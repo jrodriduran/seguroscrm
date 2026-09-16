@@ -16,6 +16,7 @@ class Type extends Model implements TypeContract
      */
     protected $fillable = [
         'name',
+        'description',
     ];
 
     /**

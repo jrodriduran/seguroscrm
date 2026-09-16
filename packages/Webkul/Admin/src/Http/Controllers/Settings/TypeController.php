@@ -16,7 +16,7 @@ class TypeController extends Controller
      *
      * @return void
      */
-    public function __construct(protected TypeRepository $typeRepository) {}
+    public function __construct(protected TypeRepository ) {}
 
     /**
      * Display a listing of the type.
@@ -35,18 +35,19 @@ class TypeController extends Controller
      */
     public function store(): JsonResponse
     {
-        $this->validate(request(), [
+        ->validate(request(), [
             'name' => ['required', 'unique:lead_types,name'],
+            'description' => ['nullable', 'string'],
         ]);
 
         Event::dispatch('settings.type.create.before');
 
-        $type = $this->typeRepository->create(request()->only(['name']));
+         = ->typeRepository->create(request()->only(['name', 'description']));
 
-        Event::dispatch('settings.type.create.after', $type);
+        Event::dispatch('settings.type.create.after', );
 
         return new JsonResponse([
-            'data' => $type,
+            'data' => ,
             'message' => trans('admin::app.settings.types.index.create-success'),
         ]);
     }
@@ -54,32 +55,33 @@ class TypeController extends Controller
     /**
      * Show the form for editing the specified type.
      */
-    public function edit(int $id): View|JsonResponse
+    public function edit(int ): View|JsonResponse
     {
-        $type = $this->typeRepository->findOrFail($id);
+         = ->typeRepository->findOrFail();
 
         return new JsonResponse([
-            'data' => $type,
+            'data' => ,
         ]);
     }
 
     /**
      * Update the specified type in storage.
      */
-    public function update(int $id): JsonResponse
+    public function update(int ): JsonResponse
     {
-        $this->validate(request(), [
-            'name' => 'required|unique:lead_types,name,'.$id,
+        ->validate(request(), [
+            'name' => 'required|unique:lead_types,name,'.,
+            'description' => 'nullable|string',
         ]);
 
-        Event::dispatch('settings.type.update.before', $id);
+        Event::dispatch('settings.type.update.before', );
 
-        $type = $this->typeRepository->update(request()->only(['name']), $id);
+         = ->typeRepository->update(request()->only(['name', 'description']), );
 
-        Event::dispatch('settings.type.update.after', $type);
+        Event::dispatch('settings.type.update.after', );
 
         return new JsonResponse([
-            'data' => $type,
+            'data' => ,
             'message' => trans('admin::app.settings.types.index.update-success'),
         ]);
     }
@@ -87,21 +89,21 @@ class TypeController extends Controller
     /**
      * Remove the specified type from storage.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int ): JsonResponse
     {
-        $type = $this->typeRepository->findOrFail($id);
+         = ->typeRepository->findOrFail();
 
         try {
-            Event::dispatch('settings.type.delete.before', $id);
+            Event::dispatch('settings.type.delete.before', );
 
-            $type->delete($id);
+            ->delete();
 
-            Event::dispatch('settings.type.delete.after', $id);
+            Event::dispatch('settings.type.delete.after', );
 
             return new JsonResponse([
                 'message' => trans('admin::app.settings.types.index.delete-success'),
             ], 200);
-        } catch (\Exception $exception) {
+        } catch (\Exception ) {
             return new JsonResponse([
                 'message' => trans('admin::app.settings.types.index.delete-failed'),
             ], 400);

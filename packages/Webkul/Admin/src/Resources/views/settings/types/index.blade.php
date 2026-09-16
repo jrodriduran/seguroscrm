@@ -208,6 +208,23 @@
                                 <x-admin::form.control-group.error control-name="name" />
                             </x-admin::form.control-group>
 
+                            <!-- Description -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    Descripción / Detalles
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="textarea"
+                                    id="description"
+                                    name="description"
+                                    rows="3"
+                                    placeholder="Ej: Cobertura médica con subsidio federal APTC..."
+                                />
+
+                                <x-admin::form.control-group.error control-name="description" />
+                            </x-admin::form.control-group>
+
                             {!! view_render_event('admin.settings.types.index.content.after') !!}
                         </x-slot>
 

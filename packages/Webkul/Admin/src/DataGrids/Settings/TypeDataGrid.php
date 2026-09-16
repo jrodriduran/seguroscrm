@@ -13,15 +13,16 @@ class TypeDataGrid extends DataGrid
      */
     public function prepareQueryBuilder(): Builder
     {
-        $queryBuilder = DB::table('lead_types')
+         = DB::table('lead_types')
             ->addSelect(
                 'lead_types.id',
-                'lead_types.name'
+                'lead_types.name',
+                'lead_types.description'
             );
 
-        $this->addFilter('id', 'lead_types.id');
+        ->addFilter('id', 'lead_types.id');
 
-        return $queryBuilder;
+        return ;
     }
 
     /**
@@ -29,7 +30,7 @@ class TypeDataGrid extends DataGrid
      */
     public function prepareColumns(): void
     {
-        $this->addColumn([
+        ->addColumn([
             'index' => 'id',
             'label' => trans('admin::app.settings.types.index.datagrid.id'),
             'type' => 'string',
@@ -38,13 +39,22 @@ class TypeDataGrid extends DataGrid
             'sortable' => true,
         ]);
 
-        $this->addColumn([
+        ->addColumn([
             'index' => 'name',
             'label' => trans('admin::app.settings.types.index.datagrid.name'),
             'type' => 'string',
             'searchable' => true,
             'filterable' => true,
             'sortable' => true,
+        ]);
+
+        ->addColumn([
+            'index' => 'description',
+            'label' => 'Descripción',
+            'type' => 'string',
+            'searchable' => true,
+            'filterable' => false,
+            'sortable' => false,
         ]);
     }
 
@@ -54,7 +64,7 @@ class TypeDataGrid extends DataGrid
     public function prepareActions(): void
     {
         if (bouncer()->hasPermission('settings.lead.types.edit')) {
-            $this->addAction([
+            ->addAction([
                 'index' => 'edit',
                 'icon' => 'icon-edit',
                 'title' => trans('admin::app.settings.roles.index.datagrid.edit'),
@@ -64,7 +74,7 @@ class TypeDataGrid extends DataGrid
         }
 
         if (bouncer()->hasPermission('settings.lead.types.delete')) {
-            $this->addAction([
+            ->addAction([
                 'index' => 'delete',
                 'icon' => 'icon-delete',
                 'title' => trans('admin::app.settings.roles.index.datagrid.delete'),
