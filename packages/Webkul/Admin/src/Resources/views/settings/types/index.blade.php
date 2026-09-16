@@ -211,7 +211,7 @@
                             <!-- Description -->
                             <x-admin::form.control-group>
                                 <x-admin::form.control-group.label>
-                                    Descripción / Detalles
+                                    DescripciÃƒÂ³n / Detalles
                                 </x-admin::form.control-group.label>
 
                                 <x-admin::form.control-group.control
@@ -219,7 +219,7 @@
                                     id="description"
                                     name="description"
                                     rows="3"
-                                    placeholder="Ej: Cobertura médica con subsidio federal APTC..."
+                                    placeholder="Ej: Cobertura mÃƒÂ©dica con subsidio federal APTC..."
                                 />
 
                                 <x-admin::form.control-group.error control-name="description" />
