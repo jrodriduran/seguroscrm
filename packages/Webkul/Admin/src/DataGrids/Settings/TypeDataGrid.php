@@ -13,16 +13,16 @@ class TypeDataGrid extends DataGrid
      */
     public function prepareQueryBuilder(): Builder
     {
-         = DB::table('lead_types')
+        $queryBuilder = DB::table('lead_types')
             ->addSelect(
                 'lead_types.id',
                 'lead_types.name',
                 'lead_types.description'
             );
 
-        ->addFilter('id', 'lead_types.id');
+        $this->addFilter('id', 'lead_types.id');
 
-        return ;
+        return $queryBuilder;
     }
 
     /**
@@ -30,31 +30,31 @@ class TypeDataGrid extends DataGrid
      */
     public function prepareColumns(): void
     {
-        ->addColumn([
-            'index' => 'id',
-            'label' => trans('admin::app.settings.types.index.datagrid.id'),
-            'type' => 'string',
+        $this->addColumn([
+            'index'      => 'id',
+            'label'      => trans('admin::app.settings.types.index.datagrid.id'),
+            'type'       => 'string',
             'searchable' => true,
             'filterable' => true,
-            'sortable' => true,
+            'sortable'   => true,
         ]);
 
-        ->addColumn([
-            'index' => 'name',
-            'label' => trans('admin::app.settings.types.index.datagrid.name'),
-            'type' => 'string',
+        $this->addColumn([
+            'index'      => 'name',
+            'label'      => trans('admin::app.settings.types.index.datagrid.name'),
+            'type'       => 'string',
             'searchable' => true,
             'filterable' => true,
-            'sortable' => true,
+            'sortable'   => true,
         ]);
 
-        ->addColumn([
-            'index' => 'description',
-            'label' => 'Descripción',
-            'type' => 'string',
+        $this->addColumn([
+            'index'      => 'description',
+            'label'      => 'Descripción',
+            'type'       => 'string',
             'searchable' => true,
             'filterable' => false,
-            'sortable' => false,
+            'sortable'   => false,
         ]);
     }
 
@@ -64,22 +64,22 @@ class TypeDataGrid extends DataGrid
     public function prepareActions(): void
     {
         if (bouncer()->hasPermission('settings.lead.types.edit')) {
-            ->addAction([
-                'index' => 'edit',
-                'icon' => 'icon-edit',
-                'title' => trans('admin::app.settings.roles.index.datagrid.edit'),
+            $this->addAction([
+                'index'  => 'edit',
+                'icon'   => 'icon-edit',
+                'title'  => trans('admin::app.settings.roles.index.datagrid.edit'),
                 'method' => 'GET',
-                'url' => fn ($row) => route('admin.settings.types.update', $row->id),
+                'url'    => fn ($row) => route('admin.settings.types.update', $row->id),
             ]);
         }
 
         if (bouncer()->hasPermission('settings.lead.types.delete')) {
-            ->addAction([
-                'index' => 'delete',
-                'icon' => 'icon-delete',
-                'title' => trans('admin::app.settings.roles.index.datagrid.delete'),
+            $this->addAction([
+                'index'  => 'delete',
+                'icon'   => 'icon-delete',
+                'title'  => trans('admin::app.settings.roles.index.datagrid.delete'),
                 'method' => 'DELETE',
-                'url' => fn ($row) => route('admin.settings.types.delete', $row->id),
+                'url'    => fn ($row) => route('admin.settings.types.delete', $row->id),
             ]);
         }
     }
