@@ -36,7 +36,7 @@ class TypeController extends Controller
     public function store(): JsonResponse
     {
         $this->validate(request(), [
-            'name'        => ['required', 'unique:lead_types,name'],
+            'name' => ['required', 'unique:lead_types,name'],
             'description' => ['nullable', 'string'],
         ]);
 
@@ -47,7 +47,7 @@ class TypeController extends Controller
         Event::dispatch('settings.type.create.after', $type);
 
         return new JsonResponse([
-            'data'    => $type,
+            'data' => $type,
             'message' => trans('admin::app.settings.types.index.create-success'),
         ]);
     }
@@ -70,7 +70,7 @@ class TypeController extends Controller
     public function update(int $id): JsonResponse
     {
         $this->validate(request(), [
-            'name'        => 'required|unique:lead_types,name,'.$id,
+            'name' => 'required|unique:lead_types,name,'.$id,
             'description' => 'nullable|string',
         ]);
 
@@ -81,7 +81,7 @@ class TypeController extends Controller
         Event::dispatch('settings.type.update.after', $type);
 
         return new JsonResponse([
-            'data'    => $type,
+            'data' => $type,
             'message' => trans('admin::app.settings.types.index.update-success'),
         ]);
     }
