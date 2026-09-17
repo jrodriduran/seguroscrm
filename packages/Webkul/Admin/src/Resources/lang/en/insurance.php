@@ -353,7 +353,7 @@ return [
     ],
 
     'filters' => [
-        'all_leads'        => 'All Leads / Pipeline',
+        'all_leads' => 'All Leads / Pipeline',
         'book_of_business' => 'Book of Business: Active Policies',
     ],
 ];

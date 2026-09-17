@@ -353,7 +353,7 @@ return [
     ],
 
     'filters' => [
-        'all_leads'        => 'Todos os Leads',
+        'all_leads' => 'Todos os Leads',
         'book_of_business' => 'Carteira de Clientes: Apólices Vigentes',
     ],
 ];

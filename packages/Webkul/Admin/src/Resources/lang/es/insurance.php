@@ -353,7 +353,7 @@ return [
     ],
 
     'filters' => [
-        'all_leads'        => 'Todos los Prospectos',
+        'all_leads' => 'Todos los Prospectos',
         'book_of_business' => 'Libro de Negocio: Pólizas Vigentes',
     ],
 ];

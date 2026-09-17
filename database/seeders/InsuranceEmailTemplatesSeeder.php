@@ -16,7 +16,7 @@ class InsuranceEmailTemplatesSeeder extends Seeder
 
         $templates = [
             [
-                'name'    => 'Insurance: CMS Consent Form Confirmation',
+                'name' => 'Insurance: CMS Consent Form Confirmation',
                 'subject' => 'Consentimiento para Asesoría e Inscripción de Cobertura Médica - {%leads.title%}',
                 'content' => '<div style="font-family: Arial, sans-serif; font-size: 14px; color: #1e293b; line-height: 1.6; max-width: 650px;">
                     <div style="background-color: #1e40af; color: #ffffff; padding: 18px 24px; border-radius: 6px 6px 0 0;">
@@ -42,7 +42,7 @@ class InsuranceEmailTemplatesSeeder extends Seeder
                 </div>',
             ],
             [
-                'name'    => 'Insurance: Eligibility Documents Request (DMI)',
+                'name' => 'Insurance: Eligibility Documents Request (DMI)',
                 'subject' => 'Documentos Requeridos para Validar su Subsidio Médico - {%leads.title%}',
                 'content' => '<div style="font-family: Arial, sans-serif; font-size: 14px; color: #1e293b; line-height: 1.6; max-width: 650px;">
                     <div style="background-color: #d97706; color: #ffffff; padding: 18px 24px; border-radius: 6px 6px 0 0;">
@@ -68,7 +68,7 @@ class InsuranceEmailTemplatesSeeder extends Seeder
                 </div>',
             ],
             [
-                'name'    => 'Insurance: Policy Issued & Welcome Packet',
+                'name' => 'Insurance: Policy Issued & Welcome Packet',
                 'subject' => '¡Felicitaciones! Su Póliza de Seguro ha sido Emitida con Éxito - {%leads.title%}',
                 'content' => '<div style="font-family: Arial, sans-serif; font-size: 14px; color: #1e293b; line-height: 1.6; max-width: 650px;">
                     <div style="background-color: #059669; color: #ffffff; padding: 18px 24px; border-radius: 6px 6px 0 0;">
@@ -96,7 +96,7 @@ class InsuranceEmailTemplatesSeeder extends Seeder
                 </div>',
             ],
             [
-                'name'    => 'Insurance: Annual Renewal Reminder (OEP / AEP)',
+                'name' => 'Insurance: Annual Renewal Reminder (OEP / AEP)',
                 'subject' => 'Aviso Importante: Periodo de Renovación de su Seguro de Salud - {%leads.title%}',
                 'content' => '<div style="font-family: Arial, sans-serif; font-size: 14px; color: #1e293b; line-height: 1.6; max-width: 650px;">
                     <div style="background-color: #7c3aed; color: #ffffff; padding: 18px 24px; border-radius: 6px 6px 0 0;">
@@ -133,15 +133,15 @@ class InsuranceEmailTemplatesSeeder extends Seeder
                 DB::table('email_templates')
                     ->where('id', $existing->id)
                     ->update([
-                        'subject'    => $t['subject'],
-                        'content'    => $t['content'],
+                        'subject' => $t['subject'],
+                        'content' => $t['content'],
                         'updated_at' => $now,
                     ]);
             } else {
                 DB::table('email_templates')->insert([
-                    'name'       => $t['name'],
-                    'subject'    => $t['subject'],
-                    'content'    => $t['content'],
+                    'name' => $t['name'],
+                    'subject' => $t['subject'],
+                    'content' => $t['content'],
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]);
