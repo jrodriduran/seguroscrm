@@ -4,6 +4,7 @@ namespace Webkul\Admin\DataGrids\Activity;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use Webkul\Activity\Models\Activity;
 use Webkul\Admin\Traits\ProvideDropdownOptions;
 use Webkul\DataGrid\DataGrid;
 use Webkul\Lead\Repositories\LeadRepository;
@@ -32,7 +33,7 @@ class ActivityDataGrid extends DataGrid
             ->leftJoin('lead_activities', 'activities.id', '=', 'lead_activities.activity_id')
             ->leftJoin('leads', 'lead_activities.lead_id', '=', 'leads.id')
             ->leftJoin('users', 'activities.user_id', '=', 'users.id')
-            ->whereIn('type', \Webkul\Activity\Models\Activity::ACTIONABLE_TYPES)
+            ->whereIn('type', Activity::ACTIONABLE_TYPES)
             ->where(function ($query) {
                 if ($userIds = bouncer()->getAuthorizedUserIds()) {
                     $query->whereIn('activities.user_id', $userIds)
@@ -153,6 +154,7 @@ class ActivityDataGrid extends DataGrid
                 if (trans()->has($appKey)) {
                     return trans($appKey);
                 }
+
                 return ucfirst(str_replace('_', ' ', $row->type));
             },
         ]);

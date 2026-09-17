@@ -38,7 +38,7 @@ class InsuranceSourcesSeeder extends Seeder
 
             if (! $existing) {
                 DB::table('lead_sources')->insert([
-                    'name'       => $sourceName,
+                    'name' => $sourceName,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]);
