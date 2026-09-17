@@ -5,6 +5,7 @@ use Webkul\Admin\Http\Controllers\Lead\ActivityController;
 use Webkul\Admin\Http\Controllers\Lead\EmailController;
 use Webkul\Admin\Http\Controllers\Lead\LeadController;
 use Webkul\Admin\Http\Controllers\Lead\QuoteController;
+use Webkul\Admin\Http\Controllers\Lead\HouseholdMemberController;
 use Webkul\Admin\Http\Controllers\Lead\TagController;
 
 Route::controller(LeadController::class)->prefix('leads')->group(function () {
@@ -62,5 +63,12 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::post('{quote_id}/mail', 'mail')->name('admin.leads.quotes.mail');
 
         Route::delete('{quote_id?}', 'delete')->name('admin.leads.quotes.delete');
+    });
+
+    Route::controller(HouseholdMemberController::class)->prefix('{lead_id}/household-members')->group(function () {
+        Route::get('', 'index')->name('admin.leads.household.index');
+        Route::post('', 'store')->name('admin.leads.household.store');
+        Route::put('{id}', 'update')->name('admin.leads.household.update');
+        Route::delete('{id}', 'destroy')->name('admin.leads.household.delete');
     });
 });

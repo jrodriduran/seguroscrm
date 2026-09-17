@@ -113,11 +113,17 @@
                 :email-detach-endpoint="route('admin.leads.emails.detach', $lead->id)"
                 :activeType="request()->query('tab') ?? (request()->query('from') === 'quotes' ? 'quotes' : 'all')"
                 :extra-types="[
-                    ['name' => 'description', 'label' => trans('admin::app.leads.view.tabs.description')],
+                    ['name' => 'household', 'label' => trans('admin::insurance.tabs.household')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
+                    ['name' => 'description', 'label' => trans('admin::app.leads.view.tabs.description')],
                 ]"
             >
+                <!-- Household Members -->
+                <x-slot:household>
+                    @include ('admin::leads.view.household')
+                </x-slot>
+
                 <!-- Products -->
                 <x-slot:products>
                     @include ('admin::leads.view.products')

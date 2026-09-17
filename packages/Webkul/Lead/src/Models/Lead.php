@@ -150,6 +150,14 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get the household members / dependents for the lead.
+     */
+    public function householdMembers(): HasMany
+    {
+        return $this->hasMany(HouseholdMemberProxy::modelClass());
+    }
+
+    /**
      * Returns the rotten days
      */
     public function getRottenDaysAttribute()

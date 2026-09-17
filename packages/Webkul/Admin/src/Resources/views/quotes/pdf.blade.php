@@ -1,429 +1,422 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html
-    lang="{{ $locale = app()->getLocale() }}"
-    dir="{{ in_array($locale, ['fa', 'ar']) ? 'rtl' : 'ltr' }}"
->
+<html lang="{{ $locale = app()->getLocale() }}">
     <head>
-        <!-- meta tags -->
-        <meta
-            http-equiv="Cache-control"
-            content="no-cache"
-        >
-
-        <meta
-            http-equiv="Content-Type"
-            content="text/html; charset=utf-8"
-        />
-
-        @php
-            if ($locale == 'en') {
-                $fontFamily = [
-                    'regular' => 'DejaVu Sans',
-                    'bold' => 'DejaVu Sans',
-                ];
-            }  else {
-                $fontFamily = [
-                    'regular' => 'Arial, sans-serif',
-                    'bold' => 'Arial, sans-serif',
-                ];
-            }
-
-            if (in_array($locale, ['ar', 'fa', 'tr'])) {
-                $fontFamily = [
-                    'regular' => 'DejaVu Sans',
-                    'bold' => 'DejaVu Sans',
-                ];
-            }
-        @endphp
-
-        <!-- lang supports inclusion -->
+        <meta http-equiv="Cache-control" content="no-cache" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <style type="text/css">
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                font-family: {{ $fontFamily['regular'] }};
+                font-family: Arial, Helvetica, sans-serif;
             }
 
             body {
                 font-size: 10px;
-                color: #091341;
-                font-family: "{{ $fontFamily['regular'] }}";
+                color: #1e293b;
+                line-height: 1.4;
+                padding: 24px;
             }
 
-            b, th {
-                font-family: "{{ $fontFamily['bold'] }}";
-            }
-
-            .page-content {
-                padding: 12px;
-            }
-
-            .page-header {
-                border-bottom: 1px solid #E9EFFC;
-                text-align: center;
-                font-size: 24px;
-                text-transform: uppercase;
-                color: #000DBB;
-                padding: 24px 0;
-                margin: 0;
-            }
-
-            .logo-container {
-                position: absolute;
-                top: 20px;
-                left: 20px;
-            }
-
-            .logo-container.rtl {
-                left: auto;
-                right: 20px;
-            }
-
-            .logo-container img {
-                max-width: 100%;
-                height: auto;
-            }
-
-            .page-header b {
-                display: inline-block;
-                vertical-align: middle;
-            }
-
-            .small-text {
-                font-size: 7px;
-            }
-
-            table {
+            .header-table {
                 width: 100%;
-                border-spacing: 1px 0;
-                border-collapse: separate;
+                border-bottom: 2px solid #2563eb;
+                padding-bottom: 12px;
                 margin-bottom: 16px;
             }
-            
-            table thead th {
-                background-color: #E9EFFC;
-                color: #000DBB;
-                padding: 6px 18px;
-                text-align: left;
+
+            .agency-title {
+                font-size: 20px;
+                font-weight: bold;
+                color: #1e3a8a;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
-            table.rtl thead tr th {
+            .proposal-badge {
                 text-align: right;
+                font-size: 12px;
+                font-weight: bold;
+                color: #2563eb;
+                text-transform: uppercase;
             }
 
-            table tbody td {
-                padding: 9px 18px;
-                border-bottom: 1px solid #E9EFFC;
-                text-align: left;
+            .meta-table {
+                width: 100%;
+                margin-bottom: 16px;
+                border-collapse: collapse;
+            }
+
+            .meta-card {
+                width: 48%;
+                background-color: #f8fafc;
+                border: 1px solid #e2e8f0;
+                padding: 10px 12px;
                 vertical-align: top;
             }
 
-            table.rtl tbody tr td {
+            .meta-card-title {
+                font-size: 11px;
+                font-weight: bold;
+                color: #1e40af;
+                border-bottom: 1px solid #cbd5e1;
+                padding-bottom: 4px;
+                margin-bottom: 6px;
+                text-transform: uppercase;
+            }
+
+            .meta-row {
+                font-size: 9.5px;
+                margin-bottom: 3px;
+            }
+
+            .meta-label {
+                font-weight: bold;
+                color: #475569;
+                display: inline-block;
+                width: 100px;
+            }
+
+            .meta-value {
+                color: #0f172a;
+            }
+
+            .section-title {
+                font-size: 12px;
+                font-weight: bold;
+                color: #0f172a;
+                margin-top: 14px;
+                margin-bottom: 8px;
+                padding-left: 6px;
+                border-left: 3px solid #2563eb;
+                text-transform: uppercase;
+            }
+
+            .plans-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 16px;
+            }
+
+            .plans-table thead th {
+                background-color: #1e40af;
+                color: #ffffff;
+                font-size: 9px;
+                font-weight: bold;
+                text-transform: uppercase;
+                padding: 8px 10px;
+                text-align: left;
+            }
+
+            .plans-table tbody td {
+                padding: 8px 10px;
+                border-bottom: 1px solid #e2e8f0;
+                font-size: 9.5px;
+                vertical-align: middle;
+            }
+
+            .plans-table tbody tr:nth-child(even) {
+                background-color: #f8fafc;
+            }
+
+            .plan-name {
+                font-weight: bold;
+                color: #0f172a;
+                font-size: 10px;
+            }
+
+            .plan-carrier {
+                font-size: 8.5px;
+                color: #2563eb;
+                font-weight: 600;
+            }
+
+            .badge {
+                display: inline-block;
+                padding: 2px 6px;
+                font-size: 8px;
+                font-weight: bold;
+                border-radius: 3px;
+                background-color: #e0e7ff;
+                color: #3730a3;
+            }
+
+            .text-right {
                 text-align: right;
             }
 
-            .summary {
-                width: 100%;
-                display: inline-block;
-            }
-
-            .summary table {
-                float: right;
-                width: 250px;
-                padding-top: 5px;
-                padding-bottom: 5px;
-                background-color: #E9EFFC;
-                white-space: nowrap;
-            }
-
-            .summary table.rtl {
-                width: 280px;
-            }
-
-            .summary table.rtl {
-                margin-right: 480px;
-            }
-
-            .summary table td {
-                padding: 5px 10px;
-            }
-
-            .summary table td:nth-child(2) {
+            .text-center {
                 text-align: center;
             }
 
-            .summary table td:nth-child(3) {
-                text-align: right;
+            .price-highlight {
+                font-size: 11px;
+                font-weight: bold;
+                color: #047857;
+            }
+
+            .summary-container {
+                width: 100%;
+                margin-top: 8px;
+                margin-bottom: 20px;
+            }
+
+            .summary-table {
+                float: right;
+                width: 280px;
+                border-collapse: collapse;
+                border: 1px solid #cbd5e1;
+            }
+
+            .summary-table td {
+                padding: 6px 12px;
+                font-size: 9.5px;
+            }
+
+            .summary-table tr.total-row {
+                background-color: #1e40af;
+                color: #ffffff;
+                font-weight: bold;
+                font-size: 11px;
+            }
+
+            .summary-table tr.total-row td {
+                color: #ffffff;
+                padding: 8px 12px;
+            }
+
+            .disclaimer-box {
+                clear: both;
+                margin-top: 30px;
+                padding: 10px 12px;
+                background-color: #f1f5f9;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+            }
+
+            .disclaimer-title {
+                font-size: 9px;
+                font-weight: bold;
+                color: #334155;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+            }
+
+            .disclaimer-text {
+                font-size: 8px;
+                color: #64748b;
+                line-height: 1.35;
             }
         </style>
     </head>
 
-    <body dir="{{ $locale }}">
-        <div class="page">
-            <!-- Header -->
-            <div class="page-header">
-                <b>@lang('admin::app.quotes.index.pdf.title')</b>
+    <body>
+        <!-- Header -->
+        <table class="header-table">
+            <tr>
+                <td style="width: 55%; vertical-align: middle;">
+                    <div class="agency-title">
+                        {{ config('app.name', 'Seguros CRM') }}
+                    </div>
+                    <div style="font-size: 9px; color: #64748b; margin-top: 2px;">
+                        @lang('admin::insurance.quotes_pdf.subtitle')
+                    </div>
+                </td>
+
+                <td style="width: 45%; vertical-align: middle;" class="proposal-badge">
+                    <div>@lang('admin::insurance.quotes_pdf.title')</div>
+                    <div style="font-size: 9.5px; color: #475569; font-weight: normal; margin-top: 3px;">
+                        #{{ $quote->id }} &bull; {{ $quote->created_at->format('d/m/Y') }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Metadata Section (Applicant & Agent) -->
+        <table class="meta-table">
+            <tr>
+                <!-- Applicant Info -->
+                <td class="meta-card" style="width: 49%;">
+                    <div class="meta-card-title">
+                        @lang('admin::insurance.quotes_pdf.applicant_info')
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">@lang('admin::app.quotes.index.pdf.person'):</span>
+                        <span class="meta-value"><b>{{ $quote->person?->name ?? 'N/A' }}</b></span>
+                    </div>
+                    @if (! empty($quote->person?->emails))
+                        <div class="meta-row">
+                            <span class="meta-label">Email:</span>
+                            <span class="meta-value">{{ $quote->person->emails[0]['value'] ?? '' }}</span>
+                        </div>
+                    @endif
+                    @if (! empty($quote->person?->contact_numbers))
+                        <div class="meta-row">
+                            <span class="meta-label">Phone:</span>
+                            <span class="meta-value">{{ $quote->person->contact_numbers[0]['value'] ?? '' }}</span>
+                        </div>
+                    @endif
+                    @php
+                        $lead = $quote->leads->first();
+                    @endphp
+                    @if ($lead)
+                        <div class="meta-row">
+                            <span class="meta-label">Case / Lead:</span>
+                            <span class="meta-value">{{ $lead->title }}</span>
+                        </div>
+                    @endif
+                </td>
+
+                <td style="width: 2%;"></td>
+
+                <!-- Agent & Proposal Validity -->
+                <td class="meta-card" style="width: 49%;">
+                    <div class="meta-card-title">
+                        @lang('admin::insurance.quotes_pdf.agent_info')
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">@lang('admin::app.quotes.index.pdf.sales-person'):</span>
+                        <span class="meta-value"><b>{{ $quote->user?->name ?? 'Agency Agent' }}</b></span>
+                    </div>
+                    @if ($quote->user?->email)
+                        <div class="meta-row">
+                            <span class="meta-label">Agent Email:</span>
+                            <span class="meta-value">{{ $quote->user->email }}</span>
+                        </div>
+                    @endif
+                    <div class="meta-row">
+                        <span class="meta-label">@lang('admin::app.quotes.index.pdf.subject'):</span>
+                        <span class="meta-value">{{ $quote->subject }}</span>
+                    </div>
+                    @if ($quote->expired_at)
+                        <div class="meta-row">
+                            <span class="meta-label">Valid Until:</span>
+                            <span class="meta-value" style="color: #b91c1c; font-weight: bold;">
+                                {{ $quote->expired_at->format('d/m/Y') }}
+                            </span>
+                        </div>
+                    @endif
+                </td>
+            </tr>
+        </table>
+
+        @if ($quote->description)
+            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; margin-bottom: 14px; font-size: 9px; color: #334155;">
+                <b>Notes / Observaciones:</b> {{ $quote->description }}
             </div>
+        @endif
 
-            <div class="page-content">
-                <!-- Invoice Information -->
-                <table class="{{ app()->getLocale   () }}">
-                    <tbody>
+        <!-- Plans & Benefits Table -->
+        <div class="section-title">
+            @lang('admin::insurance.quotes_pdf.plan_details')
+        </div>
+
+        <table class="plans-table">
+            <thead>
+                <tr>
+                    <th style="width: 34%;">@lang('admin::insurance.quotes_pdf.plan_name')</th>
+                    <th style="width: 14%;">@lang('admin::insurance.quotes_pdf.network_tier')</th>
+                    <th style="width: 13%;" class="text-right">@lang('admin::insurance.quotes_pdf.deductible')</th>
+                    <th style="width: 13%;" class="text-right">@lang('admin::insurance.quotes_pdf.moop')</th>
+                    <th style="width: 12%;" class="text-center">@lang('admin::insurance.quotes_pdf.copays')</th>
+                    <th style="width: 14%;" class="text-right">@lang('admin::insurance.quotes_pdf.monthly_premium')</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($quote->items as $item)
+                    @php
+                        $product = $item->product;
+                        $deductible = $product?->deductible ? '$'.number_format($product->deductible, 0) : '$0';
+                        $moop = $product?->max_out_of_pocket ? '$'.number_format($product->max_out_of_pocket, 0) : '$0';
+                        $pcp = $product?->primary_care_copay ?? '$0';
+                        $spec = $product?->specialist_copay ?? '$0';
+                    @endphp
+                    <tr>
+                        <td>
+                            <div class="plan-name">{{ $item->name }}</div>
+                            <div class="plan-carrier">SKU: {{ $item->sku }}</div>
+                        </td>
+
+                        <td>
+                            <span class="badge">
+                                {{ $product?->network_type ?? 'PPO/HMO' }}
+                            </span>
+                        </td>
+
+                        <td class="text-right font-medium">
+                            {{ $deductible }}
+                        </td>
+
+                        <td class="text-right font-medium">
+                            {{ $moop }}
+                        </td>
+
+                        <td class="text-center" style="font-size: 8.5px;">
+                            {{ $pcp }} / {{ $spec }}
+                        </td>
+
+                        <td class="text-right price-highlight">
+                            {!! core()->formatBasePrice($item->total, true) !!} / mo
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Summary Calculation Box -->
+        <div class="summary-container">
+            <table class="summary-table">
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; color: #475569;">
+                            @lang('admin::app.quotes.index.pdf.sub-total'):
+                        </td>
+                        <td class="text-right font-medium">
+                            {!! core()->formatBasePrice($quote->sub_total, true) !!}
+                        </td>
+                    </tr>
+
+                    @if ($quote->discount_amount > 0)
                         <tr>
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.quote-id'): 
-                                </b>
-
-                                <span>
-                                    #{{ $quote->id }}
-                                </span>
+                            <td style="font-weight: bold; color: #047857;">
+                                Subsidio / Descuento:
                             </td>
-
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.person'):
-                                </b>
-
-                                <span>
-                                    {{ $quote->person->name }}
-                                </span>
+                            <td class="text-right" style="color: #047857; font-weight: bold;">
+                                -{!! core()->formatBasePrice($quote->discount_amount, true) !!}
                             </td>
                         </tr>
+                    @endif
 
+                    @if ($quote->adjustment_amount != 0)
                         <tr>
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.sales-person'): 
-                                </b>
-
-                                <span>
-                                    {{ $quote->user->name }}
-                                </span>
+                            <td style="font-weight: bold; color: #475569;">
+                                Ajuste / Cargo:
                             </td>
-
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.subject'):
-                                </b>
-
-                                <span>
-                                    {{ $quote->subject }}
-                                </span>
+                            <td class="text-right font-medium">
+                                {!! core()->formatBasePrice($quote->adjustment_amount, true) !!}
                             </td>
                         </tr>
-                        
-                        <tr>
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.date'):
-                                </b>
+                    @endif
 
-                                <span>
-                                    {{ core()->formatDate($quote->created_at, 'd-m-Y') }}
-                                </span>
-                            </td>
+                    <tr class="total-row">
+                        <td>
+                            @lang('admin::insurance.quotes_pdf.total_monthly'):
+                        </td>
+                        <td class="text-right">
+                            {!! core()->formatBasePrice($quote->grand_total, true) !!} / mo
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.sales-person'):
-                                </b>
-
-                                <span>
-                                    {{ $quote->user->name }}
-                                </span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="width: 50%; padding: 2px 18px;border:none;">
-                                <b>
-                                    @lang('admin::app.quotes.index.pdf.expired-at'):
-                                </b>
-
-                                <span>
-                                    {{ core()->formatDate($quote->expired_at, 'd-m-Y') }}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Billing & Shipping Address -->
-                <table class="{{ $locale }}">
-                    <thead>
-                        <tr>
-                            @if ($quote->billing_address)
-                                <th style="width: 50%;">
-                                    <b>
-                                        @lang('admin::app.quotes.index.pdf.billing-address')
-                                    </b>
-                                </th>
-                            @endif
-
-                            @if ($quote->shipping_address)
-                                <th style="width: 50%">
-                                    <b>
-                                        @lang('admin::app.quotes.index.pdf.shipping-address')
-                                    </b>
-                                </th>
-                            @endif
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            @if ($quote->billing_address)
-                                <td style="width: 50%">
-                                    <div>{{ $quote->billing_address['address'] ?? '' }}</div>
-
-                                    <div>{{ $quote->billing_address['postcode'] ?? '' . ' ' .$quote->billing_address['city'] ?? '' }} </div>
-
-                                    <div>{{ $quote->billing_address['state'] ?? '' }}</div>
-
-                                    <div>{{ core()->country_name($quote->billing_address['country'] ?? '') }}</div>
-                                </td>
-                            @endif
-                            
-                            @if ($quote->shipping_address)
-                                <td style="width: 50%">
-                                    <div>{{ $quote->shipping_address['address'] ?? ''}}</div>
-
-                                    <div>{{ $quote->shipping_address['postcode'] ?? '' . ' ' .$quote->shipping_address['city'] ?? '' }} </div>
-
-                                    <div>{{ $quote->shipping_address['state'] ?? '' }}</div>
-
-                                    <div>{{ core()->country_name($quote->shipping_address['country'] ?? '') }}</div>
-                                </td>
-                            @endif
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Description -->
-                @if ($quote->description)
-                    <table class="{{ $locale }}">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <b>
-                                        @lang('admin::app.quotes.index.pdf.description')
-                                    </b>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding: 9px 18px;">
-                                    {{ $quote->description }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                @endif
-
-                <!-- Items -->
-                <div class="items">
-                    <table class="{{ app()->getLocale   () }}">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.sku')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.product-name')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.price')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.quantity')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.amount')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.discount')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.tax')
-                                </th>
-
-                                <th>
-                                    @lang('admin::app.quotes.index.pdf.grand-total')
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($quote->items as $item)
-                                <tr>
-                                    <td>{{ $item->sku }}</td>
-
-                                    <td>
-                                        {{ $item->name }}
-                                    </td>
-
-                                    <td>{!! core()->formatBasePrice($item->price, true) !!}</td>
-
-                                    <td class="text-center">{{ $item->quantity }}</td>
-
-                                    <td class="text-center">{!! core()->formatBasePrice($item->total, true) !!}</td>
-
-                                    <td class="text-center">{!! core()->formatBasePrice($item->discount_amount, true) !!}</td>
-
-                                    <td class="text-center">{!! core()->formatBasePrice($item->tax_amount, true) !!}</td>
-                                    
-                                    <td class="text-center">{!! core()->formatBasePrice($item->total + $item->tax_amount - $item->discount_amount, true) !!}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-               <!-- Summary Table -->
-                <div class="summary">
-                    <table class="{{ app()->getLocale   () }}">
-                        <tbody>
-                            <tr>
-                                <td>@lang('admin::app.quotes.index.pdf.sub-total')</td>
-                                <td>-</td>
-                                <td>{!! core()->formatBasePrice($quote->sub_total, true) !!}</td>
-                            </tr>
-        
-                            <tr>
-                                <td>@lang('admin::app.quotes.index.pdf.tax')</td>
-                                <td>-</td>
-                                <td>{!! core()->formatBasePrice($quote->tax_amount, true) !!}</td>
-                            </tr>
-        
-                            <tr>
-                                <td>@lang('admin::app.quotes.index.pdf.discount')</td>
-                                <td>-</td>
-                                <td>{!! core()->formatBasePrice($quote->discount_amount, true) !!}</td>
-                            </tr>
-        
-                            <tr>
-                                <td>@lang('admin::app.quotes.index.pdf.adjustment')</td>
-                                <td>-</td>
-                                <td>{!! core()->formatBasePrice($quote->adjustment_amount, true) !!}</td>
-                            </tr>
-        
-                            <tr>
-                                <td><strong>@lang('admin::app.quotes.index.pdf.grand-total')</strong></td>
-                                <td><strong>-</strong></td>
-                                <td><strong>{!! core()->formatBasePrice($quote->grand_total, true) !!}</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <!-- Compliance Disclaimer -->
+        <div class="disclaimer-box">
+            <div class="disclaimer-title">
+                @lang('admin::insurance.quotes_pdf.disclaimer_title')
+            </div>
+            <div class="disclaimer-text">
+                @lang('admin::insurance.quotes_pdf.disclaimer_text')
             </div>
         </div>
     </body>
