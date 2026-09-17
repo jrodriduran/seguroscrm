@@ -24,9 +24,9 @@ class HouseholdMember extends Model implements HouseholdMemberContract
     ];
 
     protected $casts = [
-        'date_of_birth'        => 'date',
+        'date_of_birth' => 'date',
         'is_applying_coverage' => 'boolean',
-        'tobacco_user'         => 'boolean',
+        'tobacco_user' => 'boolean',
     ];
 
     protected $appends = [
@@ -51,7 +51,7 @@ class HouseholdMember extends Model implements HouseholdMemberContract
      */
     public function getRelationshipLabelAttribute(): string
     {
-        $key = 'admin::insurance.household.relationships.' . $this->relationship;
+        $key = 'admin::insurance.household.relationships.'.$this->relationship;
 
         return trans()->has($key) ? trans($key) : ucfirst($this->relationship);
     }
