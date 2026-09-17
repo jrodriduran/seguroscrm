@@ -12,46 +12,46 @@ class InsuranceTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $types = [
+         = [
             [
-                'name' => 'Obamacare (ACA)',
-                'description' => 'Seguro de salud bajo la Ley de Cuidado de Salud a Bajo Precio con subsidio federal (APTC).',
+                'name' => 'ACA / Obamacare',
+                'description' => 'Qualified health insurance with federal subsidy (APTC) for individuals and families.',
             ],
             [
-                'name' => 'Medicare Advantage (Parte C)',
-                'description' => 'Planes de salud privados aprobados por Medicare con cobertura médica y de medicamentos.',
+                'name' => 'Medicare Advantage',
+                'description' => 'All-in-one Medicare plans with dental, vision and prescription drugs.',
             ],
             [
-                'name' => 'Medicare Suplementario (Medigap)',
-                'description' => 'Pólizas privadas que cubren los costos compartidos y deducibles de Medicare Original.',
+                'name' => 'Medicare Supplement (Medigap)',
+                'description' => 'Private insurance to cover out-of-pocket gaps in Original Medicare.',
             ],
             [
-                'name' => 'Seguro de Vida (IUL / Término)',
-                'description' => 'Protección financiera familiar por fallecimiento y acumulación de valor en efectivo.',
+                'name' => 'Life Insurance (IUL / Term)',
+                'description' => 'Life insurance protection with death benefit and cash value accumulation.',
             ],
             [
-                'name' => 'Gastos Finales (Final Expense)',
-                'description' => 'Pólizas de vida entera simplificadas para cubrir costos de funeral y deudas médicas.',
+                'name' => 'Final Expense',
+                'description' => 'Simplified whole life insurance to cover funeral costs and final medical bills.',
             ],
             [
-                'name' => 'Dental y Visión',
-                'description' => 'Planes individuales o familiares para servicios odontológicos, limpiezas y lentes.',
+                'name' => 'Dental & Vision',
+                'description' => 'Individual or family plans for dental checkups, treatments, and vision care.',
             ],
             [
-                'name' => 'Indemnización Hospitalaria / Accidentes',
-                'description' => 'Pólizas suplementarias con pagos directos en efectivo por hospitalización o lesiones.',
+                'name' => 'Hospital Indemnity',
+                'description' => 'Supplemental policies paying direct cash benefits for hospital stays or injuries.',
             ],
             [
-                'name' => 'Seguro Privado / Internacional',
-                'description' => 'Planes médicos mayores para viajes, nómadas digitales o fuera del marketplace ACA.',
+                'name' => 'Private & International Health',
+                'description' => 'Major medical insurance for expatriates, travel, or off-exchange private plans.',
             ],
         ];
 
-        foreach ($types as $type) {
+        foreach ( as ) {
             DB::table('lead_types')->updateOrInsert(
-                ['name' => $type['name']],
+                ['name' => ['name']],
                 [
-                    'description' => $type['description'],
+                    'description' => ['description'],
                     'updated_at' => now(),
                     'created_at' => now(),
                 ]

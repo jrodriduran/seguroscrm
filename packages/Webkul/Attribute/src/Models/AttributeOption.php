@@ -3,6 +3,8 @@
 namespace Webkul\Attribute\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Webkul\Attribute\Contracts\AttributeOption as AttributeOptionContract;
 
 class AttributeOption extends Model implements AttributeOptionContract
@@ -19,6 +21,26 @@ class AttributeOption extends Model implements AttributeOptionContract
         'sort_order',
         'attribute_id',
     ];
+
+    /**
+     * Get translated option name according to the active interface locale.
+     */
+    public function getNameAttribute($value)
+    {
+        $attr = $this->attribute;
+
+        if ($attr) {
+            $rawName = $this->getRawOriginal('name') ?? $value;
+            $slug = Str::slug($rawName, '_');
+            $key = "admin::app.attribute_options.{$attr->code}.{$slug}";
+
+            if (Lang::has($key)) {
+                return trans($key);
+            }
+        }
+
+        return $value;
+    }
 
     /**
      * Get the attribute that owns the attribute option.

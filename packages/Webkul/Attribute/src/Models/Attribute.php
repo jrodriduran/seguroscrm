@@ -3,6 +3,7 @@
 namespace Webkul\Attribute\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Lang;
 use Webkul\Attribute\Contracts\Attribute as AttributeContract;
 
 class Attribute extends Model implements AttributeContract
@@ -24,6 +25,20 @@ class Attribute extends Model implements AttributeContract
         'validation',
         'is_user_defined',
     ];
+
+    /**
+     * Get translated name according to the active interface locale.
+     */
+    public function getNameAttribute($value)
+    {
+        $key = "admin::app.attributes.{$this->entity_type}.{$this->code}";
+
+        if (Lang::has($key)) {
+            return trans($key);
+        }
+
+        return $value;
+    }
 
     /**
      * Get the options.

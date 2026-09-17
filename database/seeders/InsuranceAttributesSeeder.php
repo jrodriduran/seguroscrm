@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,15 +12,15 @@ class InsuranceAttributesSeeder extends Seeder
      */
     public function run(): void
     {
-        $now = Carbon::now();
+         = now();
 
-        $attributes = [
+         = [
             /**
-             * Person (Asegurado) Attributes
+             * Persons (Prospectos / Clientes) Attributes
              */
             [
                 'code' => 'dob',
-                'name' => 'Fecha de Nacimiento / Date of Birth',
+                'name' => 'Date of Birth',
                 'type' => 'date',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -35,7 +34,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'gender',
-                'name' => 'Género / Gender',
+                'name' => 'Gender',
                 'type' => 'select',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -46,14 +45,14 @@ class InsuranceAttributesSeeder extends Seeder
                 'quick_add' => 1,
                 'is_user_defined' => 1,
                 'options' => [
-                    'Masculino / Male',
-                    'Femenino / Female',
-                    'Otro / Other',
+                    'Male',
+                    'Female',
+                    'Other',
                 ],
             ],
             [
                 'code' => 'marital_status',
-                'name' => 'Estado Civil / Marital Status',
+                'name' => 'Marital Status',
                 'type' => 'select',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -64,15 +63,15 @@ class InsuranceAttributesSeeder extends Seeder
                 'quick_add' => 0,
                 'is_user_defined' => 1,
                 'options' => [
-                    'Soltero(a) / Single',
-                    'Casado(a) / Married',
-                    'Divorciado(a) / Divorced',
-                    'Viudo(a) / Widowed',
+                    'Single',
+                    'Married',
+                    'Divorced',
+                    'Widowed',
                 ],
             ],
             [
                 'code' => 'ssn_itin',
-                'name' => 'SSN / ITIN / Doc ID',
+                'name' => 'SSN / ITIN / ID',
                 'type' => 'text',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -86,7 +85,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'immigration_status',
-                'name' => 'Estatus Migratorio / Immigration Status',
+                'name' => 'Immigration Status',
                 'type' => 'select',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -97,17 +96,17 @@ class InsuranceAttributesSeeder extends Seeder
                 'quick_add' => 0,
                 'is_user_defined' => 1,
                 'options' => [
-                    'Ciudadano / US Citizen',
-                    'Residente Permanente / Green Card',
-                    'Permiso de Trabajo / Work Permit (EAD)',
-                    'Solicitante de Asilo / Asylum Applicant',
-                    'Visado / Documentado',
-                    'No Documentado / Undocumented',
+                    'US Citizen',
+                    'Permanent Resident (Green Card)',
+                    'Work Authorization (EAD)',
+                    'Valid Visa',
+                    'Humanitarian Parole / TPS / Asylum',
+                    'Other Status',
                 ],
             ],
             [
                 'code' => 'preferred_language',
-                'name' => 'Idioma Preferido / Preferred Language',
+                'name' => 'Preferred Language',
                 'type' => 'select',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -118,14 +117,14 @@ class InsuranceAttributesSeeder extends Seeder
                 'quick_add' => 1,
                 'is_user_defined' => 1,
                 'options' => [
-                    'Español',
                     'English',
-                    'Português',
+                    'Spanish',
+                    'Portuguese',
                 ],
             ],
             [
                 'code' => 'tobacco_user',
-                'name' => 'Usa Tabaco / Tobacco User',
+                'name' => 'Tobacco / Smoker',
                 'type' => 'boolean',
                 'entity_type' => 'persons',
                 'lookup_type' => null,
@@ -139,11 +138,11 @@ class InsuranceAttributesSeeder extends Seeder
             ],
 
             /**
-             * Leads (Cotizaciones / Casos de Seguro) Attributes
+             * Leads Attributes
              */
             [
                 'code' => 'zip_code',
-                'name' => 'Código Postal / Zip Code',
+                'name' => 'ZIP Code',
                 'type' => 'text',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -157,7 +156,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'county_state',
-                'name' => 'Condado y Estado / County & State',
+                'name' => 'County / State',
                 'type' => 'text',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -171,7 +170,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'household_size',
-                'name' => 'Tamaño del Hogar / Household Size',
+                'name' => 'Household Size',
                 'type' => 'text',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -185,7 +184,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'annual_income',
-                'name' => 'Ingreso Anual Estimado / Annual Income',
+                'name' => 'Estimated Annual Income',
                 'type' => 'price',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -199,7 +198,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'current_carrier',
-                'name' => 'Aseguradora Actual / Current Carrier',
+                'name' => 'Current Carrier',
                 'type' => 'text',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -213,7 +212,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'mbi_number',
-                'name' => 'Medicare MBI Number',
+                'name' => 'Medicare Beneficiary ID (MBI)',
                 'type' => 'text',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -227,7 +226,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'medicare_part_a_date',
-                'name' => 'Parte A Fecha Efectiva / Part A Date',
+                'name' => 'Medicare Part A Effective Date',
                 'type' => 'date',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -241,7 +240,7 @@ class InsuranceAttributesSeeder extends Seeder
             ],
             [
                 'code' => 'medicare_part_b_date',
-                'name' => 'Parte B Fecha Efectiva / Part B Date',
+                'name' => 'Medicare Part B Effective Date',
                 'type' => 'date',
                 'entity_type' => 'leads',
                 'lookup_type' => null,
@@ -255,39 +254,39 @@ class InsuranceAttributesSeeder extends Seeder
             ],
         ];
 
-        foreach ($attributes as $attrData) {
-            $options = $attrData['options'];
-            unset($attrData['options']);
+        foreach ( as ) {
+             = ['options'];
+            unset(['options']);
 
-            $existing = DB::table('attributes')
-                ->where('code', $attrData['code'])
-                ->where('entity_type', $attrData['entity_type'])
+             = DB::table('attributes')
+                ->where('code', ['code'])
+                ->where('entity_type', ['entity_type'])
                 ->first();
 
-            if ($existing) {
+            if () {
                 DB::table('attributes')
-                    ->where('id', $existing->id)
-                    ->update(array_merge($attrData, ['updated_at' => $now]));
-                $attributeId = $existing->id;
+                    ->where('id', ->id)
+                    ->update(array_merge(, ['updated_at' => ]));
+                 = ->id;
             } else {
-                $attributeId = DB::table('attributes')->insertGetId(
-                    array_merge($attrData, ['created_at' => $now, 'updated_at' => $now])
+                 = DB::table('attributes')->insertGetId(
+                    array_merge(, ['created_at' => , 'updated_at' => ])
                 );
             }
 
-            if (! empty($options) && $attrData['type'] === 'select') {
-                $sort = 1;
-                foreach ($options as $optName) {
-                    $optExists = DB::table('attribute_options')
-                        ->where('attribute_id', $attributeId)
-                        ->where('name', $optName)
+            if (! empty() && ['type'] === 'select') {
+                 = 1;
+                foreach ( as ) {
+                     = DB::table('attribute_options')
+                        ->where('attribute_id', )
+                        ->where('name', )
                         ->exists();
 
-                    if (! $optExists) {
+                    if (! ) {
                         DB::table('attribute_options')->insert([
-                            'attribute_id' => $attributeId,
-                            'name' => $optName,
-                            'sort_order' => $sort++,
+                            'attribute_id' => ,
+                            'name' => ,
+                            'sort_order' => ++,
                         ]);
                     }
                 }

@@ -3,6 +3,8 @@
 namespace Webkul\Lead\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Webkul\Lead\Contracts\Pipeline as PipelineContract;
 
 class Pipeline extends Model implements PipelineContract
@@ -19,6 +21,22 @@ class Pipeline extends Model implements PipelineContract
         'rotten_days',
         'is_default',
     ];
+
+    /**
+     * Get translated name according to the active interface locale.
+     */
+    public function getNameAttribute($value)
+    {
+        $raw = $this->getRawOriginal('name') ?? $value;
+        $slug = Str::slug($raw, '_');
+        $key = "admin::app.pipelines.{$slug}";
+
+        if (Lang::has($key)) {
+            return trans($key);
+        }
+
+        return $value;
+    }
 
     /**
      * Get the leads.
