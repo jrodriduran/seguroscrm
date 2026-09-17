@@ -10,6 +10,7 @@ require_once __DIR__.'/InsuranceAttributesSeeder.php';
 require_once __DIR__.'/InsuranceCarriersSeeder.php';
 require_once __DIR__.'/InsurancePipelineSeeder.php';
 require_once __DIR__.'/InsuranceProductsSeeder.php';
+require_once __DIR__.'/InsuranceSourcesSeeder.php';
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(InsuranceCarriersSeeder::class);
         $this->call(InsurancePipelineSeeder::class);
         $this->call(InsuranceProductsSeeder::class);
+        $this->call(InsuranceSourcesSeeder::class);
     }
 }

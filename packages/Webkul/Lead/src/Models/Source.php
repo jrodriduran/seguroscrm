@@ -19,6 +19,38 @@ class Source extends Model implements SourceContract
     ];
 
     /**
+     * Return translated name if available in active locale.
+     */
+    public function getNameAttribute($value)
+    {
+        if (empty($value)) {
+            return $value;
+        }
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9]+/', '_', $value), '_'));
+
+        $insuranceKey = "admin::insurance.lead_sources.{$slug}";
+        if (trans()->has($insuranceKey)) {
+            return trans($insuranceKey);
+        }
+
+        $appKey = "admin::app.lead_sources.{$slug}";
+        if (trans()->has($appKey)) {
+            return trans($appKey);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get raw database name.
+     */
+    public function getRoNameAttribute(): ?string
+    {
+        return $this->attributes['name'] ?? null;
+    }
+
+    /**
      * Get the leads.
      */
     public function leads()

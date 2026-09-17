@@ -201,15 +201,35 @@
                                     :placeholder="trans('admin::app.activities.edit.type')"
                                 >
                                     <option value="call">
-                                        @lang('admin::app.activities.edit.call')
+                                        @lang('admin::insurance.activity_types.call')
                                     </option>
 
                                     <option value="meeting">
-                                        @lang('admin::app.activities.edit.meeting')
+                                        @lang('admin::insurance.activity_types.meeting')
+                                    </option>
+
+                                    <option value="consent_request">
+                                        @lang('admin::insurance.activity_types.consent_request')
+                                    </option>
+
+                                    <option value="soa">
+                                        @lang('admin::insurance.activity_types.soa')
+                                    </option>
+
+                                    <option value="docs_verification">
+                                        @lang('admin::insurance.activity_types.docs_verification')
+                                    </option>
+
+                                    <option value="application_submit">
+                                        @lang('admin::insurance.activity_types.application_submit')
+                                    </option>
+
+                                    <option value="renewal_review">
+                                        @lang('admin::insurance.activity_types.renewal_review')
                                     </option>
 
                                     <option value="lunch">
-                                        @lang('admin::app.activities.edit.lunch')
+                                        @lang('admin::insurance.activity_types.lunch')
                                     </option>
                                 </x-admin::form.control-group.control>
 

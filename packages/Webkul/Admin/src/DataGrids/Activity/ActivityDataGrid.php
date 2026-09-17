@@ -32,7 +32,7 @@ class ActivityDataGrid extends DataGrid
             ->leftJoin('lead_activities', 'activities.id', '=', 'lead_activities.activity_id')
             ->leftJoin('leads', 'lead_activities.lead_id', '=', 'leads.id')
             ->leftJoin('users', 'activities.user_id', '=', 'users.id')
-            ->whereIn('type', ['call', 'meeting', 'lunch'])
+            ->whereIn('type', \Webkul\Activity\Models\Activity::ACTIONABLE_TYPES)
             ->where(function ($query) {
                 if ($userIds = bouncer()->getAuthorizedUserIds()) {
                     $query->whereIn('activities.user_id', $userIds)
@@ -144,7 +144,17 @@ class ActivityDataGrid extends DataGrid
             'searchable' => false,
             'filterable' => false,
             'sortable' => true,
-            'closure' => fn ($row) => trans('admin::app.activities.index.datagrid.'.$row->type),
+            'closure' => function ($row) {
+                $insuranceKey = 'admin::insurance.activity_types.'.$row->type;
+                if (trans()->has($insuranceKey)) {
+                    return trans($insuranceKey);
+                }
+                $appKey = 'admin::app.activities.index.datagrid.'.$row->type;
+                if (trans()->has($appKey)) {
+                    return trans($appKey);
+                }
+                return ucfirst(str_replace('_', ' ', $row->type));
+            },
         ]);
 
         $this->addColumn([

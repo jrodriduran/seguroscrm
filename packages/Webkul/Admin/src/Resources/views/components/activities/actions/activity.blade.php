@@ -230,19 +230,34 @@
                     isStoring: false,
                     
                     selectedType: {
-                        label: "{{ trans('admin::app.components.activities.actions.activity.call') }}",
+                        label: "{{ trans('admin::insurance.activity_types.call') }}",
                         value: 'call'
                     },
 
                     availableTypes: [
                         {
-                            label: "{{ trans('admin::app.components.activities.actions.activity.call') }}",
+                            label: "{{ trans('admin::insurance.activity_types.call') }}",
                             value: 'call'
                         }, {
-                            label: "{{ trans('admin::app.components.activities.actions.activity.meeting') }}",
+                            label: "{{ trans('admin::insurance.activity_types.meeting') }}",
                             value: 'meeting'
                         }, {
-                            label: "{{ trans('admin::app.components.activities.actions.activity.lunch') }}",
+                            label: "{{ trans('admin::insurance.activity_types.consent_request') }}",
+                            value: 'consent_request'
+                        }, {
+                            label: "{{ trans('admin::insurance.activity_types.soa') }}",
+                            value: 'soa'
+                        }, {
+                            label: "{{ trans('admin::insurance.activity_types.docs_verification') }}",
+                            value: 'docs_verification'
+                        }, {
+                            label: "{{ trans('admin::insurance.activity_types.application_submit') }}",
+                            value: 'application_submit'
+                        }, {
+                            label: "{{ trans('admin::insurance.activity_types.renewal_review') }}",
+                            value: 'renewal_review'
+                        }, {
+                            label: "{{ trans('admin::insurance.activity_types.lunch') }}",
                             value: 'lunch'
                         },
                     ]

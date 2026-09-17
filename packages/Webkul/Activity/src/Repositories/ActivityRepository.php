@@ -120,7 +120,7 @@ class ActivityRepository extends Repository
             ->addSelect(\DB::raw('IF('.$tablePrefix.'activities.is_done, "done", "") as class'))
             ->leftJoin('activity_participants', 'activities.id', '=', 'activity_participants.activity_id')
             ->leftJoin('users', 'activities.user_id', '=', 'users.id')
-            ->whereIn('type', ['call', 'meeting', 'lunch'])
+            ->whereIn('type', \Webkul\Activity\Models\Activity::ACTIONABLE_TYPES)
             ->whereBetween('activities.schedule_from', $dateRange)
             ->where(function ($query) {
                 if ($userIds = bouncer()->getAuthorizedUserIds()) {

@@ -13,6 +13,20 @@ use Webkul\Warehouse\Models\WarehouseProxy;
 class Activity extends Model implements ActivityContract
 {
     /**
+     * Actionable activity types displayed on calendar and activity lists.
+     */
+    public const ACTIONABLE_TYPES = [
+        'call',
+        'meeting',
+        'lunch',
+        'consent_request',
+        'soa',
+        'docs_verification',
+        'application_submit',
+        'renewal_review',
+    ];
+
+    /**
      * Define table name of property
      *
      * @var string
@@ -52,6 +66,24 @@ class Activity extends Model implements ActivityContract
         'is_done',
         'user_id',
     ];
+
+    /**
+     * Get translated activity type name.
+     */
+    public function getTypeNameAttribute(): string
+    {
+        $insuranceKey = "admin::insurance.activity_types.{$this->type}";
+        if (trans()->has($insuranceKey)) {
+            return trans($insuranceKey);
+        }
+
+        $appKey = "admin::app.activities.index.datagrid.{$this->type}";
+        if (trans()->has($appKey)) {
+            return trans($appKey);
+        }
+
+        return ucfirst(str_replace('_', ' ', $this->type ?? ''));
+    }
 
     /**
      * Get the user that owns the activity.
