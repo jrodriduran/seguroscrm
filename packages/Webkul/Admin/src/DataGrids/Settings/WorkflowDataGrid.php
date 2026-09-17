@@ -4,6 +4,8 @@ namespace Webkul\Admin\DataGrids\Settings;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Webkul\DataGrid\DataGrid;
 
 class WorkflowDataGrid extends DataGrid
@@ -39,21 +41,21 @@ class WorkflowDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'      => 'name',
-            'label'      => trans('admin::app.settings.workflows.index.datagrid.name'),
-            'type'       => 'string',
+            'index' => 'name',
+            'label' => trans('admin::app.settings.workflows.index.datagrid.name'),
+            'type' => 'string',
             'searchable' => true,
             'filterable' => true,
-            'sortable'   => true,
-            'closure'    => function ($row) {
-                $slug = \Illuminate\Support\Str::slug($row->name ?? '', '_');
+            'sortable' => true,
+            'closure' => function ($row) {
+                $slug = Str::slug($row->name ?? '', '_');
                 $candidates = [
                     "admin::insurance.workflows.{$slug}",
                     "admin::app.settings.workflows.{$slug}",
                 ];
 
                 foreach ($candidates as $candidate) {
-                    if (\Illuminate\Support\Facades\Lang::has($candidate)) {
+                    if (Lang::has($candidate)) {
                         return trans($candidate);
                     }
                 }

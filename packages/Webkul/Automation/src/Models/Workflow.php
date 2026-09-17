@@ -11,7 +11,7 @@ class Workflow extends Model implements WorkflowContract
 {
     protected $casts = [
         'conditions' => 'array',
-        'actions'    => 'array',
+        'actions' => 'array',
     ];
 
     protected $fillable = [
