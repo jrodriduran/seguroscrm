@@ -20,11 +20,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        ->call(KrayinDatabaseSeeder::class);
-        ->call(InsuranceTypeSeeder::class);
-        ->call(InsuranceAttributesSeeder::class);
-        ->call(InsuranceCarriersSeeder::class);
-        ->call(InsurancePipelineSeeder::class);
-        ->call(InsuranceProductsSeeder::class);
+        $this->call(KrayinDatabaseSeeder::class);
+        $this->call(InsuranceTypeSeeder::class);
+        $this->call(InsuranceAttributesSeeder::class);
+        $this->call(InsuranceCarriersSeeder::class);
+        $this->call(InsurancePipelineSeeder::class);
+        $this->call(InsuranceProductsSeeder::class);
     }
 }
