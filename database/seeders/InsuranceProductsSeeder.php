@@ -13,10 +13,10 @@ class InsuranceProductsSeeder extends Seeder
      */
     public function run(): void
     {
-         = Carbon::now();
+        $now = Carbon::now();
 
         // 1. Define custom attributes for products (Planes / Paquetes de Pólizas)
-         = [
+        $attributes = [
             [
                 'code'            => 'carrier_id',
                 'name'            => 'Aseguradora / Carrier',
@@ -170,292 +170,283 @@ class InsuranceProductsSeeder extends Seeder
             ],
         ];
 
-         = [];
-         = [];
+        $createdAttributes = [];
+        $attributeOptionsMap = [];
 
-        foreach ( as ) {
-             = ['options'];
-            unset(['options']);
+        foreach ($attributes as $attrData) {
+            $options = $attrData['options'];
+            unset($attrData['options']);
 
-             = DB::table('attributes')
-                ->where('code', ['code'])
-                ->where('entity_type', ['entity_type'])
+            $existing = DB::table('attributes')
+                ->where('code', $attrData['code'])
+                ->where('entity_type', $attrData['entity_type'])
                 ->first();
 
-            if () {
+            if ($existing) {
                 DB::table('attributes')
-                    ->where('id', ->id)
-                    ->update(array_merge(, ['updated_at' => ]));
-                 = ->id;
+                    ->where('id', $existing->id)
+                    ->update(array_merge($attrData, ['updated_at' => $now]));
+                $attributeId = $existing->id;
             } else {
-                 = DB::table('attributes')->insertGetId(
-                    array_merge(, ['created_at' => , 'updated_at' => ])
+                $attributeId = DB::table('attributes')->insertGetId(
+                    array_merge($attrData, ['created_at' => $now, 'updated_at' => $now])
                 );
             }
 
-            [['code']] = ;
+            $createdAttributes[$attrData['code']] = $attributeId;
 
-            if (! empty() && in_array(['type'], ['select', 'multiselect'])) {
-                 = 1;
-                foreach ( as ) {
-                     = DB::table('attribute_options')
-                        ->where('attribute_id', )
-                        ->where('name', )
+            if (! empty($options) && in_array($attrData['type'], ['select', 'multiselect'])) {
+                $sort = 1;
+                foreach ($options as $optName) {
+                    $optRow = DB::table('attribute_options')
+                        ->where('attribute_id', $attributeId)
+                        ->where('name', $optName)
                         ->first();
 
-                    if (! ) {
-                         = DB::table('attribute_options')->insertGetId([
-                            'attribute_id' => ,
-                            'name'         => ,
-                            'sort_order'   => ++,
+                    if (! $optRow) {
+                        $optId = DB::table('attribute_options')->insertGetId([
+                            'attribute_id' => $attributeId,
+                            'name'         => $optName,
+                            'sort_order'   => $sort++,
                         ]);
                     } else {
-                         = ->id;
+                        $optId = $optRow->id;
                     }
 
-                    [['code']][] = ;
+                    $attributeOptionsMap[$attrData['code']][$optName] = $optId;
                 }
             }
         }
 
         // Helper map of carriers
-         = DB::table('organizations')->pluck('id', 'name');
+        $carriers = DB::table('organizations')->pluck('id', 'name');
 
         // 2. Real-World Insurance Plans / Policy Packages
-         = [
+        $plans = [
             [
-                'sku'                => 'FB-SLV-1410',
-                'name'               => 'Florida Blue - BlueOptions Silver 1410',
-                'description'        => 'Plan ACA Plata con Reducción de Costos Compartidos (CSR). Excelente cobertura médica con copagos bajos y deducible .',
-                'price'              => 450.00,
-                'carrier_name'       => 'Florida Blue (BCBS Florida)',
-                'line'               => 'ACA / Obamacare (Salud)',
-                'tier'               => 'Plata / Silver (CSR)',
-                'network'            => 'PPO (Preferred Provider Org)',
-                'deductible'         => 0.00,
-                'moop'               => 3000.00,
-                'pcp'                => ' Copago',
-                'specialist'         => ' Copago',
-                'year'               => '2026',
+                'sku'          => 'FB-SLV-1410',
+                'name'         => 'Florida Blue - BlueOptions Silver 1410',
+                'description'  => 'Plan ACA Plata con Reducción de Costos Compartidos (CSR). Excelente cobertura médica con copagos bajos y deducible $0.',
+                'price'        => 450.00,
+                'carrier_name' => 'Florida Blue (BCBS Florida)',
+                'line'         => 'ACA / Obamacare (Salud)',
+                'tier'         => 'Plata / Silver (CSR)',
+                'network'      => 'PPO (Preferred Provider Org)',
+                'deductible'   => 0.00,
+                'moop'         => 3000.00,
+                'pcp'          => '$0 Copago',
+                'specialist'   => '$30 Copago',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'FB-BRZ-1422',
-                'name'               => 'Florida Blue - BlueCare Bronze 1422',
-                'description'        => 'Plan ACA Bronce económico diseñado para protección ante gastos médicos mayores con prima mensual reducida.',
-                'price'              => 380.00,
-                'carrier_name'       => 'Florida Blue (BCBS Florida)',
-                'line'               => 'ACA / Obamacare (Salud)',
-                'tier'               => 'Bronce / Bronze',
-                'network'            => 'HMO (Health Maintenance Org)',
-                'deductible'         => 7500.00,
-                'moop'               => 9100.00,
-                'pcp'                => ' Copago',
-                'specialist'         => ' Copago',
-                'year'               => '2026',
+                'sku'          => 'FB-BRZ-1422',
+                'name'         => 'Florida Blue - BlueCare Bronze 1422',
+                'description'  => 'Plan ACA Bronce económico diseñado para protección ante gastos médicos mayores con prima mensual reducida.',
+                'price'        => 380.00,
+                'carrier_name' => 'Florida Blue (BCBS Florida)',
+                'line'         => 'ACA / Obamacare (Salud)',
+                'tier'         => 'Bronce / Bronze',
+                'network'      => 'HMO (Health Maintenance Org)',
+                'deductible'   => 7500.00,
+                'moop'         => 9100.00,
+                'pcp'          => '$40 Copago',
+                'specialist'   => '$80 Copago',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'AMB-SLV-STD',
-                'name'               => 'Ambetter - Clear Silver (Standard CSR)',
-                'description'        => 'Plan ACA Plata de Ambetter con cobertura integral de medicamentos recetados y red de clínicas preferidas.',
-                'price'              => 420.00,
-                'carrier_name'       => 'Ambetter (Centene Corporation)',
-                'line'               => 'ACA / Obamacare (Salud)',
-                'tier'               => 'Plata / Silver (CSR)',
-                'network'            => 'EPO (Exclusive Provider Org)',
-                'deductible'         => 500.00,
-                'moop'               => 2900.00,
-                'pcp'                => ' Copago',
-                'specialist'         => ' Copago',
-                'year'               => '2026',
+                'sku'          => 'AMB-SLV-STD',
+                'name'         => 'Ambetter - Clear Silver (Standard CSR)',
+                'description'  => 'Plan ACA Plata de Ambetter con cobertura integral de medicamentos recetados y red de clínicas preferidas.',
+                'price'        => 420.00,
+                'carrier_name' => 'Ambetter (Centene Corporation)',
+                'line'         => 'ACA / Obamacare (Salud)',
+                'tier'         => 'Plata / Silver (CSR)',
+                'network'      => 'EPO (Exclusive Provider Org)',
+                'deductible'   => 500.00,
+                'moop'         => 2900.00,
+                'pcp'          => '$5 Copago',
+                'specialist'   => '$25 Copago',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'OSC-SLV-NXT',
-                'name'               => 'Oscar Health - Classic Silver Next',
-                'description'        => 'Plan tecnológico con telemedicina 24/7 sin costo, red de especialistas amplia y gestión fácil desde la app.',
-                'price'              => 435.00,
-                'carrier_name'       => 'Oscar Health',
-                'line'               => 'ACA / Obamacare (Salud)',
-                'tier'               => 'Plata / Silver (CSR)',
-                'network'            => 'EPO (Exclusive Provider Org)',
-                'deductible'         => 0.00,
-                'moop'               => 2500.00,
-                'pcp'                => ' Virtual /  PCP',
-                'specialist'         => ' Copago',
-                'year'               => '2026',
+                'sku'          => 'OSC-SLV-NXT',
+                'name'         => 'Oscar Health - Classic Silver Next',
+                'description'  => 'Plan tecnológico con telemedicina 24/7 sin costo, red de especialistas amplia y gestión fácil desde la app.',
+                'price'        => 435.00,
+                'carrier_name' => 'Oscar Health',
+                'line'         => 'ACA / Obamacare (Salud)',
+                'tier'         => 'Plata / Silver (CSR)',
+                'network'      => 'EPO (Exclusive Provider Org)',
+                'deductible'   => 0.00,
+                'moop'         => 2500.00,
+                'pcp'          => '$0 Virtual / $15 PCP',
+                'specialist'   => '$40 Copago',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'HUM-MA-HMO1',
-                'name'               => 'Humana - Gold Plus HMO (H1036-001)',
-                'description'        => 'Medicare Advantage HMO con prima mensual de , beneficios dentales completos, lentes, audífonos y tarjeta de comida/OTC.',
-                'price'              => 0.00,
-                'carrier_name'       => 'Humana',
-                'line'               => 'Medicare Advantage (Part C)',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'HMO (Health Maintenance Org)',
-                'deductible'         => 0.00,
-                'moop'               => 3400.00,
-                'pcp'                => ' Copago',
-                'specialist'         => ' Copago',
-                'year'               => '2026',
+                'sku'          => 'HUM-MA-HMO1',
+                'name'         => 'Humana - Gold Plus HMO (H1036-001)',
+                'description'  => 'Medicare Advantage HMO con prima mensual de $0, beneficios dentales completos, lentes, audífonos y tarjeta de comida/OTC.',
+                'price'        => 0.00,
+                'carrier_name' => 'Humana',
+                'line'         => 'Medicare Advantage (Part C)',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'HMO (Health Maintenance Org)',
+                'deductible'   => 0.00,
+                'moop'         => 3400.00,
+                'pcp'          => '$0 Copago',
+                'specialist'   => '$20 Copago',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'UHC-MA-PPO1',
-                'name'               => 'UnitedHealthcare - AARP Medicare Advantage Choice (PPO)',
-                'description'        => 'Medicare Advantage con red PPO flexible que permite ver doctores fuera de red sin referidos y crédito OTC mensual.',
-                'price'              => 0.00,
-                'carrier_name'       => 'UnitedHealthcare (UHC / Golden Rule)',
-                'line'               => 'Medicare Advantage (Part C)',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'PPO (Preferred Provider Org)',
-                'deductible'         => 0.00,
-                'moop'               => 3900.00,
-                'pcp'                => ' Copago',
-                'specialist'         => ' Copago',
-                'year'               => '2026',
+                'sku'          => 'UHC-MA-PPO1',
+                'name'         => 'UnitedHealthcare - AARP Medicare Advantage Choice (PPO)',
+                'description'  => 'Medicare Advantage con red PPO flexible que permite ver doctores fuera de red sin referidos y crédito OTC mensual.',
+                'price'        => 0.00,
+                'carrier_name' => 'UnitedHealthcare (UHC / Golden Rule)',
+                'line'         => 'Medicare Advantage (Part C)',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'PPO (Preferred Provider Org)',
+                'deductible'   => 0.00,
+                'moop'         => 3900.00,
+                'pcp'          => '$0 Copago',
+                'specialist'   => '$35 Copago',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'MOO-MED-PLANG',
-                'name'               => 'Mutual of Omaha - Medicare Supplement Plan G',
-                'description'        => 'Póliza Medigap Plan G. Cubre el 100% de los gastos hospitalarios y médicos no cubiertos por Medicare Original (solo paga deducible Parte B).',
-                'price'              => 165.00,
-                'carrier_name'       => 'Mutual of Omaha',
-                'line'               => 'Medicare Supplement (Medigap)',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'Indemnización / FFS',
-                'deductible'         => 240.00,
-                'moop'               => 0.00,
-                'pcp'                => '100% Cubierto tras deducible B',
-                'specialist'         => '100% Cubierto',
-                'year'               => '2026',
+                'sku'          => 'MOO-MED-PLANG',
+                'name'         => 'Mutual of Omaha - Medicare Supplement Plan G',
+                'description'  => 'Póliza Medigap Plan G. Cubre el 100% de los gastos hospitalarios y médicos no cubiertos por Medicare Original (solo paga deducible Parte B).',
+                'price'        => 165.00,
+                'carrier_name' => 'Mutual of Omaha',
+                'line'         => 'Medicare Supplement (Medigap)',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'Indemnización / FFS',
+                'deductible'   => 240.00,
+                'moop'         => 0.00,
+                'pcp'          => '100% Cubierto tras deducible B',
+                'specialist'   => '100% Cubierto',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'MOO-LIFE-250K',
-                'name'               => 'Mutual of Omaha - Term Life Answers ( / 20 Años)',
-                'description'        => 'Seguro de vida a término por 20 años con suma asegurada de ,000 y cláusula de beneficios en vida por enfermedad terminal.',
-                'price'              => 38.50,
-                'carrier_name'       => 'Mutual of Omaha',
-                'line'               => 'Vida Término / Term Life',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'No Aplica / N/A',
-                'deductible'         => 0.00,
-                'moop'               => 0.00,
-                'pcp'                => 'No Aplica',
-                'specialist'         => 'No Aplica',
-                'year'               => '2026',
+                'sku'          => 'MOO-LIFE-250K',
+                'name'         => 'Mutual of Omaha - Term Life Answers ($250k / 20 Años)',
+                'description'  => 'Seguro de vida a término por 20 años con suma asegurada de $250,000 y cláusula de beneficios en vida por enfermedad terminal.',
+                'price'        => 38.50,
+                'carrier_name' => 'Mutual of Omaha',
+                'line'         => 'Vida Término / Term Life',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'No Aplica / N/A',
+                'deductible'   => 0.00,
+                'moop'         => 0.00,
+                'pcp'          => 'No Aplica',
+                'specialist'   => 'No Aplica',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'AME-FE-15K',
-                'name'               => 'Americo - Eagle Premier Series (Gastos Finales ,000)',
-                'description'        => 'Seguro de Gastos Finales de emisión simplificada sin examen médico para adultos mayores (50-85 años).',
-                'price'              => 55.00,
-                'carrier_name'       => 'Americo Financial Life',
-                'line'               => 'Gastos Finales / Final Expense',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'No Aplica / N/A',
-                'deductible'         => 0.00,
-                'moop'               => 0.00,
-                'pcp'                => 'No Aplica',
-                'specialist'         => 'No Aplica',
-                'year'               => '2026',
+                'sku'          => 'AME-FE-15K',
+                'name'         => 'Americo - Eagle Premier Series (Gastos Finales $15,000)',
+                'description'  => 'Seguro de Gastos Finales de emisión simplificada sin examen médico para adultos mayores (50-85 años).',
+                'price'        => 55.00,
+                'carrier_name' => 'Americo Financial Life',
+                'line'         => 'Gastos Finales / Final Expense',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'No Aplica / N/A',
+                'deductible'   => 0.00,
+                'moop'         => 0.00,
+                'pcp'          => 'No Aplica',
+                'specialist'   => 'No Aplica',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'DD-DENT-PREM',
-                'name'               => 'Delta Dental - Premium Individual & Family',
-                'description'        => 'Plan dental preferente con 100% de cobertura en limpiezas preventivas y 80% en tratamientos básicos con red nacional Delta.',
-                'price'              => 45.00,
-                'carrier_name'       => 'Delta Dental',
-                'line'               => 'Dental y Visión',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'PPO (Preferred Provider Org)',
-                'deductible'         => 50.00,
-                'moop'               => 2000.00,
-                'pcp'                => ' Limpiezas / Preventivo',
-                'specialist'         => '20% Básico / 50% Mayor',
-                'year'               => '2026',
+                'sku'          => 'DD-DENT-PREM',
+                'name'         => 'Delta Dental - Premium Individual & Family',
+                'description'  => 'Plan dental preferente con 100% de cobertura en limpiezas preventivas y 80% en tratamientos básicos con red nacional Delta.',
+                'price'        => 45.00,
+                'carrier_name' => 'Delta Dental',
+                'line'         => 'Dental y Visión',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'PPO (Preferred Provider Org)',
+                'deductible'   => 50.00,
+                'moop'         => 2000.00,
+                'pcp'          => '$0 Limpiezas / Preventivo',
+                'specialist'   => '20% Básico / 50% Mayor',
+                'year'         => '2026',
             ],
             [
-                'sku'                => 'NAT-HOSP-IND',
-                'name'               => 'National General - Foundation Health (Hospital Indemnity)',
-                'description'        => 'Póliza suplementaria de indemnización hospitalaria. Paga directamente al asegurado  por día de internación médica o quirúrgica.',
-                'price'              => 49.00,
-                'carrier_name'       => 'National General (Allstate Health Solutions)',
-                'line'               => 'Indemnización Hospitalaria',
-                'tier'               => 'No Aplica / N/A',
-                'network'            => 'No Aplica / N/A',
-                'deductible'         => 0.00,
-                'moop'               => 0.00,
-                'pcp'                => 'Pago directo al asegurado /día',
-                'specialist'         => 'No Aplica',
-                'year'               => '2026',
+                'sku'          => 'NAT-HOSP-IND',
+                'name'         => 'National General - Foundation Health (Hospital Indemnity)',
+                'description'  => 'Póliza suplementaria de indemnización hospitalaria. Paga directamente al asegurado $500 por día de internación médica o quirúrgica.',
+                'price'        => 49.00,
+                'carrier_name' => 'National General (Allstate Health Solutions)',
+                'line'         => 'Indemnización Hospitalaria',
+                'tier'         => 'No Aplica / N/A',
+                'network'      => 'No Aplica / N/A',
+                'deductible'   => 0.00,
+                'moop'         => 0.00,
+                'pcp'          => 'Pago directo al asegurado $500/día',
+                'specialist'   => 'No Aplica',
+                'year'         => '2026',
             ],
         ];
 
-        foreach ( as ) {
-             = DB::table('products')->where('sku', ['sku'])->first();
+        foreach ($plans as $p) {
+            $existing = DB::table('products')->where('sku', $p['sku'])->first();
 
-             = [
-                'sku'         => ['sku'],
-                'name'        => ['name'],
-                'description' => ['description'],
+            $productData = [
+                'sku'         => $p['sku'],
+                'name'        => $p['name'],
+                'description' => $p['description'],
                 'quantity'    => 9999,
-                'price'       => ['price'],
-                'updated_at'  => ,
+                'price'       => $p['price'],
+                'updated_at'  => $now,
             ];
 
-            if () {
-                DB::table('products')->where('id', ->id)->update();
-                 = ->id;
+            if ($existing) {
+                DB::table('products')->where('id', $existing->id)->update($productData);
+                $productId = $existing->id;
             } else {
-                 = DB::table('products')->insertGetId(array_merge(, [
-                    'created_at' => ,
+                $productId = DB::table('products')->insertGetId(array_merge($productData, [
+                    'created_at' => $now,
                 ]));
             }
 
             // Save custom attributes
-            // 1. carrier_id
-             = [['carrier_name']] ?? null;
-            if ( && isset(['carrier_id'])) {
-                ->saveAttributeValue(['carrier_id'], , 'products', 'integer_value', );
+            $carrierId = $carriers[$p['carrier_name']] ?? null;
+            if ($carrierId && isset($createdAttributes['carrier_id'])) {
+                $this->saveAttributeValue($createdAttributes['carrier_id'], $productId, 'products', 'integer_value', $carrierId);
             }
 
-            // 2. insurance_line
-            if (isset(['insurance_line']) && isset(['insurance_line'][['line']])) {
-                ->saveAttributeValue(['insurance_line'], , 'products', 'integer_value', ['insurance_line'][['line']]);
+            if (isset($createdAttributes['insurance_line']) && isset($attributeOptionsMap['insurance_line'][$p['line']])) {
+                $this->saveAttributeValue($createdAttributes['insurance_line'], $productId, 'products', 'integer_value', $attributeOptionsMap['insurance_line'][$p['line']]);
             }
 
-            // 3. metal_tier
-            if (isset(['metal_tier']) && isset(['metal_tier'][['tier']])) {
-                ->saveAttributeValue(['metal_tier'], , 'products', 'integer_value', ['metal_tier'][['tier']]);
+            if (isset($createdAttributes['metal_tier']) && isset($attributeOptionsMap['metal_tier'][$p['tier']])) {
+                $this->saveAttributeValue($createdAttributes['metal_tier'], $productId, 'products', 'integer_value', $attributeOptionsMap['metal_tier'][$p['tier']]);
             }
 
-            // 4. network_type
-            if (isset(['network_type']) && isset(['network_type'][['network']])) {
-                ->saveAttributeValue(['network_type'], , 'products', 'integer_value', ['network_type'][['network']]);
+            if (isset($createdAttributes['network_type']) && isset($attributeOptionsMap['network_type'][$p['network']])) {
+                $this->saveAttributeValue($createdAttributes['network_type'], $productId, 'products', 'integer_value', $attributeOptionsMap['network_type'][$p['network']]);
             }
 
-            // 5. deductible
-            if (isset(['deductible'])) {
-                ->saveAttributeValue(['deductible'], , 'products', 'float_value', ['deductible']);
+            if (isset($createdAttributes['deductible'])) {
+                $this->saveAttributeValue($createdAttributes['deductible'], $productId, 'products', 'float_value', $p['deductible']);
             }
 
-            // 6. max_out_of_pocket
-            if (isset(['max_out_of_pocket'])) {
-                ->saveAttributeValue(['max_out_of_pocket'], , 'products', 'float_value', ['moop']);
+            if (isset($createdAttributes['max_out_of_pocket'])) {
+                $this->saveAttributeValue($createdAttributes['max_out_of_pocket'], $productId, 'products', 'float_value', $p['moop']);
             }
 
-            // 7. primary_care_copay
-            if (isset(['primary_care_copay'])) {
-                ->saveAttributeValue(['primary_care_copay'], , 'products', 'text_value', ['pcp']);
+            if (isset($createdAttributes['primary_care_copay'])) {
+                $this->saveAttributeValue($createdAttributes['primary_care_copay'], $productId, 'products', 'text_value', $p['pcp']);
             }
 
-            // 8. specialist_copay
-            if (isset(['specialist_copay'])) {
-                ->saveAttributeValue(['specialist_copay'], , 'products', 'text_value', ['specialist']);
+            if (isset($createdAttributes['specialist_copay'])) {
+                $this->saveAttributeValue($createdAttributes['specialist_copay'], $productId, 'products', 'text_value', $p['specialist']);
             }
 
-            // 9. plan_year
-            if (isset(['plan_year'])) {
-                ->saveAttributeValue(['plan_year'], , 'products', 'text_value', ['year']);
+            if (isset($createdAttributes['plan_year'])) {
+                $this->saveAttributeValue($createdAttributes['plan_year'], $productId, 'products', 'text_value', $p['year']);
             }
         }
     }
@@ -463,24 +454,24 @@ class InsuranceProductsSeeder extends Seeder
     /**
      * Helper to save or update attribute value.
      */
-    private function saveAttributeValue(int , int , string , string , ): void
+    private function saveAttributeValue(int $attributeId, int $entityId, string $entityType, string $column, $value): void
     {
-         = DB::table('attribute_values')
-            ->where('attribute_id', )
-            ->where('entity_id', )
-            ->where('entity_type', )
+        $existing = DB::table('attribute_values')
+            ->where('attribute_id', $attributeId)
+            ->where('entity_id', $entityId)
+            ->where('entity_type', $entityType)
             ->first();
 
-        if () {
+        if ($existing) {
             DB::table('attribute_values')
-                ->where('id', ->id)
-                ->update([ => ]);
+                ->where('id', $existing->id)
+                ->update([$column => $value]);
         } else {
             DB::table('attribute_values')->insert([
-                'attribute_id' => ,
-                'entity_id'    => ,
-                'entity_type'  => ,
-                        => ,
+                'attribute_id' => $attributeId,
+                'entity_id'    => $entityId,
+                'entity_type'  => $entityType,
+                $column        => $value,
             ]);
         }
     }

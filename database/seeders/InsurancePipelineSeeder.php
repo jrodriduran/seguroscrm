@@ -13,9 +13,9 @@ class InsurancePipelineSeeder extends Seeder
      */
     public function run(): void
     {
-         = Carbon::now();
+        $now = Carbon::now();
 
-         = [
+        $pipelines = [
             [
                 'name'        => 'ACA / Obamacare (Salud Individual y Familiar)',
                 'is_default'  => 1,
@@ -197,55 +197,55 @@ class InsurancePipelineSeeder extends Seeder
         ];
 
         // Check if there is an initial generic pipeline with ID 1
-         = DB::table('lead_pipelines')->where('id', 1)->first();
-        if ( && in_array(strtolower(->name), ['default', 'por defecto', 'predeterminado', 'padrão'])) {
+        $firstPipeline = DB::table('lead_pipelines')->where('id', 1)->first();
+        if ($firstPipeline && in_array(strtolower($firstPipeline->name), ['default', 'por defecto', 'predeterminado', 'padrão'])) {
             DB::table('lead_pipelines')->where('id', 1)->update([
-                'name' => 'Flujo General de Seguros / General Insurance',
-                'updated_at' => ,
+                'name'       => 'Flujo General de Seguros / General Insurance',
+                'updated_at' => $now,
             ]);
         }
 
-        foreach ( as ) {
-             = ['stages'];
-            unset(['stages']);
+        foreach ($pipelines as $pData) {
+            $stages = $pData['stages'];
+            unset($pData['stages']);
 
-             = DB::table('lead_pipelines')->where('name', ['name'])->first();
+            $existing = DB::table('lead_pipelines')->where('name', $pData['name'])->first();
 
-            if () {
-                DB::table('lead_pipelines')->where('id', ->id)->update([
-                    'is_default'  => ['is_default'],
-                    'rotten_days' => ['rotten_days'],
-                    'updated_at'  => ,
+            if ($existing) {
+                DB::table('lead_pipelines')->where('id', $existing->id)->update([
+                    'is_default'  => $pData['is_default'],
+                    'rotten_days' => $pData['rotten_days'],
+                    'updated_at'  => $now,
                 ]);
-                 = ->id;
+                $pipelineId = $existing->id;
             } else {
-                 = DB::table('lead_pipelines')->insertGetId(array_merge(, [
-                    'created_at' => ,
-                    'updated_at' => ,
+                $pipelineId = DB::table('lead_pipelines')->insertGetId(array_merge($pData, [
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]));
             }
 
-            foreach ( as ) {
-                 = DB::table('lead_pipeline_stages')
-                    ->where('lead_pipeline_id', )
-                    ->where('code', ['code'])
+            foreach ($stages as $stg) {
+                $stageExists = DB::table('lead_pipeline_stages')
+                    ->where('lead_pipeline_id', $pipelineId)
+                    ->where('code', $stg['code'])
                     ->first();
 
-                if () {
+                if ($stageExists) {
                     DB::table('lead_pipeline_stages')
-                        ->where('id', ->id)
+                        ->where('id', $stageExists->id)
                         ->update([
-                            'name'        => ['name'],
-                            'probability' => ['probability'],
-                            'sort_order'  => ['sort_order'],
+                            'name'        => $stg['name'],
+                            'probability' => $stg['probability'],
+                            'sort_order'  => $stg['sort_order'],
                         ]);
                 } else {
                     DB::table('lead_pipeline_stages')->insert([
-                        'code'             => ['code'],
-                        'name'             => ['name'],
-                        'probability'      => ['probability'],
-                        'sort_order'       => ['sort_order'],
-                        'lead_pipeline_id' => ,
+                        'code'             => $stg['code'],
+                        'name'             => $stg['name'],
+                        'probability'      => $stg['probability'],
+                        'sort_order'       => $stg['sort_order'],
+                        'lead_pipeline_id' => $pipelineId,
                     ]);
                 }
             }
