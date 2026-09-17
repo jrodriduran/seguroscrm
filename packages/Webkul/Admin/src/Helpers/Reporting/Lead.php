@@ -4,6 +4,8 @@ namespace Webkul\Admin\Helpers\Reporting;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Webkul\Lead\Repositories\LeadRepository;
 use Webkul\Lead\Repositories\PipelineRepository;
 use Webkul\Lead\Repositories\StageRepository;
@@ -307,7 +309,7 @@ class Lead extends AbstractReporting
      */
     public function getTotalWonLeadValueBySources()
     {
-        return $this->leadRepository
+        $records = $this->leadRepository
             ->resetModel()
             ->select(
                 'lead_sources.name',
@@ -318,6 +320,31 @@ class Lead extends AbstractReporting
             ->whereBetween('leads.created_at', [$this->startDate, $this->endDate])
             ->groupBy('lead_source_id')
             ->get();
+
+        return $records->map(function ($item) {
+            $name = $item->name;
+
+            if ($name) {
+                $slug = Str::slug($name, '_');
+                $candidates = [
+                    "admin::insurance.lead_sources.{$slug}",
+                    "admin::app.lead_sources.{$slug}",
+                ];
+
+                foreach ($candidates as $candidate) {
+                    if (Lang::has($candidate)) {
+                        $item->name = trans($candidate);
+                        break;
+                    }
+                }
+            } else {
+                $item->name = Lang::has('admin::app.dashboard.unknown')
+                    ? trans('admin::app.dashboard.unknown')
+                    : 'N/A';
+            }
+
+            return $item;
+        });
     }
 
     /**
@@ -325,7 +352,7 @@ class Lead extends AbstractReporting
      */
     public function getTotalWonLeadValueByTypes()
     {
-        return $this->leadRepository
+        $records = $this->leadRepository
             ->resetModel()
             ->select(
                 'lead_types.name',
@@ -336,6 +363,31 @@ class Lead extends AbstractReporting
             ->whereBetween('leads.created_at', [$this->startDate, $this->endDate])
             ->groupBy('lead_type_id')
             ->get();
+
+        return $records->map(function ($item) {
+            $name = $item->name;
+
+            if ($name) {
+                $slug = Str::slug($name, '_');
+                $candidates = [
+                    "admin::insurance.lead_types.{$slug}",
+                    "admin::app.lead_types.{$slug}",
+                ];
+
+                foreach ($candidates as $candidate) {
+                    if (Lang::has($candidate)) {
+                        $item->name = trans($candidate);
+                        break;
+                    }
+                }
+            } else {
+                $item->name = Lang::has('admin::app.dashboard.unknown')
+                    ? trans('admin::app.dashboard.unknown')
+                    : 'N/A';
+            }
+
+            return $item;
+        });
     }
 
     /**
@@ -343,10 +395,11 @@ class Lead extends AbstractReporting
      */
     public function getOpenLeadsByStates()
     {
-        return $this->leadRepository
+        $records = $this->leadRepository
             ->resetModel()
             ->select(
                 'lead_pipeline_stages.name',
+                'lead_pipeline_stages.code',
                 DB::raw('COUNT(lead_value) as total')
             )
             ->leftJoin('lead_pipeline_stages', 'leads.lead_pipeline_stage_id', '=', 'lead_pipeline_stages.id')
@@ -356,6 +409,27 @@ class Lead extends AbstractReporting
             ->groupBy('lead_pipeline_stage_id')
             ->orderByDesc('total')
             ->get();
+
+        return $records->map(function ($item) {
+            $codeSlug = ! empty($item->code) ? Str::slug($item->code, '_') : '';
+            $nameSlug = ! empty($item->name) ? Str::slug($item->name, '_') : '';
+
+            $candidates = [
+                ! empty($codeSlug) ? "admin::insurance.pipeline_stages.general.{$codeSlug}" : null,
+                ! empty($nameSlug) ? "admin::insurance.pipeline_stages.general.{$nameSlug}" : null,
+                ! empty($codeSlug) ? "admin::app.pipeline_stages.general.{$codeSlug}" : null,
+                ! empty($nameSlug) ? "admin::app.pipeline_stages.general.{$nameSlug}" : null,
+            ];
+
+            foreach ($candidates as $candidate) {
+                if (! empty($candidate) && Lang::has($candidate)) {
+                    $item->name = trans($candidate);
+                    break;
+                }
+            }
+
+            return $item;
+        });
     }
 
     /**

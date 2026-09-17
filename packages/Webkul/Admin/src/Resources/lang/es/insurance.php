@@ -356,4 +356,12 @@ return [
         'all_leads' => 'Todos los Prospectos',
         'book_of_business' => 'Libro de Negocio: Pólizas Vigentes',
     ],
+    'workflows' => [
+        'insurance_cms_consent_compliance_automation' => 'Automatización de Cumplimiento de Consentimiento CMS',
+        'insurance_cms_consent_compliance_automation_description' => 'Envía automáticamente el formulario de consentimiento CMS y registra la actividad cuando el prospecto avanza a Consentimiento y Documentos.',
+        'insurance_dmi_proof_of_income_automation' => 'Automatización de Solicitud de Documentos DMI e Ingresos',
+        'insurance_dmi_proof_of_income_automation_description' => 'Envía automáticamente la solicitud de comprobante de ingresos e identidad (DMI) al calificar el censo y subsidio APTC.',
+        'insurance_policy_bound_welcome_packet_automation' => 'Automatización de Póliza Emitida y Paquete de Bienvenida',
+        'insurance_policy_bound_welcome_packet_automation_description' => 'Envía automáticamente el paquete de bienvenida al asegurado con instrucciones de ID de miembro y portal de la aseguradora al emitir la póliza.',
+    ],
 ];

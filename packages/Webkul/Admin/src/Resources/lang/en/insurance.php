@@ -356,4 +356,12 @@ return [
         'all_leads' => 'All Leads / Pipeline',
         'book_of_business' => 'Book of Business: Active Policies',
     ],
+    'workflows' => [
+        'insurance_cms_consent_compliance_automation' => 'Insurance: CMS Consent Compliance Automation',
+        'insurance_cms_consent_compliance_automation_description' => 'Automatically sends CMS consent confirmation email and logs compliance activity when lead reaches Signed Consent & Docs.',
+        'insurance_dmi_proof_of_income_automation' => 'Insurance: DMI & Proof of Income Automation',
+        'insurance_dmi_proof_of_income_automation_description' => 'Automatically sends Data Matching Issue (DMI) income & identity verification request when lead reaches Census / Income & APTC stage.',
+        'insurance_policy_bound_welcome_packet_automation' => 'Insurance: Policy Bound & Welcome Packet Automation',
+        'insurance_policy_bound_welcome_packet_automation_description' => 'Automatically sends Member Welcome Packet with ID card instructions and carrier portal access upon policy issuance (Won).',
+    ],
 ];

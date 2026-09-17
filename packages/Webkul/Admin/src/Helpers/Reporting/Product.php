@@ -45,7 +45,7 @@ class Product extends AbstractReporting
         $items = $items->map(function ($item) {
             return [
                 'id' => $item->product_id,
-                'name' => $item->name,
+                'name' => $item->product?->name ?? $item->name,
                 'price' => $item->product?->price,
                 'formatted_price' => core()->formatBasePrice($item->price),
                 'revenue' => $item->revenue,
@@ -82,7 +82,7 @@ class Product extends AbstractReporting
         $items = $items->map(function ($item) {
             return [
                 'id' => $item->product_id,
-                'name' => $item->name,
+                'name' => $item->product?->name ?? $item->name,
                 'price' => $item->product?->price,
                 'formatted_price' => core()->formatBasePrice($item->price),
                 'total_qty_ordered' => $item->total_qty_ordered,

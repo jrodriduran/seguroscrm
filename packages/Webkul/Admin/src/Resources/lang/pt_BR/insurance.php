@@ -356,4 +356,12 @@ return [
         'all_leads' => 'Todos os Leads',
         'book_of_business' => 'Carteira de Clientes: Apólices Vigentes',
     ],
+    'workflows' => [
+        'insurance_cms_consent_compliance_automation' => 'Automação de Conformidade de Consentimento CMS',
+        'insurance_cms_consent_compliance_automation_description' => 'Envia automaticamente o formulário de consentimento CMS e registra a atividade quando o lead avança para Consentimento e Documentos.',
+        'insurance_dmi_proof_of_income_automation' => 'Automação de Solicitação de Documentos DMI e Renda',
+        'insurance_dmi_proof_of_income_automation_description' => 'Envia automaticamente a solicitação de comprovante de renda e identidade (DMI) ao qualificar o censo e subsídio APTC.',
+        'insurance_policy_bound_welcome_packet_automation' => 'Automação de Apólice Emitida e Pacote de Boas-Vindas',
+        'insurance_policy_bound_welcome_packet_automation_description' => 'Envia automaticamente o pacote de boas-vindas com instruções de cartão de membro e portal da seguradora ao emitir a apólice.',
+    ],
 ];

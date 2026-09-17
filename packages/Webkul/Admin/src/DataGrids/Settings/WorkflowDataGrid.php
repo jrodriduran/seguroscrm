@@ -39,12 +39,27 @@ class WorkflowDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index' => 'name',
-            'label' => trans('admin::app.settings.workflows.index.datagrid.name'),
-            'type' => 'string',
+            'index'      => 'name',
+            'label'      => trans('admin::app.settings.workflows.index.datagrid.name'),
+            'type'       => 'string',
             'searchable' => true,
             'filterable' => true,
-            'sortable' => true,
+            'sortable'   => true,
+            'closure'    => function ($row) {
+                $slug = \Illuminate\Support\Str::slug($row->name ?? '', '_');
+                $candidates = [
+                    "admin::insurance.workflows.{$slug}",
+                    "admin::app.settings.workflows.{$slug}",
+                ];
+
+                foreach ($candidates as $candidate) {
+                    if (\Illuminate\Support\Facades\Lang::has($candidate)) {
+                        return trans($candidate);
+                    }
+                }
+
+                return $row->name;
+            },
         ]);
     }
 
