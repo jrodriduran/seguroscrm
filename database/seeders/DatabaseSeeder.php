@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Webkul\Installer\Database\Seeders\DatabaseSeeder as KrayinDatabaseSeeder;
 
+require_once __DIR__ . '/InsuranceTypeSeeder.php';
+require_once __DIR__ . '/InsuranceAttributesSeeder.php';
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -16,5 +19,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(KrayinDatabaseSeeder::class);
         $this->call(InsuranceTypeSeeder::class);
+        $this->call(InsuranceAttributesSeeder::class);
     }
 }
