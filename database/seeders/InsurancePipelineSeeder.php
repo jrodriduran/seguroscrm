@@ -19,36 +19,36 @@ class InsurancePipelineSeeder extends Seeder
                 'name'        => 'ACA / Obamacare (Health)',
                 'is_default'  => 1,
                 'rotten_days' => 30,
-                'stages'      => [
+                'stages' => [
                     [
                         'code'        => 'new',
                         'name'        => 'New Lead',
                         'probability' => 10,
-                        'sort_order'  => 1,
+                        'sort_order' => 1,
                     ],
                     [
                         'code'        => 'census',
                         'name'        => 'Income & Household Qualified',
                         'probability' => 25,
-                        'sort_order'  => 2,
+                        'sort_order' => 2,
                     ],
                     [
                         'code'        => 'quoted',
                         'name'        => 'Quoted & Plan Selected',
                         'probability' => 50,
-                        'sort_order'  => 3,
+                        'sort_order' => 3,
                     ],
                     [
                         'code'        => 'consent_docs',
                         'name'        => 'Consent & Documents',
                         'probability' => 75,
-                        'sort_order'  => 4,
+                        'sort_order' => 4,
                     ],
                     [
                         'code'        => 'won',
                         'name'        => 'Policy Issued (Won)',
                         'probability' => 100,
-                        'sort_order'  => 5,
+                        'sort_order' => 5,
                     ],
                     [
                         'code'        => 'lost',
@@ -183,7 +183,7 @@ class InsurancePipelineSeeder extends Seeder
                         'code'        => 'lost',
                         'name'        => 'Lost',
                         'probability' => 0,
-                        'sort_order'  => 6,
+                        'sort_order' => 6,
                     ],
                 ],
             ],

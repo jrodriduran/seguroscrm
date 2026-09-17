@@ -68,58 +68,58 @@ class ProductDataGrid extends DataGrid
     public function prepareColumns(): void
     {
         $this->addColumn([
-            'index'      => 'sku',
-            'label'      => trans('admin::app.products.index.datagrid.sku'),
-            'type'       => 'string',
-            'sortable'   => true,
+            'index' => 'sku',
+            'label' => trans('admin::app.products.index.datagrid.sku'),
+            'type' => 'string',
+            'sortable' => true,
             'searchable' => true,
             'filterable' => true,
         ]);
 
         $this->addColumn([
-            'index'      => 'name',
-            'label'      => trans('admin::app.products.index.datagrid.name'),
-            'type'       => 'string',
-            'sortable'   => true,
+            'index' => 'name',
+            'label' => trans('admin::app.products.index.datagrid.name'),
+            'type' => 'string',
+            'sortable' => true,
             'searchable' => true,
             'filterable' => true,
         ]);
 
         $this->addColumn([
-            'index'      => 'carrier_name',
-            'label'      => trans('admin::app.products.index.datagrid.carrier'),
-            'type'       => 'string',
-            'sortable'   => false,
+            'index' => 'carrier_name',
+            'label' => trans('admin::app.products.index.datagrid.carrier'),
+            'type' => 'string',
+            'sortable' => false,
             'searchable' => false,
             'filterable' => false,
-            'closure'    => fn ($row) => $row->carrier_name ?: '-',
+            'closure' => fn ($row) => $row->carrier_name ?: '-',
         ]);
 
         $this->addColumn([
-            'index'      => 'insurance_line',
-            'label'      => trans('admin::app.products.index.datagrid.line'),
-            'type'       => 'string',
-            'sortable'   => false,
+            'index' => 'insurance_line',
+            'label' => trans('admin::app.products.index.datagrid.line'),
+            'type' => 'string',
+            'sortable' => false,
             'searchable' => false,
             'filterable' => false,
-            'closure'    => fn ($row) => $row->insurance_line ?: '-',
+            'closure' => fn ($row) => $row->insurance_line ?: '-',
         ]);
 
         $this->addColumn([
-            'index'      => 'metal_tier',
-            'label'      => trans('admin::app.products.index.datagrid.tier'),
-            'type'       => 'string',
-            'sortable'   => false,
+            'index' => 'metal_tier',
+            'label' => trans('admin::app.products.index.datagrid.tier'),
+            'type' => 'string',
+            'sortable' => false,
             'searchable' => false,
             'filterable' => false,
-            'closure'    => fn ($row) => $row->metal_tier ?: '-',
+            'closure' => fn ($row) => $row->metal_tier ?: '-',
         ]);
 
         $this->addColumn([
-            'index'      => 'price',
-            'label'      => trans('admin::app.products.index.datagrid.price'),
-            'type'       => 'string',
-            'sortable'   => true,
+            'index' => 'price',
+            'label' => trans('admin::app.products.index.datagrid.price'),
+            'type' => 'string',
+            'sortable' => true,
             'searchable' => true,
             'filterable' => true,
             'closure'    => function ($row) {
@@ -139,31 +139,31 @@ class ProductDataGrid extends DataGrid
     {
         if (bouncer()->hasPermission('products.view')) {
             $this->addAction([
-                'index'  => 'view',
-                'icon'   => 'icon-eye',
-                'title'  => trans('admin::app.products.index.datagrid.view'),
+                'index' => 'view',
+                'icon' => 'icon-eye',
+                'title' => trans('admin::app.products.index.datagrid.view'),
                 'method' => 'GET',
-                'url'    => fn ($row) => route('admin.products.view', $row->id),
+                'url' => fn ($row) => route('admin.products.view', $row->id),
             ]);
         }
 
         if (bouncer()->hasPermission('products.edit')) {
             $this->addAction([
-                'index'  => 'edit',
-                'icon'   => 'icon-edit',
-                'title'  => trans('admin::app.products.index.datagrid.edit'),
+                'index' => 'edit',
+                'icon' => 'icon-edit',
+                'title' => trans('admin::app.products.index.datagrid.edit'),
                 'method' => 'GET',
-                'url'    => fn ($row) => route('admin.products.edit', $row->id),
+                'url' => fn ($row) => route('admin.products.edit', $row->id),
             ]);
         }
 
         if (bouncer()->hasPermission('products.delete')) {
             $this->addAction([
-                'index'  => 'delete',
-                'icon'   => 'icon-delete',
-                'title'  => trans('admin::app.products.index.datagrid.delete'),
+                'index' => 'delete',
+                'icon' => 'icon-delete',
+                'title' => trans('admin::app.products.index.datagrid.delete'),
                 'method' => 'DELETE',
-                'url'    => fn ($row) => route('admin.products.delete', $row->id),
+                'url' => fn ($row) => route('admin.products.delete', $row->id),
             ]);
         }
     }
@@ -174,10 +174,10 @@ class ProductDataGrid extends DataGrid
     public function prepareMassActions(): void
     {
         $this->addMassAction([
-            'icon'   => 'icon-delete',
-            'title'  => trans('admin::app.products.index.datagrid.delete'),
+            'icon' => 'icon-delete',
+            'title' => trans('admin::app.products.index.datagrid.delete'),
             'method' => 'POST',
-            'url'    => route('admin.products.mass_delete'),
+            'url' => route('admin.products.mass_delete'),
         ]);
     }
 }
