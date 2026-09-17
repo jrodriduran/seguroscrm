@@ -8,6 +8,7 @@ use Webkul\Installer\Database\Seeders\DatabaseSeeder as KrayinDatabaseSeeder;
 require_once __DIR__.'/InsuranceTypeSeeder.php';
 require_once __DIR__.'/InsuranceAttributesSeeder.php';
 require_once __DIR__.'/InsuranceCarriersSeeder.php';
+require_once __DIR__.'/InsurancePipelineSeeder.php';
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,9 +19,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(KrayinDatabaseSeeder::class);
-        $this->call(InsuranceTypeSeeder::class);
-        $this->call(InsuranceAttributesSeeder::class);
-        $this->call(InsuranceCarriersSeeder::class);
+        ->call(KrayinDatabaseSeeder::class);
+        ->call(InsuranceTypeSeeder::class);
+        ->call(InsuranceAttributesSeeder::class);
+        ->call(InsuranceCarriersSeeder::class);
+        ->call(InsurancePipelineSeeder::class);
     }
 }
