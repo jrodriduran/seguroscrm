@@ -39,19 +39,19 @@ class Stage extends Model implements StageContract
 
         $candidates = [
             // Look by pipeline + code
-            !empty($pipeSlug) && !empty($codeSlug) ? "admin::insurance.pipeline_stages.{$pipeSlug}.{$codeSlug}" : null,
+            ! empty($pipeSlug) && ! empty($codeSlug) ? "admin::insurance.pipeline_stages.{$pipeSlug}.{$codeSlug}" : null,
             // Look by general code
-            !empty($codeSlug) ? "admin::insurance.pipeline_stages.general.{$codeSlug}" : null,
+            ! empty($codeSlug) ? "admin::insurance.pipeline_stages.general.{$codeSlug}" : null,
             // Look by name slug
-            !empty($nameSlug) ? "admin::insurance.pipeline_stages.general.{$nameSlug}" : null,
+            ! empty($nameSlug) ? "admin::insurance.pipeline_stages.general.{$nameSlug}" : null,
             // Fallbacks in app
-            !empty($pipeSlug) && !empty($codeSlug) ? "admin::app.pipeline_stages.{$pipeSlug}.{$codeSlug}" : null,
-            !empty($codeSlug) ? "admin::app.pipeline_stages.general.{$codeSlug}" : null,
-            !empty($nameSlug) ? "admin::app.pipeline_stages.general.{$nameSlug}" : null,
+            ! empty($pipeSlug) && ! empty($codeSlug) ? "admin::app.pipeline_stages.{$pipeSlug}.{$codeSlug}" : null,
+            ! empty($codeSlug) ? "admin::app.pipeline_stages.general.{$codeSlug}" : null,
+            ! empty($nameSlug) ? "admin::app.pipeline_stages.general.{$nameSlug}" : null,
         ];
 
         foreach ($candidates as $key) {
-            if (!empty($key) && Lang::has($key)) {
+            if (! empty($key) && Lang::has($key)) {
                 return trans($key);
             }
         }

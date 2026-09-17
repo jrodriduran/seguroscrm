@@ -33,9 +33,9 @@ class InsurancePipelineSeeder extends Seeder
 
             if ($canonicalName && $canonicalName !== $p->name) {
                 $targetExists = DB::table('lead_pipelines')->where('name', $canonicalName)->first();
-                if (!$targetExists) {
+                if (! $targetExists) {
                     DB::table('lead_pipelines')->where('id', $p->id)->update([
-                        'name'       => $canonicalName,
+                        'name' => $canonicalName,
                         'updated_at' => $now,
                     ]);
                 }
@@ -67,174 +67,174 @@ class InsurancePipelineSeeder extends Seeder
         // 3. Define standard pipelines and stages with canonical English names
         $pipelines = [
             [
-                'name'        => 'ACA / Obamacare (Health)',
-                'is_default'  => 1,
+                'name' => 'ACA / Obamacare (Health)',
+                'is_default' => 1,
                 'rotten_days' => 30,
-                'stages'      => [
+                'stages' => [
                     [
-                        'code'        => 'new',
-                        'name'        => 'New Lead',
+                        'code' => 'new',
+                        'name' => 'New Lead',
                         'probability' => 10,
-                        'sort_order'  => 1,
+                        'sort_order' => 1,
                     ],
                     [
-                        'code'        => 'census',
-                        'name'        => 'Income & Household Qualified',
+                        'code' => 'census',
+                        'name' => 'Income & Household Qualified',
                         'probability' => 25,
-                        'sort_order'  => 2,
+                        'sort_order' => 2,
                     ],
                     [
-                        'code'        => 'quoted',
-                        'name'        => 'Quoted & Plan Selected',
+                        'code' => 'quoted',
+                        'name' => 'Quoted & Plan Selected',
                         'probability' => 50,
-                        'sort_order'  => 3,
+                        'sort_order' => 3,
                     ],
                     [
-                        'code'        => 'consent_docs',
-                        'name'        => 'Consent & Documents',
+                        'code' => 'consent_docs',
+                        'name' => 'Consent & Documents',
                         'probability' => 75,
-                        'sort_order'  => 4,
+                        'sort_order' => 4,
                     ],
                     [
-                        'code'        => 'won',
-                        'name'        => 'Policy Issued (Won)',
+                        'code' => 'won',
+                        'name' => 'Policy Issued (Won)',
                         'probability' => 100,
-                        'sort_order'  => 5,
+                        'sort_order' => 5,
                     ],
                     [
-                        'code'        => 'lost',
-                        'name'        => 'Lost',
+                        'code' => 'lost',
+                        'name' => 'Lost',
                         'probability' => 0,
-                        'sort_order'  => 6,
+                        'sort_order' => 6,
                     ],
                 ],
             ],
             [
-                'name'        => 'Medicare (Advantage & Supplement)',
-                'is_default'  => 0,
+                'name' => 'Medicare (Advantage & Supplement)',
+                'is_default' => 0,
                 'rotten_days' => 45,
-                'stages'      => [
+                'stages' => [
                     [
-                        'code'        => 'new',
-                        'name'        => 'New Lead',
+                        'code' => 'new',
+                        'name' => 'New Lead',
                         'probability' => 10,
-                        'sort_order'  => 1,
+                        'sort_order' => 1,
                     ],
                     [
-                        'code'        => 'soa',
-                        'name'        => 'Scope of Appointment (SOA) Signed',
+                        'code' => 'soa',
+                        'name' => 'Scope of Appointment (SOA) Signed',
                         'probability' => 30,
-                        'sort_order'  => 2,
+                        'sort_order' => 2,
                     ],
                     [
-                        'code'        => 'needs',
-                        'name'        => 'Needs Assessment',
+                        'code' => 'needs',
+                        'name' => 'Needs Assessment',
                         'probability' => 50,
-                        'sort_order'  => 3,
+                        'sort_order' => 3,
                     ],
                     [
-                        'code'        => 'presentation',
-                        'name'        => 'Plan Presentation',
+                        'code' => 'presentation',
+                        'name' => 'Plan Presentation',
                         'probability' => 70,
-                        'sort_order'  => 4,
+                        'sort_order' => 4,
                     ],
                     [
-                        'code'        => 'won',
-                        'name'        => 'Enrolled (Won)',
+                        'code' => 'won',
+                        'name' => 'Enrolled (Won)',
                         'probability' => 100,
-                        'sort_order'  => 5,
+                        'sort_order' => 5,
                     ],
                     [
-                        'code'        => 'lost',
-                        'name'        => 'Lost',
+                        'code' => 'lost',
+                        'name' => 'Lost',
                         'probability' => 0,
-                        'sort_order'  => 6,
+                        'sort_order' => 6,
                     ],
                 ],
             ],
             [
-                'name'        => 'Life & Final Expense',
-                'is_default'  => 0,
+                'name' => 'Life & Final Expense',
+                'is_default' => 0,
                 'rotten_days' => 45,
-                'stages'      => [
+                'stages' => [
                     [
-                        'code'        => 'new',
-                        'name'        => 'New Lead',
+                        'code' => 'new',
+                        'name' => 'New Lead',
                         'probability' => 10,
-                        'sort_order'  => 1,
+                        'sort_order' => 1,
                     ],
                     [
-                        'code'        => 'needs',
-                        'name'        => 'Needs Assessment',
+                        'code' => 'needs',
+                        'name' => 'Needs Assessment',
                         'probability' => 30,
-                        'sort_order'  => 2,
+                        'sort_order' => 2,
                     ],
                     [
-                        'code'        => 'underwriting',
-                        'name'        => 'Pre-Underwriting',
+                        'code' => 'underwriting',
+                        'name' => 'Pre-Underwriting',
                         'probability' => 50,
-                        'sort_order'  => 3,
+                        'sort_order' => 3,
                     ],
                     [
-                        'code'        => 'proposal',
-                        'name'        => 'Proposal Presented',
+                        'code' => 'proposal',
+                        'name' => 'Proposal Presented',
                         'probability' => 70,
-                        'sort_order'  => 4,
+                        'sort_order' => 4,
                     ],
                     [
-                        'code'        => 'won',
-                        'name'        => 'Policy Issued (Won)',
+                        'code' => 'won',
+                        'name' => 'Policy Issued (Won)',
                         'probability' => 100,
-                        'sort_order'  => 5,
+                        'sort_order' => 5,
                     ],
                     [
-                        'code'        => 'lost',
-                        'name'        => 'Lost',
+                        'code' => 'lost',
+                        'name' => 'Lost',
                         'probability' => 0,
-                        'sort_order'  => 6,
+                        'sort_order' => 6,
                     ],
                 ],
             ],
             [
-                'name'        => 'General Insurance',
-                'is_default'  => 0,
+                'name' => 'General Insurance',
+                'is_default' => 0,
                 'rotten_days' => 30,
-                'stages'      => [
+                'stages' => [
                     [
-                        'code'        => 'new',
-                        'name'        => 'New Lead',
+                        'code' => 'new',
+                        'name' => 'New Lead',
                         'probability' => 10,
-                        'sort_order'  => 1,
+                        'sort_order' => 1,
                     ],
                     [
-                        'code'        => 'contact',
-                        'name'        => 'Contact Made',
+                        'code' => 'contact',
+                        'name' => 'Contact Made',
                         'probability' => 25,
-                        'sort_order'  => 2,
+                        'sort_order' => 2,
                     ],
                     [
-                        'code'        => 'quoted',
-                        'name'        => 'Quoted',
+                        'code' => 'quoted',
+                        'name' => 'Quoted',
                         'probability' => 50,
-                        'sort_order'  => 3,
+                        'sort_order' => 3,
                     ],
                     [
-                        'code'        => 'closing',
-                        'name'        => 'Closing',
+                        'code' => 'closing',
+                        'name' => 'Closing',
                         'probability' => 75,
-                        'sort_order'  => 4,
+                        'sort_order' => 4,
                     ],
                     [
-                        'code'        => 'won',
-                        'name'        => 'Won',
+                        'code' => 'won',
+                        'name' => 'Won',
                         'probability' => 100,
-                        'sort_order'  => 5,
+                        'sort_order' => 5,
                     ],
                     [
-                        'code'        => 'lost',
-                        'name'        => 'Lost',
+                        'code' => 'lost',
+                        'name' => 'Lost',
                         'probability' => 0,
-                        'sort_order'  => 6,
+                        'sort_order' => 6,
                     ],
                 ],
             ],
@@ -251,9 +251,9 @@ class InsurancePipelineSeeder extends Seeder
 
             if ($existing) {
                 DB::table('lead_pipelines')->where('id', $existing->id)->update([
-                    'is_default'  => $pData['is_default'],
+                    'is_default' => $pData['is_default'],
                     'rotten_days' => $pData['rotten_days'],
-                    'updated_at'  => $now,
+                    'updated_at' => $now,
                 ]);
                 $pipelineId = $existing->id;
             } else {
@@ -273,16 +273,16 @@ class InsurancePipelineSeeder extends Seeder
                     DB::table('lead_pipeline_stages')
                         ->where('id', $stageExists->id)
                         ->update([
-                            'name'        => $stg['name'],
+                            'name' => $stg['name'],
                             'probability' => $stg['probability'],
-                            'sort_order'  => $stg['sort_order'],
+                            'sort_order' => $stg['sort_order'],
                         ]);
                 } else {
                     DB::table('lead_pipeline_stages')->insert([
-                        'code'             => $stg['code'],
-                        'name'             => $stg['name'],
-                        'probability'      => $stg['probability'],
-                        'sort_order'       => $stg['sort_order'],
+                        'code' => $stg['code'],
+                        'name' => $stg['name'],
+                        'probability' => $stg['probability'],
+                        'sort_order' => $stg['sort_order'],
                         'lead_pipeline_id' => $pipelineId,
                     ]);
                 }

@@ -32,7 +32,7 @@ class Attribute extends Model implements AttributeContract
      */
     public function getNameAttribute($value)
     {
-        if (!empty($this->entity_type) && !empty($this->code)) {
+        if (! empty($this->entity_type) && ! empty($this->code)) {
             $candidates = [
                 "admin::insurance.attributes.{$this->entity_type}.{$this->code}",
                 "admin::app.attributes.{$this->entity_type}.{$this->code}",

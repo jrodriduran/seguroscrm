@@ -122,12 +122,13 @@ class ProductDataGrid extends DataGrid
             'sortable' => true,
             'searchable' => true,
             'filterable' => true,
-            'closure'    => function ($row) {
+            'closure' => function ($row) {
                 $perMonth = trans('admin::app.products.index.datagrid.per_month');
                 if ($row->price == 0) {
-                    return '<span class="text-green-600 dark:text-green-400 font-semibold">$0.00 ' . $perMonth . '</span>';
+                    return '<span class="text-green-600 dark:text-green-400 font-semibold">$0.00 '.$perMonth.'</span>';
                 }
-                return core()->formatBasePrice($row->price, 2) . ' ' . $perMonth;
+
+                return core()->formatBasePrice($row->price, 2).' '.$perMonth;
             },
         ]);
     }
