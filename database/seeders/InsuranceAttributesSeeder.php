@@ -12,11 +12,11 @@ class InsuranceAttributesSeeder extends Seeder
      */
     public function run(): void
     {
-         = now();
+        $now = now();
 
-         = [
+        $attributes = [
             /**
-             * Persons (Prospectos / Clientes) Attributes
+             * Persons Attributes
              */
             [
                 'code' => 'dob',
@@ -254,39 +254,39 @@ class InsuranceAttributesSeeder extends Seeder
             ],
         ];
 
-        foreach ( as ) {
-             = ['options'];
-            unset(['options']);
+        foreach ($attributes as $attrData) {
+            $options = $attrData['options'];
+            unset($attrData['options']);
 
-             = DB::table('attributes')
-                ->where('code', ['code'])
-                ->where('entity_type', ['entity_type'])
+            $existing = DB::table('attributes')
+                ->where('code', $attrData['code'])
+                ->where('entity_type', $attrData['entity_type'])
                 ->first();
 
-            if () {
+            if ($existing) {
                 DB::table('attributes')
-                    ->where('id', ->id)
-                    ->update(array_merge(, ['updated_at' => ]));
-                 = ->id;
+                    ->where('id', $existing->id)
+                    ->update(array_merge($attrData, ['updated_at' => $now]));
+                $attributeId = $existing->id;
             } else {
-                 = DB::table('attributes')->insertGetId(
-                    array_merge(, ['created_at' => , 'updated_at' => ])
+                $attributeId = DB::table('attributes')->insertGetId(
+                    array_merge($attrData, ['created_at' => $now, 'updated_at' => $now])
                 );
             }
 
-            if (! empty() && ['type'] === 'select') {
-                 = 1;
-                foreach ( as ) {
-                     = DB::table('attribute_options')
-                        ->where('attribute_id', )
-                        ->where('name', )
+            if (! empty($options) && $attrData['type'] === 'select') {
+                $sort = 1;
+                foreach ($options as $optName) {
+                    $optExists = DB::table('attribute_options')
+                        ->where('attribute_id', $attributeId)
+                        ->where('name', $optName)
                         ->exists();
 
-                    if (! ) {
+                    if (! $optExists) {
                         DB::table('attribute_options')->insert([
-                            'attribute_id' => ,
-                            'name' => ,
-                            'sort_order' => ++,
+                            'attribute_id' => $attributeId,
+                            'name' => $optName,
+                            'sort_order' => $sort++,
                         ]);
                     }
                 }

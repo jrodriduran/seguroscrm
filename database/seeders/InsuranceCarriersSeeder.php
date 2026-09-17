@@ -12,12 +12,12 @@ class InsuranceCarriersSeeder extends Seeder
      */
     public function run(): void
     {
-         = now();
+        $now = now();
 
-         = DB::table('users')->first();
-         =  ? ->id : 1;
+        $adminUser = DB::table('users')->first();
+        $adminUserId = $adminUser ? $adminUser->id : 1;
 
-         = [
+        $attributes = [
             [
                 'code' => 'carrier_code',
                 'name' => 'Carrier / NAIC Code',
@@ -138,55 +138,55 @@ class InsuranceCarriersSeeder extends Seeder
             ],
         ];
 
-         = [];
-         = [];
+        $createdAttributes = [];
+        $attributeOptionsMap = [];
 
-        foreach ( as ) {
-             = ['options'];
-            unset(['options']);
+        foreach ($attributes as $attrData) {
+            $options = $attrData['options'];
+            unset($attrData['options']);
 
-             = DB::table('attributes')
-                ->where('code', ['code'])
-                ->where('entity_type', ['entity_type'])
+            $existing = DB::table('attributes')
+                ->where('code', $attrData['code'])
+                ->where('entity_type', $attrData['entity_type'])
                 ->first();
 
-            if () {
+            if ($existing) {
                 DB::table('attributes')
-                    ->where('id', ->id)
-                    ->update(array_merge(, ['updated_at' => ]));
-                 = ->id;
+                    ->where('id', $existing->id)
+                    ->update(array_merge($attrData, ['updated_at' => $now]));
+                $attributeId = $existing->id;
             } else {
-                 = DB::table('attributes')->insertGetId(
-                    array_merge(, ['created_at' => , 'updated_at' => ])
+                $attributeId = DB::table('attributes')->insertGetId(
+                    array_merge($attrData, ['created_at' => $now, 'updated_at' => $now])
                 );
             }
 
-            [['code']] = ;
+            $createdAttributes[$attrData['code']] = $attributeId;
 
-            if (! empty()) {
-                 = 1;
-                foreach ( as ) {
-                     = DB::table('attribute_options')
-                        ->where('attribute_id', )
-                        ->where('name', )
+            if (! empty($options)) {
+                $sort = 1;
+                foreach ($options as $optName) {
+                    $opt = DB::table('attribute_options')
+                        ->where('attribute_id', $attributeId)
+                        ->where('name', $optName)
                         ->first();
 
-                    if (! ) {
-                         = DB::table('attribute_options')->insertGetId([
-                            'attribute_id' => ,
-                            'name'         => ,
-                            'sort_order'   => ++,
+                    if (! $opt) {
+                        $optId = DB::table('attribute_options')->insertGetId([
+                            'attribute_id' => $attributeId,
+                            'name'         => $optName,
+                            'sort_order'   => $sort++,
                         ]);
                     } else {
-                         = ->id;
+                        $optId = $opt->id;
                     }
 
-                    [['code']][] = ;
+                    $attributeOptionsMap[$attrData['code']][$optName] = $optId;
                 }
             }
         }
 
-         = [
+        $carriers = [
             [
                 'name'         => 'Florida Blue',
                 'city'         => 'Jacksonville',
@@ -375,68 +375,67 @@ class InsuranceCarriersSeeder extends Seeder
             ],
         ];
 
-        foreach ( as ) {
-             = DB::table('organizations')->where('name', ['name'])->first();
+        foreach ($carriers as $c) {
+            $org = DB::table('organizations')->where('name', $c['name'])->first();
 
-             = [
+            $addressData = [
                 'address'  => '',
-                'city'     => ['city'],
-                'state'    => ['state'],
+                'city'     => $c['city'],
+                'state'    => $c['state'],
                 'country'  => 'US',
                 'postcode' => '',
             ];
 
-            if () {
-                 = ->id;
-                DB::table('organizations')->where('id', )->update([
-                    'address'    => json_encode(),
-                    'updated_at' => ,
+            if ($org) {
+                $orgId = $org->id;
+                DB::table('organizations')->where('id', $orgId)->update([
+                    'address'    => json_encode($addressData),
+                    'updated_at' => $now,
                 ]);
             } else {
-                 = DB::table('organizations')->insertGetId([
-                    'name'       => ['name'],
-                    'address'    => json_encode(),
-                    'user_id'    => ,
-                    'created_at' => ,
-                    'updated_at' => ,
+                $orgId = DB::table('organizations')->insertGetId([
+                    'name'       => $c['name'],
+                    'address'    => json_encode($addressData),
+                    'user_id'    => $adminUserId,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]);
             }
 
-            // Save attribute values for this organization
-            if (isset(['carrier_code'])) {
-                ->saveAttributeValue(['carrier_code'], , 'organizations', 'text_value', ['carrier_code']);
+            if (isset($createdAttributes['carrier_code'])) {
+                $this->saveAttributeValue($createdAttributes['carrier_code'], $orgId, 'organizations', 'text_value', $c['carrier_code']);
             }
 
-            if (isset(['carrier_type']) && isset(['carrier_type'][['carrier_type']])) {
-                ->saveAttributeValue(['carrier_type'], , 'organizations', 'integer_value', ['carrier_type'][['carrier_type']]);
+            if (isset($createdAttributes['carrier_type']) && isset($attributeOptionsMap['carrier_type'][$c['carrier_type']])) {
+                $this->saveAttributeValue($createdAttributes['carrier_type'], $orgId, 'organizations', 'integer_value', $attributeOptionsMap['carrier_type'][$c['carrier_type']]);
             }
 
-            if (isset(['lines_of_business'])) {
-                 = [];
-                foreach (['lines'] as ) {
-                    if (isset(['lines_of_business'][])) {
-                        [] = ['lines_of_business'][];
+            if (isset($createdAttributes['lines_of_business'])) {
+                $lineIds = [];
+                foreach ($c['lines'] as $lineName) {
+                    if (isset($attributeOptionsMap['lines_of_business'][$lineName])) {
+                        $lineIds[] = $attributeOptionsMap['lines_of_business'][$lineName];
                     }
                 }
-                if (! empty()) {
-                    ->saveAttributeValue(['lines_of_business'], , 'organizations', 'text_value', implode(',', ));
+                if (! empty($lineIds)) {
+                    $this->saveAttributeValue($createdAttributes['lines_of_business'], $orgId, 'organizations', 'text_value', implode(',', $lineIds));
                 }
             }
 
-            if (isset(['broker_portal_url'])) {
-                ->saveAttributeValue(['broker_portal_url'], , 'organizations', 'text_value', ['portal_url']);
+            if (isset($createdAttributes['broker_portal_url'])) {
+                $this->saveAttributeValue($createdAttributes['broker_portal_url'], $orgId, 'organizations', 'text_value', $c['portal_url']);
             }
 
-            if (isset(['agent_support_phone'])) {
-                ->saveAttributeValue(['agent_support_phone'], , 'organizations', 'text_value', ['phone']);
+            if (isset($createdAttributes['agent_support_phone'])) {
+                $this->saveAttributeValue($createdAttributes['agent_support_phone'], $orgId, 'organizations', 'text_value', $c['phone']);
             }
 
-            if (isset(['agent_support_email'])) {
-                ->saveAttributeValue(['agent_support_email'], , 'organizations', 'text_value', ['email']);
+            if (isset($createdAttributes['agent_support_email'])) {
+                $this->saveAttributeValue($createdAttributes['agent_support_email'], $orgId, 'organizations', 'text_value', $c['email']);
             }
 
-            if (isset(['carrier_status']) && isset(['carrier_status'][['status']])) {
-                ->saveAttributeValue(['carrier_status'], , 'organizations', 'integer_value', ['carrier_status'][['status']]);
+            if (isset($createdAttributes['carrier_status']) && isset($attributeOptionsMap['carrier_status'][$c['status']])) {
+                $this->saveAttributeValue($createdAttributes['carrier_status'], $orgId, 'organizations', 'integer_value', $attributeOptionsMap['carrier_status'][$c['status']]);
             }
         }
     }
@@ -444,24 +443,24 @@ class InsuranceCarriersSeeder extends Seeder
     /**
      * Helper to save or update attribute value.
      */
-    private function saveAttributeValue(int , int , string , string , ): void
+    private function saveAttributeValue(int $attributeId, int $entityId, string $entityType, string $column, $value): void
     {
-         = DB::table('attribute_values')
-            ->where('attribute_id', )
-            ->where('entity_id', )
-            ->where('entity_type', )
+        $existing = DB::table('attribute_values')
+            ->where('attribute_id', $attributeId)
+            ->where('entity_id', $entityId)
+            ->where('entity_type', $entityType)
             ->first();
 
-        if () {
+        if ($existing) {
             DB::table('attribute_values')
-                ->where('id', ->id)
-                ->update([ => ]);
+                ->where('id', $existing->id)
+                ->update([$column => $value]);
         } else {
             DB::table('attribute_values')->insert([
-                'attribute_id' => ,
-                'entity_id'    => ,
-                'entity_type'  => ,
-                        => ,
+                'attribute_id' => $attributeId,
+                'entity_id'    => $entityId,
+                'entity_type'  => $entityType,
+                $column     => $value,
             ]);
         }
     }

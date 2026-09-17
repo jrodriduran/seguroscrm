@@ -12,7 +12,7 @@ class InsuranceTypeSeeder extends Seeder
      */
     public function run(): void
     {
-         = [
+        $types = [
             [
                 'name' => 'ACA / Obamacare',
                 'description' => 'Qualified health insurance with federal subsidy (APTC) for individuals and families.',
@@ -47,11 +47,11 @@ class InsuranceTypeSeeder extends Seeder
             ],
         ];
 
-        foreach ( as ) {
+        foreach ($types as $type) {
             DB::table('lead_types')->updateOrInsert(
-                ['name' => ['name']],
+                ['name' => $type['name']],
                 [
-                    'description' => ['description'],
+                    'description' => $type['description'],
                     'updated_at' => now(),
                     'created_at' => now(),
                 ]
