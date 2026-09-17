@@ -351,4 +351,9 @@ return [
         'disclaimer_title' => 'Aviso Legal e Divulgação Importante',
         'disclaimer_text' => 'Esta proposta constitui uma cotação estimada com base nas informações fornecidas. A emissão final da apólice e os subsídios federais estão sujeitos à aprovação da Seguradora e do Mercado de Seguros.',
     ],
+
+    'filters' => [
+        'all_leads'        => 'Todos os Leads',
+        'book_of_business' => 'Carteira de Clientes: Apólices Vigentes',
+    ],
 ];

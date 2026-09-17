@@ -115,6 +115,54 @@ class LeadDataGrid extends DataGrid
             ]);
         }
 
+        // Policy & Book of Business sub-queries
+        $policyAttrMap = [
+            'policy_number'  => 'text_value',
+            'effective_date' => 'date_value',
+            'renewal_date'   => 'date_value',
+            'issued_premium' => 'float_value',
+        ];
+
+        foreach ($policyAttrMap as $code => $col) {
+            $queryBuilder->addSelect(DB::raw(
+                '(SELECT '.$tablePrefix.'attribute_values.'.$col.
+                ' FROM '.$tablePrefix.'attribute_values'.
+                ' INNER JOIN '.$tablePrefix.'attributes ON '.$tablePrefix.'attribute_values.attribute_id = '.$tablePrefix.'attributes.id'.
+                ' WHERE '.$tablePrefix.'attribute_values.entity_id = '.$tablePrefix.'leads.id'.
+                ' AND '.$tablePrefix.'attributes.code = \''.$code.'\''.
+                ' AND '.$tablePrefix.'attribute_values.entity_type = \'leads\' LIMIT 1) as '.$code
+            ));
+
+            $this->addFilter($code, DB::raw(
+                '(SELECT '.$tablePrefix.'attribute_values.'.$col.
+                ' FROM '.$tablePrefix.'attribute_values'.
+                ' INNER JOIN '.$tablePrefix.'attributes ON '.$tablePrefix.'attribute_values.attribute_id = '.$tablePrefix.'attributes.id'.
+                ' WHERE '.$tablePrefix.'attribute_values.entity_id = '.$tablePrefix.'leads.id'.
+                ' AND '.$tablePrefix.'attributes.code = \''.$code.'\''.
+                ' AND '.$tablePrefix.'attribute_values.entity_type = \'leads\' LIMIT 1)'
+            ));
+        }
+
+        $queryBuilder->addSelect(DB::raw(
+            '(SELECT '.$tablePrefix.'attribute_options.name'.
+            ' FROM '.$tablePrefix.'attribute_values'.
+            ' INNER JOIN '.$tablePrefix.'attributes ON '.$tablePrefix.'attribute_values.attribute_id = '.$tablePrefix.'attributes.id'.
+            ' LEFT JOIN '.$tablePrefix.'attribute_options ON '.$tablePrefix.'attribute_values.integer_value = '.$tablePrefix.'attribute_options.id'.
+            ' WHERE '.$tablePrefix.'attribute_values.entity_id = '.$tablePrefix.'leads.id'.
+            ' AND '.$tablePrefix.'attributes.code = \'policy_status\''.
+            ' AND '.$tablePrefix.'attribute_values.entity_type = \'leads\' LIMIT 1) as policy_status'
+        ));
+
+        $this->addFilter('policy_status', DB::raw(
+            '(SELECT '.$tablePrefix.'attribute_options.name'.
+            ' FROM '.$tablePrefix.'attribute_values'.
+            ' INNER JOIN '.$tablePrefix.'attributes ON '.$tablePrefix.'attribute_values.attribute_id = '.$tablePrefix.'attributes.id'.
+            ' LEFT JOIN '.$tablePrefix.'attribute_options ON '.$tablePrefix.'attribute_values.integer_value = '.$tablePrefix.'attribute_options.id'.
+            ' WHERE '.$tablePrefix.'attribute_values.entity_id = '.$tablePrefix.'leads.id'.
+            ' AND '.$tablePrefix.'attributes.code = \'policy_status\''.
+            ' AND '.$tablePrefix.'attribute_values.entity_type = \'leads\' LIMIT 1)'
+        ));
+
         $this->addFilter('id', 'leads.id');
         $this->addFilter('user', 'leads.user_id');
         $this->addFilter('sales_person', 'users.name');
@@ -305,6 +353,60 @@ class LeadDataGrid extends DataGrid
             'sortable' => true,
             'filterable' => true,
             'filterable_type' => 'date_range',
+        ]);
+
+        $this->addColumn([
+            'index'      => 'policy_number',
+            'label'      => trans('admin::insurance.policy_attributes.policy_number'),
+            'type'       => 'string',
+            'sortable'   => true,
+            'searchable' => true,
+            'filterable' => true,
+            'closure'    => fn ($row) => $row->policy_number ? '<span class="font-mono font-semibold">'.$row->policy_number.'</span>' : '--',
+        ]);
+
+        $this->addColumn([
+            'index'      => 'policy_status',
+            'label'      => trans('admin::insurance.policy_attributes.policy_status'),
+            'type'       => 'string',
+            'sortable'   => true,
+            'searchable' => false,
+            'filterable' => true,
+            'closure'    => function ($row) {
+                if (empty($row->policy_status)) {
+                    return '--';
+                }
+                $badgeClasses = match (strtolower(trim($row->policy_status))) {
+                    'active / bound', 'activa / emitida' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300',
+                    'pending first payment', 'en espera de primer pago' => 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
+                    'under review', 'en revisión' => 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300',
+                    'lapsed / cancelled', 'cancelada / lapsed' => 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300',
+                    'renewed', 'renovada' => 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300',
+                    default => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
+                };
+                return '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium '.$badgeClasses.'">'.$row->policy_status.'</span>';
+            },
+        ]);
+
+        $this->addColumn([
+            'index'           => 'renewal_date',
+            'label'           => trans('admin::insurance.policy_attributes.renewal_date'),
+            'type'            => 'date',
+            'sortable'        => true,
+            'searchable'      => false,
+            'filterable'      => true,
+            'filterable_type' => 'date_range',
+            'closure'         => fn ($row) => $row->renewal_date ? core()->formatDate($row->renewal_date, 'd/m/Y') : '--',
+        ]);
+
+        $this->addColumn([
+            'index'      => 'issued_premium',
+            'label'      => trans('admin::insurance.policy_attributes.issued_premium'),
+            'type'       => 'string',
+            'sortable'   => true,
+            'searchable' => false,
+            'filterable' => true,
+            'closure'    => fn ($row) => $row->issued_premium ? core()->formatBasePrice($row->issued_premium, 2) : '--',
         ]);
 
         /**

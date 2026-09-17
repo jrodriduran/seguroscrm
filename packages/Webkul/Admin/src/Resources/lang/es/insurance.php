@@ -351,4 +351,9 @@ return [
         'disclaimer_title' => 'Aviso Legal y Divulgación Importante',
         'disclaimer_text' => 'Esta propuesta constituye una cotización estimada basada en los datos del hogar suministrados. La emisión final de la póliza, coberturas y subsidios federales están sujetos a la aprobación final de la Compañía Aseguradora y del Mercado de Seguros de Salud.',
     ],
+
+    'filters' => [
+        'all_leads'        => 'Todos los Prospectos',
+        'book_of_business' => 'Libro de Negocio: Pólizas Vigentes',
+    ],
 ];

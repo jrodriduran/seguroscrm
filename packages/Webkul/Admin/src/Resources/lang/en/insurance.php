@@ -351,4 +351,9 @@ return [
         'disclaimer_title' => 'Important Notice & Legal Disclaimer',
         'disclaimer_text' => 'This proposal is an estimate based on current rates and household information provided. Final eligibility, subsidies, and policy issuance are subject to approval by the Insurance Carrier and the Health Insurance Marketplace.',
     ],
+
+    'filters' => [
+        'all_leads'        => 'All Leads / Pipeline',
+        'book_of_business' => 'Book of Business: Active Policies',
+    ],
 ];
