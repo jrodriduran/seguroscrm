@@ -31,18 +31,28 @@ class Stage extends Model implements StageContract
      */
     public function getNameAttribute($value)
     {
-        if ($this->code) {
-            $pipeline = $this->pipeline;
-            $pipelineSlug = $pipeline ? Str::slug($pipeline->getRawOriginal('name'), '_') : 'default';
-            $key = "admin::app.pipeline_stages.{$pipelineSlug}.{$this->code}";
+        $code = $this->code;
+        $codeSlug = Str::slug($code ?? '', '_');
+        $nameSlug = Str::slug($this->getRawOriginal('name') ?? $value, '_');
+        $pipeline = $this->pipeline;
+        $pipeSlug = $pipeline ? Str::slug($pipeline->getRawOriginal('name'), '_') : '';
 
-            if (Lang::has($key)) {
+        $candidates = [
+            // Look by pipeline + code
+            !empty($pipeSlug) && !empty($codeSlug) ? "admin::insurance.pipeline_stages.{$pipeSlug}.{$codeSlug}" : null,
+            // Look by general code
+            !empty($codeSlug) ? "admin::insurance.pipeline_stages.general.{$codeSlug}" : null,
+            // Look by name slug
+            !empty($nameSlug) ? "admin::insurance.pipeline_stages.general.{$nameSlug}" : null,
+            // Fallbacks in app
+            !empty($pipeSlug) && !empty($codeSlug) ? "admin::app.pipeline_stages.{$pipeSlug}.{$codeSlug}" : null,
+            !empty($codeSlug) ? "admin::app.pipeline_stages.general.{$codeSlug}" : null,
+            !empty($nameSlug) ? "admin::app.pipeline_stages.general.{$nameSlug}" : null,
+        ];
+
+        foreach ($candidates as $key) {
+            if (!empty($key) && Lang::has($key)) {
                 return trans($key);
-            }
-
-            $generalKey = "admin::app.pipeline_stages.general.{$this->code}";
-            if (Lang::has($generalKey)) {
-                return trans($generalKey);
             }
         }
 

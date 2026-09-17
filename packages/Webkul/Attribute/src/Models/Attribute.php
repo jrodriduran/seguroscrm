@@ -17,12 +17,13 @@ class Attribute extends Model implements AttributeContract
         'code',
         'name',
         'type',
-        'entity_type',
-        'lookup_type',
         'is_required',
         'is_unique',
-        'quick_add',
         'validation',
+        'sort_order',
+        'entity_type',
+        'lookup_type',
+        'quick_add',
         'is_user_defined',
     ];
 
@@ -31,10 +32,17 @@ class Attribute extends Model implements AttributeContract
      */
     public function getNameAttribute($value)
     {
-        $key = "admin::app.attributes.{$this->entity_type}.{$this->code}";
+        if (!empty($this->entity_type) && !empty($this->code)) {
+            $candidates = [
+                "admin::insurance.attributes.{$this->entity_type}.{$this->code}",
+                "admin::app.attributes.{$this->entity_type}.{$this->code}",
+            ];
 
-        if (Lang::has($key)) {
-            return trans($key);
+            foreach ($candidates as $key) {
+                if (Lang::has($key)) {
+                    return trans($key);
+                }
+            }
         }
 
         return $value;

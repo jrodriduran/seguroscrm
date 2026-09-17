@@ -211,7 +211,7 @@
                             <!-- Description -->
                             <x-admin::form.control-group>
                                 <x-admin::form.control-group.label>
-                                    DescripciÃƒÂ³n / Detalles
+                                    @lang('admin::app.settings.types.index.datagrid.description')
                                 </x-admin::form.control-group.label>
 
                                 <x-admin::form.control-group.control
@@ -219,7 +219,7 @@
                                     id="description"
                                     name="description"
                                     rows="3"
-                                    placeholder="Ej: Cobertura mÃƒÂ©dica con subsidio federal APTC..."
+                                    :placeholder="trans('admin::app.settings.types.index.datagrid.description')"
                                 />
 
                                 <x-admin::form.control-group.error control-name="description" />

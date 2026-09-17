@@ -29,10 +29,16 @@ class Pipeline extends Model implements PipelineContract
     {
         $raw = $this->getRawOriginal('name') ?? $value;
         $slug = Str::slug($raw, '_');
-        $key = "admin::app.pipelines.{$slug}";
 
-        if (Lang::has($key)) {
-            return trans($key);
+        $candidates = [
+            "admin::insurance.pipelines.{$slug}",
+            "admin::app.pipelines.{$slug}",
+        ];
+
+        foreach ($candidates as $key) {
+            if (Lang::has($key)) {
+                return trans($key);
+            }
         }
 
         return $value;

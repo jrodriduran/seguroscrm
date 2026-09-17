@@ -14,6 +14,57 @@ class InsurancePipelineSeeder extends Seeder
     {
         $now = now();
 
+        // 1. Clean up & consolidate existing pipelines in database
+        $existingPipelines = DB::table('lead_pipelines')->get();
+
+        foreach ($existingPipelines as $p) {
+            $lower = strtolower($p->name);
+            $canonicalName = null;
+
+            if (str_contains($lower, 'obamacare') || str_contains($lower, 'aca')) {
+                $canonicalName = 'ACA / Obamacare (Health)';
+            } elseif (str_contains($lower, 'medicare')) {
+                $canonicalName = 'Medicare (Advantage & Supplement)';
+            } elseif (str_contains($lower, 'vida') || str_contains($lower, 'final expense') || str_contains($lower, 'gastos finales') || str_contains($lower, 'life')) {
+                $canonicalName = 'Life & Final Expense';
+            } elseif (str_contains($lower, 'flujo') || str_contains($lower, 'general') || str_contains($lower, 'default')) {
+                $canonicalName = 'General Insurance';
+            }
+
+            if ($canonicalName && $canonicalName !== $p->name) {
+                $targetExists = DB::table('lead_pipelines')->where('name', $canonicalName)->first();
+                if (!$targetExists) {
+                    DB::table('lead_pipelines')->where('id', $p->id)->update([
+                        'name'       => $canonicalName,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+        }
+
+        // 2. Remove redundant empty duplicate pipelines if any
+        $uniquePipelines = [
+            'ACA / Obamacare (Health)',
+            'Medicare (Advantage & Supplement)',
+            'Life & Final Expense',
+            'General Insurance',
+        ];
+
+        foreach ($uniquePipelines as $uName) {
+            $duplicates = DB::table('lead_pipelines')->where('name', $uName)->orderBy('id')->get();
+            if ($duplicates->count() > 1) {
+                $keepId = $duplicates->first()->id;
+                foreach ($duplicates->slice(1) as $dup) {
+                    $leadsCount = DB::table('leads')->where('lead_pipeline_id', $dup->id)->count();
+                    if ($leadsCount === 0) {
+                        DB::table('lead_pipeline_stages')->where('lead_pipeline_id', $dup->id)->delete();
+                        DB::table('lead_pipelines')->where('id', $dup->id)->delete();
+                    }
+                }
+            }
+        }
+
+        // 3. Define standard pipelines and stages with canonical English names
         $pipelines = [
             [
                 'name'        => 'ACA / Obamacare (Health)',
@@ -189,21 +240,8 @@ class InsurancePipelineSeeder extends Seeder
             ],
         ];
 
-        // Clean up previously seeded bilingual names if they exist
-        $cleanupMap = [
-            'ACA / Obamacare (Salud Individual y Familiar)' => 'ACA / Obamacare (Health)',
-            'Medicare (Advantage & Suplementario)'          => 'Medicare (Advantage & Supplement)',
-            'Seguros de Vida y Gastos Finales (Life & Annuities)' => 'Life & Final Expense',
-            'Flujo General de Seguros / General Insurance'  => 'General Insurance',
-            'Default Pipeline'                             => 'General Insurance',
-        ];
-
-        foreach ($cleanupMap as $oldName => $newName) {
-            DB::table('lead_pipelines')->where('name', $oldName)->update([
-                'name'       => $newName,
-                'updated_at' => $now,
-            ]);
-        }
+        // Ensure ACA / Obamacare is set as the default pipeline
+        DB::table('lead_pipelines')->update(['is_default' => 0]);
 
         foreach ($pipelines as $pData) {
             $stages = $pData['stages'];

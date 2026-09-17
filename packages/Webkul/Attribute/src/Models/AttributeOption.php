@@ -28,14 +28,19 @@ class AttributeOption extends Model implements AttributeOptionContract
     public function getNameAttribute($value)
     {
         $attr = $this->attribute;
+        if ($attr && $attr->code) {
+            $raw = $this->getRawOriginal('name') ?? $value;
+            $slug = Str::slug($raw, '_');
 
-        if ($attr) {
-            $rawName = $this->getRawOriginal('name') ?? $value;
-            $slug = Str::slug($rawName, '_');
-            $key = "admin::app.attribute_options.{$attr->code}.{$slug}";
+            $candidates = [
+                "admin::insurance.attribute_options.{$attr->code}.{$slug}",
+                "admin::app.attribute_options.{$attr->code}.{$slug}",
+            ];
 
-            if (Lang::has($key)) {
-                return trans($key);
+            foreach ($candidates as $key) {
+                if (Lang::has($key)) {
+                    return trans($key);
+                }
             }
         }
 

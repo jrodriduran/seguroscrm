@@ -28,10 +28,16 @@ class Type extends Model implements TypeContract
     {
         $raw = $this->getRawOriginal('name') ?? $value;
         $slug = Str::slug($raw, '_');
-        $key = "admin::app.lead_types.{$slug}";
 
-        if (Lang::has($key)) {
-            return trans($key);
+        $candidates = [
+            "admin::insurance.lead_types.{$slug}",
+            "admin::app.lead_types.{$slug}",
+        ];
+
+        foreach ($candidates as $key) {
+            if (Lang::has($key)) {
+                return trans($key);
+            }
         }
 
         return $value;
@@ -44,10 +50,16 @@ class Type extends Model implements TypeContract
     {
         $raw = $this->getRawOriginal('name') ?? '';
         $slug = Str::slug($raw, '_');
-        $key = "admin::app.lead_types.{$slug}_description";
 
-        if (Lang::has($key)) {
-            return trans($key);
+        $candidates = [
+            "admin::insurance.lead_types.{$slug}_description",
+            "admin::app.lead_types.{$slug}_description",
+        ];
+
+        foreach ($candidates as $key) {
+            if (Lang::has($key)) {
+                return trans($key);
+            }
         }
 
         return $value;
