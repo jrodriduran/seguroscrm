@@ -16,16 +16,16 @@ return [
      * Leads.
      */
     [
-        'key'        => 'leads',
-        'name'       => 'admin::app.layouts.leads',
-        'route'      => 'admin.leads.index',
-        'sort'       => 2,
+        'key' => 'leads',
+        'name' => 'admin::app.layouts.leads',
+        'route' => 'admin.leads.index',
+        'sort' => 2,
         'icon-class' => 'icon-leads',
     ], [
-        'key'        => 'leads.team_radar',
-        'name'       => 'admin::insurance.team_radar.title',
-        'route'      => 'admin.leads.team_radar.index',
-        'sort'       => 1,
+        'key' => 'leads.team_radar',
+        'name' => 'admin::insurance.team_radar.title',
+        'route' => 'admin.leads.team_radar.index',
+        'sort' => 1,
         'icon-class' => 'icon-activity',
     ],
 

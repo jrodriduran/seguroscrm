@@ -53,10 +53,10 @@ class Lead extends Model implements LeadContract
      * @var array
      */
     protected $casts = [
-        'closed_at'            => 'datetime:D M d, Y H:i A',
-        'expected_close_date'  => 'date:D M d, Y',
-        'assigned_at'          => 'datetime',
-        'escalated_at'         => 'datetime',
+        'closed_at' => 'datetime:D M d, Y H:i A',
+        'expected_close_date' => 'date:D M d, Y',
+        'assigned_at' => 'datetime',
+        'escalated_at' => 'datetime',
     ];
 
     /**
@@ -194,11 +194,11 @@ class Lead extends Model implements LeadContract
     public function getSlaStatusBadgeAttribute(): string
     {
         return match ($this->sla_status ?? 'pending') {
-            'active'    => 'ok',
-            'overdue'   => 'danger',
+            'active' => 'ok',
+            'overdue' => 'danger',
             'escalated' => 'danger',
-            'resolved'  => 'resolved',
-            default     => 'warning',
+            'resolved' => 'resolved',
+            default => 'warning',
         };
     }
 

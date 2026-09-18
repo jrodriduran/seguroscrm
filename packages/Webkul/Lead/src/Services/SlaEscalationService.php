@@ -5,6 +5,7 @@ namespace Webkul\Lead\Services;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Webkul\Activity\Repositories\ActivityRepository;
+use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Repositories\LeadRepository;
 use Webkul\Lead\Repositories\SlaRuleRepository;
 use Webkul\User\Repositories\UserRepository;
@@ -44,7 +45,7 @@ class SlaEscalationService
             );
 
             $firstContactHours = (int) ($rule->first_contact_hours ?? 2);
-            $escalationHours   = (int) ($rule->escalation_hours ?? 4);
+            $escalationHours = (int) ($rule->escalation_hours ?? 4);
 
             // Escalation threshold is assigned_at + first_contact_hours + escalation_hours
             $escalationDeadline = Carbon::parse($lead->assigned_at)
@@ -65,10 +66,7 @@ class SlaEscalationService
     /**
      * Escalate a specific lead.
      *
-     * @param  \Webkul\Lead\Models\Lead|int  $lead
-     * @param  string  $reason
-     * @param  int|null  $requestedBy
-     * @return bool
+     * @param  Lead|int  $lead
      */
     public function escalateLead($lead, string $reason, ?int $requestedBy = null): bool
     {
@@ -83,8 +81,8 @@ class SlaEscalationService
         $now = Carbon::now();
 
         $this->leadRepository->update([
-            'sla_status'        => 'escalated',
-            'escalated_at'      => $now,
+            'sla_status' => 'escalated',
+            'escalated_at' => $now,
             'escalation_reason' => $reason,
         ], $lead->id);
 
@@ -94,7 +92,7 @@ class SlaEscalationService
             ->where('lead_activities.lead_id', $lead->id)
             ->where('activities.is_done', false)
             ->update([
-                'activities.priority'            => 'urgent',
+                'activities.priority' => 'urgent',
                 'activities.sla_activity_status' => 'overdue',
             ]);
 
@@ -103,14 +101,14 @@ class SlaEscalationService
         $assigneeId = $adminUser ? $adminUser->id : $lead->user_id;
 
         $activity = $this->activityRepository->create([
-            'title'               => '🚨 ESCALACIÓN SLA: '.$lead->title,
-            'type'                => 'note',
-            'comment'             => 'Caso escalado a Torre de Control / Agente Maestro. Motivo: '.$reason,
-            'schedule_from'       => $now,
-            'schedule_to'         => $now->copy()->addHours(2),
-            'is_done'             => false,
-            'user_id'             => $assigneeId,
-            'priority'            => 'urgent',
+            'title' => '🚨 ESCALACIÓN SLA: '.$lead->title,
+            'type' => 'note',
+            'comment' => 'Caso escalado a Torre de Control / Agente Maestro. Motivo: '.$reason,
+            'schedule_from' => $now,
+            'schedule_to' => $now->copy()->addHours(2),
+            'is_done' => false,
+            'user_id' => $assigneeId,
+            'priority' => 'urgent',
             'sla_activity_status' => 'overdue',
         ]);
 

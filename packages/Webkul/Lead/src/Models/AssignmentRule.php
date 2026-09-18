@@ -29,10 +29,10 @@ class AssignmentRule extends Model implements AssignmentRuleContract
      * The attributes that should be cast.
      */
     protected $casts = [
-        'agent_ids'    => 'array',
+        'agent_ids' => 'array',
         'max_capacity' => 'integer',
-        'rr_pointer'   => 'integer',
-        'is_active'    => 'boolean',
+        'rr_pointer' => 'integer',
+        'is_active' => 'boolean',
     ];
 
     /**

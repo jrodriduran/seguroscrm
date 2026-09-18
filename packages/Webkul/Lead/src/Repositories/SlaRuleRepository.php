@@ -9,8 +9,6 @@ class SlaRuleRepository extends Repository
 {
     /**
      * Specify Model class name.
-     *
-     * @return string
      */
     public function model(): string
     {
@@ -32,8 +30,8 @@ class SlaRuleRepository extends Repository
         if ($pipelineId && $leadTypeId) {
             $rule = $this->findOneWhere([
                 'lead_pipeline_id' => $pipelineId,
-                'lead_type_id'     => $leadTypeId,
-                'is_active'        => 1,
+                'lead_type_id' => $leadTypeId,
+                'is_active' => 1,
             ]);
 
             if ($rule) {
@@ -45,8 +43,8 @@ class SlaRuleRepository extends Repository
         if ($pipelineId) {
             $rule = $this->findOneWhere([
                 'lead_pipeline_id' => $pipelineId,
-                'lead_type_id'     => null,
-                'is_active'        => 1,
+                'lead_type_id' => null,
+                'is_active' => 1,
             ]);
 
             if ($rule) {
@@ -57,7 +55,7 @@ class SlaRuleRepository extends Repository
         // 3. Global rule
         $globalRule = $this->findOneWhere([
             'lead_pipeline_id' => null,
-            'is_active'        => 1,
+            'is_active' => 1,
         ]);
 
         if ($globalRule) {
@@ -66,13 +64,13 @@ class SlaRuleRepository extends Repository
 
         // 4. Fallback in-memory dummy object
         return (object) [
-            'id'                  => null,
-            'lead_pipeline_id'    => $pipelineId,
-            'lead_type_id'        => $leadTypeId,
+            'id' => null,
+            'lead_pipeline_id' => $pipelineId,
+            'lead_type_id' => $leadTypeId,
             'first_contact_hours' => 2,
-            'follow_up_hours'     => 24,
-            'escalation_hours'    => 4,
-            'is_active'           => true,
+            'follow_up_hours' => 24,
+            'escalation_hours' => 4,
+            'is_active' => true,
         ];
     }
 }

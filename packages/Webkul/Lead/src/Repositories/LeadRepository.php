@@ -5,6 +5,7 @@ namespace Webkul\Lead\Repositories;
 use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Webkul\Attribute\Repositories\AttributeRepository;
@@ -12,6 +13,7 @@ use Webkul\Attribute\Repositories\AttributeValueRepository;
 use Webkul\Contact\Repositories\PersonRepository;
 use Webkul\Core\Eloquent\Repository;
 use Webkul\Lead\Contracts\Lead;
+use Webkul\Lead\Services\AssignmentEngine;
 
 class LeadRepository extends Repository
 {
@@ -139,7 +141,7 @@ class LeadRepository extends Repository
         }
 
         if (empty($data['user_id'])) {
-            $assignedUserId = app(\Webkul\Lead\Services\AssignmentEngine::class)->assign($data);
+            $assignedUserId = app(AssignmentEngine::class)->assign($data);
 
             if ($assignedUserId) {
                 $data['user_id'] = $assignedUserId;
@@ -149,10 +151,10 @@ class LeadRepository extends Repository
         $lead = parent::create(array_merge([
             'lead_pipeline_id' => 1,
             'lead_pipeline_stage_id' => 1,
-        ], \Illuminate\Support\Arr::except($data, ['entity_type'])));
+        ], Arr::except($data, ['entity_type'])));
 
         $this->attributeValueRepository->save(array_merge($data, [
-            'entity_id'   => $lead->id,
+            'entity_id' => $lead->id,
             'entity_type' => 'leads',
         ]));
 

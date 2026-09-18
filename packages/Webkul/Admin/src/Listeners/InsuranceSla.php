@@ -3,7 +3,9 @@
 namespace Webkul\Admin\Listeners;
 
 use Carbon\Carbon;
+use Webkul\Activity\Models\Activity;
 use Webkul\Activity\Repositories\ActivityRepository;
+use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Repositories\LeadRepository;
 use Webkul\Lead\Repositories\SlaRuleRepository;
 
@@ -21,7 +23,7 @@ class InsuranceSla
     /**
      * Handle lead.create.after — stamp assigned_at and auto-create SLA activity.
      *
-     * @param  \Webkul\Lead\Models\Lead  $lead
+     * @param  Lead  $lead
      */
     public function onLeadCreate($lead): void
     {
@@ -36,7 +38,7 @@ class InsuranceSla
     /**
      * Handle lead.update.after — reset SLA clock if the assigned agent changed.
      *
-     * @param  \Webkul\Lead\Models\Lead  $lead
+     * @param  Lead  $lead
      */
     public function onLeadUpdate($lead): void
     {
@@ -57,7 +59,7 @@ class InsuranceSla
      * Handle activity.create.after / activity.update.after
      * — resolve the SLA on the parent lead when a call/note is registered.
      *
-     * @param  \Webkul\Activity\Models\Activity  $activity
+     * @param  Activity  $activity
      */
     public function onActivitySaved($activity): void
     {
@@ -85,7 +87,7 @@ class InsuranceSla
     /**
      * Stamp assigned_at, configured sla_hours, and reset sla_status to pending.
      *
-     * @param  \Webkul\Lead\Models\Lead  $lead
+     * @param  Lead  $lead
      */
     private function stampAssignedAt($lead): void
     {
@@ -99,8 +101,8 @@ class InsuranceSla
         $this->leadRepository->update(
             [
                 'assigned_at' => Carbon::now(),
-                'sla_status'  => 'pending',
-                'sla_hours'   => $slaHours,
+                'sla_status' => 'pending',
+                'sla_hours' => $slaHours,
             ],
             $lead->id
         );
@@ -109,7 +111,7 @@ class InsuranceSla
     /**
      * Auto-create a "Primer Contacto" activity for the assigned agent based on configurable SLA.
      *
-     * @param  \Webkul\Lead\Models\Lead  $lead
+     * @param  Lead  $lead
      */
     private function createFirstContactActivity($lead): void
     {
@@ -123,17 +125,17 @@ class InsuranceSla
         $slaHours = (int) ($rule->first_contact_hours ?? $lead->sla_hours ?? 2);
 
         $activity = $this->activityRepository->create([
-            'title'               => trans('admin::insurance.team_radar.first_contact_title'),
-            'type'                => 'call',
-            'comment'             => trans('admin::insurance.team_radar.first_contact_comment', [
-                'lead'  => $lead->title,
+            'title' => trans('admin::insurance.team_radar.first_contact_title'),
+            'type' => 'call',
+            'comment' => trans('admin::insurance.team_radar.first_contact_comment', [
+                'lead' => $lead->title,
                 'hours' => $slaHours,
             ]),
-            'schedule_from'       => $now,
-            'schedule_to'         => $now->copy()->addHours($slaHours),
-            'is_done'             => false,
-            'user_id'             => $lead->user_id,
-            'priority'            => 'urgent',
+            'schedule_from' => $now,
+            'schedule_to' => $now->copy()->addHours($slaHours),
+            'is_done' => false,
+            'user_id' => $lead->user_id,
+            'priority' => 'urgent',
             'sla_activity_status' => 'pending',
         ]);
 

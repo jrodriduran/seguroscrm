@@ -29,10 +29,10 @@ class SlaRule extends Model implements SlaRuleContract
      * The attributes that should be cast.
      */
     protected $casts = [
-        'is_active'           => 'boolean',
+        'is_active' => 'boolean',
         'first_contact_hours' => 'integer',
-        'follow_up_hours'     => 'integer',
-        'escalation_hours'    => 'integer',
+        'follow_up_hours' => 'integer',
+        'escalation_hours' => 'integer',
     ];
 
     /**

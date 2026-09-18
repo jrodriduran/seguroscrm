@@ -81,60 +81,60 @@ class TeamRadarDataGrid extends DataGrid
     public function prepareColumns(): void
     {
         $this->addColumn([
-            'index'      => 'agent_name',
-            'label'      => trans('admin::insurance.team_radar.agent'),
-            'type'       => 'string',
-            'sortable'   => true,
+            'index' => 'agent_name',
+            'label' => trans('admin::insurance.team_radar.agent'),
+            'type' => 'string',
+            'sortable' => true,
             'searchable' => true,
             'filterable' => true,
         ]);
 
         $this->addColumn([
-            'index'    => 'assigned_today',
-            'label'    => trans('admin::insurance.team_radar.assigned_today'),
-            'type'     => 'integer',
+            'index' => 'assigned_today',
+            'label' => trans('admin::insurance.team_radar.assigned_today'),
+            'type' => 'integer',
             'sortable' => true,
-            'closure'  => fn ($row) => $row->assigned_today ?? 0,
+            'closure' => fn ($row) => $row->assigned_today ?? 0,
         ]);
 
         $this->addColumn([
-            'index'    => 'on_time',
-            'label'    => trans('admin::insurance.team_radar.on_time'),
-            'type'     => 'integer',
+            'index' => 'on_time',
+            'label' => trans('admin::insurance.team_radar.on_time'),
+            'type' => 'integer',
             'sortable' => true,
-            'closure'  => fn ($row) => $row->on_time ?? 0,
+            'closure' => fn ($row) => $row->on_time ?? 0,
         ]);
 
         $this->addColumn([
-            'index'    => 'overdue_count',
-            'label'    => trans('admin::insurance.team_radar.overdue'),
-            'type'     => 'integer',
+            'index' => 'overdue_count',
+            'label' => trans('admin::insurance.team_radar.overdue'),
+            'type' => 'integer',
             'sortable' => true,
-            'closure'  => fn ($row) => $row->overdue_count ?? 0,
+            'closure' => fn ($row) => $row->overdue_count ?? 0,
         ]);
 
         $this->addColumn([
-            'index'    => 'escalated_count',
-            'label'    => trans('admin::insurance.team_radar.escalated'),
-            'type'     => 'integer',
+            'index' => 'escalated_count',
+            'label' => trans('admin::insurance.team_radar.escalated'),
+            'type' => 'integer',
             'sortable' => true,
-            'closure'  => fn ($row) => $row->escalated_count ?? 0,
+            'closure' => fn ($row) => $row->escalated_count ?? 0,
         ]);
 
         $this->addColumn([
-            'index'    => 'pending_contact',
-            'label'    => trans('admin::insurance.team_radar.pending_contact'),
-            'type'     => 'integer',
+            'index' => 'pending_contact',
+            'label' => trans('admin::insurance.team_radar.pending_contact'),
+            'type' => 'integer',
             'sortable' => true,
-            'closure'  => fn ($row) => $row->pending_contact ?? 0,
+            'closure' => fn ($row) => $row->pending_contact ?? 0,
         ]);
 
         $this->addColumn([
-            'index'    => 'policies_issued_today',
-            'label'    => trans('admin::insurance.team_radar.policies_issued'),
-            'type'     => 'integer',
+            'index' => 'policies_issued_today',
+            'label' => trans('admin::insurance.team_radar.policies_issued'),
+            'type' => 'integer',
             'sortable' => true,
-            'closure'  => fn ($row) => $row->policies_issued_today ?? 0,
+            'closure' => fn ($row) => $row->policies_issued_today ?? 0,
         ]);
     }
 

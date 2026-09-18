@@ -47,8 +47,8 @@ class Activity extends Model implements ActivityContract
      */
     protected $casts = [
         'schedule_from' => 'datetime',
-        'schedule_to'   => 'datetime',
-        'is_done'       => 'boolean',
+        'schedule_to' => 'datetime',
+        'is_done' => 'boolean',
     ];
 
     /**
@@ -93,7 +93,7 @@ class Activity extends Model implements ActivityContract
      */
     public function getPriorityLabelAttribute(): string
     {
-        $key = 'admin::insurance.team_radar.priority_' . ($this->priority ?? 'normal');
+        $key = 'admin::insurance.team_radar.priority_'.($this->priority ?? 'normal');
 
         return trans()->has($key) ? trans($key) : ucfirst($this->priority ?? 'normal');
     }

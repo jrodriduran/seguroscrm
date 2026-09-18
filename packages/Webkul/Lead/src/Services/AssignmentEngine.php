@@ -3,6 +3,7 @@
 namespace Webkul\Lead\Services;
 
 use Illuminate\Support\Facades\DB;
+use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Repositories\AssignmentRuleRepository;
 use Webkul\User\Repositories\UserRepository;
 
@@ -19,7 +20,7 @@ class AssignmentEngine
     /**
      * Determine and assign user_id for a lead based on pipeline configuration.
      *
-     * @param  array|\Webkul\Lead\Models\Lead  $leadData
+     * @param  array|Lead  $leadData
      * @return int|null Assigned user ID, or null if unassigned / manual
      */
     public function assign(array|object $leadData): ?int
@@ -107,13 +108,13 @@ class AssignmentEngine
             ->toArray();
 
         $selectedId = $agentIds[0];
-        $minCount   = $counts[$selectedId] ?? 0;
+        $minCount = $counts[$selectedId] ?? 0;
 
         foreach ($agentIds as $agentId) {
             $agentCount = $counts[$agentId] ?? 0;
 
             if ($agentCount < $minCount) {
-                $minCount   = $agentCount;
+                $minCount = $agentCount;
                 $selectedId = $agentId;
             }
         }
@@ -126,7 +127,7 @@ class AssignmentEngine
      */
     protected function selectRoundRobin(object $rule, array $eligibleAgents): int
     {
-        $count   = count($eligibleAgents);
+        $count = count($eligibleAgents);
         $pointer = (int) ($rule->rr_pointer ?? 0);
 
         $selectedId = $eligibleAgents[$pointer % $count];

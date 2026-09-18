@@ -30,13 +30,13 @@ class CheckLeadSla extends Command
     public function handle(SlaEscalationService $escalationService): int
     {
         $dryRun = $this->option('dry-run');
-        $now    = Carbon::now();
+        $now = Carbon::now();
 
         // 1. Find leads that are still "pending" and whose assigned_at + sla_hours < now.
         $driver = DB::connection()->getDriverName();
         $rawCondition = $driver === 'pgsql'
             ? "(assigned_at + (sla_hours || ' hours')::interval) < ?"
-            : "DATE_ADD(assigned_at, INTERVAL sla_hours HOUR) < ?";
+            : 'DATE_ADD(assigned_at, INTERVAL sla_hours HOUR) < ?';
 
         $overdue = DB::table('leads')
             ->where('sla_status', 'pending')

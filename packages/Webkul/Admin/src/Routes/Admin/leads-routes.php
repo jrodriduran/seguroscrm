@@ -96,4 +96,3 @@ Route::controller(TeamRadarController::class)->prefix('leads')->group(function (
 
     Route::post('{lead_id}/resolve-escalation', 'resolveEscalation')->name('admin.leads.resolve_escalation');
 });
-

@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Webkul\Activity\Models\ActivityProxy;
 use Webkul\Admin\DataGrids\Lead\TeamRadarDataGrid;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Lead\Repositories\AssignmentRuleRepository;
@@ -62,11 +63,11 @@ class TeamRadarController extends Controller
 
         $agents = $users->map(function ($u) use ($userStats, $maxCapacity) {
             $stats = $userStats->get($u->id);
-            $u->active_leads    = (int) ($stats->active_leads ?? 0);
-            $u->pending_leads   = (int) ($stats->pending_leads ?? 0);
-            $u->overdue_leads   = (int) ($stats->overdue_leads ?? 0);
+            $u->active_leads = (int) ($stats->active_leads ?? 0);
+            $u->pending_leads = (int) ($stats->pending_leads ?? 0);
+            $u->overdue_leads = (int) ($stats->overdue_leads ?? 0);
             $u->escalated_leads = (int) ($stats->escalated_leads ?? 0);
-            $u->max_capacity    = $maxCapacity;
+            $u->max_capacity = $maxCapacity;
             $u->capacity_percent = $maxCapacity > 0 ? min(100, (int) round(($u->active_leads / $maxCapacity) * 100)) : 0;
 
             return $u;
@@ -88,14 +89,14 @@ class TeamRadarController extends Controller
             ->get();
 
         return view('admin::leads.team-radar', [
-            'agents'             => $agents,
-            'pipelines'          => $pipelines,
+            'agents' => $agents,
+            'pipelines' => $pipelines,
             'selectedPipelineId' => $selectedPipelineId,
-            'assignmentRule'     => $assignmentRule,
-            'slaRules'           => $slaRules,
-            'leadTypes'          => $leadTypes,
-            'escalatedLeads'     => $escalatedLeads,
-            'unassignedLeads'    => $unassignedLeads,
+            'assignmentRule' => $assignmentRule,
+            'slaRules' => $slaRules,
+            'leadTypes' => $leadTypes,
+            'escalatedLeads' => $escalatedLeads,
+            'unassignedLeads' => $unassignedLeads,
         ]);
     }
 
@@ -130,7 +131,7 @@ class TeamRadarController extends Controller
             ->limit(50)
             ->get();
 
-        $urgent = \Webkul\Activity\Models\ActivityProxy::modelClass()::query()
+        $urgent = ActivityProxy::modelClass()::query()
             ->urgent()
             ->pending()
             ->whereHas('leads', fn ($q) => $q->where('user_id', $userId))
@@ -139,7 +140,7 @@ class TeamRadarController extends Controller
             ->limit(50)
             ->get();
 
-        $normal = \Webkul\Activity\Models\ActivityProxy::modelClass()::query()
+        $normal = ActivityProxy::modelClass()::query()
             ->pending()
             ->where('priority', 'normal')
             ->whereHas('leads', fn ($q) => $q->where('user_id', $userId))
@@ -164,11 +165,11 @@ class TeamRadarController extends Controller
     {
         $data = $request->validate([
             'lead_pipeline_id' => ['required', 'integer', 'exists:lead_pipelines,id'],
-            'strategy'         => ['required', 'string', 'in:round_robin,least_loaded,manual'],
-            'max_capacity'     => ['required', 'integer', 'min:0'],
-            'agent_ids'        => ['nullable', 'array'],
-            'agent_ids.*'      => ['integer', 'exists:users,id'],
-            'is_active'        => ['nullable', 'boolean'],
+            'strategy' => ['required', 'string', 'in:round_robin,least_loaded,manual'],
+            'max_capacity' => ['required', 'integer', 'min:0'],
+            'agent_ids' => ['nullable', 'array'],
+            'agent_ids.*' => ['integer', 'exists:users,id'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
 
         $existing = $this->assignmentRuleRepository->findOneWhere([
@@ -177,18 +178,18 @@ class TeamRadarController extends Controller
 
         if ($existing) {
             $this->assignmentRuleRepository->update([
-                'strategy'     => $data['strategy'],
+                'strategy' => $data['strategy'],
                 'max_capacity' => $data['max_capacity'],
-                'agent_ids'    => $data['agent_ids'] ?? [],
-                'is_active'    => $data['is_active'] ?? true,
+                'agent_ids' => $data['agent_ids'] ?? [],
+                'is_active' => $data['is_active'] ?? true,
             ], $existing->id);
         } else {
             $this->assignmentRuleRepository->create([
                 'lead_pipeline_id' => $data['lead_pipeline_id'],
-                'strategy'         => $data['strategy'],
-                'max_capacity'     => $data['max_capacity'],
-                'agent_ids'        => $data['agent_ids'] ?? [],
-                'is_active'        => $data['is_active'] ?? true,
+                'strategy' => $data['strategy'],
+                'max_capacity' => $data['max_capacity'],
+                'agent_ids' => $data['agent_ids'] ?? [],
+                'is_active' => $data['is_active'] ?? true,
             ]);
         }
 
@@ -204,16 +205,16 @@ class TeamRadarController extends Controller
     public function saveSlaRule(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'lead_pipeline_id'    => ['required', 'integer', 'exists:lead_pipelines,id'],
-            'lead_type_id'        => ['nullable', 'integer', 'exists:lead_types,id'],
+            'lead_pipeline_id' => ['required', 'integer', 'exists:lead_pipelines,id'],
+            'lead_type_id' => ['nullable', 'integer', 'exists:lead_types,id'],
             'first_contact_hours' => ['required', 'integer', 'min:1'],
-            'follow_up_hours'     => ['required', 'integer', 'min:1'],
-            'escalation_hours'    => ['required', 'integer', 'min:1'],
+            'follow_up_hours' => ['required', 'integer', 'min:1'],
+            'escalation_hours' => ['required', 'integer', 'min:1'],
         ]);
 
         $existing = $this->slaRuleRepository->findOneWhere([
             'lead_pipeline_id' => $data['lead_pipeline_id'],
-            'lead_type_id'     => $data['lead_type_id'] ?? null,
+            'lead_type_id' => $data['lead_type_id'] ?? null,
         ]);
 
         if ($existing) {
@@ -234,7 +235,7 @@ class TeamRadarController extends Controller
     public function assignManual(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'lead_id'     => ['required', 'integer', 'exists:leads,id'],
+            'lead_id' => ['required', 'integer', 'exists:leads,id'],
             'new_user_id' => ['required', 'integer', 'exists:users,id'],
         ]);
 
@@ -242,10 +243,10 @@ class TeamRadarController extends Controller
 
         if ($lead) {
             $this->leadRepository->update([
-                'user_id'           => $data['new_user_id'],
-                'assigned_at'       => now(),
-                'sla_status'        => 'pending',
-                'escalated_at'      => null,
+                'user_id' => $data['new_user_id'],
+                'assigned_at' => now(),
+                'sla_status' => 'pending',
+                'escalated_at' => null,
                 'escalation_reason' => null,
             ], $lead->id);
 
@@ -264,8 +265,8 @@ class TeamRadarController extends Controller
     public function bulkReassign(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'lead_ids'    => ['required', 'array', 'min:1'],
-            'lead_ids.*'  => ['integer', 'exists:leads,id'],
+            'lead_ids' => ['required', 'array', 'min:1'],
+            'lead_ids.*' => ['integer', 'exists:leads,id'],
             'new_user_id' => ['required', 'integer', 'exists:users,id'],
         ]);
 
@@ -274,10 +275,10 @@ class TeamRadarController extends Controller
 
             if ($lead) {
                 $this->leadRepository->update([
-                    'user_id'           => $data['new_user_id'],
-                    'assigned_at'       => now(),
-                    'sla_status'        => 'pending',
-                    'escalated_at'      => null,
+                    'user_id' => $data['new_user_id'],
+                    'assigned_at' => now(),
+                    'sla_status' => 'pending',
+                    'escalated_at' => null,
                     'escalation_reason' => null,
                 ], $leadId);
 
@@ -317,8 +318,8 @@ class TeamRadarController extends Controller
 
         if ($lead) {
             $this->leadRepository->update([
-                'sla_status'        => 'active',
-                'escalated_at'      => null,
+                'sla_status' => 'active',
+                'escalated_at' => null,
                 'escalation_reason' => null,
             ], $leadId);
 
@@ -352,9 +353,9 @@ class TeamRadarController extends Controller
         $activity->update(['priority' => $newPriority]);
 
         return response()->json([
-            'success'      => true,
+            'success' => true,
             'new_priority' => $newPriority,
-            'message'      => trans('admin::insurance.team_radar.urgent_flag_toggled'),
+            'message' => trans('admin::insurance.team_radar.urgent_flag_toggled'),
         ]);
     }
 }
