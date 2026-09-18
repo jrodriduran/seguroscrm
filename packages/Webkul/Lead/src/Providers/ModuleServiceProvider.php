@@ -7,6 +7,7 @@ use Webkul\Lead\Models\AssignmentRule;
 use Webkul\Lead\Models\HouseholdMember;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\LeadConsent;
+use Webkul\Lead\Models\LeadCrossSellOpportunity;
 use Webkul\Lead\Models\LeadDmiDocument;
 use Webkul\Lead\Models\LeadDoctorNetwork;
 use Webkul\Lead\Models\LeadRxMedication;
@@ -16,6 +17,7 @@ use Webkul\Lead\Models\SlaRule;
 use Webkul\Lead\Models\Source;
 use Webkul\Lead\Models\Stage;
 use Webkul\Lead\Models\Type;
+use Webkul\Lead\Models\UserAgentLicense;
 
 class ModuleServiceProvider extends BaseModuleServiceProvider
 {
@@ -24,6 +26,7 @@ class ModuleServiceProvider extends BaseModuleServiceProvider
         HouseholdMember::class,
         Lead::class,
         LeadConsent::class,
+        LeadCrossSellOpportunity::class,
         LeadDmiDocument::class,
         LeadDoctorNetwork::class,
         LeadRxMedication::class,
@@ -33,5 +36,6 @@ class ModuleServiceProvider extends BaseModuleServiceProvider
         Source::class,
         Stage::class,
         Type::class,
+        UserAgentLicense::class,
     ];
 }

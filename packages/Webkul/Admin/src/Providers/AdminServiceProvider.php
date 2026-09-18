@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Admin\Bouncer;
+use Webkul\Admin\Console\Commands\CheckAgentCompliance;
 use Webkul\Admin\Console\Commands\CheckDmiDeadlines;
 use Webkul\Admin\Console\Commands\CheckGracePeriods;
 use Webkul\Admin\Console\Commands\CheckLeadSla;
@@ -72,12 +73,14 @@ class AdminServiceProvider extends ServiceProvider
                 CheckLeadSla::class,
                 CheckDmiDeadlines::class,
                 CheckGracePeriods::class,
+                CheckAgentCompliance::class,
             ]);
 
             $this->callAfterResolving('schedule', function ($schedule) {
                 $schedule->command('insurance:check-sla')->everyFifteenMinutes();
                 $schedule->command('insurance:check-dmi-deadlines')->dailyAt('08:00');
                 $schedule->command('insurance:check-grace-periods')->dailyAt('07:00');
+                $schedule->command('insurance:check-agent-compliance')->dailyAt('06:00');
             });
         }
     }

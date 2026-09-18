@@ -215,6 +215,14 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get cross-sell opportunities associated with the lead.
+     */
+    public function crossSellOpportunities(): HasMany
+    {
+        return $this->hasMany(LeadCrossSellOpportunityProxy::modelClass(), 'lead_id');
+    }
+
+    /**
      * Returns the rotten days
      */
     public function getRottenDaysAttribute()

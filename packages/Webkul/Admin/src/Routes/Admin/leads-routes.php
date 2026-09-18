@@ -14,6 +14,12 @@ use Webkul\Admin\Http\Controllers\Lead\LeadController;
 use Webkul\Admin\Http\Controllers\Lead\QuoteController;
 use Webkul\Admin\Http\Controllers\Lead\TagController;
 use Webkul\Admin\Http\Controllers\Lead\TeamRadarController;
+use Webkul\Admin\Http\Controllers\Chatwoot\ChatwootController;
+use Webkul\Admin\Http\Controllers\Insurance\AgentComplianceController;
+use Webkul\Admin\Http\Controllers\Insurance\ClientSnapshotController;
+use Webkul\Admin\Http\Controllers\Insurance\CrossSellController;
+use Webkul\Admin\Http\Controllers\Insurance\HealthSherpaBridgeController;
+use Webkul\Admin\Http\Controllers\Insurance\RxProviderNetworkController;
 use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController;
 
 Route::controller(LeadController::class)->prefix('leads')->group(function () {
@@ -133,6 +139,27 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::get('conversation', 'getConversation')->name('admin.leads.chatwoot.conversation');
         Route::post('send', 'sendMessage')->name('admin.leads.chatwoot.send');
     });
+
+    Route::controller(HealthSherpaBridgeController::class)->prefix('{lead_id}/healthsherpa')->group(function () {
+        Route::get('redirect', 'redirectToEnrollment')->name('admin.leads.healthsherpa.redirect');
+        Route::get('payload', 'exportPayload')->name('admin.leads.healthsherpa.payload');
+    });
+
+    Route::controller(CrossSellController::class)->prefix('{lead_id}/cross-sell')->group(function () {
+        Route::get('', 'index')->name('admin.leads.cross_sell.index');
+        Route::post('evaluate', 'evaluate')->name('admin.leads.cross_sell.evaluate');
+        Route::put('{opportunityId}/status', 'updateStatus')->name('admin.leads.cross_sell.update_status');
+    });
+
+    Route::get('{lead_id}/client-snapshot', [ClientSnapshotController::class, 'show'])->name('admin.leads.client_snapshot.show');
+});
+
+// ─── Producer Compliance: Licenses, AHIP & E&O ─────────────────────────────
+Route::controller(AgentComplianceController::class)->prefix('agent-compliance')->group(function () {
+    Route::get('{userId}', 'show')->name('admin.insurance.agent_compliance.show');
+    Route::post('{userId}', 'storeLicense')->name('admin.insurance.agent_compliance.store');
+    Route::put('license/{licenseId}/status', 'updateLicenseStatus')->name('admin.insurance.agent_compliance.update_license_status');
+    Route::get('summary/roster', 'rosterSummary')->name('admin.insurance.agent_compliance.roster');
 });
 
 // ─── Team Radar: Master Agent Control Tower ─────────────────────────────────

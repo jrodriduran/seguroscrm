@@ -89,6 +89,14 @@ class User extends Authenticatable implements UserContract
     }
 
     /**
+     * Get the agent licensing, certification (AHIP), and E&O records.
+     */
+    public function agentLicenses()
+    {
+        return $this->hasMany(\Webkul\Lead\Models\UserAgentLicense::class, 'user_id');
+    }
+
+    /**
      * Checks if user has permission to perform certain action.
      *
      * @param  string  $permission

@@ -87,6 +87,20 @@
 
                     {!! view_render_event('admin.leads.view.actions.after', ['lead' => $lead]) !!}
                 </div>
+
+                <!-- Quick Insurance Actions -->
+                <div class="mt-2 flex w-full flex-wrap items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
+                    <a
+                        href="{{ route('admin.leads.healthsherpa.redirect', $lead->id) }}"
+                        target="_blank"
+                        class="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700 transition"
+                        title="Abrir HealthSherpa con datos y dependientes prellenados"
+                    >
+                        🚀 HealthSherpa
+                    </a>
+
+                    @include ('admin::leads.view.ai_client_snapshot')
+                </div>
             </div>
 
             <!-- AI Lead Scoring & Next Best Action Card -->
@@ -125,6 +139,7 @@
                     ['name' => 'enrollment_period', 'label' => '🗓️ Inscripción (SEP/OEP)'],
                     ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
                     ['name' => 'rx_network', 'label' => '💊 Medicinas & Doctores'],
+                    ['name' => 'cross_sell', 'label' => '🛍️ Venta Cruzada (Bundles)'],
                     ['name' => 'chatwoot', 'label' => '💬 Chatwoot (WhatsApp / SMS)'],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
@@ -159,6 +174,11 @@
                 <!-- Medicinas & Doctores -->
                 <x-slot:rx_network>
                     @include ('admin::leads.view.rx_and_doctors')
+                </x-slot>
+
+                <!-- Cross-Sell Bundles -->
+                <x-slot:cross_sell>
+                    @include ('admin::leads.view.cross_sell_matrix')
                 </x-slot>
 
                 <!-- Chatwoot Omnichannel Inbox -->

@@ -4,6 +4,18 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] HealthSherpa 1-Click Enrollment Bridge: Implemented instant deep-link prefill integration (`/admin/leads/{id}/healthsherpa/redirect`) connecting Krayin CRM directly to HealthSherpa EDE, pre-populating applicant demographics, household dependents, projected FPL income, zip code, and tobacco status to eliminate 15-20 minutes of manual re-keying per ACA application.
+
+* [feature] Cross-Sell Bundle Engine (Dental, Vision, Hospital Indemnity & Critical Illness): Built automated gap-filling matrix evaluating ACA and Medicare out-of-pocket exposure to identify, calculate, and present lucrative supplemental protection packages with tailored client pitch scripts and projected annual agency commission tracking.
+
+* [feature] Producer Licensing, State Authority, AHIP & E&O Compliance Tracker: Added centralized producer compliance management tracking National Producer Numbers (NPN), resident vs non-resident state licenses, annual CMS AHIP Medicare certifications, and Errors & Omissions (E&O) policy liability limits with automated expiration alert audits via console command (`insurance:check-agent-compliance`).
+
+* [feature] AI Client 360° Narrative Snapshot: Built instant 5-second client briefing engine synthesizing household demographics, active health quotes, CMS consent, Medicare SOA compliance, DMI deadlines, prescription drug counts, and next best action into an executive summary drawer before agent calls.
+
+* [migration] Added `lead_cross_sell_opportunities` and `user_agent_licenses` tables (Lead package migrations `2026_09_18_000016` and `2026_09_18_000017`).
+
+* [tests] Added Pest feature test `DeepCompetitiveFeaturesTest` covering HealthSherpa payload formatting, cross-sell bundle evaluation, producer compliance audits, and AI client 360 narrative synthesis.
+
 * [feature] Omnichannel Chatwoot Integration (WhatsApp, SMS, Live Chat): Added enterprise integration connecting Krayin CRM to Chatwoot for centralizing all client conversations across WhatsApp Business, Twilio SMS, and Webchat.
 
 * [feature] Bidirectional Webhook Sync: Built `POST /api/chatwoot/webhook` listener handling customer `message_created` events to automatically create or match CRM leads, log full message conversations into CRM activities, and update real-time response timestamps.
