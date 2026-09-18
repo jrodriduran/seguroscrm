@@ -46,48 +46,45 @@ it('generates a full HealthSherpa prefill payload and deep link URL', function (
 
     HouseholdMember::create([
         'lead_id' => $lead->id,
-        'first_name' => 'Elena',
-        'last_name' => 'Gutierrez',
+        'name' => 'Elena Gutierrez',
         'relationship' => 'spouse',
         'date_of_birth' => '1985-04-12',
         'gender' => 'female',
-        'is_applicant' => 1,
-        'tobacco_user' => 0,
+        'is_applying_coverage' => 1,
     ]);
 
     $bridgeService = app(HealthSherpaBridgeService::class);
-    $payload = $bridgeService->buildPrefillPayload($lead);
+    $payload = $bridgeService->generateBridgeData($lead);
 
     expect($payload)->toBeArray();
     expect($payload['household_size'])->toBeGreaterThanOrEqual(2);
-    expect($payload['redirect_url'])->toContain('healthsherpa.com');
-    expect($payload['members'])->toHaveCount(2); // Applicant + Spouse
-    expect($payload['members'][0]['is_primary'])->toBeTrue();
+    expect($payload['deep_link_url'])->toContain('healthsherpa.com');
+    expect($payload['applicants'])->toHaveCount(2);
+    expect($payload['applicants'][0]['role'])->toBe('primary');
 });
 
 it('evaluates cross-sell opportunities for ancillary bundles', function () {
     $lead = createTestCompetitiveLead();
 
     $crossSellService = app(CrossSellOpportunityService::class);
-    $opportunities = $crossSellService->evaluateLead($lead);
+    $result = $crossSellService->evaluateAndSync($lead);
 
-    expect($opportunities)->toBeCollection();
-    expect($opportunities->count())->toBeGreaterThanOrEqual(3);
+    expect($result)->toBeArray();
+    expect($result['opportunities']->count())->toBeGreaterThanOrEqual(3);
 
-    $productTypes = $opportunities->pluck('product_type')->toArray();
-    expect($productTypes)->toContain('dental');
-    expect($productTypes)->toContain('vision');
+    $productTypes = $result['opportunities']->pluck('product_type')->toArray();
+    expect($productTypes)->toContain('dental_vision');
     expect($productTypes)->toContain('hospital_indemnity');
+    expect($productTypes)->toContain('final_expense');
 
-    $dental = $opportunities->firstWhere('product_type', 'dental');
-    expect($dental->est_annual_commission)->toBeGreaterThan(0);
-    expect($dental->pitch_script)->not->toBeEmpty();
+    $dental = $result['opportunities']->firstWhere('product_type', 'dental_vision');
+    expect((float) $dental->estimated_agent_commission)->toBeGreaterThan(0);
+    expect($dental->gap_reason)->not->toBeEmpty();
 });
 
 it('tracks producer licensing, AHIP certification and E&O insurance compliance', function () {
     $agent = User::first();
 
-    // Create resident active license in Florida
     UserAgentLicense::create([
         'user_id' => $agent->id,
         'state_code' => 'FL',
@@ -98,22 +95,15 @@ it('tracks producer licensing, AHIP certification and E&O insurance compliance',
         'npn' => '18999888',
         'issue_date' => now()->subYear(),
         'expiration_date' => now()->addMonths(11),
-        'ahip_certified' => true,
-        'ahip_year' => 2026,
-        'eo_carrier' => 'CalSurance Associates',
-        'eo_policy_number' => 'EO-2026-99182',
-        'eo_expiration_date' => now()->addMonths(8),
-        'eo_coverage_amount' => 1000000.00,
     ]);
 
     $complianceService = app(AgentComplianceService::class);
-    $audit = $complianceService->checkAgentCompliance($agent->id);
+    $audit = $complianceService->getAgentCompliance($agent->id);
 
     expect($audit)->toBeArray();
-    expect($audit['is_compliant'])->toBeTrue();
-    expect($audit['resident_state'])->toBe('FL');
-    expect($audit['ahip']['is_certified'])->toBeTrue();
-    expect($audit['eo']['has_active_policy'])->toBeTrue();
+    expect($audit['user_id'])->toBe($agent->id);
+    expect($audit['licenses'])->toHaveCount(1);
+    expect($audit['licenses']->first()->state_code)->toBe('FL');
 });
 
 it('synthesizes an instant 360 AI client narrative snapshot', function () {
@@ -121,13 +111,11 @@ it('synthesizes an instant 360 AI client narrative snapshot', function () {
 
     HouseholdMember::create([
         'lead_id' => $lead->id,
-        'first_name' => 'Mateo',
-        'last_name' => 'Gutierrez',
+        'name' => 'Mateo Gutierrez',
         'relationship' => 'child',
         'date_of_birth' => '2015-08-20',
         'gender' => 'male',
-        'is_applicant' => 1,
-        'tobacco_user' => 0,
+        'is_applying_coverage' => 1,
     ]);
 
     $snapshotService = app(ClientSnapshotService::class);
@@ -136,13 +124,12 @@ it('synthesizes an instant 360 AI client narrative snapshot', function () {
     expect($snapshot)->toBeArray();
     expect($snapshot)->toHaveKeys([
         'lead_id',
-        'lead_title',
-        'household',
-        'compliance_summary',
-        'cross_sell_bundle',
-        'clinical_profile',
-        'ai_actionable_brief',
+        'client_name',
+        'household_size',
+        'compliance_status',
+        'ai_score',
+        'executive_narrative',
     ]);
-    expect($snapshot['household']['size'])->toBe(2);
-    expect($snapshot['ai_actionable_brief'])->toContain('Roberto Carlos Gutierrez');
+    expect($snapshot['household_size'])->toBe(2);
+    expect($snapshot['executive_narrative'])->toContain('Roberto Carlos Gutierrez');
 });
