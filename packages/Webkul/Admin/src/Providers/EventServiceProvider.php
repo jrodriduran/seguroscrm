@@ -18,14 +18,21 @@ class EventServiceProvider extends ServiceProvider
 
         'lead.create.after' => [
             'Webkul\Admin\Listeners\Lead@linkToEmail',
+            'Webkul\Admin\Listeners\InsuranceSla@onLeadCreate',
+        ],
+
+        'lead.update.after' => [
+            'Webkul\Admin\Listeners\InsuranceSla@onLeadUpdate',
         ],
 
         'activity.create.after' => [
             'Webkul\Admin\Listeners\Activity@afterUpdateOrCreate',
+            'Webkul\Admin\Listeners\InsuranceSla@onActivitySaved',
         ],
 
         'activity.update.after' => [
             'Webkul\Admin\Listeners\Activity@afterUpdateOrCreate',
+            'Webkul\Admin\Listeners\InsuranceSla@onActivitySaved',
         ],
     ];
 }

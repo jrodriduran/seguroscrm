@@ -2,6 +2,28 @@
 
 This changelog consists of the bug & security fixes and new features being included in the releases listed below.
 
+## **v2.2.7 (unreleased)**
+
+* [feature] Added Master Agent Control Tower (Team Radar) — a real-time SLA dashboard at `leads/team-radar` with dynamic pipeline switching, workload/capacity progress bars per agent, escalated cases triage, unassigned queue distribution, and personal pending queue for each agent (`leads/my-pending`).
+
+* [feature] Added configurable SLA rules by pipeline and lead type (`lead_sla_rules` table, `SlaRuleRepository`) allowing customizable first contact window, follow-up window, and escalation threshold.
+
+* [feature] Added dynamic lead `AssignmentEngine` with Round Robin, Least Loaded (workload balancing), and Manual triage strategies with agent pool selection and per-agent capacity limits (`lead_assignment_rules` table, `AssignmentRuleRepository`).
+
+* [feature] Added `SlaEscalationService` and automated escalation in `insurance:check-sla` command to escalate breached leads to Master Agent, along with agent-initiated escalation requests directly from `leads/my-pending`.
+
+* [migration] Added `lead_sla_rules` table for configurable SLA thresholds (Lead package migration `2026_09_17_000001`).
+
+* [migration] Added `lead_assignment_rules` table for dynamic routing strategies (Lead package migration `2026_09_17_000002`).
+
+* [migration] Added `escalated_at` and `escalation_reason` columns to `leads` table (Lead package migration `2026_09_17_000003`).
+
+* [feature] Added `InsuranceSla` event listener to auto-stamp `assigned_at`, reset `sla_status` to `pending`, and create a first-contact SLA activity based on configurable pipeline rules whenever a lead is created or reassigned.
+
+* [migration] Added `sla_status`, `sla_hours`, and `assigned_at` columns to the `leads` table (Lead package migration `2026_09_16_000001`).
+
+* [migration] Added `priority` and `sla_activity_status` columns to the `activities` table (Activity package migration `2026_09_16_000002`).
+
 ## **v2.2.6 (10th of Sept 2026)**
 
 * [feature] Added MariaDB support.

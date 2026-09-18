@@ -27,31 +27,32 @@
                     </p>
                 </div>
 
-                <!-- Doughnut Chart -->
+                <!-- Leads by Stages List -->
                 <div
-                    class="relative flex w-full max-w-full flex-col gap-4"
+                    class="flex w-full flex-col gap-2.5"
                     v-if="report.statistics.length"
                 >
-                    <canvas
-                        :id="$.uid + '_chart'"
-                        class="w-full max-w-full items-end px-12"
-                        :style="{ height: report.statistics.length * 60 + 'px' }"
-                    ></canvas>
-
-                    <ul class="absolute flex w-full flex-col">
-                        <li
-                            class="flex w-full flex-col border-b border-gray-300 pb-[9px] pt-2.5 last:border-none dark:border-gray-800"
-                            v-for="(stat, index) in report.statistics"
-                        >
-                            <span class="text-sm font-semibold dark:text-gray-100">
-                                @{{ stat.total }}
-                            </span>
-
-                            <span class="text-sm font-semibold dark:text-gray-100">
+                    <div
+                        class="flex flex-col gap-1.5 rounded-lg border border-gray-100 bg-gray-50/60 p-2.5 dark:border-gray-800 dark:bg-gray-800/50"
+                        v-for="(stat, index) in report.statistics"
+                        :key="index"
+                    >
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-700 dark:text-gray-200">
                                 @{{ stat.name }}
                             </span>
-                        </li>
-                    </ul>
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
+                                @{{ stat.total }}
+                            </span>
+                        </div>
+
+                        <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                            <div
+                                class="h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-500"
+                                :style="{ width: Math.min(100, Math.max(15, (stat.total / Math.max(...report.statistics.map(s => s.total || 1))) * 100)) + '%' }"
+                            ></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Empty Product Design -->

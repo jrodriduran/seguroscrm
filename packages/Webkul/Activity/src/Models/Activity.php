@@ -47,7 +47,8 @@ class Activity extends Model implements ActivityContract
      */
     protected $casts = [
         'schedule_from' => 'datetime',
-        'schedule_to' => 'datetime',
+        'schedule_to'   => 'datetime',
+        'is_done'       => 'boolean',
     ];
 
     /**
@@ -65,6 +66,8 @@ class Activity extends Model implements ActivityContract
         'schedule_to',
         'is_done',
         'user_id',
+        'priority',
+        'sla_activity_status',
     ];
 
     /**
@@ -83,6 +86,32 @@ class Activity extends Model implements ActivityContract
         }
 
         return ucfirst(str_replace('_', ' ', $this->type ?? ''));
+    }
+
+    /**
+     * Get a translated label for the priority level.
+     */
+    public function getPriorityLabelAttribute(): string
+    {
+        $key = 'admin::insurance.team_radar.priority_' . ($this->priority ?? 'normal');
+
+        return trans()->has($key) ? trans($key) : ucfirst($this->priority ?? 'normal');
+    }
+
+    /**
+     * Scope: urgent activities flagged by the Master Agent.
+     */
+    public function scopeUrgent($query)
+    {
+        return $query->where('priority', 'urgent');
+    }
+
+    /**
+     * Scope: activities still pending (not done).
+     */
+    public function scopePending($query)
+    {
+        return $query->where('is_done', false);
     }
 
     /**

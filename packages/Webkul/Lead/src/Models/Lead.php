@@ -40,6 +40,11 @@ class Lead extends Model implements LeadContract
         'lead_type_id',
         'lead_pipeline_id',
         'lead_pipeline_stage_id',
+        'sla_status',
+        'assigned_at',
+        'sla_hours',
+        'escalated_at',
+        'escalation_reason',
     ];
 
     /**
@@ -48,8 +53,10 @@ class Lead extends Model implements LeadContract
      * @var array
      */
     protected $casts = [
-        'closed_at' => 'datetime:D M d, Y H:i A',
-        'expected_close_date' => 'date:D M d, Y',
+        'closed_at'            => 'datetime:D M d, Y H:i A',
+        'expected_close_date'  => 'date:D M d, Y',
+        'assigned_at'          => 'datetime',
+        'escalated_at'         => 'datetime',
     ];
 
     /**
@@ -59,6 +66,7 @@ class Lead extends Model implements LeadContract
      */
     protected $appends = [
         'rotten_days',
+        'sla_status_badge',
     ];
 
     /**
@@ -177,5 +185,70 @@ class Lead extends Model implements LeadContract
         $rottenDate = $this->created_at->addDays($this->pipeline->rotten_days);
 
         return $rottenDate->diffInDays(Carbon::now(), false);
+    }
+
+    /**
+     * Returns a semantic badge identifier for the current SLA status.
+     * Values: 'ok' | 'warning' | 'danger' | 'resolved'
+     */
+    public function getSlaStatusBadgeAttribute(): string
+    {
+        return match ($this->sla_status ?? 'pending') {
+            'active'    => 'ok',
+            'overdue'   => 'danger',
+            'escalated' => 'danger',
+            'resolved'  => 'resolved',
+            default     => 'warning',
+        };
+    }
+
+    /**
+     * Scope: leads whose SLA has expired (overdue).
+     */
+    public function scopeOverdue($query)
+    {
+        return $query->where('sla_status', 'overdue');
+    }
+
+    /**
+     * Scope: leads that have been escalated to Master Agent.
+     */
+    public function scopeEscalated($query)
+    {
+        return $query->where('sla_status', 'escalated');
+    }
+
+    /**
+     * Scope: leads that do not have an agent assigned.
+     */
+    public function scopeUnassigned($query)
+    {
+        return $query->whereNull('user_id');
+    }
+
+    /**
+     * Scope: leads in an active SLA state.
+     */
+    public function scopeSlaActive($query)
+    {
+        return $query->where('sla_status', 'active');
+    }
+
+    /**
+     * Scope: leads assigned to a specific agent.
+     */
+    public function scopeMyLeads($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope: leads assigned today to a specific agent.
+     */
+    public function scopeAssignedToday($query, int $userId)
+    {
+        return $query
+            ->where('user_id', $userId)
+            ->whereDate('assigned_at', Carbon::today());
     }
 }

@@ -356,6 +356,74 @@ return [
         'all_leads' => 'Todos los Prospectos',
         'book_of_business' => 'Libro de Negocio: Pólizas Vigentes',
     ],
+    'team_radar' => [
+        // Títulos
+        'title'                  => '🛰️ Torre de Control del Agente Maestro',
+        'subtitle'               => 'Seguimiento de SLA en tiempo real y balance de carga entre agentes.',
+        'team_status'            => 'Estado del Equipo de Agentes',
+        'my_pending_title'       => 'Mi Cola Pendiente',
+        'my_pending_subtitle'    => 'Tu lista de tareas prioritarias — leads vencidos y actividades próximas.',
+
+        // Tarjetas de estadísticas
+        'overdue'                => 'Vencidos',
+        'escalated'              => 'Escalados',
+        'pending_contact'        => 'Pendiente de Contacto',
+        'on_time'                => 'A Tiempo',
+        'policies_issued'        => 'Pólizas Emitidas Hoy',
+        'assigned_today'         => 'Asignados Hoy',
+
+        // Workflow y Estrategias
+        'assignment_strategy'    => 'Estrategia de Asignación',
+        'strategy_round_robin'   => 'Round Robin (Turno Rotativo)',
+        'strategy_least_loaded'  => 'Menor Carga (Balance Dinámico)',
+        'strategy_manual'        => 'Manual (Triaje Agente Maestro)',
+        'max_capacity'           => 'Límite de Capacidad (Leads/Agente)',
+        'workload'               => 'Carga y Capacidad del Equipo',
+        'configure_rules'        => 'Configurar Reglas y SLA del Pipeline',
+        'assignment_saved'       => 'Reglas de asignación guardadas exitosamente.',
+        'sla_rule_saved'         => 'Regla de SLA guardada exitosamente.',
+        'lead_assigned_success'  => 'Lead asignado exitosamente.',
+        'escalated_success'      => 'Caso escalado a la Torre de Control del Agente Maestro.',
+        'escalation_resolved'    => 'Escalación resuelta exitosamente.',
+        'resolve'                => 'Resolver',
+        'escalate_to_ma'         => 'Escalar a MA',
+        'active_leads_count'     => 'Leads Activos en Gestión',
+        'first_contact_hours'    => 'Ventana Primer Contacto (Horas)',
+        'follow_up_hours'        => 'Ventana Seguimiento (Horas)',
+        'escalation_hours'       => 'Escalar Vencido Tras (Horas)',
+        'escalated_leads_title'  => '🚨 Casos Escalados que Requieren Intervención',
+        'unassigned_leads_title' => '📥 Leads Sin Asignar (Esperando Distribución)',
+        'save_rules'             => 'Guardar Configuración',
+
+        // Panel de leads vencidos
+        'overdue_alert_title'    => 'Leads Vencidos — Acción Inmediata Requerida',
+        'loading'                => 'Cargando…',
+        'no_overdue'             => 'Sin leads vencidos — ¡excelente trabajo! 🎉',
+        'inactive'               => 'inactivo',
+
+        // Etiquetas de columnas del DataGrid
+        'agent'                  => 'Agente',
+
+        // Reasignación masiva
+        'leads_selected'         => 'lead(s) seleccionado(s)',
+        'select_agent'           => 'Seleccionar agente',
+        'bulk_reassign'          => 'Reasignar',
+        'bulk_reassign_success'  => ':count lead(s) reasignado(s) exitosamente.',
+
+        // Bandera urgente
+        'urgent_flag'            => 'Marcar como Urgente',
+        'urgent_flag_toggled'    => 'Prioridad de actividad actualizada.',
+
+        // Etiquetas de prioridad
+        'priority_urgent'        => 'Urgente',
+        'priority_normal'        => 'Normal',
+        'priority_low'           => 'Baja',
+
+        // Actividad SLA creada automáticamente
+        'first_contact_title'    => 'Primer Contacto (SLA)',
+        'first_contact_comment'  => 'Llamada de primer contacto SLA para lead ":lead". Fecha límite: :hours hora(s) después de la asignación.',
+    ],
+
     'workflows' => [
         'insurance_cms_consent_compliance_automation' => 'Automatización de Cumplimiento de Consentimiento CMS',
         'insurance_cms_consent_compliance_automation_description' => 'Envía automáticamente el formulario de consentimiento CMS y registra la actividad cuando el prospecto avanza a Consentimiento y Documentos.',

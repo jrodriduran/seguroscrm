@@ -138,13 +138,22 @@ class LeadRepository extends Repository
             $data['expected_close_date'] = null;
         }
 
+        if (empty($data['user_id'])) {
+            $assignedUserId = app(\Webkul\Lead\Services\AssignmentEngine::class)->assign($data);
+
+            if ($assignedUserId) {
+                $data['user_id'] = $assignedUserId;
+            }
+        }
+
         $lead = parent::create(array_merge([
             'lead_pipeline_id' => 1,
             'lead_pipeline_stage_id' => 1,
-        ], $data));
+        ], \Illuminate\Support\Arr::except($data, ['entity_type'])));
 
         $this->attributeValueRepository->save(array_merge($data, [
-            'entity_id' => $lead->id,
+            'entity_id'   => $lead->id,
+            'entity_type' => 'leads',
         ]));
 
         if (isset($data['products'])) {
