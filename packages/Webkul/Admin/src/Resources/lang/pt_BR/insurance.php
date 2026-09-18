@@ -364,4 +364,24 @@ return [
         'insurance_policy_bound_welcome_packet_automation' => 'Automação de Apólice Emitida e Pacote de Boas-Vindas',
         'insurance_policy_bound_welcome_packet_automation_description' => 'Envia automaticamente o pacote de boas-vindas com instruções de cartão de membro e portal da seguradora ao emitir a apólice.',
     ],
+
+    'commissions' => [
+        'title' => 'Comissões de Seguros',
+        'subtitle' => 'Livro razão de comissões por apólice emitida (PMPM / ACA) e distribuição.',
+    ],
+
+    'policies' => [
+        'title' => 'Carteira de Apólices (Book of Business)',
+        'subtitle' => 'Livro razão de apólices ativas, taxa de persistência e alertas de carência.',
+    ],
+
+    'hierarchy' => [
+        'title' => 'Hierarquia & Overrides',
+        'subtitle' => 'Estrutura de subagências, downlines e liquidação de sobrecomissões PMPM.',
+    ],
+
+    'analytics' => [
+        'title' => 'Analítica & Valuação',
+        'subtitle' => 'Dashboard executivo de KPIs de carteira, valuação de mercado do Book of Business e leaderboard de produtores.',
+    ],
 ];

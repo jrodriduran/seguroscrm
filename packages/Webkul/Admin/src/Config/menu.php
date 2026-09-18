@@ -74,6 +74,17 @@ return [
     ],
 
     /**
+     * Executive Analytics & Book of Business Valuation.
+     */
+    [
+        'key' => 'insurance_analytics',
+        'name' => 'admin::insurance.analytics.title',
+        'route' => 'admin.insurance.analytics.index',
+        'sort' => 6,
+        'icon-class' => 'icon-dashboard',
+    ],
+
+    /**
      * Emails.
      */
     [

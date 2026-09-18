@@ -447,4 +447,9 @@ return [
         'title' => 'Jerarquía & Overrides',
         'subtitle' => 'Estructura de sub-agencias, downlines y liquidación de sobrecomisiones PMPM.',
     ],
+
+    'analytics' => [
+        'title' => 'Analítica & Valuación',
+        'subtitle' => 'Dashboard ejecutivo de KPIs de cartera, valuación de mercado del Book of Business y leaderboard de productores.',
+    ],
 ];

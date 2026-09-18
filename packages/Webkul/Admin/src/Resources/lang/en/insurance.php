@@ -447,4 +447,9 @@ return [
         'title' => 'Hierarchy & Overrides',
         'subtitle' => 'Agency structure, downline management, and multi-tier PMPM override distribution.',
     ],
+
+    'analytics' => [
+        'title' => 'Analytics & Valuation',
+        'subtitle' => 'Executive portfolio KPIs, Book of Business market valuation multiples, and producer leaderboard.',
+    ],
 ];

@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Executive Analytics & Book of Business Valuation Dashboard: Added dedicated agency business intelligence control tower (`/admin/insurance/analytics`) computing market valuation multiples (1.5x Conservative, 2.0x Standard Market, 2.5x High-Growth ARR), annualized gross premium volume, covered lives growth, and real-time persistency rates.
+
+* [feature] Carrier Market Share & Segmentation Analytics: Implemented visual breakdown of active policies, covered lives, and monthly premium volume across health carriers (Florida Blue, Ambetter, Oscar, UnitedHealthcare, etc.), metal tiers (Bronze, Silver CSR, Gold, Platinum), and network types (HMO, EPO, PPO).
+
+* [feature] Producer Leaderboard & OEP Season Tracker: Built agency sales leaderboard ranking producers by active policies, covered lives, volume, and persistency percentage alongside an Open Enrollment Period (OEP) season target progress meter.
+
+* [feature] Executive CSV Valuation Export: Added one-click export for board presentations, banking compliance, and M&A portfolio audit (`Valuacion_Cartera_Ejecutiva_*.csv`).
+
+* [tests] Added Pest feature test `ExecutiveAnalyticsTest` covering valuation multiple computations, ARR scaling, JSON analytics, and CSV streaming.
+
 * [feature] Prescription Formulary (Rx Collect) & Drug Tier Engine: Added comprehensive prescription drug tracker directly in Lead details supporting drug tier classification (Tier 1 Preferred Generic to Tier 5 Specialty), utilization management restrictions (Prior Authorization [PA], Step Therapy [ST], Quantity Limits [QL]), and real-time copay estimation for 30-day retail and 90-day mail-order dispensing.
 
 * [feature] Healthcare Provider & Doctor Network Lookup: Implemented provider network tracking allowing agents to catalog clients' doctors, specialists, clinic/hospital affiliations, 10-digit NPI numbers, Primary Care Physician (PCP) designations, and carrier in-network vs out-of-network status mapping (Florida Blue, Ambetter, Oscar, UnitedHealthcare, etc.).
