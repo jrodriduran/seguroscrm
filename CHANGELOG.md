@@ -4,6 +4,18 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Digital Consent Form & Client Portal (CMS Compliance): Added client electronic consent portal replicating Apizeal CMS workflow with touch/mouse signature pad, audit metadata capture (IP address, user agent, timestamp), printable compliance certificate, and lead detail compliance card.
+
+* [feature] 90-Day DMI Document Tracking (Data Matching Issues): Added tracking for Marketplace ACA document requirements (income proof, immigration status, identity) with expiration date countdown, document upload, status workflow (pending, submitted, verified, rejected), and deadline status badges.
+
+* [migration] Added `lead_consents` table for CMS consent tracking and signatures (Lead package migration `2026_09_18_000004`).
+
+* [migration] Added `lead_dmi_documents` table for Marketplace DMI documentation (Lead package migration `2026_09_18_000005`).
+
+* [fixed] Safe route placeholder replacement in lead quotes tab preventing invalid URI generation in JavaScript handlers.
+
+* [fixed] Added missing CSRF token meta tag to main admin layout view for AJAX operations.
+
 * [feature] Health Insurance Quotes Transformation: Adapted Quotes module to ACA/Obamacare health insurance with carrier selection (Florida Blue, Ambetter, Oscar, Molina, UHC, Aetna), metal tier, gross premium, federal APTC subsidy deduction, and real-time client net monthly premium calculation.
 
 * [feature] WhatsApp Proposal Generator & Direct Chat: Added instant WhatsApp proposal formatter and click-to-chat URL with preformatted client proposal summary and copays breakdown.
