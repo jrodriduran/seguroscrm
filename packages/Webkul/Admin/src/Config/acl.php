@@ -54,7 +54,7 @@ return [
     ], [
         'key' => 'quotes.edit',
         'name' => 'admin::app.acl.edit',
-        'route' => ['admin.quotes.edit', 'admin.quotes.update'],
+        'route' => ['admin.quotes.edit', 'admin.quotes.update', 'admin.quotes.whatsapp', 'admin.quotes.convert_to_policy'],
         'sort' => 2,
     ], [
         'key' => 'quotes.print',

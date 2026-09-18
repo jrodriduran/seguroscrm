@@ -323,23 +323,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($quote->items as $item)
+                @if ($quote->carrier_name)
                     @php
-                        $product = $item->product;
-                        $deductible = $product?->deductible ? '$'.number_format($product->deductible, 0) : '$0';
-                        $moop = $product?->max_out_of_pocket ? '$'.number_format($product->max_out_of_pocket, 0) : '$0';
-                        $pcp = $product?->primary_care_copay ?? '$0';
-                        $spec = $product?->specialist_copay ?? '$0';
+                        $carrier = $quote->carrier_name;
+                        $plan = $quote->plan_name ?: $quote->subject;
+                        $tier = $quote->metal_tier ? strtoupper($quote->metal_tier) : 'SILVER';
+                        $network = $quote->network_type ?: 'EPO';
+                        $deductible = $quote->deductible !== null ? '$'.number_format($quote->deductible, 0) : '$0';
+                        $moop = $quote->out_of_pocket_max !== null ? '$'.number_format($quote->out_of_pocket_max, 0) : '$0';
+                        $pcp = $quote->copay_primary_care !== null ? '$'.number_format($quote->copay_primary_care, 0) : '$0';
+                        $spec = $quote->copay_specialist !== null ? '$'.number_format($quote->copay_specialist, 0) : '$0';
+                        $net = (float) ($quote->net_premium ?: $quote->grand_total ?: 0);
                     @endphp
                     <tr>
                         <td>
-                            <div class="plan-name">{{ $item->name }}</div>
-                            <div class="plan-carrier">SKU: {{ $item->sku }}</div>
+                            <div class="plan-name">{{ $plan }}</div>
+                            <div class="plan-carrier">{{ $carrier }} &bull; {{ $tier }}</div>
                         </td>
 
                         <td>
                             <span class="badge">
-                                {{ $product?->network_type ?? 'PPO/HMO' }}
+                                {{ $network }} &bull; {{ $tier }}
                             </span>
                         </td>
 
@@ -356,10 +360,48 @@
                         </td>
 
                         <td class="text-right price-highlight">
-                            {!! core()->formatBasePrice($item->total, true) !!} / mo
+                            ${{ number_format($net, 2) }} / mo
                         </td>
                     </tr>
-                @endforeach
+                @else
+                    @foreach ($quote->items as $item)
+                        @php
+                            $product = $item->product;
+                            $deductible = $product?->deductible ? '$'.number_format($product->deductible, 0) : '$0';
+                            $moop = $product?->max_out_of_pocket ? '$'.number_format($product->max_out_of_pocket, 0) : '$0';
+                            $pcp = $product?->primary_care_copay ?? '$0';
+                            $spec = $product?->specialist_copay ?? '$0';
+                        @endphp
+                        <tr>
+                            <td>
+                                <div class="plan-name">{{ $item->name }}</div>
+                                <div class="plan-carrier">SKU: {{ $item->sku }}</div>
+                            </td>
+
+                            <td>
+                                <span class="badge">
+                                    {{ $product?->network_type ?? 'PPO/HMO' }}
+                                </span>
+                            </td>
+
+                            <td class="text-right font-medium">
+                                {{ $deductible }}
+                            </td>
+
+                            <td class="text-right font-medium">
+                                {{ $moop }}
+                            </td>
+
+                            <td class="text-center" style="font-size: 8.5px;">
+                                {{ $pcp }} / {{ $spec }}
+                            </td>
+
+                            <td class="text-right price-highlight">
+                                {!! core()->formatBasePrice($item->total, true) !!} / mo
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
 
@@ -369,20 +411,23 @@
                 <tbody>
                     <tr>
                         <td style="font-weight: bold; color: #475569;">
-                            @lang('admin::app.quotes.index.pdf.sub-total'):
+                            Prima Original Bruta (Gross):
                         </td>
                         <td class="text-right font-medium">
-                            {!! core()->formatBasePrice($quote->sub_total, true) !!}
+                            ${{ number_format((float) ($quote->gross_premium ?: $quote->sub_total ?: 0), 2) }}
                         </td>
                     </tr>
 
-                    @if ($quote->discount_amount > 0)
+                    @php
+                        $subsidy = (float) ($quote->aptc_subsidy ?: $quote->discount_amount ?: 0);
+                    @endphp
+                    @if ($subsidy > 0)
                         <tr>
                             <td style="font-weight: bold; color: #047857;">
-                                Subsidio / Descuento:
+                                Subsidio Federal (APTC):
                             </td>
                             <td class="text-right" style="color: #047857; font-weight: bold;">
-                                -{!! core()->formatBasePrice($quote->discount_amount, true) !!}
+                                -${{ number_format($subsidy, 2) }}
                             </td>
                         </tr>
                     @endif
@@ -400,10 +445,10 @@
 
                     <tr class="total-row">
                         <td>
-                            @lang('admin::insurance.quotes_pdf.total_monthly'):
+                            PAGO NETO CLIENTE:
                         </td>
-                        <td class="text-right">
-                            {!! core()->formatBasePrice($quote->grand_total, true) !!} / mo
+                        <td class="text-right font-extrabold">
+                            ${{ number_format((float) ($quote->net_premium ?: $quote->grand_total ?: 0), 2) }} / mo
                         </td>
                     </tr>
                 </tbody>

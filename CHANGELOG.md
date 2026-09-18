@@ -4,7 +4,13 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
-* [feature] Added Master Agent Control Tower (Team Radar) — a real-time SLA dashboard at `leads/team-radar` with dynamic pipeline switching, workload/capacity progress bars per agent, escalated cases triage, unassigned queue distribution, and personal pending queue for each agent (`leads/my-pending`).
+* [feature] Health Insurance Quotes Transformation: Adapted Quotes module to ACA/Obamacare health insurance with carrier selection (Florida Blue, Ambetter, Oscar, Molina, UHC, Aetna), metal tier, gross premium, federal APTC subsidy deduction, and real-time client net monthly premium calculation.
+
+* [feature] WhatsApp Proposal Generator & Direct Chat: Added instant WhatsApp proposal formatter and click-to-chat URL with preformatted client proposal summary and copays breakdown.
+
+* [feature] Quote to Policy Conversion: Added one-click "Emitir Póliza" action that transitions quotes to 'bound', advances linked health leads to 'Policy Issued (Won)', and sets pipeline deal value to the monthly net premium.
+
+* [migration] Added health insurance plan and subsidy columns (`carrier_name`, `plan_name`, `metal_tier`, `gross_premium`, `aptc_subsidy`, `net_premium`, `deductible`, `out_of_pocket_max`, `network_type`, copays, and `quote_status`) to `quotes` table (Quote package migration `2026_09_18_000001`).
 
 * [feature] Added configurable SLA rules by pipeline and lead type (`lead_sla_rules` table, `SlaRuleRepository`) allowing customizable first contact window, follow-up window, and escalation threshold.
 

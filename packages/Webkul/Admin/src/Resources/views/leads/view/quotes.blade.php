@@ -128,6 +128,24 @@
                                                 {!! view_render_event('admin.leads.view.quotes.table.table_body.quote.download.before', ['lead' => $lead]) !!}
 
                                                 <x-admin::dropdown.menu.item>
+                                                    <a :href="'{{ route('admin.quotes.whatsapp', '') }}/' + quote.id" target="_blank">
+                                                        <div class="flex items-center gap-2 text-emerald-600 font-semibold">
+                                                            <span class="text-xl">📱</span>
+                                                            WhatsApp Proposal
+                                                        </div>
+                                                    </a>
+                                                </x-admin::dropdown.menu.item>
+
+                                                <x-admin::dropdown.menu.item v-if="quote.quote_status !== 'bound'">
+                                                    <a href="javascript:void(0)" @click="convertToPolicy(quote.id)">
+                                                        <div class="flex items-center gap-2 text-blue-600 font-semibold">
+                                                            <span class="icon-tick text-2xl"></span>
+                                                            Emitir Póliza (Ganar)
+                                                        </div>
+                                                    </a>
+                                                </x-admin::dropdown.menu.item>
+
+                                                <x-admin::dropdown.menu.item>
                                                     <a :href="'{{ route('admin.quotes.print') }}/' + quote.id" target="_blank">
                                                         <div class="flex items-center gap-2">
                                                             <span class="icon-download text-2xl"></span>
@@ -264,6 +282,31 @@
                             this.$emitter.emit('add-flash', {
                                 type: 'error',
                                 message: error?.response?.data?.message || 'Unable to send quote email.',
+                            });
+                        });
+                },
+
+                convertToPolicy(quoteId) {
+                    if (! confirm('¿Deseas emitir la póliza y marcar este caso de salud como Ganado?')) {
+                        return;
+                    }
+
+                    this.isLoading = true;
+
+                    this.$axios.post("{{ route('admin.quotes.convert_to_policy', '') }}/" + quoteId)
+                        .then(response => {
+                            this.isLoading = false;
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data?.message || '¡Póliza emitida con éxito!',
+                            });
+                            setTimeout(() => window.location.reload(), 1000);
+                        })
+                        .catch(error => {
+                            this.isLoading = false;
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: error?.response?.data?.message || 'Error al emitir la póliza.',
                             });
                         });
                 }

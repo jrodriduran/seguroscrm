@@ -26,6 +26,35 @@
                 </div>
 
                 <div class="flex items-center gap-x-2.5">
+                    <!-- WhatsApp Share Link -->
+                    <a
+                        href="{{ route('admin.quotes.whatsapp', $quote->id) }}"
+                        target="_blank"
+                        class="secondary-button !border-emerald-500 !text-emerald-600 hover:!bg-emerald-50 dark:hover:!bg-emerald-950 flex items-center gap-1.5 font-medium"
+                    >
+                        <span>📱 WhatsApp</span>
+                    </a>
+
+                    @if ($quote->quote_status !== 'bound')
+                        <!-- Convert to Policy Button -->
+                        <button
+                            type="button"
+                            class="secondary-button !border-blue-600 !text-blue-600 hover:!bg-blue-50 dark:hover:!bg-blue-950 flex items-center gap-1.5 font-medium"
+                            onclick="if(confirm('¿Confirmas convertir esta propuesta en una Póliza Emitida y marcar el caso como Ganado?')) { document.getElementById('convert-to-policy-form').submit(); }"
+                        >
+                            <span>🛡️ Emitir Póliza</span>
+                        </button>
+                    @endif
+
+                    <!-- Print PDF -->
+                    <a
+                        href="{{ route('admin.quotes.print', $quote->id) }}"
+                        target="_blank"
+                        class="secondary-button flex items-center gap-1.5 font-medium"
+                    >
+                        <span>📄 PDF</span>
+                    </a>
+
                     <div class="flex items-center gap-x-2.5">
                         {!! view_render_event('admin.contacts.quotes.edit.save_button.before', ['quote' => $quote]) !!}
 
@@ -49,6 +78,10 @@
     </x-admin::form>
 
     {!! view_render_event('admin.contacts.quotes.edit.form_controls.after', ['quote' => $quote]) !!}
+
+    <form id="convert-to-policy-form" action="{{ route('admin.quotes.convert_to_policy', $quote->id) }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 
     @pushOnce('scripts')
         <script
@@ -81,6 +114,235 @@
 
                 <div class="flex flex-col gap-4 px-4 py-2">
                     {!! view_render_event('admin.contacts.quotes.edit.quote_information.before', ['quote' => $quote]) !!}
+
+                    <!-- Health Insurance Plan & Subsidy Card (ACA / Obamacare) -->
+                    <div
+                        id="health-plan-info"
+                        class="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50/60 via-white to-indigo-50/40 p-5 shadow-sm dark:border-blue-900/40 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/20"
+                    >
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-blue-100 pb-3.5 mb-4 dark:border-gray-800">
+                            <div class="flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg text-white shadow-md shadow-blue-500/20">
+                                    🩺
+                                </span>
+                                <div>
+                                    <h3 class="text-base font-bold text-gray-900 dark:text-white">
+                                        Plan de Salud & Subsidio ACA (Obamacare)
+                                    </h3>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                        Modifica la aseguradora, nivel de metal y cálculo instantáneo de subsidio APTC
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Net Premium Live Pill -->
+                            <div class="flex items-center gap-2.5 rounded-xl border border-blue-200 bg-white px-4 py-2 shadow-sm dark:border-blue-800 dark:bg-gray-800">
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Pago Neto Cliente:</span>
+                                <span class="text-xl font-extrabold text-blue-600 dark:text-blue-400">
+                                    $@{{ calculatedNetPremium }}<span class="text-xs font-normal text-gray-500">/mes</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Top row: Carrier, Plan, Tier -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                    Aseguradora (Carrier) <span class="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="carrier_name"
+                                    v-model="carrierName"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                    required
+                                >
+                                    <option value="">Seleccionar Aseguradora...</option>
+                                    <option value="Florida Blue">Florida Blue (BCBS)</option>
+                                    <option value="Ambetter">Ambetter (Centene)</option>
+                                    <option value="Oscar Health">Oscar Health</option>
+                                    <option value="Molina Healthcare">Molina Healthcare</option>
+                                    <option value="UnitedHealthcare">UnitedHealthcare (UHC)</option>
+                                    <option value="Aetna CVS Health">Aetna CVS Health</option>
+                                    <option value="Humana">Humana</option>
+                                    <option value="Cigna Healthcare">Cigna Healthcare</option>
+                                    <option value="Devoted Health">Devoted Health</option>
+                                    <option value="Delta Dental">Delta Dental</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                    Nombre del Plan Médico
+                                </label>
+                                <input
+                                    type="text"
+                                    name="plan_name"
+                                    v-model="planName"
+                                    placeholder="Ej. Clear Silver Standard CSR (Silver 94)"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                    Nivel de Cobertura (Metal Tier)
+                                </label>
+                                <select
+                                    name="metal_tier"
+                                    v-model="metalTier"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                >
+                                    <option value="silver">Silver (Plata - CSR Recomendado)</option>
+                                    <option value="bronze">Bronze (Bronce)</option>
+                                    <option value="gold">Gold (Oro)</option>
+                                    <option value="platinum">Platinum (Platino)</option>
+                                    <option value="catastrophic">Catastrophic (Catastrófico)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Financial Calculation Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 p-4 rounded-xl bg-white/80 dark:bg-gray-900/60 border border-blue-100 dark:border-gray-800">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                    Prima Mensual Bruta ($)
+                                </label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    name="gross_premium"
+                                    v-model="grossPremium"
+                                    placeholder="450.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                                <span class="text-[10px] text-gray-400">Tarifa completa sin subsidio</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-emerald-700 dark:text-emerald-400 mb-1">
+                                    Subsidio Federal APTC ($)
+                                </label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    name="aptc_subsidy"
+                                    v-model="aptcSubsidy"
+                                    placeholder="420.00"
+                                    class="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm font-bold text-emerald-600 focus:border-emerald-500 focus:outline-none dark:border-emerald-700 dark:bg-gray-900 dark:text-emerald-400"
+                                />
+                                <span class="text-[10px] text-emerald-600/80">Crédito fiscal IRS mensual</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-blue-700 dark:text-blue-400 mb-1">
+                                    Pago Mensual Cliente ($)
+                                </label>
+                                <input
+                                    type="hidden"
+                                    name="net_premium"
+                                    :value="calculatedNetPremium"
+                                />
+                                <input
+                                    type="text"
+                                    :value="'$' + calculatedNetPremium + ' / mes'"
+                                    readonly
+                                    class="w-full rounded-lg border border-blue-300 bg-blue-50/80 px-3 py-2 text-sm font-black text-blue-700 focus:outline-none dark:border-blue-700 dark:bg-gray-800 dark:text-blue-300"
+                                />
+                                <span class="text-[10px] text-blue-600/80 font-medium">Auto-calculado (Bruta - Subsidio)</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                    Estado de la Cotización
+                                </label>
+                                <select
+                                    name="quote_status"
+                                    v-model="quoteStatus"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                >
+                                    <option value="draft">Borrador</option>
+                                    <option value="presented">Presentada al Cliente</option>
+                                    <option value="accepted">Aceptada por Cliente</option>
+                                    <option value="bound">Emitida (Póliza Activa)</option>
+                                    <option value="rejected">Rechazada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Medical Copays & Deductible Row -->
+                        <div class="grid grid-cols-2 md:grid-cols-6 gap-3 text-xs">
+                            <div>
+                                <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Red (Network)</label>
+                                <select
+                                    name="network_type"
+                                    v-model="networkType"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-xs focus:border-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                >
+                                    <option value="EPO">EPO</option>
+                                    <option value="HMO">HMO</option>
+                                    <option value="PPO">PPO</option>
+                                    <option value="POS">POS</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Deducible ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="deductible"
+                                    v-model="deductible"
+                                    placeholder="0.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Máx. Bolsillo ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="out_of_pocket_max"
+                                    v-model="outOfPocketMax"
+                                    placeholder="1500.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Copago Médico ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="copay_primary_care"
+                                    v-model="copayPrimaryCare"
+                                    placeholder="0.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Copago Especialista ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="copay_specialist"
+                                    v-model="copaySpecialist"
+                                    placeholder="15.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Copago Rx Gen ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="copay_generic_drugs"
+                                    v-model="copayGenericDrugs"
+                                    placeholder="3.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                />
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Quote information -->
                     <div
@@ -606,9 +868,10 @@
 
                 data() {
                     return {
-                        activeTab: 'quote-info',
+                        activeTab: 'health-plan-info',
 
                         tabs: [
+                            { id: 'health-plan-info', label: "🩺 Plan de Salud & Subsidio" },
                             { id: 'quote-info', label: "@lang('admin::app.quotes.create.quote-info')" },
                             { id: 'address-info', label: "@lang('admin::app.quotes.create.address-info')" },
                             { id: 'quote-items', label: "@lang('admin::app.quotes.create.quote-items')" }
@@ -617,7 +880,28 @@
                         leadEntity: @json($lookUpEntityData ?? []),
 
                         sameAsBilling: {{ (old('shipping_address_same_as_billing') ?? (! empty($quote->shipping_address) && $quote->shipping_address == $quote->billing_address)) ? 'true' : 'false' }},
+
+                        carrierName: @json(old('carrier_name', $quote->carrier_name ?? '')),
+                        planName: @json(old('plan_name', $quote->plan_name ?? '')),
+                        metalTier: @json(old('metal_tier', $quote->metal_tier ?? 'silver')),
+                        networkType: @json(old('network_type', $quote->network_type ?? 'EPO')),
+                        grossPremium: @json(old('gross_premium', $quote->gross_premium ?? $quote->sub_total ?? '')),
+                        aptcSubsidy: @json(old('aptc_subsidy', $quote->aptc_subsidy ?? $quote->discount_amount ?? '')),
+                        quoteStatus: @json(old('quote_status', $quote->quote_status ?? 'draft')),
+                        deductible: @json(old('deductible', $quote->deductible ?? '')),
+                        outOfPocketMax: @json(old('out_of_pocket_max', $quote->out_of_pocket_max ?? '')),
+                        copayPrimaryCare: @json(old('copay_primary_care', $quote->copay_primary_care ?? '')),
+                        copaySpecialist: @json(old('copay_specialist', $quote->copay_specialist ?? '')),
+                        copayGenericDrugs: @json(old('copay_generic_drugs', $quote->copay_generic_drugs ?? '')),
                     };
+                },
+
+                computed: {
+                    calculatedNetPremium() {
+                        const gross = parseFloat(this.grossPremium) || 0;
+                        const subsidy = parseFloat(this.aptcSubsidy) || 0;
+                        return Math.max(0, gross - subsidy).toFixed(2);
+                    },
                 },
 
                 methods: {

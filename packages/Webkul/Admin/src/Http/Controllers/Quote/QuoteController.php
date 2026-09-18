@@ -81,6 +81,8 @@ class QuoteController extends Controller
      */
     public function store(AttributeForm $request): RedirectResponse|JsonResponse
     {
+        $this->ensureHealthQuoteData($request);
+
         if (! request()->has('quick_add')) {
             $this->additionalValidation();
         }
@@ -96,7 +98,17 @@ class QuoteController extends Controller
         if ($leadId) {
             $lead = $this->leadRepository->find($leadId);
 
-            $lead->quotes()->attach($quote->id);
+            if ($lead) {
+                $lead->quotes()->attach($quote->id);
+
+                if ($quote->net_premium > 0 || $quote->grand_total > 0) {
+                    $lead->lead_value = $quote->net_premium ?: $quote->grand_total;
+                    if (in_array($lead->lead_pipeline_stage_id, [1, 2])) {
+                        $lead->lead_pipeline_stage_id = 3;
+                    }
+                    $lead->save();
+                }
+            }
         }
 
         Event::dispatch('quote.create.after', $quote);
@@ -146,6 +158,8 @@ class QuoteController extends Controller
     {
         $this->preventUnauthorizedAccess($this->quoteRepository->findOrFail($id)->user_id);
 
+        $this->ensureHealthQuoteData($request);
+
         $this->additionalValidation();
 
         $this->syncShippingAddressWithBilling($request);
@@ -161,7 +175,14 @@ class QuoteController extends Controller
         if ($leadId) {
             $lead = $this->leadRepository->find($leadId);
 
-            $lead->quotes()->attach($quote->id);
+            if ($lead) {
+                $lead->quotes()->attach($quote->id);
+
+                if ($quote->net_premium > 0 || $quote->grand_total > 0) {
+                    $lead->lead_value = $quote->net_premium ?: $quote->grand_total;
+                    $lead->save();
+                }
+            }
         }
 
         Event::dispatch('quote.update.after', $quote);
@@ -277,13 +298,158 @@ class QuoteController extends Controller
     }
 
     /**
+     * Get preformatted WhatsApp proposal text and click-to-chat URL.
+     */
+    public function getWhatsAppMessage(int $id): JsonResponse
+    {
+        $quote = $this->quoteRepository->findOrFail($id);
+        $message = $quote->getWhatsAppSummary();
+
+        $phone = null;
+        if (! empty($quote->person?->contact_numbers)) {
+            $rawPhone = $quote->person->contact_numbers[0]['value'] ?? null;
+            $digits = preg_replace('/\D+/', '', (string) $rawPhone);
+            if ($digits) {
+                if (strlen($digits) === 10) {
+                    $digits = '1'.$digits;
+                }
+                $phone = $digits;
+            }
+        }
+
+        $whatsappUrl = $phone
+            ? 'https://api.whatsapp.com/send?phone='.$phone.'&text='.urlencode($message)
+            : 'https://api.whatsapp.com/send?text='.urlencode($message);
+
+        return response()->json([
+            'status'       => true,
+            'client_name'  => $quote->person?->name ?? 'Cliente',
+            'client_phone' => $phone,
+            'message'      => $message,
+            'whatsapp_url' => $whatsappUrl,
+        ]);
+    }
+
+    /**
+     * Convert an accepted quote into an active/bound policy and advance lead to won.
+     */
+    public function convertToPolicy(int $id): JsonResponse|RedirectResponse
+    {
+        $quote = $this->quoteRepository->findOrFail($id);
+        $this->preventUnauthorizedAccess($quote->user_id);
+
+        $quote->quote_status = 'bound';
+        $quote->save();
+
+        $lead = $quote->leads->first();
+        if ($lead) {
+            $lead->status = 1;
+            $lead->lead_pipeline_stage_id = 5;
+            $lead->lead_value = $quote->net_premium ?: $quote->grand_total;
+            $lead->save();
+
+            Event::dispatch('lead.update.after', $lead);
+        }
+
+        $msg = "¡Cotización #{$quote->id} convertida con éxito en Póliza Emitida! El caso de salud ha sido cerrado y ganado.";
+
+        if (request()->ajax()) {
+            return response()->json([
+                'status'  => true,
+                'message' => $msg,
+                'quote'   => $quote,
+            ]);
+        }
+
+        session()->flash('success', $msg);
+
+        return redirect()->route('admin.quotes.index');
+    }
+
+    /**
+     * Ensure health quote fields, synthetic items, totals, and subject are synchronized.
+     */
+    private function ensureHealthQuoteData(AttributeForm $request): void
+    {
+        $carrier = $request->input('carrier_name');
+        $plan = $request->input('plan_name');
+        $metalTier = $request->input('metal_tier');
+
+        $isHealthQuote = ! empty($carrier) || ! empty($plan) || $request->filled('gross_premium') || $request->filled('aptc_subsidy');
+
+        if (! $isHealthQuote) {
+            return;
+        }
+
+        $gross = (float) ($request->input('gross_premium') ?: $request->input('net_premium') ?: 0);
+        $subsidy = (float) ($request->input('aptc_subsidy') ?: 0);
+        $net = (float) ($request->input('net_premium') !== null && $request->input('net_premium') !== '' 
+            ? $request->input('net_premium') 
+            : max(0, $gross - $subsidy));
+
+        if (! $request->filled('subject')) {
+            $subjectParts = array_filter([$carrier, $plan, $metalTier ? ucfirst($metalTier) : null]);
+            $request->merge([
+                'subject' => ! empty($subjectParts) ? implode(' - ', $subjectParts) : 'Cotización Plan de Salud ACA',
+            ]);
+        }
+
+        $request->merge([
+            'gross_premium'   => $gross,
+            'aptc_subsidy'    => $subsidy,
+            'net_premium'     => $net,
+            'sub_total'       => $gross,
+            'discount_amount' => $subsidy,
+            'grand_total'     => $net,
+            'tax_amount'      => 0,
+            'adjustment_amount' => 0,
+        ]);
+
+        $items = $request->input('items', []);
+        $hasProduct = false;
+        if (is_array($items)) {
+            foreach ($items as $it) {
+                if (! empty($it['product_id'])) {
+                    $hasProduct = true;
+                    break;
+                }
+            }
+        }
+
+        if (! $hasProduct) {
+            $product = null;
+            if ($carrier) {
+                $product = \Webkul\Product\Models\Product::where('name', 'LIKE', "%{$carrier}%")->first();
+            }
+            if (! $product) {
+                $product = \Webkul\Product\Models\Product::first();
+            }
+
+            $request->merge([
+                'items' => [
+                    'item_0' => [
+                        'product_id'      => $product?->id ?? 1,
+                        'name'            => trim(($carrier ?: 'Salud') . ' ' . ($plan ?: '')),
+                        'quantity'        => 1,
+                        'price'           => $gross,
+                        'discount_amount' => $subsidy,
+                        'tax_amount'      => 0,
+                        'total'           => $gross,
+                        'final_total'     => $net,
+                    ],
+                ],
+            ]);
+        }
+    }
+
+    /**
      * Additional validation for quote product items.
      */
     private function additionalValidation(): void
     {
         $this->validate(request(), [
             'items' => 'required|array',
-            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.product_id' => 'required',
             'items.*.quantity' => 'required|numeric|min:0',
             'items.*.price' => 'required|numeric|min:0',
             'items.*.total' => 'required|numeric|min:0',
