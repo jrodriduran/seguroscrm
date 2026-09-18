@@ -350,6 +350,13 @@ class QuoteController extends Controller
             // In case table not yet migrated
         }
 
+        // Create or update active Insurance Policy (Book of Business)
+        try {
+            \Webkul\Lead\Models\InsurancePolicy::createOrUpdateFromQuote($quote);
+        } catch (\Throwable $e) {
+            // In case table not yet migrated
+        }
+
         $lead = $quote->leads->first();
         if ($lead) {
             $lead->status = 1;

@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Book of Business (Cartera) Ledger & Portfolio Persistency Engine: Added full policy lifecycle management with real-time portfolio persistency rate calculation, covered lives tracking, and monthly gross vs net premium volume KPIs.
+
+* [feature] ACA 90-Day Grace Period Lifecycle & Lapse Warnings: Implemented automated detection of overdue payments with Month 1 (Day 1-30) and Critical Month 2-3 (Day 31-90) grace period transitions, agent high-priority alert tasks to prevent commission chargebacks (clawbacks), payment recording to restore active status, and one-click WhatsApp payment reminders.
+
+* [feature] Automated Daily Grace Period Command: Added `insurance:check-grace-periods` scheduled daily at 07:00 to evaluate policy payment deadlines and enforce federal ACA grace period rules.
+
+* [migration] Added `insurance_policies` table for active health and life insurance policy tracking (Lead package migration `2026_09_18_000011`).
+
+* [tests] Added Pest feature test `BookOfBusinessTest` covering retention KPIs, grace period transitions, payment recording, and automatic policy creation upon quote conversion.
+
 * [feature] Enrollment Period Manager & OEP Countdown (ACA & Medicare): Added global federal enrollment status tracker displaying active ACA Open Enrollment Period (Nov 1 - Jan 15) and Special Enrollment Period (SEP) operational modes across CRM leads and dashboards.
 
 * [feature] SEP / Qualifying Life Events (QLE) 60-Day Window Validator & CMS Checklist: Implemented interactive validation engine inside Lead details that computes the mandatory 60-day enrollment window deadline, expected coverage effective date, and generates a dynamic verification document checklist based on federal CMS categories (loss of coverage, marriage, birth/adoption, permanent relocation, immigration status, income transition, FEMA emergency).

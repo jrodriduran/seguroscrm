@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Admin\Bouncer;
 use Webkul\Admin\Console\Commands\CheckDmiDeadlines;
+use Webkul\Admin\Console\Commands\CheckGracePeriods;
 use Webkul\Admin\Console\Commands\CheckLeadSla;
 use Webkul\Admin\Exceptions\Handler;
 use Webkul\Admin\Http\Middleware\Bouncer as BouncerMiddleware;
@@ -70,11 +71,13 @@ class AdminServiceProvider extends ServiceProvider
             $this->commands([
                 CheckLeadSla::class,
                 CheckDmiDeadlines::class,
+                CheckGracePeriods::class,
             ]);
 
             $this->callAfterResolving('schedule', function ($schedule) {
                 $schedule->command('insurance:check-sla')->everyFifteenMinutes();
                 $schedule->command('insurance:check-dmi-deadlines')->dailyAt('08:00');
+                $schedule->command('insurance:check-grace-periods')->dailyAt('07:00');
             });
         }
     }

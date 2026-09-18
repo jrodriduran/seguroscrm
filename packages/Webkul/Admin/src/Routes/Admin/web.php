@@ -59,3 +59,9 @@ require 'rest-routes.php';
  * Commissions routes.
  */
 require 'commission-routes.php';
+
+/**
+ * Policies / Book of Business routes.
+ */
+require 'policy-routes.php';
+

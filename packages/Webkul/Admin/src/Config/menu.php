@@ -41,6 +41,17 @@ return [
     ],
 
     /**
+     * Insurance Policies (Book of Business).
+     */
+    [
+        'key' => 'policies',
+        'name' => 'admin::insurance.policies.title',
+        'route' => 'admin.policies.index',
+        'sort' => 3,
+        'icon-class' => 'icon-product',
+    ],
+
+    /**
      * Insurance Commissions.
      */
     [

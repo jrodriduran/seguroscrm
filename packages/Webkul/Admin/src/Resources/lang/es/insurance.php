@@ -437,4 +437,10 @@ return [
         'title' => 'Comisiones de Seguros',
         'subtitle' => 'Libro mayor de comisiones por póliza emitida (PMPM / ACA) y distribución entre agencia y agentes.',
     ],
+
+    'policies' => [
+        'title' => 'Libro de Pólizas (Cartera)',
+        'subtitle' => 'Libro mayor de pólizas activas, tasa de persistencia y alertas de período de gracia (ACA 90 días).',
+    ],
 ];
+

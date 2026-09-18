@@ -437,4 +437,10 @@ return [
         'title' => 'Insurance Commissions',
         'subtitle' => 'Commissions ledger for issued policies (PMPM / ACA) and split distribution between agency and agents.',
     ],
+
+    'policies' => [
+        'title' => 'Book of Business (Cartera)',
+        'subtitle' => 'Active policy ledger, persistency rates, and ACA 90-day grace period lapse alerts.',
+    ],
 ];
+
