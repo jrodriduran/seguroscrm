@@ -51,7 +51,8 @@ class HealthSherpaBridgeController extends Controller
                 'user_id' => auth()->id() ?: 1,
                 'lead_id' => $lead->id,
             ]);
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+        }
 
         return redirect()->away($data['deep_link_url']);
     }

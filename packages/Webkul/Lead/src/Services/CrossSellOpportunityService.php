@@ -3,7 +3,6 @@
 namespace Webkul\Lead\Services;
 
 use Webkul\Lead\Models\Lead;
-use Webkul\Lead\Models\LeadCrossSellOpportunity;
 
 class CrossSellOpportunityService
 {

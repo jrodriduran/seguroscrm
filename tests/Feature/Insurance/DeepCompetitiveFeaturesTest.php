@@ -4,7 +4,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Models\HouseholdMember;
 use Webkul\Lead\Models\Lead;
-use Webkul\Lead\Models\LeadCrossSellOpportunity;
 use Webkul\Lead\Models\Pipeline;
 use Webkul\Lead\Models\Stage;
 use Webkul\Lead\Models\UserAgentLicense;

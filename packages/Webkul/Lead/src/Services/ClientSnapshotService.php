@@ -42,7 +42,7 @@ class ClientSnapshotService
         // Age calculation
         $ageText = 'Edad no especificada';
         if ($person?->date_of_birth) {
-            $ageText = Carbon::parse($person->date_of_birth)->age . ' años';
+            $ageText = Carbon::parse($person->date_of_birth)->age.' años';
         }
 
         // Meds summary
@@ -64,8 +64,8 @@ class ClientSnapshotService
 
         // Narrative Brief
         $narrative = sprintf(
-            'El beneficiario %s (%s) reside en %s. Cuenta con un censo de %d personas en su hogar. ' .
-            'Médico primario: %s. Medicamentos activos: %s. Estatus de cumplimiento: %s. ' .
+            'El beneficiario %s (%s) reside en %s. Cuenta con un censo de %d personas en su hogar. '.
+            'Médico primario: %s. Medicamentos activos: %s. Estatus de cumplimiento: %s. '.
             'Score IA: %d/100 (%s). Acción prioritaria recomendada: %s.',
             $person?->name ?: $lead->title,
             $ageText,

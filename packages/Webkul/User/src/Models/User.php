@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
+use Webkul\Lead\Models\UserAgentLicense;
 use Webkul\User\Contracts\User as UserContract;
 
 class User extends Authenticatable implements UserContract
@@ -93,7 +94,7 @@ class User extends Authenticatable implements UserContract
      */
     public function agentLicenses()
     {
-        return $this->hasMany(\Webkul\Lead\Models\UserAgentLicense::class, 'user_id');
+        return $this->hasMany(UserAgentLicense::class, 'user_id');
     }
 
     /**
