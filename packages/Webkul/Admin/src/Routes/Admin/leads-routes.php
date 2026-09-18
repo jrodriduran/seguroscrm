@@ -11,6 +11,7 @@ use Webkul\Admin\Http\Controllers\Lead\LeadController;
 use Webkul\Admin\Http\Controllers\Lead\QuoteController;
 use Webkul\Admin\Http\Controllers\Lead\TagController;
 use Webkul\Admin\Http\Controllers\Lead\TeamRadarController;
+use Webkul\Admin\Http\Controllers\Insurance\RxProviderNetworkController;
 use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController;
 
 Route::controller(LeadController::class)->prefix('leads')->group(function () {
@@ -107,6 +108,21 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::get('', 'get')->name('admin.leads.enrollment.get');
         Route::post('', 'save')->name('admin.leads.enrollment.save');
         Route::post('toggle-document', 'toggleDocument')->name('admin.leads.enrollment.toggle_document');
+    });
+
+    Route::controller(RxProviderNetworkController::class)->prefix('{lead_id}/rx-network')->group(function () {
+        Route::get('summary', 'getLeadSummary')->name('admin.insurance.leads.rx_network.summary');
+        Route::get('pdf', 'downloadSummaryPdf')->name('admin.insurance.leads.rx_network.pdf');
+    });
+
+    Route::controller(RxProviderNetworkController::class)->prefix('{lead_id}/rx-medications')->group(function () {
+        Route::post('', 'storeMedication')->name('admin.insurance.leads.rx_medications.store');
+        Route::delete('{medication_id}', 'destroyMedication')->name('admin.insurance.leads.rx_medications.delete');
+    });
+
+    Route::controller(RxProviderNetworkController::class)->prefix('{lead_id}/doctor-networks')->group(function () {
+        Route::post('', 'storeDoctor')->name('admin.insurance.leads.doctor_networks.store');
+        Route::delete('{doctor_id}', 'destroyDoctor')->name('admin.insurance.leads.doctor_networks.delete');
     });
 });
 

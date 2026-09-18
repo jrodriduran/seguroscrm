@@ -121,6 +121,7 @@
                     ['name' => 'medicare_soa', 'label' => '🛡️ Medicare SOA (48h)'],
                     ['name' => 'enrollment_period', 'label' => '🗓️ Inscripción (SEP/OEP)'],
                     ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
+                    ['name' => 'rx_network', 'label' => '💊 Medicinas & Doctores'],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
                     ['name' => 'description', 'label' => trans('admin::app.leads.view.tabs.description')],
@@ -149,6 +150,11 @@
                 <!-- Documentos DMI -->
                 <x-slot:dmi_documents>
                     @include ('admin::leads.view.dmi_documents')
+                </x-slot>
+
+                <!-- Medicinas & Doctores -->
+                <x-slot:rx_network>
+                    @include ('admin::leads.view.rx_and_doctors')
                 </x-slot>
 
                 <!-- Products -->

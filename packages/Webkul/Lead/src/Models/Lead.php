@@ -199,6 +199,22 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get prescription medications associated with the lead.
+     */
+    public function rxMedications(): HasMany
+    {
+        return $this->hasMany(LeadRxMedication::class, 'lead_id');
+    }
+
+    /**
+     * Get healthcare provider / doctor network records associated with the lead.
+     */
+    public function doctorNetworks(): HasMany
+    {
+        return $this->hasMany(LeadDoctorNetwork::class, 'lead_id');
+    }
+
+    /**
      * Returns the rotten days
      */
     public function getRottenDaysAttribute()

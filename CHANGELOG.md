@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Prescription Formulary (Rx Collect) & Drug Tier Engine: Added comprehensive prescription drug tracker directly in Lead details supporting drug tier classification (Tier 1 Preferred Generic to Tier 5 Specialty), utilization management restrictions (Prior Authorization [PA], Step Therapy [ST], Quantity Limits [QL]), and real-time copay estimation for 30-day retail and 90-day mail-order dispensing.
+
+* [feature] Healthcare Provider & Doctor Network Lookup: Implemented provider network tracking allowing agents to catalog clients' doctors, specialists, clinic/hospital affiliations, 10-digit NPI numbers, Primary Care Physician (PCP) designations, and carrier in-network vs out-of-network status mapping (Florida Blue, Ambetter, Oscar, UnitedHealthcare, etc.).
+
+* [feature] Printable Rx & Provider Network Summary PDF: Added downloadable and audit-ready PDF summary document (`Resumen_Medicinas_Doctores_{id}_{client}.pdf`) compiling all patient prescriptions, copays, and in-network physicians for enrollment verification and client records.
+
+* [migration] Added `lead_rx_medications` and `lead_doctor_networks` tables (Lead package migration `2026_09_18_000014`).
+
+* [tests] Added Pest feature test `RxProviderNetworkTest` covering formulary restrictions, copay calculation, carrier network mapping, PCP designation, and PDF generation.
+
 * [feature] Insured Self-Service Portal & Digital Health Card: Added public mobile-friendly beneficiary self-service portal (`/my-policy/{token}`) allowing insured clients to access their digital member card, plan details, copay summaries, primary care physician (PCP), and covered household dependents anytime without agent intervention.
 
 * [feature] Printable 2-Sided Wallet ID Card PDF: Implemented downloadable wallet-sized insurance card PDF rendering carrier logo, Member ID, RxBIN, RxPCN, RxGrp, emergency contacts, 24/7 NurseLine, and copay breakdowns for medical visits and pharmacy dispensing.
