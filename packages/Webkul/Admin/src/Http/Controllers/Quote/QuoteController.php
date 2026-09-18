@@ -387,23 +387,21 @@ class QuoteController extends Controller
             ? $request->input('net_premium') 
             : max(0, $gross - $subsidy));
 
+        $mergeData = [
+            'gross_premium'     => $gross,
+            'aptc_subsidy'      => $subsidy,
+            'net_premium'       => $net,
+            'sub_total'         => $gross,
+            'discount_amount'   => $subsidy,
+            'grand_total'       => $net,
+            'tax_amount'        => 0,
+            'adjustment_amount' => 0,
+        ];
+
         if (! $request->filled('subject')) {
             $subjectParts = array_filter([$carrier, $plan, $metalTier ? ucfirst($metalTier) : null]);
-            $request->merge([
-                'subject' => ! empty($subjectParts) ? implode(' - ', $subjectParts) : 'Cotización Plan de Salud ACA',
-            ]);
+            $mergeData['subject'] = ! empty($subjectParts) ? implode(' - ', $subjectParts) : 'Cotización Plan de Salud ACA';
         }
-
-        $request->merge([
-            'gross_premium'   => $gross,
-            'aptc_subsidy'    => $subsidy,
-            'net_premium'     => $net,
-            'sub_total'       => $gross,
-            'discount_amount' => $subsidy,
-            'grand_total'     => $net,
-            'tax_amount'      => 0,
-            'adjustment_amount' => 0,
-        ]);
 
         $items = $request->input('items', []);
         $hasProduct = false;
@@ -425,21 +423,22 @@ class QuoteController extends Controller
                 $product = \Webkul\Product\Models\Product::first();
             }
 
-            $request->merge([
-                'items' => [
-                    'item_0' => [
-                        'product_id'      => $product?->id ?? 1,
-                        'name'            => trim(($carrier ?: 'Salud') . ' ' . ($plan ?: '')),
-                        'quantity'        => 1,
-                        'price'           => $gross,
-                        'discount_amount' => $subsidy,
-                        'tax_amount'      => 0,
-                        'total'           => $gross,
-                        'final_total'     => $net,
-                    ],
+            $mergeData['items'] = [
+                'item_0' => [
+                    'product_id'      => $product?->id ?? 1,
+                    'name'            => trim(($carrier ?: 'Salud') . ' ' . ($plan ?: '')),
+                    'quantity'        => 1,
+                    'price'           => $gross,
+                    'discount_amount' => $subsidy,
+                    'tax_amount'      => 0,
+                    'total'           => $gross,
+                    'final_total'     => $net,
                 ],
-            ]);
+            ];
         }
+
+        $request->merge($mergeData);
+        request()->merge($mergeData);
     }
 
     /**
@@ -447,6 +446,10 @@ class QuoteController extends Controller
      */
     private function additionalValidation(): void
     {
+        if (request()->filled('carrier_name') || request()->filled('plan_name')) {
+            return;
+        }
+
         $this->validate(request(), [
             'items' => 'required|array',
             'items.*.product_id' => 'required',
