@@ -6,6 +6,8 @@ use Webkul\Core\Providers\BaseModuleServiceProvider;
 use Webkul\Lead\Models\AssignmentRule;
 use Webkul\Lead\Models\HouseholdMember;
 use Webkul\Lead\Models\Lead;
+use Webkul\Lead\Models\LeadConsent;
+use Webkul\Lead\Models\LeadDmiDocument;
 use Webkul\Lead\Models\Pipeline;
 use Webkul\Lead\Models\Product;
 use Webkul\Lead\Models\SlaRule;
@@ -19,6 +21,8 @@ class ModuleServiceProvider extends BaseModuleServiceProvider
         AssignmentRule::class,
         HouseholdMember::class,
         Lead::class,
+        LeadConsent::class,
+        LeadDmiDocument::class,
         Pipeline::class,
         Product::class,
         SlaRule::class,

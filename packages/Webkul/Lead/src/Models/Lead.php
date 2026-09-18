@@ -166,6 +166,22 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get the CMS consent associated with the lead.
+     */
+    public function consent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(LeadConsentProxy::modelClass());
+    }
+
+    /**
+     * Get the DMI documents associated with the lead.
+     */
+    public function dmiDocuments(): HasMany
+    {
+        return $this->hasMany(LeadDmiDocumentProxy::modelClass());
+    }
+
+    /**
      * Returns the rotten days
      */
     public function getRottenDaysAttribute()

@@ -89,6 +89,9 @@
                 </div>
             </div>
 
+            <!-- ACA & DMI Compliance Card -->
+            @include ('admin::leads.view.compliance_card')
+
             <!-- Lead Attributes -->
             @include ('admin::leads.view.attributes')
 
@@ -114,14 +117,26 @@
                 :activeType="request()->query('tab') ?? (request()->query('from') === 'quotes' ? 'quotes' : 'all')"
                 :extra-types="[
                     ['name' => 'household', 'label' => trans('admin::insurance.tabs.household')],
-                    ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
+                    ['name' => 'consent', 'label' => '📋 Consentimiento CMS'],
+                    ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
+                    ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
                     ['name' => 'description', 'label' => trans('admin::app.leads.view.tabs.description')],
                 ]"
             >
                 <!-- Household Members -->
                 <x-slot:household>
                     @include ('admin::leads.view.household')
+                </x-slot>
+
+                <!-- Consentimiento CMS -->
+                <x-slot:consent>
+                    @include ('admin::leads.view.consent')
+                </x-slot>
+
+                <!-- Documentos DMI -->
+                <x-slot:dmi_documents>
+                    @include ('admin::leads.view.dmi_documents')
                 </x-slot>
 
                 <!-- Products -->

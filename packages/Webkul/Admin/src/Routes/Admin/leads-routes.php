@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\Lead\ActivityController;
+use Webkul\Admin\Http\Controllers\Lead\ConsentController;
+use Webkul\Admin\Http\Controllers\Lead\DmiDocumentController;
 use Webkul\Admin\Http\Controllers\Lead\EmailController;
 use Webkul\Admin\Http\Controllers\Lead\HouseholdMemberController;
 use Webkul\Admin\Http\Controllers\Lead\LeadController;
@@ -71,6 +73,22 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::post('', 'store')->name('admin.leads.household.store');
         Route::put('{id}', 'update')->name('admin.leads.household.update');
         Route::delete('{id}', 'destroy')->name('admin.leads.household.delete');
+    });
+
+    Route::controller(ConsentController::class)->prefix('{lead_id}/consent')->group(function () {
+        Route::get('', 'get')->name('admin.leads.consent.get');
+        Route::get('whatsapp', 'getWhatsAppLink')->name('admin.leads.consent.whatsapp');
+        Route::post('regenerate', 'regenerate')->name('admin.leads.consent.regenerate');
+        Route::post('revoke', 'revoke')->name('admin.leads.consent.revoke');
+        Route::get('certificate', 'printCertificate')->name('admin.leads.consent.certificate');
+    });
+
+    Route::controller(DmiDocumentController::class)->prefix('{lead_id}/dmi-documents')->group(function () {
+        Route::get('', 'index')->name('admin.leads.dmi.index');
+        Route::post('', 'store')->name('admin.leads.dmi.store');
+        Route::put('{id}', 'update')->name('admin.leads.dmi.update');
+        Route::delete('{id}', 'destroy')->name('admin.leads.dmi.delete');
+        Route::get('{id}/whatsapp', 'getWhatsAppReminder')->name('admin.leads.dmi.whatsapp');
     });
 });
 
