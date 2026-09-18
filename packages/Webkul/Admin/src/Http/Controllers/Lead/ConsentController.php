@@ -3,7 +3,6 @@
 namespace Webkul\Admin\Http\Controllers\Lead;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Webkul\Lead\Models\Lead;
@@ -32,25 +31,25 @@ class ConsentController extends Controller
             $consentText = LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName);
 
             $consent = LeadConsent::create([
-                'lead_id'      => $lead->id,
-                'person_id'    => $lead->person_id,
-                'user_id'      => $lead->user_id ?: auth()->guard('user')->id(),
-                'token'        => Str::random(36),
-                'status'       => 'pending',
-                'client_name'  => $clientName,
+                'lead_id' => $lead->id,
+                'person_id' => $lead->person_id,
+                'user_id' => $lead->user_id ?: auth()->guard('user')->id(),
+                'token' => Str::random(36),
+                'status' => 'pending',
+                'client_name' => $clientName,
                 'client_phone' => $clientPhone,
                 'client_email' => $clientEmail,
-                'agent_name'   => $agentName,
-                'agent_npn'    => $agentNpn,
-                'agency_name'  => $agencyName,
+                'agent_name' => $agentName,
+                'agent_npn' => $agentNpn,
+                'agency_name' => $agencyName,
                 'consent_text' => $consentText,
             ]);
         }
 
         return response()->json([
-            'success'          => true,
-            'consent'          => $consent,
-            'public_url'       => $consent->public_url,
+            'success' => true,
+            'consent' => $consent,
+            'public_url' => $consent->public_url,
             'whatsapp_message' => $consent->whatsapp_message,
         ]);
     }
@@ -73,14 +72,14 @@ class ConsentController extends Controller
         $phone = $consent->client_phone ?: collect($lead->person?->contact_numbers ?? [])->first()['value'] ?? '';
         $cleanPhone = preg_replace('/[^0-9]/', '', (string) $phone);
 
-        $whatsappUrl = 'https://api.whatsapp.com/send?phone=' . $cleanPhone . '&text=' . urlencode($consent->whatsapp_message);
+        $whatsappUrl = 'https://api.whatsapp.com/send?phone='.$cleanPhone.'&text='.urlencode($consent->whatsapp_message);
 
         return response()->json([
-            'success'      => true,
-            'phone'        => $phone,
-            'clean_phone'  => $cleanPhone,
-            'message'      => $consent->whatsapp_message,
-            'public_url'   => $consent->public_url,
+            'success' => true,
+            'phone' => $phone,
+            'clean_phone' => $cleanPhone,
+            'message' => $consent->whatsapp_message,
+            'public_url' => $consent->public_url,
             'whatsapp_url' => $whatsappUrl,
         ]);
     }
@@ -118,23 +117,23 @@ class ConsentController extends Controller
 
         if ($consent) {
             $consent->update([
-                'token'          => Str::random(36),
-                'status'         => 'pending',
+                'token' => Str::random(36),
+                'status' => 'pending',
                 'signature_data' => null,
-                'signed_at'      => null,
-                'ip_address'     => null,
-                'user_agent'     => null,
-                'consent_text'   => LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName),
+                'signed_at' => null,
+                'ip_address' => null,
+                'user_agent' => null,
+                'consent_text' => LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName),
             ]);
         } else {
             return $this->get($leadId);
         }
 
         return response()->json([
-            'success'          => true,
-            'message'          => 'Nuevo enlace de consentimiento generado exitosamente.',
-            'consent'          => $consent,
-            'public_url'       => $consent->public_url,
+            'success' => true,
+            'message' => 'Nuevo enlace de consentimiento generado exitosamente.',
+            'consent' => $consent,
+            'public_url' => $consent->public_url,
             'whatsapp_message' => $consent->whatsapp_message,
         ]);
     }

@@ -24,14 +24,14 @@ class DmiDocumentController extends Controller
             ->get();
 
         return response()->json([
-            'success'   => true,
+            'success' => true,
             'documents' => $documents,
-            'summary'   => [
-                'total'     => $documents->count(),
-                'critical'  => $documents->where('urgency_level', 'critical')->count(),
-                'warning'   => $documents->where('urgency_level', 'warning')->count(),
-                'verified'  => $documents->where('urgency_level', 'verified')->count(),
-                'expired'   => $documents->where('urgency_level', 'expired')->count(),
+            'summary' => [
+                'total' => $documents->count(),
+                'critical' => $documents->where('urgency_level', 'critical')->count(),
+                'warning' => $documents->where('urgency_level', 'warning')->count(),
+                'verified' => $documents->where('urgency_level', 'verified')->count(),
+                'expired' => $documents->where('urgency_level', 'expired')->count(),
             ],
         ]);
     }
@@ -44,13 +44,13 @@ class DmiDocumentController extends Controller
         $lead = Lead::findOrFail($leadId);
 
         $request->validate([
-            'doc_type'      => 'required|string|max:50',
-            'title'         => 'required|string|max:150',
-            'notice_date'   => 'required|date',
+            'doc_type' => 'required|string|max:50',
+            'title' => 'required|string|max:150',
+            'notice_date' => 'required|date',
             'deadline_date' => 'nullable|date',
-            'status'        => 'nullable|string|max:40',
-            'notes'         => 'nullable|string',
-            'file'          => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'status' => 'nullable|string|max:40',
+            'notes' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ]);
 
         $noticeDate = Carbon::parse($request->input('notice_date'));
@@ -64,25 +64,25 @@ class DmiDocumentController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $fileName = $file->getClientOriginalName();
-            $filePath = $file->store('dmi_documents/' . $lead->id, 'public');
+            $filePath = $file->store('dmi_documents/'.$lead->id, 'public');
         }
 
         $document = LeadDmiDocument::create([
-            'lead_id'       => $lead->id,
-            'person_id'     => $lead->person_id,
-            'doc_type'      => $request->input('doc_type'),
-            'title'         => $request->input('title'),
-            'notice_date'   => $noticeDate,
+            'lead_id' => $lead->id,
+            'person_id' => $lead->person_id,
+            'doc_type' => $request->input('doc_type'),
+            'title' => $request->input('title'),
+            'notice_date' => $noticeDate,
             'deadline_date' => $deadlineDate,
-            'status'        => $request->input('status', 'pending_upload'),
-            'file_path'     => $filePath,
-            'file_name'     => $fileName,
-            'notes'         => $request->input('notes'),
+            'status' => $request->input('status', 'pending_upload'),
+            'file_path' => $filePath,
+            'file_name' => $fileName,
+            'notes' => $request->input('notes'),
         ]);
 
         return response()->json([
-            'success'  => true,
-            'message'  => 'Documento DMI registrado exitosamente.',
+            'success' => true,
+            'message' => 'Documento DMI registrado exitosamente.',
             'document' => $document,
         ]);
     }
@@ -96,13 +96,13 @@ class DmiDocumentController extends Controller
         $document = LeadDmiDocument::where('lead_id', $lead->id)->findOrFail($id);
 
         $request->validate([
-            'doc_type'      => 'nullable|string|max:50',
-            'title'         => 'nullable|string|max:150',
-            'notice_date'   => 'nullable|date',
+            'doc_type' => 'nullable|string|max:50',
+            'title' => 'nullable|string|max:150',
+            'notice_date' => 'nullable|date',
             'deadline_date' => 'nullable|date',
-            'status'        => 'nullable|string|max:40',
-            'notes'         => 'nullable|string',
-            'file'          => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'status' => 'nullable|string|max:40',
+            'notes' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ]);
 
         $data = $request->only(['doc_type', 'title', 'status', 'notes']);
@@ -122,14 +122,14 @@ class DmiDocumentController extends Controller
 
             $file = $request->file('file');
             $data['file_name'] = $file->getClientOriginalName();
-            $data['file_path'] = $file->store('dmi_documents/' . $lead->id, 'public');
+            $data['file_path'] = $file->store('dmi_documents/'.$lead->id, 'public');
         }
 
         $document->update($data);
 
         return response()->json([
-            'success'  => true,
-            'message'  => 'Documento DMI actualizado con éxito.',
+            'success' => true,
+            'message' => 'Documento DMI actualizado con éxito.',
             'document' => $document->fresh(),
         ]);
     }
@@ -166,13 +166,13 @@ class DmiDocumentController extends Controller
         $cleanPhone = preg_replace('/[^0-9]/', '', (string) $phone);
 
         $message = $document->whatsapp_reminder_message;
-        $whatsappUrl = 'https://api.whatsapp.com/send?phone=' . $cleanPhone . '&text=' . urlencode($message);
+        $whatsappUrl = 'https://api.whatsapp.com/send?phone='.$cleanPhone.'&text='.urlencode($message);
 
         return response()->json([
-            'success'      => true,
-            'phone'        => $phone,
-            'clean_phone'  => $cleanPhone,
-            'message'      => $message,
+            'success' => true,
+            'phone' => $phone,
+            'clean_phone' => $cleanPhone,
+            'message' => $message,
             'whatsapp_url' => $whatsappUrl,
         ]);
     }

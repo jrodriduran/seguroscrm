@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Webkul\Activity\Models\ActivityProxy;
 use Webkul\Activity\Traits\LogsActivity;
 use Webkul\Attribute\Traits\CustomAttribute;
@@ -168,7 +169,7 @@ class Lead extends Model implements LeadContract
     /**
      * Get the CMS consent associated with the lead.
      */
-    public function consent(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function consent(): HasOne
     {
         return $this->hasOne(LeadConsentProxy::modelClass());
     }

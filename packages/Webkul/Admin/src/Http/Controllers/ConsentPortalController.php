@@ -38,7 +38,7 @@ class ConsentPortalController extends Controller
 
         $request->validate([
             'signature_data' => 'required|string',
-            'client_name'    => 'nullable|string|max:150',
+            'client_name' => 'nullable|string|max:150',
         ]);
 
         $signatureData = $request->input('signature_data');
@@ -52,17 +52,17 @@ class ConsentPortalController extends Controller
         }
 
         $consent->update([
-            'status'         => 'signed',
+            'status' => 'signed',
             'signature_data' => $signatureData,
-            'signed_at'      => now(),
-            'ip_address'     => $request->ip(),
-            'user_agent'     => substr((string) $request->userAgent(), 0, 255),
-            'client_name'    => $request->input('client_name') ?: $consent->client_name,
+            'signed_at' => now(),
+            'ip_address' => $request->ip(),
+            'user_agent' => substr((string) $request->userAgent(), 0, 255),
+            'client_name' => $request->input('client_name') ?: $consent->client_name,
         ]);
 
         return response()->json([
-            'success'      => true,
-            'message'      => '¡Consentimiento firmado y registrado legalmente con éxito!',
+            'success' => true,
+            'message' => '¡Consentimiento firmado y registrado legalmente con éxito!',
             'redirect_url' => route('consent.portal.show', $consent->token),
         ]);
     }

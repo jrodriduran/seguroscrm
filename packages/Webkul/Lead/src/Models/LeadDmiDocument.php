@@ -134,11 +134,11 @@ class LeadDmiDocument extends Model implements LeadDmiDocumentContract
             : "⚠️ *AVISO DE DOCUMENTACIÓN PENDIENTE (HEALTHCARE.GOV)*\n\n";
 
         return $urgencyPrefix
-            . "Hola *{$clientName}*, le contactamos de su agencia de seguros.\n\n"
-            . "El Mercado de Seguros (Healthcare.gov) tiene una inconsistencia abierta (DMI) y requiere su comprobante de:\n"
-            . "📄 *{$docTitle}*\n\n"
-            . "⏳ *Fecha límite fatal:* {$deadline} (Le quedan *{$days} días*).\n\n"
-            . "Si este documento no se carga antes de la fecha límite, *el gobierno federal cancelará su subsidio APTC* y el precio de su seguro aumentará al costo total o se cancelará la póliza.\n\n"
-            . "📲 *Por favor envíenos una foto clara o PDF de este documento por este mismo chat de WhatsApp lo antes posible.*";
+            ."Hola *{$clientName}*, le contactamos de su agencia de seguros.\n\n"
+            ."El Mercado de Seguros (Healthcare.gov) tiene una inconsistencia abierta (DMI) y requiere su comprobante de:\n"
+            ."📄 *{$docTitle}*\n\n"
+            ."⏳ *Fecha límite fatal:* {$deadline} (Le quedan *{$days} días*).\n\n"
+            ."Si este documento no se carga antes de la fecha límite, *el gobierno federal cancelará su subsidio APTC* y el precio de su seguro aumentará al costo total o se cancelará la póliza.\n\n"
+            .'📲 *Por favor envíenos una foto clara o PDF de este documento por este mismo chat de WhatsApp lo antes posible.*';
     }
 }
