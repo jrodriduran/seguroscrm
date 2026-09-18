@@ -119,6 +119,7 @@
                     ['name' => 'household', 'label' => trans('admin::insurance.tabs.household')],
                     ['name' => 'consent', 'label' => '📋 Consentimiento CMS'],
                     ['name' => 'medicare_soa', 'label' => '🛡️ Medicare SOA (48h)'],
+                    ['name' => 'enrollment_period', 'label' => '🗓️ Inscripción (SEP/OEP)'],
                     ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
@@ -138,6 +139,11 @@
                 <!-- Medicare Scope of Appointment (48h Rule) -->
                 <x-slot:medicare_soa>
                     @include ('admin::leads.view.medicare_soa')
+                </x-slot>
+
+                <!-- Período de Inscripción (SEP / OEP) -->
+                <x-slot:enrollment_period>
+                    @include ('admin::leads.view.sep_validator')
                 </x-slot>
 
                 <!-- Documentos DMI -->

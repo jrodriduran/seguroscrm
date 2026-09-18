@@ -101,6 +101,12 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::get('certificate', 'printCertificate')->name('admin.leads.soa.certificate');
         Route::get('certificate/pdf', 'downloadCertificatePdf')->name('admin.leads.soa.certificate.pdf');
     });
+
+    Route::controller(\Webkul\Admin\Http\Controllers\Lead\EnrollmentPeriodController::class)->prefix('{lead_id}/enrollment-period')->group(function () {
+        Route::get('', 'get')->name('admin.leads.enrollment.get');
+        Route::post('', 'save')->name('admin.leads.enrollment.save');
+        Route::post('toggle-document', 'toggleDocument')->name('admin.leads.enrollment.toggle_document');
+    });
 });
 
 // ─── Team Radar: Master Agent Control Tower ─────────────────────────────────

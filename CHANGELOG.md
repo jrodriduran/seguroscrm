@@ -4,6 +4,14 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Enrollment Period Manager & OEP Countdown (ACA & Medicare): Added global federal enrollment status tracker displaying active ACA Open Enrollment Period (Nov 1 - Jan 15) and Special Enrollment Period (SEP) operational modes across CRM leads and dashboards.
+
+* [feature] SEP / Qualifying Life Events (QLE) 60-Day Window Validator & CMS Checklist: Implemented interactive validation engine inside Lead details that computes the mandatory 60-day enrollment window deadline, expected coverage effective date, and generates a dynamic verification document checklist based on federal CMS categories (loss of coverage, marriage, birth/adoption, permanent relocation, immigration status, income transition, FEMA emergency).
+
+* [migration] Added `lead_sep_qualifications` table for tracking qualifying life events, enrollment deadlines, and verified document checklists (Lead package migration `2026_09_18_000010`).
+
+* [tests] Added Pest feature test `EnrollmentPeriodTest` covering federal status detection, 60-day window deadline calculation, expired event handling, and document checklist verification.
+
 * [feature] Side-by-Side ACA Health Plan Comparator & Multi-Plan Proposal Matrix: Added interactive comparison matrix to Lead Quotes allowing agents to contrast multiple health plans column-by-column across metal tiers (Bronze, Silver CSR, Gold, Platinum), network types (HMO, EPO, PPO), gross vs APTC tax credits, net monthly costs, annual deductibles, MOOP, and primary care/specialist/Rx copays.
 
 * [feature] Professional PDF Proposal Generator: Implemented printable and downloadable multi-plan comparison PDF proposal via `PDFHandler` featuring agency branding, agent NPN, federal subsidy calculation explanations, and signature approval lines.

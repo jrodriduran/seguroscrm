@@ -191,6 +191,14 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get the SEP / QLE qualification record for the lead.
+     */
+    public function sepQualification(): HasOne
+    {
+        return $this->hasOne(\Webkul\Lead\Models\LeadSepQualification::class, 'lead_id');
+    }
+
+    /**
      * Returns the rotten days
      */
     public function getRottenDaysAttribute()
