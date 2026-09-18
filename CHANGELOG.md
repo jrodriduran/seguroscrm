@@ -4,6 +4,12 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Automated Carrier Commission Reconciliation & Missed Commissions Engine: Added mass CSV/Excel statement processing with fuzzy and exact matching against active CRM policies, variance detection, clawback/chargeback tracking, and automatic identification of unpaid policies (*Missed Commissions*) with dispute export capability.
+
+* [migration] Added `carrier_statements` and `carrier_statement_items` tables for carrier commission reconciliation audits (Lead package migration `2026_09_18_000008`).
+
+* [tests] Added Pest feature test `StatementReconciliationTest` covering exact matching, variance, orphan detection, chargebacks, and missed commissions.
+
 * [feature] Insurance Commissions Module (PMPM / ACA Health): Added dedicated commissions ledger and dashboard with live projection KPIs (gross monthly, agent net earnings, agency retention spread, covered lives), customizable carrier base rates, agent split percentages, and automatic commission generation upon quote-to-policy conversion.
 
 * [migration] Added `insurance_commission_rates` table with default ACA carrier rates (Lead package migration `2026_09_18_000006`).

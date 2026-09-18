@@ -6,8 +6,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Webkul\Admin\Http\Controllers\Controller;
+use Webkul\Lead\Models\CarrierStatement;
+use Webkul\Lead\Models\CarrierStatementItem;
 use Webkul\Lead\Models\InsuranceCommission;
 use Webkul\Lead\Models\InsuranceCommissionRate;
+use Webkul\Lead\Services\CommissionReconciliationService;
 use Webkul\User\Models\User;
 
 class CommissionController extends Controller
@@ -206,6 +209,115 @@ class CommissionController extends Controller
             'success' => true,
             'message' => "Tarifa para {$rate->carrier_name} actualizada.",
             'rate' => $rate,
+        ]);
+    }
+
+    /**
+     * Reconciliation dashboard & statement history.
+     */
+    public function reconciliationIndex(Request $request): View|JsonResponse
+    {
+        $statements = CarrierStatement::with(['items', 'user'])->latest()->get();
+        $rates = InsuranceCommissionRate::all();
+
+        $totalPaidCarrier = $statements->sum('total_carrier_amount');
+        $totalMissedDiscovered = $statements->sum('total_missed_amount');
+        $totalStatementsCount = $statements->count();
+        $averageMatchRate = $statements->avg('match_rate') ?: 0;
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'statements' => $statements,
+                'kpis' => [
+                    'total_paid' => $totalPaidCarrier,
+                    'total_missed' => $totalMissedDiscovered,
+                    'total_statements' => $totalStatementsCount,
+                    'avg_match_rate' => round($averageMatchRate, 1),
+                ],
+            ]);
+        }
+
+        return view('admin::insurance.commissions.reconciliation', compact(
+            'statements',
+            'rates',
+            'totalPaidCarrier',
+            'totalMissedDiscovered',
+            'totalStatementsCount',
+            'averageMatchRate'
+        ));
+    }
+
+    /**
+     * Upload and reconcile a carrier statement CSV.
+     */
+    public function uploadStatement(Request $request, CommissionReconciliationService $service): JsonResponse
+    {
+        $validated = $request->validate([
+            'carrier_name' => 'required|string|max:100',
+            'period_month' => 'required|string|max:7',
+            'statement_file' => 'nullable|file|mimes:csv,txt',
+            'csv_content' => 'nullable|string',
+        ]);
+
+        $csvContent = '';
+        $originalFileName = 'statement.csv';
+
+        if ($request->hasFile('statement_file')) {
+            $file = $request->file('statement_file');
+            $originalFileName = $file->getClientOriginalName();
+            $csvContent = file_get_contents($file->getRealPath());
+        } elseif ($request->filled('csv_content')) {
+            $csvContent = (string) $request->input('csv_content');
+            $originalFileName = 'paste_'.$validated['carrier_name'].'_'.$validated['period_month'].'.csv';
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Debe adjuntar un archivo CSV o proporcionar el contenido del statement.',
+            ], 422);
+        }
+
+        $userId = auth()->guard('user')->id();
+
+        $statement = $service->reconcileCsv(
+            $csvContent,
+            $validated['carrier_name'],
+            $validated['period_month'],
+            $userId,
+            $originalFileName
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => "Statement de {$statement->carrier_name} procesado. Se conciliaron {$statement->matched_records} pólizas y se identificaron {$statement->missed_records} comisiones omitidas.",
+            'statement' => $statement->load(['items.lead.person', 'items.commission']),
+        ]);
+    }
+
+    /**
+     * Show statement details with all items.
+     */
+    public function showStatement(int $id): JsonResponse
+    {
+        $statement = CarrierStatement::with(['items.lead.person', 'items.commission', 'user'])->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'statement' => $statement,
+        ]);
+    }
+
+    /**
+     * Delete statement record and its line items.
+     */
+    public function deleteStatement(int $id): JsonResponse
+    {
+        $statement = CarrierStatement::findOrFail($id);
+        $statement->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Estado de cuenta eliminado correctamente.',
         ]);
     }
 }
