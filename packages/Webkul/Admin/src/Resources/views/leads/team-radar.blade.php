@@ -12,7 +12,7 @@
                 </h1>
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                     <span class="h-2 w-2 animate-pulse rounded-full bg-blue-500"></span>
-                    {{ $assignmentRule->strategy === 'round_robin' ? '🔄 Round Robin' : ($assignmentRule->strategy === 'least_loaded' ? '⚖️ Menor Carga' : '✍️ Manual') }}
+                    {{ ($assignmentRule?->strategy ?? 'round_robin') === 'round_robin' ? '🔄 Round Robin' : (($assignmentRule?->strategy ?? '') === 'least_loaded' ? '⚖️ Menor Carga' : '✍️ Manual') }}
                 </span>
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -115,7 +115,7 @@
                 👥 @lang('admin::insurance.team_radar.workload')
             </h2>
             <span class="text-xs text-gray-500">
-                Tope configurado: {{ $assignmentRule->max_capacity ? $assignmentRule->max_capacity.' leads/agente' : 'Sin límite' }}
+                Tope configurado: {{ ($assignmentRule?->max_capacity) ? $assignmentRule->max_capacity.' leads/agente' : 'Sin límite' }}
             </span>
         </div>
 
@@ -360,13 +360,13 @@
                             name="strategy"
                             class="mt-2 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         >
-                            <option value="round_robin" {{ ($assignmentRule->strategy ?? '') === 'round_robin' ? 'selected' : '' }}>
+                            <option value="round_robin" {{ ($assignmentRule?->strategy ?? 'round_robin') === 'round_robin' ? 'selected' : '' }}>
                                 @lang('admin::insurance.team_radar.strategy_round_robin')
                             </option>
-                            <option value="least_loaded" {{ ($assignmentRule->strategy ?? '') === 'least_loaded' ? 'selected' : '' }}>
+                            <option value="least_loaded" {{ ($assignmentRule?->strategy ?? '') === 'least_loaded' ? 'selected' : '' }}>
                                 @lang('admin::insurance.team_radar.strategy_least_loaded')
                             </option>
-                            <option value="manual" {{ ($assignmentRule->strategy ?? '') === 'manual' ? 'selected' : '' }}>
+                            <option value="manual" {{ ($assignmentRule?->strategy ?? '') === 'manual' ? 'selected' : '' }}>
                                 @lang('admin::insurance.team_radar.strategy_manual')
                             </option>
                         </select>
@@ -382,7 +382,7 @@
                             type="number"
                             name="max_capacity"
                             min="0"
-                            value="{{ $assignmentRule->max_capacity ?? 0 }}"
+                            value="{{ $assignmentRule?->max_capacity ?? 0 }}"
                             class="mt-2 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         >
                         <p class="mt-1 text-xs text-gray-400">0 = sin límite de carga por agente.</p>
@@ -439,7 +439,7 @@
                         </label>
                         <div class="mt-2 max-h-40 overflow-y-auto rounded-lg border border-gray-200 p-3 dark:border-gray-700">
                             @php
-                                $currentPool = $assignmentRule->agent_ids ?? [];
+                                $currentPool = $assignmentRule?->agent_ids ?? [];
                             @endphp
                             @foreach($agents as $ag)
                                 <label class="flex items-center gap-2.5 py-1 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
