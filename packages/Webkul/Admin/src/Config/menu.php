@@ -63,6 +63,17 @@ return [
     ],
 
     /**
+     * Agency Hierarchy & Downlines Overrides.
+     */
+    [
+        'key' => 'hierarchy',
+        'name' => 'admin::insurance.hierarchy.title',
+        'route' => 'admin.hierarchy.index',
+        'sort' => 5,
+        'icon-class' => 'icon-settings',
+    ],
+
+    /**
      * Emails.
      */
     [

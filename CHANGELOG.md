@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Agency Hierarchy & Multi-Tier Overrides Engine: Added organizational hierarchy model supporting sub-agencies, MGAs, GAs, producers, and junior downlines with automated multi-tier PMPM override distribution on policy issuance and quote-to-policy conversion.
+
+* [feature] Organizational Tree & Downline Production Rollup: Implemented interactive agency tree with live production metrics (personal policies/lives vs team downline policies/lives) and monthly override compensation tracking.
+
+* [feature] Sub-Agency Override Compensation Statement Export: Added direct CSV statement generator for monthly sub-agency and upline commission settlement.
+
+* [migration] Added `agency_hierarchies` and `policy_override_distributions` tables (Lead package migration `2026_09_18_000012`).
+
+* [tests] Added Pest feature test `AgencyHierarchyTest` covering upline chain traversal, multi-tier override payouts, and compensation statement export.
+
 * [feature] Book of Business (Cartera) Ledger & Portfolio Persistency Engine: Added full policy lifecycle management with real-time portfolio persistency rate calculation, covered lives tracking, and monthly gross vs net premium volume KPIs.
 
 * [feature] ACA 90-Day Grace Period Lifecycle & Lapse Warnings: Implemented automated detection of overdue payments with Month 1 (Day 1-30) and Critical Month 2-3 (Day 31-90) grace period transitions, agent high-priority alert tasks to prevent commission chargebacks (clawbacks), payment recording to restore active status, and one-click WhatsApp payment reminders.

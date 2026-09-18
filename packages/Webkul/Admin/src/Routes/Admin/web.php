@@ -64,3 +64,9 @@ require 'commission-routes.php';
  * Policies / Book of Business routes.
  */
 require 'policy-routes.php';
+
+/**
+ * Agency Hierarchy & Overrides routes.
+ */
+require 'hierarchy-routes.php';
+

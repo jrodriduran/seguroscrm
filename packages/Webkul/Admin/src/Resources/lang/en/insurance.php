@@ -442,4 +442,10 @@ return [
         'title' => 'Book of Business (Cartera)',
         'subtitle' => 'Active policy ledger, persistency rates, and ACA 90-day grace period lapse alerts.',
     ],
+
+    'hierarchy' => [
+        'title' => 'Hierarchy & Overrides',
+        'subtitle' => 'Agency structure, downline management, and multi-tier PMPM override distribution.',
+    ],
 ];
+

@@ -353,7 +353,10 @@ class QuoteController extends Controller
 
         // Create or update active Insurance Policy (Book of Business)
         try {
-            InsurancePolicy::createOrUpdateFromQuote($quote);
+            $policy = \Webkul\Lead\Models\InsurancePolicy::createOrUpdateFromQuote($quote);
+
+            // Distribute multi-tier upline overrides (GA / MGA)
+            app(\Webkul\Lead\Services\AgencyOverrideService::class)->distributeOverridesForPolicy($policy);
         } catch (\Throwable $e) {
             // In case table not yet migrated
         }

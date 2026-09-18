@@ -442,4 +442,10 @@ return [
         'title' => 'Libro de Pólizas (Cartera)',
         'subtitle' => 'Libro mayor de pólizas activas, tasa de persistencia y alertas de período de gracia (ACA 90 días).',
     ],
+
+    'hierarchy' => [
+        'title' => 'Jerarquía & Overrides',
+        'subtitle' => 'Estructura de sub-agencias, downlines y liquidación de sobrecomisiones PMPM.',
+    ],
 ];
+
