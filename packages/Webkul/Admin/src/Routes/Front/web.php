@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\ConsentPortalController;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaPortalController;
+use Webkul\Admin\Http\Controllers\Quote\ProposalPortalController;
 
 /**
  * Home routes.
@@ -31,9 +32,8 @@ Route::controller(MedicareSoaPortalController::class)->prefix('medicare-soa')->g
 /**
  * Health Insurance Proposal Comparison Public Portal Routes
  */
-Route::controller(\Webkul\Admin\Http\Controllers\Quote\ProposalPortalController::class)->prefix('proposal')->group(function () {
+Route::controller(ProposalPortalController::class)->prefix('proposal')->group(function () {
     Route::get('{token}', 'show')->name('proposal.portal.show');
     Route::post('{token}/select', 'selectPlan')->name('proposal.portal.select');
     Route::get('{token}/thankyou', 'thankYou')->name('proposal.portal.thankyou');
 });
-

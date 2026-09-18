@@ -195,7 +195,7 @@ class Lead extends Model implements LeadContract
      */
     public function sepQualification(): HasOne
     {
-        return $this->hasOne(\Webkul\Lead\Models\LeadSepQualification::class, 'lead_id');
+        return $this->hasOne(LeadSepQualification::class, 'lead_id');
     }
 
     /**

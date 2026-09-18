@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Webkul\Lead\Models\LeadProxy;
-use Webkul\Quote\Models\Quote;
 use Webkul\User\Models\User;
 
 class HealthPlanProposal extends Model
@@ -59,7 +58,7 @@ class HealthPlanProposal extends Model
     public function getQuotes(): Collection
     {
         if (empty($this->quote_ids)) {
-            return new Collection();
+            return new Collection;
         }
 
         return Quote::whereIn('id', $this->quote_ids)->get();
@@ -104,7 +103,7 @@ class HealthPlanProposal extends Model
 
         $text .= "👉 *Vea la comparativa completa lado a lado y seleccione su plan preferido aquí:*\n"
             ."{$this->public_url}\n\n"
-            ."Si tiene cualquier pregunta sobre redes de doctores u hospitales, avíseme de inmediato. ¡Estoy para servirle!";
+            .'Si tiene cualquier pregunta sobre redes de doctores u hospitales, avíseme de inmediato. ¡Estoy para servirle!';
 
         return $text;
     }

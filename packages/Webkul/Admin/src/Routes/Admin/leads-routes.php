@@ -5,6 +5,7 @@ use Webkul\Admin\Http\Controllers\Lead\ActivityController;
 use Webkul\Admin\Http\Controllers\Lead\ConsentController;
 use Webkul\Admin\Http\Controllers\Lead\DmiDocumentController;
 use Webkul\Admin\Http\Controllers\Lead\EmailController;
+use Webkul\Admin\Http\Controllers\Lead\EnrollmentPeriodController;
 use Webkul\Admin\Http\Controllers\Lead\HouseholdMemberController;
 use Webkul\Admin\Http\Controllers\Lead\LeadController;
 use Webkul\Admin\Http\Controllers\Lead\QuoteController;
@@ -102,7 +103,7 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::get('certificate/pdf', 'downloadCertificatePdf')->name('admin.leads.soa.certificate.pdf');
     });
 
-    Route::controller(\Webkul\Admin\Http\Controllers\Lead\EnrollmentPeriodController::class)->prefix('{lead_id}/enrollment-period')->group(function () {
+    Route::controller(EnrollmentPeriodController::class)->prefix('{lead_id}/enrollment-period')->group(function () {
         Route::get('', 'get')->name('admin.leads.enrollment.get');
         Route::post('', 'save')->name('admin.leads.enrollment.save');
         Route::post('toggle-document', 'toggleDocument')->name('admin.leads.enrollment.toggle_document');
