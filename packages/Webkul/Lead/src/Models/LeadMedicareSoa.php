@@ -166,6 +166,6 @@ class LeadMedicareSoa extends Model
             ."📝 *Complete su firma en 1 minuto desde su celular aquí:*\n"
             ."👉 {$url}\n\n"
             ."*Importante:* La ley de Medicare exige firmar este documento con al menos 48 horas de anticipación a nuestra cita para que su cita sea válida.\n\n"
-            ."¡Gracias por su confianza!";
+            .'¡Gracias por su confianza!';
     }
 }

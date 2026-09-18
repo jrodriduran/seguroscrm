@@ -187,7 +187,7 @@ class Lead extends Model implements LeadContract
      */
     public function medicareSoas(): HasMany
     {
-        return $this->hasMany(\Webkul\Lead\Models\LeadMedicareSoa::class, 'lead_id');
+        return $this->hasMany(LeadMedicareSoa::class, 'lead_id');
     }
 
     /**

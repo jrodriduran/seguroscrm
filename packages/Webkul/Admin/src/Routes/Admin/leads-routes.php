@@ -10,6 +10,7 @@ use Webkul\Admin\Http\Controllers\Lead\LeadController;
 use Webkul\Admin\Http\Controllers\Lead\QuoteController;
 use Webkul\Admin\Http\Controllers\Lead\TagController;
 use Webkul\Admin\Http\Controllers\Lead\TeamRadarController;
+use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController;
 
 Route::controller(LeadController::class)->prefix('leads')->group(function () {
     Route::get('', 'index')->name('admin.leads.index');
@@ -92,7 +93,7 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::get('{id}/whatsapp', 'getWhatsAppReminder')->name('admin.leads.dmi.whatsapp');
     });
 
-    Route::controller(\Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController::class)->prefix('{lead_id}/medicare-soa')->group(function () {
+    Route::controller(MedicareSoaController::class)->prefix('{lead_id}/medicare-soa')->group(function () {
         Route::get('', 'get')->name('admin.leads.soa.get');
         Route::get('whatsapp', 'getWhatsAppLink')->name('admin.leads.soa.whatsapp');
         Route::post('regenerate', 'regenerate')->name('admin.leads.soa.regenerate');

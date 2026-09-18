@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\ConsentPortalController;
 use Webkul\Admin\Http\Controllers\Controller;
+use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaPortalController;
 
 /**
  * Home routes.
@@ -21,7 +22,7 @@ Route::controller(ConsentPortalController::class)->prefix('consent')->group(func
 /**
  * Medicare Scope of Appointment (SOA) Public Signing Portal Routes (CMS Compliance)
  */
-Route::controller(\Webkul\Admin\Http\Controllers\Medicare\MedicareSoaPortalController::class)->prefix('medicare-soa')->group(function () {
+Route::controller(MedicareSoaPortalController::class)->prefix('medicare-soa')->group(function () {
     Route::get('{token}', 'show')->name('medicare.soa.portal');
     Route::post('{token}', 'sign')->name('medicare.soa.sign');
     Route::get('{token}/signed', 'signed')->name('medicare.soa.signed');
