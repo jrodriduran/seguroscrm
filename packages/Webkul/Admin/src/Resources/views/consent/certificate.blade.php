@@ -15,9 +15,17 @@
             border-bottom: 2px solid #2563eb;
             padding-bottom: 15px;
             margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: table;
+            width: 100%;
+        }
+        .header-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .header-right {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
         }
         .title {
             font-size: 20px;
@@ -94,24 +102,29 @@
         }
         @media print {
             body { margin: 20px; }
-            button { display: none !important; }
+            .no-print { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <div style="text-align: right; margin-bottom: 15px;">
-        <button onclick="window.print()" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-            🖨️ Imprimir Certificado de Cumplimiento
-        </button>
-    </div>
+    @if (! ($isPdf ?? false))
+        <div class="no-print" style="text-align: right; margin-bottom: 15px; display: flex; justify-content: flex-end; gap: 8px;">
+            <button onclick="window.print()" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                🖨️ Imprimir
+            </button>
+            <a href="{{ route('admin.leads.consent.certificate.pdf', $lead->id) }}" style="padding: 8px 16px; background: #16a34a; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+                📥 Descargar PDF
+            </a>
+        </div>
+    @endif
 
     <div class="header">
-        <div>
+        <div class="header-cell">
             <h1 class="title">CERTIFICADO DE AUTORIZACIÓN Y CONSENTIMIENTO CMS</h1>
             <div class="subtitle">Cumplimiento Federal 45 CFR § 155.220 • ACA / Healthcare.gov</div>
         </div>
-        <div style="text-align: right;">
+        <div class="header-right">
             <strong style="color: #16a34a; font-size: 14px;">ESTADO: FIRMADO ELECTRÓNICAMENTE</strong>
         </div>
     </div>

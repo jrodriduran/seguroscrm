@@ -17,6 +17,7 @@ use Webkul\Admin\Http\Requests\MassDestroyRequest;
 use Webkul\Admin\Http\Resources\QuoteResource;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Core\Traits\PDFHandler;
+use Webkul\Lead\Models\InsuranceCommission;
 use Webkul\Lead\Repositories\LeadRepository;
 use Webkul\Product\Models\Product;
 use Webkul\Quote\Repositories\QuoteRepository;
@@ -341,6 +342,13 @@ class QuoteController extends Controller
 
         $quote->quote_status = 'bound';
         $quote->save();
+
+        // Create or update insurance commission tracking record
+        try {
+            InsuranceCommission::createFromQuote($quote);
+        } catch (\Throwable $e) {
+            // In case table not yet migrated
+        }
 
         $lead = $quote->leads->first();
         if ($lead) {

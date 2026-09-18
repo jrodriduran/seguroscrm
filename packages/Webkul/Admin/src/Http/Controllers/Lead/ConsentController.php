@@ -5,11 +5,13 @@ namespace Webkul\Admin\Http\Controllers\Lead;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
+use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\LeadConsent;
 
 class ConsentController extends Controller
 {
+    use PDFHandler;
     /**
      * Get or initialize the consent record for a lead.
      */
@@ -146,6 +148,30 @@ class ConsentController extends Controller
         $lead = Lead::with(['person', 'user'])->findOrFail($leadId);
         $consent = LeadConsent::where('lead_id', $lead->id)->firstOrFail();
 
-        return view('admin::consent.certificate', compact('lead', 'consent'));
+        return view('admin::consent.certificate', [
+            'lead' => $lead,
+            'consent' => $consent,
+            'isPdf' => false,
+        ]);
+    }
+
+    /**
+     * Download Compliance Certificate as direct PDF
+     */
+    public function downloadCertificatePdf(int $leadId)
+    {
+        $lead = Lead::with(['person', 'user'])->findOrFail($leadId);
+        $consent = LeadConsent::where('lead_id', $lead->id)->firstOrFail();
+
+        $html = view('admin::consent.certificate', [
+            'lead' => $lead,
+            'consent' => $consent,
+            'isPdf' => true,
+        ])->render();
+
+        $clientSlug = Str::slug($lead->person?->name ?: $lead->title ?: 'cliente');
+        $fileName = 'Certificado_Consentimiento_CMS_'.$lead->id.'_'.$clientSlug;
+
+        return $this->downloadPDF($html, $fileName);
     }
 }

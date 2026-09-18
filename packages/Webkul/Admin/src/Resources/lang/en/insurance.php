@@ -432,4 +432,9 @@ return [
         'insurance_policy_bound_welcome_packet_automation' => 'Insurance: Policy Bound & Welcome Packet Automation',
         'insurance_policy_bound_welcome_packet_automation_description' => 'Automatically sends Member Welcome Packet with ID card instructions and carrier portal access upon policy issuance (Won).',
     ],
+
+    'commissions' => [
+        'title' => 'Insurance Commissions',
+        'subtitle' => 'Commissions ledger for issued policies (PMPM / ACA) and split distribution between agency and agents.',
+    ],
 ];

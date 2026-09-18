@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Admin\Bouncer;
+use Webkul\Admin\Console\Commands\CheckDmiDeadlines;
 use Webkul\Admin\Console\Commands\CheckLeadSla;
 use Webkul\Admin\Exceptions\Handler;
 use Webkul\Admin\Http\Middleware\Bouncer as BouncerMiddleware;
@@ -66,10 +67,14 @@ class AdminServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
 
         if ($this->app->runningInConsole()) {
-            $this->commands([CheckLeadSla::class]);
+            $this->commands([
+                CheckLeadSla::class,
+                CheckDmiDeadlines::class,
+            ]);
 
             $this->callAfterResolving('schedule', function ($schedule) {
                 $schedule->command('insurance:check-sla')->everyFifteenMinutes();
+                $schedule->command('insurance:check-dmi-deadlines')->dailyAt('08:00');
             });
         }
     }

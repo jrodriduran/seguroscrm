@@ -432,4 +432,9 @@ return [
         'insurance_policy_bound_welcome_packet_automation' => 'Automatización de Póliza Emitida y Paquete de Bienvenida',
         'insurance_policy_bound_welcome_packet_automation_description' => 'Envía automáticamente el paquete de bienvenida al asegurado con instrucciones de ID de miembro y portal de la aseguradora al emitir la póliza.',
     ],
+
+    'commissions' => [
+        'title' => 'Comisiones de Seguros',
+        'subtitle' => 'Libro mayor de comisiones por póliza emitida (PMPM / ACA) y distribución entre agencia y agentes.',
+    ],
 ];

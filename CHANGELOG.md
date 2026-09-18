@@ -4,6 +4,18 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Insurance Commissions Module (PMPM / ACA Health): Added dedicated commissions ledger and dashboard with live projection KPIs (gross monthly, agent net earnings, agency retention spread, covered lives), customizable carrier base rates, agent split percentages, and automatic commission generation upon quote-to-policy conversion.
+
+* [migration] Added `insurance_commission_rates` table with default ACA carrier rates (Lead package migration `2026_09_18_000006`).
+
+* [migration] Added `insurance_commissions` table for policy commission tracking and split calculations (Lead package migration `2026_09_18_000007`).
+
+* [feature] Automated DMI Deadline Monitoring Command: Added `insurance:check-dmi-deadlines` scheduled artisan command (daily at 08:00) that scans Marketplace 90-day verification deadlines and automatically assigns urgent/high priority alert activities with client WhatsApp copy to assigned agents.
+
+* [feature] Direct PDF Certificate Generation: Added backend PDF rendering and download for CMS Consent Compliance Certificates via `PDFHandler`.
+
+* [tests] Added Pest feature test suite for Insurance modules: `ConsentPortalTest`, `DmiDocumentTest`, `CheckDmiDeadlinesTest`, `HealthQuoteTest`, and `CommissionTest`.
+
 * [feature] Digital Consent Form & Client Portal (CMS Compliance): Added client electronic consent portal replicating Apizeal CMS workflow with touch/mouse signature pad, audit metadata capture (IP address, user agent, timestamp), printable compliance certificate, and lead detail compliance card.
 
 * [feature] 90-Day DMI Document Tracking (Data Matching Issues): Added tracking for Marketplace ACA document requirements (income proof, immigration status, identity) with expiration date countdown, document upload, status workflow (pending, submitted, verified, rejected), and deadline status badges.

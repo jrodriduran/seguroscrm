@@ -33,10 +33,20 @@
                         v-if="consent && consent.status === 'signed'"
                         :href="'{{ route('admin.leads.consent.certificate', $lead->id) }}'"
                         target="_blank"
-                        class="primary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
+                        class="secondary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
                     >
                         <span>🖨️</span>
-                        Descargar Certificado
+                        Ver / Imprimir
+                    </a>
+
+                    <a
+                        v-if="consent && consent.status === 'signed'"
+                        :href="'{{ route('admin.leads.consent.certificate.pdf', $lead->id) }}'"
+                        target="_blank"
+                        class="primary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
+                    >
+                        <span>📥</span>
+                        Descargar PDF
                     </a>
                 </div>
             </div>

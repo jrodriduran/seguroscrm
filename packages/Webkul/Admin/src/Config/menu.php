@@ -41,6 +41,17 @@ return [
     ],
 
     /**
+     * Insurance Commissions.
+     */
+    [
+        'key' => 'commissions',
+        'name' => 'admin::insurance.commissions.title',
+        'route' => 'admin.commissions.index',
+        'sort' => 4,
+        'icon-class' => 'icon-sales',
+    ],
+
+    /**
      * Emails.
      */
     [

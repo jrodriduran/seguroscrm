@@ -54,3 +54,8 @@ require 'help-routes.php';
  * Rest routes.
  */
 require 'rest-routes.php';
+
+/**
+ * Commissions routes.
+ */
+require 'commission-routes.php';

@@ -81,6 +81,7 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::post('regenerate', 'regenerate')->name('admin.leads.consent.regenerate');
         Route::post('revoke', 'revoke')->name('admin.leads.consent.revoke');
         Route::get('certificate', 'printCertificate')->name('admin.leads.consent.certificate');
+        Route::get('certificate/pdf', 'downloadCertificatePdf')->name('admin.leads.consent.certificate.pdf');
     });
 
     Route::controller(DmiDocumentController::class)->prefix('{lead_id}/dmi-documents')->group(function () {
