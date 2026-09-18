@@ -27,3 +27,13 @@ Route::controller(MedicareSoaPortalController::class)->prefix('medicare-soa')->g
     Route::post('{token}', 'sign')->name('medicare.soa.sign');
     Route::get('{token}/signed', 'signed')->name('medicare.soa.signed');
 });
+
+/**
+ * Health Insurance Proposal Comparison Public Portal Routes
+ */
+Route::controller(\Webkul\Admin\Http\Controllers\Quote\ProposalPortalController::class)->prefix('proposal')->group(function () {
+    Route::get('{token}', 'show')->name('proposal.portal.show');
+    Route::post('{token}/select', 'selectPlan')->name('proposal.portal.select');
+    Route::get('{token}/thankyou', 'thankYou')->name('proposal.portal.thankyou');
+});
+

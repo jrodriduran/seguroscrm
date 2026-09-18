@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Side-by-Side ACA Health Plan Comparator & Multi-Plan Proposal Matrix: Added interactive comparison matrix to Lead Quotes allowing agents to contrast multiple health plans column-by-column across metal tiers (Bronze, Silver CSR, Gold, Platinum), network types (HMO, EPO, PPO), gross vs APTC tax credits, net monthly costs, annual deductibles, MOOP, and primary care/specialist/Rx copays.
+
+* [feature] Professional PDF Proposal Generator: Implemented printable and downloadable multi-plan comparison PDF proposal via `PDFHandler` featuring agency branding, agent NPN, federal subsidy calculation explanations, and signature approval lines.
+
+* [feature] Interactive Beneficiary Comparison & Plan Selection Portal: Created public mobile-responsive client portal (`/proposal/{token}`) where beneficiaries can review presented options, view copays and savings, and select their preferred health plan with a single tap, automatically updating CRM quote status and notifying the agent.
+
+* [migration] Added `health_plan_proposals` table for tracking side-by-side proposals, client views, and plan selections (Quote package migration `2026_09_18_000002`).
+
+* [tests] Added Pest feature test `HealthPlanProposalTest` covering proposal generation, PDF export, client portal viewing, and remote plan selection.
+
 * [feature] Medicare Scope of Appointment (SOA) Compliance Engine: Added dedicated Medicare SOA digital workflow complying with federal CMS regulations, featuring a public mobile-friendly touchscreen signature portal, mandatory CMS TPMO disclaimer, product discussion authorizations (Medicare Advantage Part C, Part D Rx, Medigap, Dental/Vision, Hospital Indemnity), and audit-ready CMS compliance certificates with PDF download.
 
 * [feature] CMS 48-Hour Waiting Period Tracker & Live Countdown: Built real-time compliance tracker in Lead details calculating the mandatory 48-hour cooling-off window between beneficiary signature and consultation eligibility, along with documented CMS exception handling (beneficiary walk-ins and end of enrollment period deadlines).

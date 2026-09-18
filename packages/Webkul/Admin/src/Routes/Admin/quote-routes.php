@@ -28,3 +28,10 @@ Route::controller(QuoteController::class)->prefix('quotes')->group(function () {
 
     Route::post('{id?}/convert-to-policy', 'convertToPolicy')->name('admin.quotes.convert_to_policy');
 });
+
+Route::controller(\Webkul\Admin\Http\Controllers\Quote\HealthPlanProposalController::class)->prefix('quotes/proposals')->group(function () {
+    Route::post('{lead_id}/generate', 'generateOrGet')->name('admin.quotes.proposals.generate');
+    Route::get('{id}/download-pdf', 'downloadPdf')->name('admin.quotes.proposals.download_pdf');
+    Route::get('{id}/print', 'print')->name('admin.quotes.proposals.print');
+});
+
