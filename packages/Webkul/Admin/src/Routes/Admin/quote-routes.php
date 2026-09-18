@@ -23,7 +23,7 @@ Route::controller(QuoteController::class)->prefix('quotes')->group(function () {
     Route::get('lead-products/{lead_id}', 'leadProducts')->name('admin.quotes.lead_products');
 
     Route::post('mass-destroy', 'massDestroy')->name('admin.quotes.mass_delete');
-    
+
     Route::get('{id}/whatsapp-message', 'getWhatsAppMessage')->name('admin.quotes.whatsapp');
 
     Route::post('{id}/convert-to-policy', 'convertToPolicy')->name('admin.quotes.convert_to_policy');

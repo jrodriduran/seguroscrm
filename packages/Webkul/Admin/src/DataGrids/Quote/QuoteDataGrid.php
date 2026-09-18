@@ -82,30 +82,31 @@ class QuoteDataGrid extends DataGrid
             'closure' => function ($row) {
                 if ($row->carrier_name) {
                     $tierColors = [
-                        'bronze'       => 'background-color:#92400e; color:#ffffff;',
-                        'silver'       => 'background-color:#475569; color:#ffffff;',
-                        'gold'         => 'background-color:#ca8a04; color:#ffffff;',
-                        'platinum'     => 'background-color:#4f46e5; color:#ffffff;',
+                        'bronze' => 'background-color:#92400e; color:#ffffff;',
+                        'silver' => 'background-color:#475569; color:#ffffff;',
+                        'gold' => 'background-color:#ca8a04; color:#ffffff;',
+                        'platinum' => 'background-color:#4f46e5; color:#ffffff;',
                         'catastrophic' => 'background-color:#dc2626; color:#ffffff;',
                     ];
                     $tierStyle = $tierColors[strtolower($row->metal_tier ?? '')] ?? 'background-color:#2563eb; color:#ffffff;';
-                    $tierBadge = $row->metal_tier 
-                        ? "<span style='padding:2px 6px; border-radius:4px; font-size:10px; font-weight:700; {$tierStyle}'>".strtoupper($row->metal_tier)."</span>" 
+                    $tierBadge = $row->metal_tier
+                        ? "<span style='padding:2px 6px; border-radius:4px; font-size:10px; font-weight:700; {$tierStyle}'>".strtoupper($row->metal_tier).'</span>'
                         : '';
 
                     $editUrl = route('admin.quotes.edit', $row->id);
 
                     return "<div class='flex flex-col gap-0.5'>"
-                        . "<div class='flex items-center gap-1.5 font-bold text-gray-900 dark:text-white'>"
-                        . "<a href='{$editUrl}' class='hover:underline text-blue-600 dark:text-blue-400'>{$row->carrier_name}</a>"
-                        . $tierBadge
-                        . "</div>"
-                        . "<div class='text-xs text-gray-500 font-medium'>".e($row->plan_name ?: $row->subject)."</div>"
-                        . "</div>";
+                        ."<div class='flex items-center gap-1.5 font-bold text-gray-900 dark:text-white'>"
+                        ."<a href='{$editUrl}' class='hover:underline text-blue-600 dark:text-blue-400'>{$row->carrier_name}</a>"
+                        .$tierBadge
+                        .'</div>'
+                        ."<div class='text-xs text-gray-500 font-medium'>".e($row->plan_name ?: $row->subject).'</div>'
+                        .'</div>';
                 }
 
                 $editUrl = route('admin.quotes.edit', $row->id);
-                return "<a href='{$editUrl}' class='font-semibold text-blue-600 dark:text-blue-400 hover:underline'>".e($row->subject)."</a>";
+
+                return "<a href='{$editUrl}' class='font-semibold text-blue-600 dark:text-blue-400 hover:underline'>".e($row->subject).'</a>';
             },
         ]);
 
@@ -165,8 +166,9 @@ class QuoteDataGrid extends DataGrid
             'filterable' => true,
             'closure' => function ($row) {
                 $val = (float) ($row->aptc_subsidy ?? $row->discount_amount ?? 0);
-                return $val > 0 
-                    ? "<span class='font-bold text-emerald-600 dark:text-emerald-400'>-".core()->formatBasePrice($val, 2)."</span>" 
+
+                return $val > 0
+                    ? "<span class='font-bold text-emerald-600 dark:text-emerald-400'>-".core()->formatBasePrice($val, 2).'</span>'
                     : core()->formatBasePrice(0, 2);
             },
         ]);
@@ -179,6 +181,7 @@ class QuoteDataGrid extends DataGrid
             'filterable' => true,
             'closure' => function ($row) {
                 $val = (float) ($row->net_premium ?? $row->grand_total ?? 0);
+
                 return "<span class='font-extrabold text-sm text-blue-600 dark:text-blue-400'>".core()->formatBasePrice($val, 2)."<span class='text-xs font-normal text-gray-500'>/mes</span></span>";
             },
         ]);
@@ -192,21 +195,22 @@ class QuoteDataGrid extends DataGrid
             'closure' => function ($row) {
                 $status = $row->quote_status ?? 'draft';
                 $badgeClasses = [
-                    'draft'     => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
+                    'draft' => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
                     'presented' => 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200',
-                    'accepted'  => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200',
-                    'bound'     => 'bg-blue-600 text-white font-bold',
-                    'rejected'  => 'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200',
+                    'accepted' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200',
+                    'bound' => 'bg-blue-600 text-white font-bold',
+                    'rejected' => 'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200',
                 ];
                 $labels = [
-                    'draft'     => 'Borrador',
+                    'draft' => 'Borrador',
                     'presented' => 'Presentada',
-                    'accepted'  => 'Aceptada',
-                    'bound'     => 'Emitida / Póliza',
-                    'rejected'  => 'Rechazada',
+                    'accepted' => 'Aceptada',
+                    'bound' => 'Emitida / Póliza',
+                    'rejected' => 'Rechazada',
                 ];
                 $cls = $badgeClasses[$status] ?? 'bg-gray-100 text-gray-800';
                 $label = $labels[$status] ?? ucfirst($status);
+
                 return "<span class='px-2.5 py-0.5 text-xs rounded-full font-semibold {$cls}'>{$label}</span>";
             },
         ]);

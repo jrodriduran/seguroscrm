@@ -18,6 +18,7 @@ use Webkul\Admin\Http\Resources\QuoteResource;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Repositories\LeadRepository;
+use Webkul\Product\Models\Product;
 use Webkul\Quote\Repositories\QuoteRepository;
 
 class QuoteController extends Controller
@@ -322,10 +323,10 @@ class QuoteController extends Controller
             : 'https://api.whatsapp.com/send?text='.urlencode($message);
 
         return response()->json([
-            'status'       => true,
-            'client_name'  => $quote->person?->name ?? 'Cliente',
+            'status' => true,
+            'client_name' => $quote->person?->name ?? 'Cliente',
             'client_phone' => $phone,
-            'message'      => $message,
+            'message' => $message,
             'whatsapp_url' => $whatsappUrl,
         ]);
     }
@@ -355,9 +356,9 @@ class QuoteController extends Controller
 
         if (request()->ajax()) {
             return response()->json([
-                'status'  => true,
+                'status' => true,
                 'message' => $msg,
-                'quote'   => $quote,
+                'quote' => $quote,
             ]);
         }
 
@@ -383,18 +384,18 @@ class QuoteController extends Controller
 
         $gross = (float) ($request->input('gross_premium') ?: $request->input('net_premium') ?: 0);
         $subsidy = (float) ($request->input('aptc_subsidy') ?: 0);
-        $net = (float) ($request->input('net_premium') !== null && $request->input('net_premium') !== '' 
-            ? $request->input('net_premium') 
+        $net = (float) ($request->input('net_premium') !== null && $request->input('net_premium') !== ''
+            ? $request->input('net_premium')
             : max(0, $gross - $subsidy));
 
         $mergeData = [
-            'gross_premium'     => $gross,
-            'aptc_subsidy'      => $subsidy,
-            'net_premium'       => $net,
-            'sub_total'         => $gross,
-            'discount_amount'   => $subsidy,
-            'grand_total'       => $net,
-            'tax_amount'        => 0,
+            'gross_premium' => $gross,
+            'aptc_subsidy' => $subsidy,
+            'net_premium' => $net,
+            'sub_total' => $gross,
+            'discount_amount' => $subsidy,
+            'grand_total' => $net,
+            'tax_amount' => 0,
             'adjustment_amount' => 0,
         ];
 
@@ -417,22 +418,22 @@ class QuoteController extends Controller
         if (! $hasProduct) {
             $product = null;
             if ($carrier) {
-                $product = \Webkul\Product\Models\Product::where('name', 'LIKE', "%{$carrier}%")->first();
+                $product = Product::where('name', 'LIKE', "%{$carrier}%")->first();
             }
             if (! $product) {
-                $product = \Webkul\Product\Models\Product::first();
+                $product = Product::first();
             }
 
             $mergeData['items'] = [
                 'item_0' => [
-                    'product_id'      => $product?->id ?? 1,
-                    'name'            => trim(($carrier ?: 'Salud') . ' ' . ($plan ?: '')),
-                    'quantity'        => 1,
-                    'price'           => $gross,
+                    'product_id' => $product?->id ?? 1,
+                    'name' => trim(($carrier ?: 'Salud').' '.($plan ?: '')),
+                    'quantity' => 1,
+                    'price' => $gross,
                     'discount_amount' => $subsidy,
-                    'tax_amount'      => 0,
-                    'total'           => $gross,
-                    'final_total'     => $net,
+                    'tax_amount' => 0,
+                    'total' => $gross,
+                    'final_total' => $net,
                 ],
             ];
         }
