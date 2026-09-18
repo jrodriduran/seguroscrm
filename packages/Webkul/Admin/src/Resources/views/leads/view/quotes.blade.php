@@ -128,7 +128,7 @@
                                                 {!! view_render_event('admin.leads.view.quotes.table.table_body.quote.download.before', ['lead' => $lead]) !!}
 
                                                 <x-admin::dropdown.menu.item>
-                                                    <a :href="'{{ route('admin.quotes.whatsapp', '') }}/' + quote.id" target="_blank">
+                                                    <a :href="'{{ route('admin.quotes.whatsapp', ['id' => 'xxx']) }}'.replace('xxx', quote.id)" target="_blank">
                                                         <div class="flex items-center gap-2 text-emerald-600 font-semibold">
                                                             <span class="text-xl">📱</span>
                                                             WhatsApp Proposal
@@ -293,7 +293,7 @@
 
                     this.isLoading = true;
 
-                    this.$axios.post("{{ route('admin.quotes.convert_to_policy', '') }}/" + quoteId)
+                    this.$axios.post("{{ route('admin.quotes.convert_to_policy', ['id' => 'xxx']) }}".replace('xxx', quoteId))
                         .then(response => {
                             this.isLoading = false;
                             this.$emitter.emit('add-flash', {

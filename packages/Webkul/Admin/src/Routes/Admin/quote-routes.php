@@ -24,7 +24,7 @@ Route::controller(QuoteController::class)->prefix('quotes')->group(function () {
 
     Route::post('mass-destroy', 'massDestroy')->name('admin.quotes.mass_delete');
 
-    Route::get('{id}/whatsapp-message', 'getWhatsAppMessage')->name('admin.quotes.whatsapp');
+    Route::get('{id?}/whatsapp-message', 'getWhatsAppMessage')->name('admin.quotes.whatsapp');
 
-    Route::post('{id}/convert-to-policy', 'convertToPolicy')->name('admin.quotes.convert_to_policy');
+    Route::post('{id?}/convert-to-policy', 'convertToPolicy')->name('admin.quotes.convert_to_policy');
 });
