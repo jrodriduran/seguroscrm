@@ -137,7 +137,7 @@ class ChatwootWebhookController extends Controller
                 'lead_id' => $lead->id,
             ]);
         } catch (\Throwable $e) {
-            Log::error('Failed to log Chatwoot message activity: ' . $e->getMessage());
+            Log::error('Failed to log Chatwoot message activity: '.$e->getMessage());
         }
     }
 }

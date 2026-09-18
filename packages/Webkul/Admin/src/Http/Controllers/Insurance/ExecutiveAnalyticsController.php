@@ -2,11 +2,9 @@
 
 namespace Webkul\Admin\Http\Controllers\Insurance;
 
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Services\PolicyRetentionService;
@@ -47,7 +45,7 @@ class ExecutiveAnalyticsController extends Controller
     public function exportCsv(): StreamedResponse
     {
         $metrics = $this->calculateExecutiveMetrics();
-        $fileName = 'Valuacion_Cartera_Ejecutiva_' . now()->format('Y_m_d') . '.csv';
+        $fileName = 'Valuacion_Cartera_Ejecutiva_'.now()->format('Y_m_d').'.csv';
 
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
@@ -59,7 +57,7 @@ class ExecutiveAnalyticsController extends Controller
 
         return response()->stream(function () use ($metrics) {
             $output = fopen('php://output', 'w');
-            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
 
             // 1. Valuation Summary
             fputcsv($output, ['INFORME EJECUTIVO DE VALUACION DE CARTERA (BOOK OF BUSINESS)']);
@@ -69,14 +67,14 @@ class ExecutiveAnalyticsController extends Controller
             fputcsv($output, ['METRICA FINANCIERA', 'VALOR ESTIMADO']);
             fputcsv($output, ['Polizas Activas en Vigor', $metrics['valuation']['active_policies']]);
             fputcsv($output, ['Vidas Aseguradas Cubiertas', $metrics['valuation']['covered_lives']]);
-            fputcsv($output, ['Prima Bruta Mensual', '$' . number_format($metrics['valuation']['monthly_gross_premium'], 2)]);
-            fputcsv($output, ['Prima Bruta Anualizada', '$' . number_format($metrics['valuation']['annualized_gross_premium'], 2)]);
-            fputcsv($output, ['Ingreso Mensual Recurrente Estimado (ARR / 12)', '$' . number_format($metrics['valuation']['monthly_recurring_revenue'], 2)]);
-            fputcsv($output, ['Ingreso Anual Recurrente (ARR)', '$' . number_format($metrics['valuation']['annual_recurring_revenue'], 2)]);
-            fputcsv($output, ['Tasa de Persistencia (Retencion)', $metrics['valuation']['persistency_rate'] . '%']);
-            fputcsv($output, ['Valuacion Conservadora (1.5x ARR)', '$' . number_format($metrics['valuation']['valuation_conservative'], 2)]);
-            fputcsv($output, ['Valuacion Mercado Estandar (2.0x ARR)', '$' . number_format($metrics['valuation']['valuation_standard'], 2)]);
-            fputcsv($output, ['Valuacion Alta Retencion (2.5x ARR)', '$' . number_format($metrics['valuation']['valuation_aggressive'], 2)]);
+            fputcsv($output, ['Prima Bruta Mensual', '$'.number_format($metrics['valuation']['monthly_gross_premium'], 2)]);
+            fputcsv($output, ['Prima Bruta Anualizada', '$'.number_format($metrics['valuation']['annualized_gross_premium'], 2)]);
+            fputcsv($output, ['Ingreso Mensual Recurrente Estimado (ARR / 12)', '$'.number_format($metrics['valuation']['monthly_recurring_revenue'], 2)]);
+            fputcsv($output, ['Ingreso Anual Recurrente (ARR)', '$'.number_format($metrics['valuation']['annual_recurring_revenue'], 2)]);
+            fputcsv($output, ['Tasa de Persistencia (Retencion)', $metrics['valuation']['persistency_rate'].'%']);
+            fputcsv($output, ['Valuacion Conservadora (1.5x ARR)', '$'.number_format($metrics['valuation']['valuation_conservative'], 2)]);
+            fputcsv($output, ['Valuacion Mercado Estandar (2.0x ARR)', '$'.number_format($metrics['valuation']['valuation_standard'], 2)]);
+            fputcsv($output, ['Valuacion Alta Retencion (2.5x ARR)', '$'.number_format($metrics['valuation']['valuation_aggressive'], 2)]);
             fputcsv($output, []);
 
             // 2. Carrier Share
@@ -88,7 +86,7 @@ class ExecutiveAnalyticsController extends Controller
                     $c['policies'],
                     $c['lives'],
                     number_format($c['monthly_premium'], 2),
-                    $c['share_pct'] . '%',
+                    $c['share_pct'].'%',
                 ]);
             }
             fputcsv($output, []);
@@ -102,7 +100,7 @@ class ExecutiveAnalyticsController extends Controller
                     $p['active_policies'],
                     $p['covered_lives'],
                     number_format($p['annualized_premium'], 2),
-                    $p['persistency_rate'] . '%',
+                    $p['persistency_rate'].'%',
                 ]);
             }
 

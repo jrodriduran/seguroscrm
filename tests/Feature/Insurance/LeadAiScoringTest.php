@@ -21,7 +21,7 @@ function createTestLeadWithPerson(string $name, ?string $dob = null): Lead
 
     $person = Person::create([
         'name' => $name,
-        'emails' => [['value' => strtolower(str_replace(' ', '.', $name)) . '@example.com', 'label' => 'work']],
+        'emails' => [['value' => strtolower(str_replace(' ', '.', $name)).'@example.com', 'label' => 'work']],
         'contact_numbers' => [['value' => '3055551234', 'label' => 'mobile']],
     ]);
 

@@ -10,8 +10,11 @@ use Webkul\Lead\Models\Lead;
 class ChatwootService
 {
     protected string $baseUrl;
+
     protected string $accountId;
+
     protected string $apiToken;
+
     protected ?int $defaultInboxId;
 
     public function __construct()
@@ -49,6 +52,7 @@ class ChatwootService
         $existingId = $this->searchContact($cleanPhone ?: $email);
         if ($existingId) {
             $person->update(['chatwoot_contact_id' => $existingId]);
+
             return $existingId;
         }
 
@@ -72,11 +76,12 @@ class ChatwootService
                 $contactId = $response->json('payload.contact.id') ?? $response->json('id');
                 if ($contactId) {
                     $person->update(['chatwoot_contact_id' => $contactId]);
+
                     return (int) $contactId;
                 }
             }
         } catch (\Throwable $e) {
-            Log::error('Chatwoot createContact failed: ' . $e->getMessage());
+            Log::error('Chatwoot createContact failed: '.$e->getMessage());
         }
 
         return null;
@@ -106,7 +111,7 @@ class ChatwootService
                 return $response->json();
             }
         } catch (\Throwable $e) {
-            Log::error('Chatwoot createConversation failed: ' . $e->getMessage());
+            Log::error('Chatwoot createConversation failed: '.$e->getMessage());
         }
 
         return null;
@@ -132,7 +137,7 @@ class ChatwootService
                 return $response->json();
             }
         } catch (\Throwable $e) {
-            Log::error('Chatwoot sendMessage failed: ' . $e->getMessage());
+            Log::error('Chatwoot sendMessage failed: '.$e->getMessage());
         }
 
         return null;
@@ -150,10 +155,11 @@ class ChatwootService
 
             if ($response->successful()) {
                 $payload = $response->json('payload') ?? $response->json();
+
                 return is_array($payload) ? $payload : [];
             }
         } catch (\Throwable $e) {
-            Log::error('Chatwoot getMessages failed: ' . $e->getMessage());
+            Log::error('Chatwoot getMessages failed: '.$e->getMessage());
         }
 
         return [];
@@ -187,7 +193,7 @@ class ChatwootService
                 }
             }
         } catch (\Throwable $e) {
-            Log::error('Chatwoot searchContact failed: ' . $e->getMessage());
+            Log::error('Chatwoot searchContact failed: '.$e->getMessage());
         }
 
         return null;
@@ -205,11 +211,11 @@ class ChatwootService
         $digits = preg_replace('/\D/', '', $phone);
 
         if (strlen($digits) === 10) {
-            return '+1' . $digits;
+            return '+1'.$digits;
         } elseif (strlen($digits) === 11 && str_starts_with($digits, '1')) {
-            return '+' . $digits;
+            return '+'.$digits;
         } elseif (! empty($digits)) {
-            return '+' . $digits;
+            return '+'.$digits;
         }
 
         return null;

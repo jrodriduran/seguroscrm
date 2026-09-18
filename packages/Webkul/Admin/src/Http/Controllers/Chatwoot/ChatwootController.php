@@ -137,7 +137,8 @@ class ChatwootController extends Controller
                 'user_id' => auth()->id() ?: 1,
                 'lead_id' => $lead->id,
             ]);
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+        }
 
         return response()->json([
             'success' => true,

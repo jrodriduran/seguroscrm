@@ -24,7 +24,7 @@ return new class extends Migration
             // Formulary Tier classification
             // Tier 1: Preferred Generic, Tier 2: Generic, Tier 3: Preferred Brand, Tier 4: Non-Preferred, Tier 5: Specialty
             $table->string('drug_tier', 40)->default('Tier 1: Preferred Generic');
-            
+
             // Utilization Management Restrictions
             $table->boolean('requires_prior_authorization')->default(false); // PA
             $table->boolean('requires_step_therapy')->default(false); // ST
