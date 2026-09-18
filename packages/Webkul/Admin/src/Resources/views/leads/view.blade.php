@@ -89,6 +89,9 @@
                 </div>
             </div>
 
+            <!-- AI Lead Scoring & Next Best Action Card -->
+            @include ('admin::leads.view.ai_insights_card')
+
             <!-- ACA & DMI Compliance Card -->
             @include ('admin::leads.view.compliance_card')
 

@@ -12,6 +12,7 @@ use Webkul\Admin\Http\Controllers\Lead\QuoteController;
 use Webkul\Admin\Http\Controllers\Lead\TagController;
 use Webkul\Admin\Http\Controllers\Lead\TeamRadarController;
 use Webkul\Admin\Http\Controllers\Insurance\RxProviderNetworkController;
+use Webkul\Admin\Http\Controllers\Lead\LeadAiInsightsController;
 use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController;
 
 Route::controller(LeadController::class)->prefix('leads')->group(function () {
@@ -124,6 +125,8 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::post('', 'storeDoctor')->name('admin.insurance.leads.doctor_networks.store');
         Route::delete('{doctor_id}', 'destroyDoctor')->name('admin.insurance.leads.doctor_networks.delete');
     });
+
+    Route::get('{lead_id}/ai-insights', [LeadAiInsightsController::class, 'show'])->name('admin.leads.ai_insights');
 });
 
 // ─── Team Radar: Master Agent Control Tower ─────────────────────────────────

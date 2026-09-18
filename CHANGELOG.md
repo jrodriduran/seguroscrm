@@ -4,6 +4,14 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] AI Health Lead Scoring & Next Best Action Copilot: Added predictive AI lead scoring service (`LeadAiScoringService`) evaluating multidimensional health insurance purchase intent (SEP expiration urgency, aging-in to Medicare at 65 IEP window, APTC subsidy potential, CMS compliance readiness, and DMI document lapse risk).
+
+* [feature] Dynamic Next Best Action Card in Lead Sidebar: Implemented interactive agent recommendation card highlighting the single most urgent and profitable action to close or protect coverage, with one-click direct navigation to the relevant lead workflow.
+
+* [feature] AI Insights JSON API: Added `/admin/leads/{id}/ai-insights` endpoint for instant score recalculation, lead tier classification (Hot, Warm, Nurture), and weighted factor breakdowns.
+
+* [tests] Added Pest feature test `LeadAiScoringTest` covering SEP urgency detection, Medicare 65 age-in tracking, DMI deadline alerts, and JSON scoring output.
+
 * [feature] Executive Analytics & Book of Business Valuation Dashboard: Added dedicated agency business intelligence control tower (`/admin/insurance/analytics`) computing market valuation multiples (1.5x Conservative, 2.0x Standard Market, 2.5x High-Growth ARR), annualized gross premium volume, covered lives growth, and real-time persistency rates.
 
 * [feature] Carrier Market Share & Segmentation Analytics: Implemented visual breakdown of active policies, covered lives, and monthly premium volume across health carriers (Florida Blue, Ambetter, Oscar, UnitedHealthcare, etc.), metal tiers (Bronze, Silver CSR, Gold, Platinum), and network types (HMO, EPO, PPO).
