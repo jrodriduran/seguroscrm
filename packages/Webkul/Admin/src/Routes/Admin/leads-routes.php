@@ -11,6 +11,7 @@ use Webkul\Admin\Http\Controllers\Lead\LeadController;
 use Webkul\Admin\Http\Controllers\Lead\QuoteController;
 use Webkul\Admin\Http\Controllers\Lead\TagController;
 use Webkul\Admin\Http\Controllers\Lead\TeamRadarController;
+use Webkul\Admin\Http\Controllers\Chatwoot\ChatwootController;
 use Webkul\Admin\Http\Controllers\Insurance\RxProviderNetworkController;
 use Webkul\Admin\Http\Controllers\Lead\LeadAiInsightsController;
 use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController;
@@ -127,6 +128,11 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
     });
 
     Route::get('{lead_id}/ai-insights', [LeadAiInsightsController::class, 'show'])->name('admin.leads.ai_insights');
+
+    Route::controller(ChatwootController::class)->prefix('{lead_id}/chatwoot')->group(function () {
+        Route::get('conversation', 'getConversation')->name('admin.leads.chatwoot.conversation');
+        Route::post('send', 'sendMessage')->name('admin.leads.chatwoot.send');
+    });
 });
 
 // ─── Team Radar: Master Agent Control Tower ─────────────────────────────────

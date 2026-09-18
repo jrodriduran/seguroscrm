@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Omnichannel Chatwoot Integration (WhatsApp, SMS, Live Chat): Added enterprise integration connecting Krayin CRM to Chatwoot for centralizing all client conversations across WhatsApp Business, Twilio SMS, and Webchat.
+
+* [feature] Bidirectional Webhook Sync: Built `POST /api/chatwoot/webhook` listener handling customer `message_created` events to automatically create or match CRM leads, log full message conversations into CRM activities, and update real-time response timestamps.
+
+* [feature] Embedded Chatwoot Inbox Drawer in Lead View: Implemented interactive live conversation drawer inside Lead details allowing agents to read conversation history, view sender message bubbles, and send instant WhatsApp/SMS replies directly from the CRM without switching applications.
+
+* [migration] Added `chatwoot_conversation_id`, `chatwoot_inbox_id`, and `chatwoot_last_message_at` to `leads` table and `chatwoot_contact_id` to `persons` table (Lead package migration `2026_09_18_000015`).
+
+* [tests] Added Pest feature test `ChatwootIntegrationTest` covering contact synchronization, conversation creation, inbound webhook processing, and outbound messaging.
+
 * [feature] AI Health Lead Scoring & Next Best Action Copilot: Added predictive AI lead scoring service (`LeadAiScoringService`) evaluating multidimensional health insurance purchase intent (SEP expiration urgency, aging-in to Medicare at 65 IEP window, APTC subsidy potential, CMS compliance readiness, and DMI document lapse risk).
 
 * [feature] Dynamic Next Best Action Card in Lead Sidebar: Implemented interactive agent recommendation card highlighting the single most urgent and profitable action to close or protect coverage, with one-click direct navigation to the relevant lead workflow.

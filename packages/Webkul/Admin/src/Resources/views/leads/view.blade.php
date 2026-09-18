@@ -125,6 +125,7 @@
                     ['name' => 'enrollment_period', 'label' => '🗓️ Inscripción (SEP/OEP)'],
                     ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
                     ['name' => 'rx_network', 'label' => '💊 Medicinas & Doctores'],
+                    ['name' => 'chatwoot', 'label' => '💬 Chatwoot (WhatsApp / SMS)'],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
                     ['name' => 'description', 'label' => trans('admin::app.leads.view.tabs.description')],
@@ -158,6 +159,11 @@
                 <!-- Medicinas & Doctores -->
                 <x-slot:rx_network>
                     @include ('admin::leads.view.rx_and_doctors')
+                </x-slot>
+
+                <!-- Chatwoot Omnichannel Inbox -->
+                <x-slot:chatwoot>
+                    @include ('admin::leads.view.chatwoot_inbox')
                 </x-slot>
 
                 <!-- Products -->

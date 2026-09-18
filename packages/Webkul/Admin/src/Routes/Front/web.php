@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Webkul\Admin\Http\Controllers\Chatwoot\ChatwootWebhookController;
 use Webkul\Admin\Http\Controllers\ConsentPortalController;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Admin\Http\Controllers\Insurance\InsuredPortalController;
@@ -47,3 +47,8 @@ Route::controller(InsuredPortalController::class)->prefix('my-policy')->group(fu
     Route::get('{token}/card-pdf', 'downloadCard')->name('insured.portal.download_card');
     Route::post('{token}/upload-doc', 'uploadDocument')->name('insured.portal.upload_doc');
 });
+
+/**
+ * Chatwoot Webhook Integration Route (Omnichannel Sync)
+ */
+Route::post('api/chatwoot/webhook', [ChatwootWebhookController::class, 'handle'])->name('chatwoot.webhook');
