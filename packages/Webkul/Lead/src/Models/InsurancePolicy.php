@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 use Webkul\Contact\Models\PersonProxy;
 use Webkul\Quote\Models\Quote;
 use Webkul\User\Models\User;
@@ -65,7 +66,7 @@ class InsurancePolicy extends Model
     {
         static::creating(function ($policy) {
             if (empty($policy->portal_token)) {
-                $policy->portal_token = \Illuminate\Support\Str::random(40);
+                $policy->portal_token = Str::random(40);
             }
             if (empty($policy->member_id)) {
                 $policy->member_id = 'MBR-'.rand(10000000, 99999999);

@@ -448,4 +448,3 @@ return [
         'subtitle' => 'Agency structure, downline management, and multi-tier PMPM override distribution.',
     ],
 ];
-

@@ -20,6 +20,7 @@ use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Models\InsuranceCommission;
 use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Repositories\LeadRepository;
+use Webkul\Lead\Services\AgencyOverrideService;
 use Webkul\Product\Models\Product;
 use Webkul\Quote\Repositories\QuoteRepository;
 
@@ -353,10 +354,10 @@ class QuoteController extends Controller
 
         // Create or update active Insurance Policy (Book of Business)
         try {
-            $policy = \Webkul\Lead\Models\InsurancePolicy::createOrUpdateFromQuote($quote);
+            $policy = InsurancePolicy::createOrUpdateFromQuote($quote);
 
             // Distribute multi-tier upline overrides (GA / MGA)
-            app(\Webkul\Lead\Services\AgencyOverrideService::class)->distributeOverridesForPolicy($policy);
+            app(AgencyOverrideService::class)->distributeOverridesForPolicy($policy);
         } catch (\Throwable $e) {
             // In case table not yet migrated
         }

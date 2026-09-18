@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\ConsentPortalController;
 use Webkul\Admin\Http\Controllers\Controller;
+use Webkul\Admin\Http\Controllers\Insurance\InsuredPortalController;
 use Webkul\Admin\Http\Controllers\Medicare\MedicareSoaPortalController;
 use Webkul\Admin\Http\Controllers\Quote\ProposalPortalController;
 
@@ -41,9 +42,8 @@ Route::controller(ProposalPortalController::class)->prefix('proposal')->group(fu
 /**
  * Insured Self-Service Portal & Digital ID Card Routes
  */
-Route::controller(\Webkul\Admin\Http\Controllers\Insurance\InsuredPortalController::class)->prefix('my-policy')->group(function () {
+Route::controller(InsuredPortalController::class)->prefix('my-policy')->group(function () {
     Route::get('{token}', 'show')->name('insured.portal.show');
     Route::get('{token}/card-pdf', 'downloadCard')->name('insured.portal.download_card');
     Route::post('{token}/upload-doc', 'uploadDocument')->name('insured.portal.upload_doc');
 });
-
