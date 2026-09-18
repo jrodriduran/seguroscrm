@@ -183,6 +183,14 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get the Medicare Scope of Appointment records associated with the lead.
+     */
+    public function medicareSoas(): HasMany
+    {
+        return $this->hasMany(\Webkul\Lead\Models\LeadMedicareSoa::class, 'lead_id');
+    }
+
+    /**
      * Returns the rotten days
      */
     public function getRottenDaysAttribute()

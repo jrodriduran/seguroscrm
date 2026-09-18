@@ -91,6 +91,15 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::delete('{id}', 'destroy')->name('admin.leads.dmi.delete');
         Route::get('{id}/whatsapp', 'getWhatsAppReminder')->name('admin.leads.dmi.whatsapp');
     });
+
+    Route::controller(\Webkul\Admin\Http\Controllers\Medicare\MedicareSoaController::class)->prefix('{lead_id}/medicare-soa')->group(function () {
+        Route::get('', 'get')->name('admin.leads.soa.get');
+        Route::get('whatsapp', 'getWhatsAppLink')->name('admin.leads.soa.whatsapp');
+        Route::post('regenerate', 'regenerate')->name('admin.leads.soa.regenerate');
+        Route::post('exception', 'applyException')->name('admin.leads.soa.exception');
+        Route::get('certificate', 'printCertificate')->name('admin.leads.soa.certificate');
+        Route::get('certificate/pdf', 'downloadCertificatePdf')->name('admin.leads.soa.certificate.pdf');
+    });
 });
 
 // ─── Team Radar: Master Agent Control Tower ─────────────────────────────────

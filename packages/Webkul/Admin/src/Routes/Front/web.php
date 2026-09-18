@@ -17,3 +17,12 @@ Route::controller(ConsentPortalController::class)->prefix('consent')->group(func
     Route::post('{token}', 'sign')->name('consent.portal.sign');
     Route::get('{token}/receipt', 'receipt')->name('consent.portal.receipt');
 });
+
+/**
+ * Medicare Scope of Appointment (SOA) Public Signing Portal Routes (CMS Compliance)
+ */
+Route::controller(\Webkul\Admin\Http\Controllers\Medicare\MedicareSoaPortalController::class)->prefix('medicare-soa')->group(function () {
+    Route::get('{token}', 'show')->name('medicare.soa.portal');
+    Route::post('{token}', 'sign')->name('medicare.soa.sign');
+    Route::get('{token}/signed', 'signed')->name('medicare.soa.signed');
+});

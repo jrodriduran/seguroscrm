@@ -4,6 +4,14 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Medicare Scope of Appointment (SOA) Compliance Engine: Added dedicated Medicare SOA digital workflow complying with federal CMS regulations, featuring a public mobile-friendly touchscreen signature portal, mandatory CMS TPMO disclaimer, product discussion authorizations (Medicare Advantage Part C, Part D Rx, Medigap, Dental/Vision, Hospital Indemnity), and audit-ready CMS compliance certificates with PDF download.
+
+* [feature] CMS 48-Hour Waiting Period Tracker & Live Countdown: Built real-time compliance tracker in Lead details calculating the mandatory 48-hour cooling-off window between beneficiary signature and consultation eligibility, along with documented CMS exception handling (beneficiary walk-ins and end of enrollment period deadlines).
+
+* [migration] Added `lead_medicare_soas` table for Medicare Scope of Appointment tracking and electronic audit trails (Lead package migration `2026_09_18_000009`).
+
+* [tests] Added Pest feature test `MedicareSoaTest` covering public portal, electronic signature, CMS 48-hour rule calculation, exception submission, and certificate PDF generation.
+
 * [feature] Automated Carrier Commission Reconciliation & Missed Commissions Engine: Added mass CSV/Excel statement processing with fuzzy and exact matching against active CRM policies, variance detection, clawback/chargeback tracking, and automatic identification of unpaid policies (*Missed Commissions*) with dispute export capability.
 
 * [migration] Added `carrier_statements` and `carrier_statement_items` tables for carrier commission reconciliation audits (Lead package migration `2026_09_18_000008`).

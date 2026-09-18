@@ -118,6 +118,7 @@
                 :extra-types="[
                     ['name' => 'household', 'label' => trans('admin::insurance.tabs.household')],
                     ['name' => 'consent', 'label' => '📋 Consentimiento CMS'],
+                    ['name' => 'medicare_soa', 'label' => '🛡️ Medicare SOA (48h)'],
                     ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
@@ -132,6 +133,11 @@
                 <!-- Consentimiento CMS -->
                 <x-slot:consent>
                     @include ('admin::leads.view.consent')
+                </x-slot>
+
+                <!-- Medicare Scope of Appointment (48h Rule) -->
+                <x-slot:medicare_soa>
+                    @include ('admin::leads.view.medicare_soa')
                 </x-slot>
 
                 <!-- Documentos DMI -->
