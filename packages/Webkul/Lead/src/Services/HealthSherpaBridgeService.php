@@ -81,8 +81,8 @@ class HealthSherpaBridgeService
             'income' => $annualIncome,
             'household_size' => $householdSize,
             'client_name' => $person?->name ?: $lead->title,
-            'client_phone' => $person?->contact_numbers?->first()?->value ?: '',
-            'client_email' => $person?->emails?->first()?->value ?: '',
+            'client_phone' => collect($person?->contact_numbers ?? [])->first()['value'] ?? '',
+            'client_email' => collect($person?->emails ?? [])->first()['value'] ?? '',
             'npn' => $agentNpn,
             'source' => 'krayin_crm',
         ]);
