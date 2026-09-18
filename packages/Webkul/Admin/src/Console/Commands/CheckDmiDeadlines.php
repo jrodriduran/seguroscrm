@@ -116,6 +116,7 @@ class CheckDmiDeadlines extends Command
 
             if ($alreadyNotifiedToday) {
                 $skippedCount++;
+
                 continue;
             }
 
@@ -142,7 +143,7 @@ class CheckDmiDeadlines extends Command
                 ."Cliente: {$clientName}\n"
                 ."Teléfono: {$clientPhone}\n"
                 ."Documento Requerido: {$docTitle}\n"
-                ."Fecha Límite Fatal: {$deadlineStr} (" . ($days < 0 ? "Venció hace ".abs($days)." días" : "Quedan {$days} días") . ")\n"
+                ."Fecha Límite Fatal: {$deadlineStr} (".($days < 0 ? 'Venció hace '.abs($days).' días' : "Quedan {$days} días").")\n"
                 ."Estatus Actual: {$doc->status_label}\n\n"
                 ."ACCIÓN REQUERIDA:\n"
                 ."Contactar al asegurado de inmediato para solicitar el documento y cargarlo en el portal antes del vencimiento para evitar la pérdida del subsidio APTC.\n\n"

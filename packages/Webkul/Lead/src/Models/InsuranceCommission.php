@@ -90,7 +90,7 @@ class InsuranceCommission extends Model
             'agency_monthly' => $agencyMonthly,
             'status' => 'active',
             'effective_date' => now()->startOfMonth(),
-            'notes' => 'Generada automáticamente al emitir la póliza desde cotización #' . $quote->id,
+            'notes' => 'Generada automáticamente al emitir la póliza desde cotización #'.$quote->id,
         ]);
     }
 }

@@ -12,6 +12,7 @@ use Webkul\Lead\Models\LeadConsent;
 class ConsentController extends Controller
 {
     use PDFHandler;
+
     /**
      * Get or initialize the consent record for a lead.
      */
