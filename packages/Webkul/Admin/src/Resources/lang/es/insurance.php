@@ -443,4 +443,3 @@ return [
         'subtitle' => 'Libro mayor de pólizas activas, tasa de persistencia y alertas de período de gracia (ACA 90 días).',
     ],
 ];
-

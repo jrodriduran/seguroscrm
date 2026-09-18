@@ -443,4 +443,3 @@ return [
         'subtitle' => 'Active policy ledger, persistency rates, and ACA 90-day grace period lapse alerts.',
     ],
 ];
-

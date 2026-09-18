@@ -18,6 +18,7 @@ use Webkul\Admin\Http\Resources\QuoteResource;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Models\InsuranceCommission;
+use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Repositories\LeadRepository;
 use Webkul\Product\Models\Product;
 use Webkul\Quote\Repositories\QuoteRepository;
@@ -352,7 +353,7 @@ class QuoteController extends Controller
 
         // Create or update active Insurance Policy (Book of Business)
         try {
-            \Webkul\Lead\Models\InsurancePolicy::createOrUpdateFromQuote($quote);
+            InsurancePolicy::createOrUpdateFromQuote($quote);
         } catch (\Throwable $e) {
             // In case table not yet migrated
         }

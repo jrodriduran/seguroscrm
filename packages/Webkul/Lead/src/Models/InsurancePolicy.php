@@ -158,7 +158,7 @@ class InsurancePolicy extends Model
             ."⚠️ Nos comunicamos para informarle que su póliza de salud *{$carrier}* (N° *{$policy}*) registra un pago mensual pendiente por un monto de *\${$premium}*.\n\n"
             ."📌 *Importante:* La ley de seguros contempla un período de gracia limitado. Para evitar que la aseguradora suspenda sus reclamos médicos o cancele su cobertura médica, le recomendamos realizar el pago a la brevedad.\n\n"
             ."Puede pagar directamente llamando al número al reverso de su tarjeta o en el portal en línea de {$carrier}.\n\n"
-            ."Si ya realizó este pago recientemente, por favor confírmeme para actualizar su expediente. ¡Estamos para apoyarle!";
+            .'Si ya realizó este pago recientemente, por favor confírmeme para actualizar su expediente. ¡Estamos para apoyarle!';
     }
 
     /**
