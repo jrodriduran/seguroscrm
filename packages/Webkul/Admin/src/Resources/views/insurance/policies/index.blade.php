@@ -255,6 +255,15 @@
 
                                     <!-- Actions -->
                                     <td class="p-3.5 text-right space-x-1.5">
+                                        <a
+                                            :href="policy.portal_url"
+                                            target="_blank"
+                                            class="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold transition-colors inline-block"
+                                            title="Abrir Tarjeta Médica Digital / Portal"
+                                        >
+                                            🪪 Tarjeta
+                                        </a>
+
                                         <button
                                             type="button"
                                             @click="openPaymentModal(policy)"

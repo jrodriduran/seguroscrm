@@ -37,3 +37,13 @@ Route::controller(ProposalPortalController::class)->prefix('proposal')->group(fu
     Route::post('{token}/select', 'selectPlan')->name('proposal.portal.select');
     Route::get('{token}/thankyou', 'thankYou')->name('proposal.portal.thankyou');
 });
+
+/**
+ * Insured Self-Service Portal & Digital ID Card Routes
+ */
+Route::controller(\Webkul\Admin\Http\Controllers\Insurance\InsuredPortalController::class)->prefix('my-policy')->group(function () {
+    Route::get('{token}', 'show')->name('insured.portal.show');
+    Route::get('{token}/card-pdf', 'downloadCard')->name('insured.portal.download_card');
+    Route::post('{token}/upload-doc', 'uploadDocument')->name('insured.portal.upload_doc');
+});
+

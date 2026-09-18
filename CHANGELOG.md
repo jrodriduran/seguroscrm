@@ -4,6 +4,16 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Insured Self-Service Portal & Digital Health Card: Added public mobile-friendly beneficiary self-service portal (`/my-policy/{token}`) allowing insured clients to access their digital member card, plan details, copay summaries, primary care physician (PCP), and covered household dependents anytime without agent intervention.
+
+* [feature] Printable 2-Sided Wallet ID Card PDF: Implemented downloadable wallet-sized insurance card PDF rendering carrier logo, Member ID, RxBIN, RxPCN, RxGrp, emergency contacts, 24/7 NurseLine, and copay breakdowns for medical visits and pharmacy dispensing.
+
+* [feature] Client Document Self-Upload (DMI / Income / Citizenship): Beneficiaries can directly photograph or upload documents (proof of income, citizenship, loss of minimum essential coverage) from their mobile device to resolve marketplace Data Matching Inconsistencies (DMIs) without emailing sensitive PII.
+
+* [migration] Added portal tokens, member identifiers, PCP info, and document stores to `insurance_policies` table (Lead package migration `2026_09_18_000013`).
+
+* [tests] Added Pest feature test `InsuredPortalTest` covering token access, ID card PDF download, and document upload handling.
+
 * [feature] Agency Hierarchy & Multi-Tier Overrides Engine: Added organizational hierarchy model supporting sub-agencies, MGAs, GAs, producers, and junior downlines with automated multi-tier PMPM override distribution on policy issuance and quote-to-policy conversion.
 
 * [feature] Organizational Tree & Downline Production Rollup: Implemented interactive agency tree with live production metrics (personal policies/lives vs team downline policies/lives) and monthly override compensation tracking.

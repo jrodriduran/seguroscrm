@@ -16,12 +16,16 @@ class InsurancePolicy extends Model
 
     protected $fillable = [
         'policy_number',
+        'portal_token',
+        'member_id',
+        'group_number',
         'lead_id',
         'person_id',
         'user_id',
         'quote_id',
         'carrier_name',
         'plan_name',
+        'pcp_name',
         'metal_tier',
         'network_type',
         'market_type',
@@ -54,7 +58,81 @@ class InsurancePolicy extends Model
         'grace_status_badge',
         'days_overdue',
         'whatsapp_payment_reminder',
+        'portal_url',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function ($policy) {
+            if (empty($policy->portal_token)) {
+                $policy->portal_token = \Illuminate\Support\Str::random(40);
+            }
+            if (empty($policy->member_id)) {
+                $policy->member_id = 'MBR-'.rand(10000000, 99999999);
+            }
+            if (empty($policy->group_number)) {
+                $policy->group_number = 'GRP-'.substr(strtoupper($policy->carrier_name), 0, 3).'-'.rand(1000, 9999);
+            }
+        });
+    }
+
+    public function getPortalUrlAttribute(): string
+    {
+        return route('insured.portal.show', $this->portal_token ?: 'token');
+    }
+
+    /**
+     * Map carrier support phone numbers and portals.
+     */
+    public function getCarrierSupportContacts(): array
+    {
+        $carrier = strtolower($this->carrier_name ?: '');
+
+        return match (true) {
+            str_contains($carrier, 'florida blue') || str_contains($carrier, 'bcbs') => [
+                'phone' => '1-800-352-2583',
+                'nurse_line' => '1-877-789-2583',
+                'website' => 'https://www.floridablue.com',
+                'portal_app' => 'Florida Blue Member App',
+            ],
+            str_contains($carrier, 'ambetter') || str_contains($carrier, 'sunshine') => [
+                'phone' => '1-877-687-1180',
+                'nurse_line' => '1-877-687-1180 (Opción 2)',
+                'website' => 'https://ambetter.sunshinehealth.com',
+                'portal_app' => 'Ambetter Health App',
+            ],
+            str_contains($carrier, 'oscar') => [
+                'phone' => '1-855-672-2788',
+                'nurse_line' => '1-855-672-2788',
+                'website' => 'https://www.hioscar.com',
+                'portal_app' => 'Oscar Health App (24/7 Virtual Urgent Care)',
+            ],
+            str_contains($carrier, 'molina') => [
+                'phone' => '1-888-562-5442',
+                'nurse_line' => '1-888-275-8750',
+                'website' => 'https://www.molinahealthcare.com',
+                'portal_app' => 'My Molina App',
+            ],
+            str_contains($carrier, 'united') || str_contains($carrier, 'uhc') => [
+                'phone' => '1-800-985-7719',
+                'nurse_line' => '1-800-846-4678',
+                'website' => 'https://www.myuhc.com',
+                'portal_app' => 'UnitedHealthcare App',
+            ],
+            str_contains($carrier, 'aetna') => [
+                'phone' => '1-800-872-3862',
+                'nurse_line' => '1-800-556-1555',
+                'website' => 'https://www.aetna.com',
+                'portal_app' => 'Aetna Health App',
+            ],
+            default => [
+                'phone' => '1-800-318-2596 (Healthcare.gov)',
+                'nurse_line' => 'Consulte el reverso de su tarjeta',
+                'website' => 'https://www.healthcare.gov',
+                'portal_app' => 'Portal de la Aseguradora',
+            ],
+        };
+    }
 
     public function lead(): BelongsTo
     {
