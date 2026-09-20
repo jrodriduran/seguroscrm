@@ -94,6 +94,10 @@ it('generates a side-by-side health plan comparison proposal for a lead', functi
             'quote_ids' => [$quote1->id, $quote2->id],
         ]);
 
+    if ($response->status() !== 200) {
+        fwrite(STDERR, "\nSTATUS: ".$response->status()." BODY: ".$response->getContent()."\n");
+    }
+
     $response->assertOk()
         ->assertJson([
             'success' => true,
