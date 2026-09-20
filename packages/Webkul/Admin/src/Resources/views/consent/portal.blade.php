@@ -52,7 +52,7 @@
                     🛡️
                 </div>
                 <div>
-                    <h1 class="text-sm font-bold text-slate-900 leading-tight">Consentimiento Federal ACA</h1>
+                    <h1 class="text-sm font-bold text-slate-900 leading-tight">Autorización y Consentimiento CMS</h1>
                     <p class="text-[11px] text-slate-500 font-medium">Normativa CMS 45 CFR § 155.220</p>
                 </div>
             </div>

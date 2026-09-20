@@ -46,6 +46,9 @@ class Lead extends Model implements LeadContract
         'sla_hours',
         'escalated_at',
         'escalation_reason',
+        'chatwoot_conversation_id',
+        'chatwoot_inbox_id',
+        'chatwoot_last_message_at',
     ];
 
     /**
@@ -58,6 +61,7 @@ class Lead extends Model implements LeadContract
         'expected_close_date' => 'date:D M d, Y',
         'assigned_at' => 'datetime',
         'escalated_at' => 'datetime',
+        'chatwoot_last_message_at' => 'datetime',
     ];
 
     /**

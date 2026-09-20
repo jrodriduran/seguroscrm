@@ -57,6 +57,8 @@ class Person extends Model implements PersonContract
         'user_id',
         'organization_id',
         'unique_id',
+        'chatwoot_contact_id',
+        'chatwoot_contact_source_id',
     ];
 
     /**

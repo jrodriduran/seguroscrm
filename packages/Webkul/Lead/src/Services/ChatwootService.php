@@ -42,8 +42,13 @@ class ChatwootService
             return (int) $person->chatwoot_contact_id;
         }
 
-        $email = $person->emails?->first()?->value ?: ($person->emails[0]['value'] ?? null);
-        $phone = $person->contact_numbers?->first()?->value ?: ($person->contact_numbers[0]['value'] ?? null);
+        $email = is_array($person->emails)
+            ? ($person->emails[0]['value'] ?? null)
+            : (is_object($person->emails) ? ($person->emails->first()->value ?? null) : null);
+
+        $phone = is_array($person->contact_numbers)
+            ? ($person->contact_numbers[0]['value'] ?? null)
+            : (is_object($person->contact_numbers) ? ($person->contact_numbers->first()->value ?? null) : null);
 
         // Normalize phone number (E.164 without dashes/spaces, add +1 if US 10 digits)
         $cleanPhone = $this->formatPhoneE164($phone);
