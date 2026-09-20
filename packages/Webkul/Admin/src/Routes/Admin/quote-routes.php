@@ -32,6 +32,6 @@ Route::controller(QuoteController::class)->prefix('quotes')->group(function () {
 
 Route::controller(HealthPlanProposalController::class)->prefix('quotes/proposals')->group(function () {
     Route::post('{lead_id}/generate', 'generateOrGet')->name('admin.quotes.proposals.generate');
-    Route::get('{id}/download-pdf', 'downloadPdf')->name('admin.quotes.proposals.download_pdf');
+    Route::get('{id}/download-pdf', 'downloadProposalPdf')->name('admin.quotes.proposals.download_pdf');
     Route::get('{id}/print', 'print')->name('admin.quotes.proposals.print');
 });

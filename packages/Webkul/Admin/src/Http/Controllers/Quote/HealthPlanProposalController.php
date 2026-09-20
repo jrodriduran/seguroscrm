@@ -86,7 +86,7 @@ class HealthPlanProposalController extends Controller
     /**
      * Download side-by-side comparison proposal as PDF.
      */
-    public function downloadPdf(int $id)
+    public function downloadProposalPdf(int $id)
     {
         $proposal = HealthPlanProposal::with(['lead.person', 'user'])->findOrFail($id);
         $lead = $proposal->lead;
