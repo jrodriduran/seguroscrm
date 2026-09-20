@@ -16,12 +16,11 @@ Route::get('/', [Controller::class, 'redirectToLogin'])->name('krayin.home');
  * CMS Digital Consent Public Mobile Portal Routes (45 CFR § 155.220)
  */
 Route::controller(ConsentPortalController::class)->prefix('consent')->group(function () {
-    Route::get('{token}', 'show')->name('consent.portal.show');
-    Route::post('{token}', 'sign')->name('consent.portal.sign');
-    Route::get('{token}/receipt', 'receipt')->name('consent.portal.receipt');
-
     Route::get('{token}', 'show')->name('consent.portal');
-    Route::post('{token}', 'sign')->name('consent.sign');
+    Route::get('{token}/view', 'show')->name('consent.portal.show');
+    Route::post('{token}', 'sign')->name('consent.portal.sign');
+    Route::post('{token}/sign', 'sign')->name('consent.sign');
+    Route::get('{token}/receipt', 'receipt')->name('consent.portal.receipt');
 });
 
 /**

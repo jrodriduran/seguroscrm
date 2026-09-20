@@ -37,11 +37,15 @@ class ConsentPortalController extends Controller
         }
 
         $request->validate([
-            'signature_data' => 'required|string',
+            'signature_data' => 'nullable|string',
+            'signature' => 'nullable|string',
             'client_name' => 'nullable|string|max:150',
         ]);
 
-        $signatureData = $request->input('signature_data');
+        $signatureData = $request->input('signature_data') ?: $request->input('signature');
+        if (! $signatureData) {
+            return response()->json(['message' => 'The signature data field is required.'], 422);
+        }
 
         // Basic verification of base64 image data
         if (! str_starts_with($signatureData, 'data:image/png;base64,') && ! str_starts_with($signatureData, 'data:image/jpeg;base64,')) {
