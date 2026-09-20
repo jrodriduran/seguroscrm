@@ -139,7 +139,7 @@
 
     <div class="header">
         <div class="header-cell">
-            <h1 class="title">CMS MEDICARE SCOPE OF APPOINTMENT (SOA)</h1>
+            <h1 class="title">CMS SCOPE OF APPOINTMENT (SOA) COMPLIANCE CERTIFICATE</h1>
             <div class="subtitle">Certificado de Cumplimiento Regulatorio • 42 CFR § 422.2274 & § 423.2274</div>
         </div>
         <div class="header-right">

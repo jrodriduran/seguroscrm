@@ -67,7 +67,7 @@ it('generates WhatsApp proposal text and click-to-chat URL for health quote', fu
         ->assertJson([
             'status' => true,
             'client_name' => 'Alejandro Morales',
-            'client_phone' => '7869998877',
+            'client_phone' => '17869998877',
         ]);
 
     $data = $response->json();

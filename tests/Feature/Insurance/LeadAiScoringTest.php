@@ -13,6 +13,10 @@ use Webkul\User\Models\User;
 
 uses(DatabaseTransactions::class);
 
+beforeEach(function () {
+    app()->setLocale('es');
+});
+
 function createAiScoringTestLead(string $name, ?string $dob = null): Lead
 {
     $admin = User::first();
@@ -41,10 +45,11 @@ it('evaluates lead with urgent SEP expiring in less than 7 days as high priority
     LeadSepQualification::create([
         'lead_id' => $lead->id,
         'status' => 'qualified',
-        'qle_type' => 'loss_of_coverage',
+        'is_eligible' => true,
+        'event_type' => 'loss_of_coverage',
         'event_date' => Carbon::now()->subDays(55)->toDateString(),
-        'window_deadline' => Carbon::now()->addDays(5)->toDateString(),
-        'coverage_effective_date' => Carbon::now()->addMonth()->startOfMonth()->toDateString(),
+        'sep_deadline' => Carbon::today()->addDays(5)->toDateString(),
+        'effective_date' => Carbon::now()->addMonth()->startOfMonth()->toDateString(),
     ]);
 
     $service = app(LeadAiScoringService::class);

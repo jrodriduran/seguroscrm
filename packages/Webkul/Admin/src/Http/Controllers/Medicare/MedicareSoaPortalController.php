@@ -29,7 +29,8 @@ class MedicareSoaPortalController extends Controller
         $soa = LeadMedicareSoa::where('token', $token)->firstOrFail();
 
         $request->validate([
-            'signature' => 'required|string',
+            'signature' => 'nullable|string',
+            'signature_data' => 'nullable|string',
             'discuss_medicare_advantage' => 'nullable|boolean',
             'discuss_prescription_drug' => 'nullable|boolean',
             'discuss_medigap' => 'nullable|boolean',
@@ -37,11 +38,16 @@ class MedicareSoaPortalController extends Controller
             'discuss_hospital_indemnity' => 'nullable|boolean',
         ]);
 
+        $signature = $request->input('signature') ?: $request->input('signature_data');
+        if (! $signature) {
+            return response()->json(['message' => 'The signature field is required.'], 422);
+        }
+
         $now = Carbon::now();
 
         $soa->update([
             'status' => 'signed',
-            'signature_data' => $request->input('signature'),
+            'signature_data' => $signature,
             'signed_at' => $now,
             'appointment_eligible_at' => $now->copy()->addHours(48), // Official CMS 48-Hour Waiting Rule
             'ip_address' => $request->ip(),

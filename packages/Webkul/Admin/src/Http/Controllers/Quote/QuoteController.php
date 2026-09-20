@@ -374,7 +374,7 @@ class QuoteController extends Controller
 
         $msg = "¡Cotización #{$quote->id} convertida con éxito en Póliza Emitida! El caso de salud ha sido cerrado y ganado.";
 
-        if (request()->ajax()) {
+        if (request()->ajax() || request()->wantsJson()) {
             return response()->json([
                 'status' => true,
                 'message' => $msg,

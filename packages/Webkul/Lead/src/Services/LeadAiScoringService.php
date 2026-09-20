@@ -32,7 +32,7 @@ class LeadAiScoringService
         $month = (int) $now->format('n');
         $isOepActive = ($month === 11 || $month === 12 || ($month === 1 && (int) $now->format('j') <= 15));
 
-        if ($sep && $sep->status === 'qualified') {
+        if ($sep && ($sep->is_eligible || $sep->status === 'qualified')) {
             $daysRemaining = $sep->days_remaining;
             if ($daysRemaining > 0 && $daysRemaining <= 7) {
                 $scoreBreakdown['sep_oep_urgency'] = 30;

@@ -568,7 +568,7 @@ return [
     ],
 
     'reconciliation' => [
-        'title' => 'Reconciliación de Statements',
+        'title' => 'Reconciliador de Statements de Aseguradoras',
         'subtitle' => 'Cruce automático de liquidaciones de aseguradoras vs. pólizas activas en CRM.',
         'back_btn' => 'Volver al Libro de Comisiones PMPM',
         'engine_badge' => 'Audit & Matching Engine',
