@@ -3,15 +3,19 @@
         @lang('admin::insurance.reconciliation.title')
     </x-slot>
 
+    @php
+        $initialKpis = [
+            'total_paid' => $totalPaidCarrier,
+            'total_missed' => $totalMissedDiscovered,
+            'total_statements' => $totalStatementsCount,
+            'avg_match_rate' => round($averageMatchRate, 1),
+        ];
+    @endphp
+
     <v-commission-reconciliation
         :initial-statements='@json($statements)'
         :rates='@json($rates)'
-        :initial-kpis='@json([
-            "total_paid" => $totalPaidCarrier,
-            "total_missed" => $totalMissedDiscovered,
-            "total_statements" => $totalStatementsCount,
-            "avg_match_rate" => round($averageMatchRate, 1)
-        ])'
+        :initial-kpis='@json($initialKpis)'
     ></v-commission-reconciliation>
 
     @pushOnce('scripts')
