@@ -19,7 +19,7 @@
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-2">
                             <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Opciones Cotizadas (@{{ quotes.length }})
+                                @lang('admin::insurance.quotes.quoted_options', ['count' => '']) (@{{ quotes.length }})
                             </span>
                         </div>
 
@@ -31,7 +31,7 @@
                                 class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"
                             >
                                 <span>⚖️</span>
-                                <span>Comparar Planes Side-by-Side</span>
+                                <span>@lang('admin::insurance.quotes.btn_compare')</span>
                             </button>
 
                             <a
@@ -54,31 +54,31 @@
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2">
-                                    Aseguradora / Plan
+                                    @lang('admin::insurance.quotes.col_carrier_plan')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2">
-                                    Nivel
+                                    @lang('admin::insurance.quotes.col_tier')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2">
-                                    Prima Bruta
+                                    @lang('admin::insurance.quotes.col_gross')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2">
-                                    Subsidio APTC
+                                    @lang('admin::insurance.quotes.col_subsidy')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2 font-bold text-sky-700">
-                                    Pago Cliente
+                                    @lang('admin::insurance.quotes.col_client_pay')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2">
-                                    Deducible
+                                    @lang('admin::insurance.quotes.col_deductible')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="!px-2">
-                                    Estado
+                                    @lang('admin::insurance.quotes.col_status')
                                 </x-admin::table.th>
 
                                 <x-admin::table.th class="actions"></x-admin::table.th>
@@ -95,10 +95,10 @@
 
                                 <x-admin::table.td class="text-wrap !px-2">
                                     <div class="font-semibold text-slate-900 dark:text-white">
-                                        @{{ quote.carrier_name || 'Salud' }} - @{{ quote.plan_name || quote.subject }}
+                                        @{{ quote.carrier_name || '@lang('admin::insurance.products.carrier_id')' }} - @{{ quote.plan_name || quote.subject }}
                                     </div>
                                     <div class="text-[11px] text-slate-500">
-                                        Red: @{{ (quote.network_type || 'HMO').toUpperCase() }}
+                                        @lang('admin::insurance.quotes.modal_network'): @{{ (quote.network_type || 'HMO').toUpperCase() }}
                                     </div>
                                 </x-admin::table.td>
 
@@ -117,7 +117,7 @@
                                 </x-admin::table.td>
 
                                 <x-admin::table.td class="!px-2 font-extrabold text-sky-700 dark:text-sky-400 text-sm">
-                                    $@{{ formatMoney(quote.net_premium || quote.grand_total) }}/mo
+                                    $@{{ formatMoney(quote.net_premium || quote.grand_total) }} / @lang('admin::insurance.policies.period_month')
                                 </x-admin::table.td>
 
                                 <x-admin::table.td class="!px-2">
@@ -134,7 +134,7 @@
                                             'bg-slate-100 text-slate-700': !quote.quote_status || quote.quote_status === 'draft',
                                         }"
                                     >
-                                        @{{ quote.quote_status === 'bound' ? 'Emitida' : (quote.quote_status === 'accepted' ? 'Aceptada' : (quote.quote_status || 'Borrador')) }}
+                                        @{{ quote.quote_status === 'bound' ? '@lang('admin::insurance.quotes.status_bound')' : (quote.quote_status === 'accepted' ? '@lang('admin::insurance.quotes.status_accepted')' : (quote.quote_status === 'presented' ? '@lang('admin::insurance.quotes.status_presented')' : '@lang('admin::insurance.quotes.status_draft')')) }}
                                     </span>
                                 </x-admin::table.td>
 
@@ -173,7 +173,7 @@
                                                 <a :href="'{{ route('admin.quotes.whatsapp', ['id' => 'xxx']) }}'.replace('xxx', quote.id)" target="_blank">
                                                     <div class="flex items-center gap-2 text-emerald-600 font-semibold">
                                                         <span class="text-xl">📱</span>
-                                                        WhatsApp Proposal
+                                                        @lang('admin::insurance.quotes.whatsapp_proposal')
                                                     </div>
                                                 </a>
                                             </x-admin::dropdown.menu.item>
@@ -182,7 +182,7 @@
                                                 <a href="javascript:void(0)" @click="convertToPolicy(quote.id)">
                                                     <div class="flex items-center gap-2 text-blue-600 font-semibold">
                                                         <span class="icon-tick text-2xl"></span>
-                                                        Emitir Póliza (Ganar)
+                                                        @lang('admin::insurance.quotes.btn_convert_policy')
                                                     </div>
                                                 </a>
                                             </x-admin::dropdown.menu.item>
@@ -250,10 +250,10 @@
                         <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                    <span>⚖️</span> Comparativa Side-by-Side de Planes ACA
+                                    <span>⚖️</span> @lang('admin::insurance.quotes.modal_title_side_by_side')
                                 </h3>
                                 <p class="text-xs text-slate-500 mt-0.5">
-                                    Presentación comparativa para {{ $lead->person?->name ?: $lead->title }}
+                                    @lang('admin::insurance.quotes.modal_subtitle_side_by_side', ['name' => $lead->person?->name ?: $lead->title])
                                 </p>
                             </div>
 
@@ -265,7 +265,7 @@
                         <!-- Top Action Bar inside Modal -->
                         <div v-if="activeProposal" class="my-4 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl flex flex-wrap items-center justify-between gap-2 border border-slate-200 dark:border-slate-700">
                             <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">Enlace del Portal del Cliente:</span>
+                                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">@lang('admin::insurance.quotes.client_portal_link')</span>
                                 <input 
                                     type="text" 
                                     readonly 
@@ -277,7 +277,7 @@
                                     @click="copyPortalUrl(activeProposal.public_url)"
                                     class="px-2.5 py-1 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 text-xs font-bold rounded"
                                 >
-                                    @{{ copied ? '¡Copiado!' : 'Copiar' }}
+                                    @{{ copied ? '@lang('admin::insurance.quotes.copied')' : '@lang('admin::insurance.quotes.btn_copy')' }}
                                 </button>
                             </div>
 
@@ -295,7 +295,7 @@
                                     target="_blank"
                                     class="inline-flex items-center gap-1 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold"
                                 >
-                                    <span>📄</span> Descargar PDF
+                                    <span>📄</span> @lang('admin::insurance.quotes.download_pdf')
                                 </a>
                             </div>
                         </div>
@@ -305,22 +305,22 @@
                             <table class="w-full border-collapse text-left text-xs">
                                 <thead>
                                     <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
-                                        <th class="p-3 w-1/4">Característica</th>
+                                        <th class="p-3 w-1/4">@lang('admin::insurance.quotes.feature')</th>
                                         <th v-for="(q, idx) in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700">
-                                            <div class="text-[11px] text-sky-600 uppercase font-bold">@{{ q.carrier_name || 'Aseguradora' }}</div>
+                                            <div class="text-[11px] text-sky-600 uppercase font-bold">@{{ q.carrier_name || '@lang('admin::insurance.quotes.modal_carrier')' }}</div>
                                             <div class="font-extrabold text-sm text-slate-900 dark:text-white mt-0.5">@{{ q.plan_name || q.subject }}</div>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
                                     <tr class="bg-emerald-50/70 dark:bg-emerald-950/20 font-bold">
-                                        <td class="p-3 text-emerald-900 dark:text-emerald-300 text-sm">PAGO CLIENTE / MES</td>
+                                        <td class="p-3 text-emerald-900 dark:text-emerald-300 text-sm uppercase">@lang('admin::insurance.quotes.col_client_pay') / @lang('admin::insurance.policies.period_month')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700 text-emerald-700 dark:text-emerald-400 text-base font-extrabold">
-                                            $@{{ formatMoney(q.net_premium || q.grand_total) }} / mes
+                                            $@{{ formatMoney(q.net_premium || q.grand_total) }} / @lang('admin::insurance.policies.period_month')
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Nivel de Metal & Red</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.tier_and_network')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700">
                                             <span class="inline-block px-2 py-0.5 rounded font-bold uppercase bg-slate-100 dark:bg-slate-700">
                                                 @{{ (q.metal_tier || 'Silver').toUpperCase() }}
@@ -329,50 +329,50 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Subsidio APTC Federal</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_subsidy')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700 text-emerald-600 font-semibold">
                                             -$@{{ formatMoney(q.aptc_subsidy || q.discount_amount) }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Deducible Anual</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_deductible')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700 font-bold">
                                             $@{{ formatMoney(q.deductible || 0) }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Gasto Máximo de Bolsillo (MOOP)</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_moop')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700">
                                             $@{{ formatMoney(q.out_of_pocket_max || 0) }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Médico Primario (PCP)</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_pcp')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700 font-bold text-sky-700 dark:text-sky-400">
-                                            $@{{ formatMoney(q.copay_primary_care || 0) }} Copago
+                                            $@{{ formatMoney(q.copay_primary_care || 0) }} @lang('admin::insurance.quotes.copay')
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Médico Especialista</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_specialist')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700">
-                                            $@{{ formatMoney(q.copay_specialist || 0) }} Copago
+                                            $@{{ formatMoney(q.copay_specialist || 0) }} @lang('admin::insurance.quotes.copay')
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Medicamentos Genéricos</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_generic_rx')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700">
-                                            $@{{ formatMoney(q.copay_generic_drugs || 0) }} Copago
+                                            $@{{ formatMoney(q.copay_generic_drugs || 0) }} @lang('admin::insurance.quotes.copay')
                                         </td>
                                     </tr>
                                     <tr class="bg-slate-50 dark:bg-slate-800/40">
-                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">Acción Directa</td>
+                                        <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">@lang('admin::insurance.quotes.modal_action')</td>
                                         <td v-for="q in comparedQuotes" class="p-3 text-center border-l border-slate-200 dark:border-slate-700">
                                             <button 
                                                 type="button" 
                                                 @click="convertToPolicy(q.id)"
                                                 class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold"
                                             >
-                                                Emitir Póliza
+                                                @lang('admin::insurance.quotes.modal_issue_policy')
                                             </button>
                                         </td>
                                     </tr>

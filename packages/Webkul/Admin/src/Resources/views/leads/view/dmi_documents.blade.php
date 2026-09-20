@@ -9,12 +9,12 @@
                     <span class="text-2xl">⏳</span>
                     <div>
                         <h3 class="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            Seguimiento de Documentos DMI (Healthcare.gov)
+                            @lang('admin::insurance.dmi_documents.title')
                             <span v-if="documents.length" class="text-xs font-normal text-gray-500">
-                                (@{{ documents.length }} requerimiento@{{ documents.length === 1 ? '' : 's' }})
+                                (@{{ documents.length }} {{ trans_choice('admin::insurance.dmi_documents.requirements_count', $lead->dmiDocuments()->count()) }})
                             </span>
                         </h3>
-                        <p class="text-xs text-gray-500">Plazo fatal de 90 días para resolver inconsistencias y preservar subsidios APTC</p>
+                        <p class="text-xs text-gray-500">@lang('admin::insurance.dmi_documents.subtitle')</p>
                     </div>
                 </div>
 
@@ -26,7 +26,7 @@
                         :disabled="isLoading"
                     >
                         <span class="icon-refresh text-sm" :class="{'animate-spin': isLoading}"></span>
-                        Actualizar
+                        @lang('admin::insurance.dmi_documents.btn_refresh')
                     </button>
 
                     <button
@@ -35,7 +35,7 @@
                         @click="openAddModal"
                     >
                         <span class="icon-add text-sm"></span>
-                        Nuevo Requerimiento DMI
+                        @lang('admin::insurance.dmi_documents.btn_add_dmi')
                     </button>
                 </div>
             </div>
@@ -44,7 +44,7 @@
             <div v-if="summary.total > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="p-3 rounded-xl border bg-rose-50/70 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900 flex items-center justify-between">
                     <div>
-                        <span class="text-[11px] font-semibold text-rose-700 dark:text-rose-300 uppercase block">Críticos (&le;15d)</span>
+                        <span class="text-[11px] font-semibold text-rose-700 dark:text-rose-300 uppercase block">@lang('admin::insurance.dmi_documents.filter_critical')</span>
                         <span class="text-xl font-bold text-rose-900 dark:text-rose-200">@{{ summary.critical }}</span>
                     </div>
                     <span class="text-2xl">🚨</span>
@@ -52,7 +52,7 @@
 
                 <div class="p-3 rounded-xl border bg-amber-50/70 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900 flex items-center justify-between">
                     <div>
-                        <span class="text-[11px] font-semibold text-amber-700 dark:text-amber-300 uppercase block">Atención (16-45d)</span>
+                        <span class="text-[11px] font-semibold text-amber-700 dark:text-amber-300 uppercase block">@lang('admin::insurance.dmi_documents.filter_warning')</span>
                         <span class="text-xl font-bold text-amber-900 dark:text-amber-200">@{{ summary.warning }}</span>
                     </div>
                     <span class="text-2xl">⚠️</span>
@@ -60,7 +60,7 @@
 
                 <div class="p-3 rounded-xl border bg-blue-50/70 border-blue-200 dark:bg-blue-950/20 dark:border-blue-900 flex items-center justify-between">
                     <div>
-                        <span class="text-[11px] font-semibold text-blue-700 dark:text-blue-300 uppercase block">En Tiempo (&gt;45d)</span>
+                        <span class="text-[11px] font-semibold text-blue-700 dark:text-blue-300 uppercase block">@lang('admin::insurance.dmi_documents.filter_on_time')</span>
                         <span class="text-xl font-bold text-blue-900 dark:text-blue-200">@{{ summary.total - summary.critical - summary.warning - summary.verified - summary.expired }}</span>
                     </div>
                     <span class="text-2xl">📅</span>
@@ -68,7 +68,7 @@
 
                 <div class="p-3 rounded-xl border bg-emerald-50/70 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-900 flex items-center justify-between">
                     <div>
-                        <span class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 uppercase block">Aprobados CMS</span>
+                        <span class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 uppercase block">@lang('admin::insurance.dmi_documents.filter_verified')</span>
                         <span class="text-xl font-bold text-emerald-900 dark:text-emerald-200">@{{ summary.verified }}</span>
                     </div>
                     <span class="text-2xl">🏆</span>
@@ -84,14 +84,14 @@
             <!-- Empty State -->
             <div v-else-if="!documents.length" class="flex flex-col items-center justify-center py-12 text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/40 rounded-xl border border-dashed border-gray-200 dark:border-gray-800">
                 <span class="text-4xl mb-2">🎉</span>
-                <p class="font-semibold text-sm text-gray-800 dark:text-gray-200">Sin Inconsistencias de Documentos (DMI)</p>
-                <p class="text-xs text-gray-400 max-w-sm mt-1">Este cliente no tiene requerimientos pendientes con Healthcare.gov en este momento.</p>
+                <p class="font-semibold text-sm text-gray-800 dark:text-gray-200">@lang('admin::insurance.dmi_documents.no_inconsistencies')</p>
+                <p class="text-xs text-gray-400 max-w-sm mt-1">@lang('admin::insurance.dmi_documents.no_inconsistencies_sub')</p>
                 <button
                     type="button"
                     class="primary-button text-xs mt-4"
                     @click="openAddModal"
                 >
-                    + Registrar Inconsistencia DMI
+                    @lang('admin::insurance.dmi_documents.btn_register_dmi')
                 </button>
             </div>
 
@@ -131,17 +131,17 @@
                                 @change="updateStatus(doc, $event.target.value)"
                                 class="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500"
                             >
-                                <option value="pending_upload">🟡 Pendiente de Subir</option>
-                                <option value="uploaded_to_marketplace">🔵 Subido a Healthcare.gov</option>
-                                <option value="verified_by_cms">🟢 Aprobado por CMS</option>
-                                <option value="rejected">🔴 Rechazado por CMS</option>
+                                <option value="pending_upload">🟡 @lang('admin::insurance.dmi_documents.status_pending_upload')</option>
+                                <option value="uploaded_to_marketplace">🔵 @lang('admin::insurance.dmi_documents.status_uploaded')</option>
+                                <option value="verified_by_cms">🟢 @lang('admin::insurance.dmi_documents.status_verified')</option>
+                                <option value="rejected">🔴 @lang('admin::insurance.dmi_documents.status_rejected')</option>
                             </select>
 
                             <button
                                 type="button"
                                 @click="deleteDocument(doc)"
                                 class="text-gray-400 hover:text-rose-600 p-1 rounded transition-colors"
-                                title="Eliminar"
+                                title="{{ trans('admin::insurance.dmi_documents.delete') }}"
                             >
                                 <span class="icon-delete text-base"></span>
                             </button>
@@ -151,10 +151,10 @@
                     <!-- 90-Day Visual Countdown Bar -->
                     <div class="space-y-1">
                         <div class="flex justify-between text-[11px] text-gray-500 font-medium">
-                            <span>Aviso: <strong>@{{ formatDate(doc.notice_date) }}</strong></span>
+                            <span>@lang('admin::insurance.dmi_documents.notice_date') <strong>@{{ formatDate(doc.notice_date) }}</strong></span>
                             <span :class="doc.days_remaining <= 15 ? 'text-rose-600 font-bold' : ''">
-                                Fecha Límite: <strong>@{{ formatDate(doc.deadline_date) }}</strong>
-                                (@{{ doc.days_remaining }} días restantes)
+                                @lang('admin::insurance.dmi_documents.col_deadline'): <strong>@{{ formatDate(doc.deadline_date) }}</strong>
+                                (@{{ doc.days_remaining }} {{ trans('admin::insurance.dmi_documents.days_remaining', ['days' => '']) }})
                             </span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
@@ -172,11 +172,11 @@
                             <span v-if="doc.file_path" class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium">
                                 <span>📎</span>
                                 <a :href="'/storage/' + doc.file_path" target="_blank" class="hover:underline">
-                                    @{{ doc.file_name || 'Ver Documento Adjunto' }}
+                                    @{{ doc.file_name || '{{ trans('admin::insurance.dmi_documents.view_attachment') }}' }}
                                 </a>
                             </span>
                             <span v-else class="text-gray-400 italic">
-                                Sin archivo adjunto en CRM
+                                @lang('admin::insurance.dmi_documents.no_attachment')
                             </span>
                         </div>
 
@@ -187,7 +187,7 @@
                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg transition-colors shadow-sm"
                         >
                             <span>📲</span>
-                            Enviar Recordatorio WhatsApp (@{{ doc.days_remaining }}d)
+                            @lang('admin::insurance.dmi_documents.send_whatsapp_reminder', ['days' => '']) @{{ doc.days_remaining }}d)
                         </button>
                     </div>
 
@@ -203,43 +203,43 @@
                 <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-gray-200 dark:border-gray-800">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-800">
                         <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            <span>📄</span> Nuevo Requerimiento DMI (Healthcare.gov)
+                            <span>📄</span> @lang('admin::insurance.dmi_documents.modal_add_title')
                         </h3>
                         <button type="button" @click="showModal = false" class="text-gray-400 hover:text-gray-600 text-lg">&times;</button>
                     </div>
 
                     <form @submit.prevent="submitAddDocument" class="space-y-3.5 text-xs">
                         <div>
-                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Tipo de Requerimiento DMI:</label>
+                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.dmi_documents.doc_type_label')</label>
                             <select
                                 v-model="form.doc_type"
                                 @change="onDocTypeChange"
                                 class="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500"
                                 required
                             >
-                                <option value="income">Prueba de Ingresos (W-2, Paystubs, Taxes 1040)</option>
-                                <option value="immigration">Estatus Migratorio (Green Card, I-766 Permiso)</option>
-                                <option value="citizenship">Ciudadanía / Pasaporte / Certificado Naturalización</option>
-                                <option value="ssn">Número de Seguro Social / Identidad</option>
-                                <option value="incarceration">Estatus de Encarcelamiento</option>
-                                <option value="other">Otro Requerimiento Marketplace</option>
+                                <option value="income">@lang('admin::insurance.dmi_documents.doc_income')</option>
+                                <option value="immigration">@lang('admin::insurance.dmi_documents.doc_immigration')</option>
+                                <option value="citizenship">@lang('admin::insurance.dmi_documents.doc_citizenship')</option>
+                                <option value="ssn">@lang('admin::insurance.dmi_documents.doc_ssn')</option>
+                                <option value="incarceration">@lang('admin::insurance.dmi_documents.doc_incarceration')</option>
+                                <option value="other">@lang('admin::insurance.dmi_documents.doc_other')</option>
                             </select>
                         </div>
 
                         <div>
-                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Título / Nombre del Documento:</label>
+                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.dmi_documents.doc_title_label')</label>
                             <input
                                 type="text"
                                 v-model="form.title"
                                 class="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500"
-                                placeholder="Ej: Formulario W-2 / Taxes 2024"
+                                placeholder="{{ trans('admin::insurance.dmi_documents.doc_title_placeholder') }}"
                                 required
                             >
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Fecha del Aviso Marketplace:</label>
+                                <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.dmi_documents.notice_date_label')</label>
                                 <input
                                     type="date"
                                     v-model="form.notice_date"
@@ -250,7 +250,7 @@
                             </div>
 
                             <div>
-                                <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Fecha Límite (+90 Días):</label>
+                                <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.dmi_documents.deadline_date_label')</label>
                                 <input
                                     type="date"
                                     v-model="form.deadline_date"
@@ -261,7 +261,7 @@
                         </div>
 
                         <div>
-                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Adjuntar Archivo / Foto del Documento (Opcional):</label>
+                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.dmi_documents.file_upload_label')</label>
                             <input
                                 type="file"
                                 ref="fileInput"
@@ -271,12 +271,11 @@
                         </div>
 
                         <div>
-                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Notas Internas:</label>
+                            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.dmi_documents.notes_label')</label>
                             <textarea
                                 v-model="form.notes"
                                 rows="2"
                                 class="w-full p-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500"
-                                placeholder="Detalles de lo que solicitó Healthcare.gov..."
                             ></textarea>
                         </div>
 
@@ -286,7 +285,7 @@
                                 @click="showModal = false"
                                 class="secondary-button text-xs py-2 px-3.5"
                             >
-                                Cancelar
+                                @lang('admin::insurance.dmi_documents.cancel')
                             </button>
 
                             <button
@@ -295,7 +294,7 @@
                                 class="primary-button text-xs py-2 px-4 flex items-center gap-1.5"
                             >
                                 <span v-if="isSubmitting" class="icon-refresh animate-spin"></span>
-                                Guardar Requerimiento
+                                @lang('admin::insurance.dmi_documents.save')
                             </button>
                         </div>
                     </form>
@@ -326,7 +325,7 @@
                     },
                     form: {
                         doc_type: 'income',
-                        title: 'Prueba de Ingresos (W-2 / Taxes)',
+                        title: '{{ trans('admin::insurance.dmi_documents.doc_income') }}',
                         notice_date: new Date().toISOString().split('T')[0],
                         deadline_date: this.addDays(new Date(), 90),
                         notes: '',
@@ -353,14 +352,14 @@
 
                 onDocTypeChange() {
                     const titles = {
-                        income: 'Prueba de Ingresos (W-2, Paystubs, Taxes)',
-                        immigration: 'Estatus Migratorio (Green Card / EAD I-766)',
-                        citizenship: 'Comprobante de Ciudadanía / Pasaporte',
-                        ssn: 'Copia de Seguro Social (SSN)',
-                        incarceration: 'Constancia de Liberación / No Encarcelamiento',
-                        other: 'Requerimiento Adicional Marketplace',
+                        income: '{{ trans('admin::insurance.dmi_documents.doc_income') }}',
+                        immigration: '{{ trans('admin::insurance.dmi_documents.doc_immigration') }}',
+                        citizenship: '{{ trans('admin::insurance.dmi_documents.doc_citizenship') }}',
+                        ssn: '{{ trans('admin::insurance.dmi_documents.doc_ssn') }}',
+                        incarceration: '{{ trans('admin::insurance.dmi_documents.doc_incarceration') }}',
+                        other: '{{ trans('admin::insurance.dmi_documents.doc_other') }}',
                     };
-                    this.form.title = titles[this.form.doc_type] || 'Documento Solicitado';
+                    this.form.title = titles[this.form.doc_type] || '{{ trans('admin::insurance.dmi_documents.doc_other') }}';
                 },
 
                 fetchDocuments() {
@@ -383,7 +382,7 @@
                 openAddModal() {
                     this.form = {
                         doc_type: 'income',
-                        title: 'Prueba de Ingresos (W-2, Paystubs, Taxes)',
+                        title: '{{ trans('admin::insurance.dmi_documents.doc_income') }}',
                         notice_date: new Date().toISOString().split('T')[0],
                         deadline_date: this.addDays(new Date(), 90),
                         notes: '',
@@ -422,7 +421,7 @@
                         console.error(err);
                         this.$emitter.emit('add-flash', {
                             type: 'error',
-                            message: err?.response?.data?.message || 'Error al guardar el documento.',
+                            message: err?.response?.data?.message || 'Error.',
                         });
                     });
                 },
@@ -436,7 +435,7 @@
                         this.fetchDocuments();
                         this.$emitter.emit('add-flash', {
                             type: 'success',
-                            message: 'Estado del documento actualizado.',
+                            message: response.data.message || 'Status updated.',
                         });
                     })
                     .catch(err => {
@@ -445,7 +444,7 @@
                 },
 
                 deleteDocument(doc) {
-                    if (!confirm('¿Desea eliminar este requerimiento DMI?')) return;
+                    if (!confirm('{{ trans('admin::insurance.dmi_documents.delete') }}?')) return;
 
                     this.$axios.delete("{{ route('admin.leads.dmi.delete', [$lead->id, 'replaceId']) }}".replace('replaceId', doc.id))
                         .then(response => {
@@ -506,18 +505,15 @@
                 },
 
                 urgencyLabel(doc) {
-                    if (doc.status === 'verified_by_cms') return 'Aprobado CMS';
-                    if (doc.days_remaining < 0) return 'Plazo Vencido';
-                    if (doc.days_remaining <= 15) return `¡URGENTE: ${doc.days_remaining} días!`;
-                    if (doc.days_remaining <= 45) return `Atención: ${doc.days_remaining} días`;
-                    return `${doc.days_remaining} días restantes`;
+                    if (doc.status === 'verified_by_cms') return '{{ trans('admin::insurance.dmi_documents.status_verified') }}';
+                    if (doc.days_remaining < 0) return '{{ trans('admin::insurance.sep_validator.sep_expired') }}';
+                    if (doc.days_remaining <= 15) return `! ${doc.days_remaining} d`;
+                    return `${doc.days_remaining} d`;
                 },
 
                 formatDate(dateStr) {
                     if (!dateStr) return 'N/A';
-                    const parts = dateStr.split('-');
-                    if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
-                    return dateStr;
+                    return new Date(dateStr).toLocaleDateString('{{ app()->getLocale() }}');
                 }
             }
         });

@@ -9,12 +9,12 @@
                     <span class="text-2xl">📋</span>
                     <div>
                         <h3 class="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            Consentimiento Digital del Consumidor
+                            @lang('admin::insurance.consent.title')
                             <span v-if="consent" :class="statusBadgeClass" class="text-xs font-semibold px-2.5 py-0.5 rounded-full">
                                 @{{ statusLabel }}
                             </span>
                         </h3>
-                        <p class="text-xs text-gray-500">Cumplimiento regulatorio obligatorio CMS 45 CFR § 155.220 (ACA / Healthcare.gov)</p>
+                        <p class="text-xs text-gray-500">@lang('admin::insurance.consent.subtitle')</p>
                     </div>
                 </div>
 
@@ -26,7 +26,7 @@
                         :disabled="isLoading"
                     >
                         <span class="icon-refresh text-sm" :class="{'animate-spin': isLoading}"></span>
-                        Actualizar
+                        @lang('admin::insurance.consent.btn_refresh')
                     </button>
 
                     <a
@@ -36,7 +36,7 @@
                         class="secondary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
                     >
                         <span>🖨️</span>
-                        Ver / Imprimir
+                        @lang('admin::insurance.consent.btn_print')
                     </a>
 
                     <a
@@ -46,7 +46,7 @@
                         class="primary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
                     >
                         <span>📥</span>
-                        Descargar PDF
+                        @lang('admin::insurance.consent.btn_pdf')
                     </a>
                 </div>
             </div>
@@ -67,8 +67,8 @@
                                 ✓
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-emerald-900 dark:text-emerald-300">Documento Firmado y Legalmente Válido</h4>
-                                <p class="text-xs text-emerald-700 dark:text-emerald-400">El cliente completó satisfactoriamente su autorización táctil.</p>
+                                <h4 class="text-sm font-bold text-emerald-900 dark:text-emerald-300">@lang('admin::insurance.consent.signed_card_title')</h4>
+                                <p class="text-xs text-emerald-700 dark:text-emerald-400">@lang('admin::insurance.consent.signed_card_sub')</p>
                             </div>
                         </div>
 
@@ -77,37 +77,37 @@
                             @click="regenerateLink"
                             class="text-xs font-medium text-gray-500 hover:text-gray-700 underline"
                         >
-                            Solicitar re-firma
+                            @lang('admin::insurance.consent.request_resend')
                         </button>
                     </div>
 
                     <!-- Audit Trail Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs bg-white dark:bg-gray-900 p-4 rounded-lg border border-emerald-100 dark:border-emerald-900/40">
                         <div>
-                            <span class="text-gray-400 block font-medium">Firmado Por:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.consent.signed_by')</span>
                             <strong class="text-gray-900 dark:text-white text-sm">@{{ consent.client_name }}</strong>
                         </div>
                         <div>
-                            <span class="text-gray-400 block font-medium">Fecha y Hora de Firma:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.consent.sign_date_time')</span>
                             <strong class="text-gray-800 dark:text-gray-200">@{{ formatDateTime(consent.signed_at) }}</strong>
                         </div>
                         <div>
-                            <span class="text-gray-400 block font-medium">Dirección IP Auditada:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.consent.ip_audited')</span>
                             <strong class="text-gray-800 dark:text-gray-200 font-mono">@{{ consent.ip_address || 'Registrada' }}</strong>
                         </div>
                         <div class="md:col-span-2">
-                            <span class="text-gray-400 block font-medium">Agente & NPN:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.consent.agent_npn')</span>
                             <span class="text-gray-700 dark:text-gray-300">@{{ consent.agent_name }} • NPN: <strong class="text-blue-600">@{{ consent.agent_npn }}</strong></span>
                         </div>
                         <div>
-                            <span class="text-gray-400 block font-medium">Navegador / Dispositivo:</span>
-                            <span class="text-gray-600 dark:text-gray-400 truncate block">@{{ consent.user_agent || 'Móvil / Web' }}</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.consent.browser_device')</span>
+                            <span class="text-gray-600 dark:text-gray-400 truncate block">@{{ consent.user_agent || 'Web' }}</span>
                         </div>
                     </div>
 
                     <!-- Signature Preview -->
                     <div v-if="consent.signature_data" class="bg-white dark:bg-gray-900 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/40">
-                        <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-2">Firma Digital Capturada:</span>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-2">@lang('admin::insurance.consent.signature_preview')</span>
                         <div class="flex items-center justify-center p-2 bg-gray-50 dark:bg-gray-950 rounded border border-gray-200 dark:border-gray-800">
                             <img :src="consent.signature_data" alt="Firma" class="h-20 object-contain max-w-full">
                         </div>
@@ -123,8 +123,8 @@
                                     ⏳
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-amber-900 dark:text-amber-300">Pendiente de Firma del Consumidor</h4>
-                                    <p class="text-xs text-amber-700 dark:text-amber-400">Envíe el enlace directo al cliente para que firme en pantalla desde su celular.</p>
+                                    <h4 class="text-sm font-bold text-amber-900 dark:text-amber-300">@lang('admin::insurance.consent.pending_card_title')</h4>
+                                    <p class="text-xs text-amber-700 dark:text-amber-400">@lang('admin::insurance.consent.pending_card_sub')</p>
                                 </div>
                             </div>
 
@@ -134,7 +134,7 @@
                                 class="secondary-button text-xs py-1 px-2.5 flex items-center gap-1"
                             >
                                 <span>🔗</span>
-                                Probar Enlace
+                                @lang('admin::insurance.consent.test_link')
                             </a>
                         </div>
 
@@ -146,7 +146,7 @@
                                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg shadow-sm transition-colors"
                             >
                                 <span class="text-sm">📲</span>
-                                Enviar por WhatsApp en 1 Clic
+                                @lang('admin::insurance.consent.send_whatsapp_1click')
                             </button>
 
                             <button
@@ -162,7 +162,7 @@
 
                     <!-- URL Box -->
                     <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 text-xs">
-                        <span class="text-gray-400 block font-medium mb-1">Enlace público de firma rápida:</span>
+                        <span class="text-gray-400 block font-medium mb-1">@lang('admin::insurance.consent.public_quick_link')</span>
                         <input
                             type="text"
                             readonly
@@ -175,7 +175,7 @@
                     <!-- WhatsApp Message Preview -->
                     <div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-800 space-y-2">
                         <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
-                            <span>💬</span> Vista previa del mensaje de WhatsApp:
+                            <span>💬</span> @lang('admin::insurance.consent.whatsapp_preview')
                         </span>
                         <div class="bg-emerald-50/40 dark:bg-gray-950 p-3 rounded-lg border border-emerald-100 dark:border-gray-800 text-xs text-gray-700 dark:text-gray-300 whitespace-pre-line font-normal leading-relaxed">
                             @{{ whatsappMessage }}
@@ -187,7 +187,7 @@
                 <div class="border-t border-gray-200 dark:border-gray-800 pt-3">
                     <details class="text-xs text-gray-500 cursor-pointer">
                         <summary class="font-medium hover:text-gray-700 dark:hover:text-gray-300">
-                            Ver texto legal de autorización CMS (45 CFR § 155.220)
+                            @lang('admin::insurance.consent.cms_legal_reference')
                         </summary>
                         <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 whitespace-pre-line text-[11px] leading-relaxed">
                             @{{ consent.consent_text }}
@@ -211,14 +211,24 @@
                     consent: null,
                     publicUrl: '',
                     whatsappMessage: '',
-                    copyBtnText: 'Copiar Enlace',
+                    copyBtnText: @json(trans('admin::insurance.consent.copy_link')),
+                    labels: {
+                        copyLink: @json(trans('admin::insurance.consent.copy_link')),
+                        copied: @json(trans('admin::insurance.consent.copied')),
+                        copyFlash: @json(trans('admin::insurance.consent.copy_link_flash')),
+                        whatsappError: @json(trans('admin::insurance.consent.whatsapp_error')),
+                        confirmRegenerate: @json(trans('admin::insurance.consent.confirm_regenerate')),
+                        statusSigned: @json(trans('admin::insurance.consent.status_signed')),
+                        statusPending: @json(trans('admin::insurance.consent.status_pending')),
+                        locale: '{{ str_replace('_', '-', app()->getLocale()) }}',
+                    }
                 };
             },
 
             computed: {
                 statusLabel() {
-                    if (!this.consent) return 'Pendiente';
-                    return this.consent.status === 'signed' ? '🟢 Firmado' : '🟡 Pendiente';
+                    if (!this.consent) return this.labels.statusPending;
+                    return this.consent.status === 'signed' ? ('🟢 ' + this.labels.statusSigned) : ('🟡 ' + this.labels.statusPending);
                 },
 
                 statusBadgeClass() {
@@ -256,13 +266,13 @@
                     if (!this.publicUrl) return;
 
                     navigator.clipboard.writeText(this.publicUrl).then(() => {
-                        this.copyBtnText = '¡Copiado!';
+                        this.copyBtnText = this.labels.copied;
                         this.$emitter.emit('add-flash', {
                             type: 'success',
-                            message: 'Enlace de consentimiento copiado al portapapeles.',
+                            message: this.labels.copyFlash,
                         });
                         setTimeout(() => {
-                            this.copyBtnText = 'Copiar Enlace';
+                            this.copyBtnText = this.labels.copyLink;
                         }, 2000);
                     });
                 },
@@ -278,13 +288,13 @@
                             console.error(err);
                             this.$emitter.emit('add-flash', {
                                 type: 'error',
-                                message: 'No se pudo generar el enlace de WhatsApp.',
+                                message: this.labels.whatsappError,
                             });
                         });
                 },
 
                 regenerateLink() {
-                    if (!confirm('¿Desea invalidar la firma anterior y generar un nuevo enlace para el cliente?')) {
+                    if (!confirm(this.labels.confirmRegenerate)) {
                         return;
                     }
 
@@ -312,7 +322,7 @@
                 formatDateTime(dateStr) {
                     if (!dateStr) return 'N/A';
                     const d = new Date(dateStr);
-                    return d.toLocaleString('es-ES', {
+                    return d.toLocaleString(this.labels.locale || 'es', {
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',

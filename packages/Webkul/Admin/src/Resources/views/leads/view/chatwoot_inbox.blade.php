@@ -9,17 +9,17 @@
                     <span class="text-2xl">💬</span>
                     <div>
                         <div class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            Inbox Omnicanal (Chatwoot)
+                            @lang('admin::insurance.chatwoot.title')
                             <span v-if="configured" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                             <span v-if="configured" class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200">
-                                WhatsApp / SMS Activo
+                                @lang('admin::insurance.chatwoot.active_badge')
                             </span>
                             <span v-else class="text-[10px] font-semibold text-amber-600 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-200">
-                                Sin Configurar
+                                @lang('admin::insurance.chatwoot.not_configured_badge')
                             </span>
                         </div>
                         <div class="text-[11px] text-gray-500">
-                            Conversación directa con el asegurado sincronizada en tiempo real
+                            @lang('admin::insurance.chatwoot.subtitle')
                         </div>
                     </div>
                 </div>
@@ -30,10 +30,10 @@
                         class="secondary-button text-xs py-1 px-2.5 flex items-center gap-1"
                         @click="fetchMessages"
                         :disabled="isLoading"
-                        title="Actualizar mensajes"
+                        title="@lang('admin::insurance.chatwoot.btn_refresh')"
                     >
                         <span class="icon-refresh text-xs" :class="{'animate-spin': isLoading}"></span>
-                        Recargar
+                        @lang('admin::insurance.chatwoot.btn_refresh')
                     </button>
 
                     <a
@@ -43,7 +43,7 @@
                         class="primary-button text-xs py-1 px-2.5 flex items-center gap-1 text-white bg-indigo-600 hover:bg-indigo-700"
                     >
                         <span>↗️</span>
-                        Abrir en Chatwoot
+                        @lang('admin::insurance.chatwoot.btn_open_chatwoot')
                     </a>
                 </div>
             </div>
@@ -52,7 +52,7 @@
             <div v-if="!configured && !isLoading" class="p-4 bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
                 <span class="text-base">⚠️</span>
                 <div>
-                    <strong>Chatwoot no está vinculado:</strong> Configura <code>CHATWOOT_API_TOKEN</code> y <code>CHATWOOT_ACCOUNT_ID</code> en tu archivo de entorno para activar la mensajería unificada de WhatsApp y SMS.
+                    @lang('admin::insurance.chatwoot.not_configured_warning')
                 </div>
             </div>
 
@@ -60,13 +60,13 @@
             <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/50 dark:bg-gray-950/40" ref="messageList">
                 <div v-if="isLoading" class="flex flex-col items-center justify-center h-full text-gray-400 text-xs gap-2">
                     <div class="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-                    <span>Cargando conversación...</span>
+                    <span>@lang('admin::insurance.chatwoot.loading')</span>
                 </div>
 
                 <div v-else-if="messages.length === 0" class="flex flex-col items-center justify-center h-full text-center text-xs text-gray-400 p-6 space-y-2">
                     <span class="text-3xl">📭</span>
-                    <div class="font-medium text-gray-600 dark:text-gray-300">No hay mensajes previos en este hilo.</div>
-                    <p class="max-w-xs text-[11px]">Escribe un mensaje abajo para iniciar la conversación por WhatsApp / SMS con el cliente.</p>
+                    <div class="font-medium text-gray-600 dark:text-gray-300">@lang('admin::insurance.chatwoot.no_messages')</div>
+                    <p class="max-w-xs text-[11px]">@lang('admin::insurance.chatwoot.empty_thread_sub')</p>
                 </div>
 
                 <!-- Messages -->
@@ -82,7 +82,7 @@
                         :class="isOutgoing(msg) ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-bl-none'"
                     >
                         <div class="font-semibold text-[10px] mb-0.5 opacity-80" v-if="msg.sender">
-                            @{{ msg.sender.name || (isOutgoing(msg) ? 'Agente' : 'Cliente') }}
+                            @{{ msg.sender.name || (isOutgoing(msg) ? '@lang('admin::insurance.chatwoot.agent')' : '@lang('admin::insurance.chatwoot.client')') }}
                         </div>
                         <div class="whitespace-pre-wrap leading-relaxed">@{{ msg.content }}</div>
                         <div class="text-[9px] mt-1 text-right opacity-70">
@@ -98,7 +98,7 @@
                     type="text"
                     v-model="newMessage"
                     :disabled="isSending"
-                    placeholder="Escribe un mensaje de WhatsApp / SMS..."
+                    placeholder="@lang('admin::insurance.chatwoot.placeholder_input')"
                     class="flex-1 text-xs rounded-lg border-gray-300 dark:bg-gray-800 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
                 <button
@@ -108,7 +108,7 @@
                 >
                     <span v-if="isSending" class="animate-spin text-xs">⏳</span>
                     <span v-else>✈️</span>
-                    Enviar
+                    @lang('admin::insurance.chatwoot.btn_send')
                 </button>
             </form>
         </div>

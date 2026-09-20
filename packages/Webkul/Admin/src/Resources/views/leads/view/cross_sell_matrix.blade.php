@@ -9,13 +9,13 @@
                     <span class="text-2xl">🛍️</span>
                     <div>
                         <h3 class="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            Motor de Venta Cruzada (Cross-Selling & Gap Protection)
+                            @lang('admin::insurance.cross_sell.header_title')
                             <span v-if="metrics" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">
-                                +$@{{ metrics.total_bundle_monthly }}/mes • Comisión: +$@{{ metrics.total_commission_kicker }}
+                                +$@{{ metrics.total_bundle_monthly }} / @lang('admin::insurance.policies.period_month') • @lang('admin::insurance.cross_sell.commission_kicker'): +$@{{ metrics.total_commission_kicker }}
                             </span>
                         </h3>
                         <p class="text-xs text-gray-500">
-                            Cierre de brechas de cobertura (Deducibles, Hospitalización, Dental y Visión) para maximizar la protección del cliente y los ingresos del agente.
+                            @lang('admin::insurance.cross_sell.subtitle')
                         </p>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                         :disabled="isLoading"
                     >
                         <span class="icon-refresh text-sm" :class="{'animate-spin': isLoading}"></span>
-                        Recalcular Oportunidades
+                        @lang('admin::insurance.cross_sell.btn_recalculate')
                     </button>
                 </div>
             </div>
@@ -62,20 +62,20 @@
 
                         <div>
                             <h4 class="text-sm font-bold text-gray-900 dark:text-white">@{{ opp.title }}</h4>
-                            <div class="text-xs text-purple-600 dark:text-purple-400 font-medium">@{{ opp.carrier_name || 'Carrier Recomendado' }}</div>
+                            <div class="text-xs text-purple-600 dark:text-purple-400 font-medium">@{{ opp.carrier_name || '@lang('admin::insurance.products.carrier_id')' }}</div>
                         </div>
 
                         <div class="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800/60 text-xs text-gray-600 dark:text-gray-300 leading-relaxed border border-gray-100 dark:border-gray-800">
-                            <strong>Brecha Detectada:</strong> @{{ opp.gap_reason }}
+                            <strong>@lang('admin::insurance.cross_sell.gap_detected')</strong> @{{ opp.gap_reason }}
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
                             <div class="p-2 rounded bg-purple-50/60 dark:bg-purple-950/40 text-center">
-                                <div class="text-[10px] text-gray-500">Prima Estimada</div>
-                                <div class="font-bold text-gray-900 dark:text-white mt-0.5">$@{{ Number(opp.estimated_monthly_premium).toFixed(2) }}/mes</div>
+                                <div class="text-[10px] text-gray-500">@lang('admin::insurance.cross_sell.monthly_premium')</div>
+                                <div class="font-bold text-gray-900 dark:text-white mt-0.5">$@{{ Number(opp.estimated_monthly_premium).toFixed(2) }} / @lang('admin::insurance.policies.period_month')</div>
                             </div>
                             <div class="p-2 rounded bg-emerald-50/60 dark:bg-emerald-950/40 text-center">
-                                <div class="text-[10px] text-gray-500">Comisión Agente</div>
+                                <div class="text-[10px] text-gray-500">@lang('admin::insurance.cross_sell.commission_kicker')</div>
                                 <div class="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">+$@{{ Number(opp.estimated_agent_commission).toFixed(2) }}</div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                             @click="updateStatus(opp.id, 'presented')"
                             v-if="opp.status !== 'presented' && opp.status !== 'enrolled'"
                         >
-                            Presentado
+                            @lang('admin::insurance.cross_sell.btn_present')
                         </button>
                         <button
                             type="button"
@@ -96,7 +96,7 @@
                             @click="updateStatus(opp.id, 'enrolled')"
                             v-if="opp.status !== 'enrolled'"
                         >
-                            <span>✓</span> Emitir
+                            <span>✓</span> @lang('admin::insurance.cross_sell.btn_enroll')
                         </button>
                         <button
                             type="button"
@@ -104,7 +104,7 @@
                             @click="updateStatus(opp.id, 'declined')"
                             v-if="opp.status !== 'declined'"
                         >
-                            Declinado
+                            @lang('admin::insurance.cross_sell.btn_decline')
                         </button>
                     </div>
                 </div>

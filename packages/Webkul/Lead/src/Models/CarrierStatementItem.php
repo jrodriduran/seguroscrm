@@ -54,12 +54,12 @@ class CarrierStatementItem extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->match_status) {
-            'matched_exact' => 'Conciliado Exacto',
-            'matched_variance' => 'Variación / Discrepancia',
-            'missed_commission' => 'Comisión Omitida (No Pagada)',
-            'unmatched_orphan' => 'Póliza Huérfana (No en CRM)',
-            'chargeback' => 'Chargeback / Clawback',
-            default => 'Desconocido',
+            'matched_exact' => trans('admin::insurance.reconciliation.status_matched_exact'),
+            'matched_variance' => trans('admin::insurance.reconciliation.status_matched_variance'),
+            'missed_commission' => trans('admin::insurance.reconciliation.status_missed_commission'),
+            'unmatched_orphan' => trans('admin::insurance.reconciliation.status_unmatched_orphan'),
+            'chargeback' => trans('admin::insurance.reconciliation.status_chargeback'),
+            default => ucfirst($this->match_status ?: 'unknown'),
         };
     }
 

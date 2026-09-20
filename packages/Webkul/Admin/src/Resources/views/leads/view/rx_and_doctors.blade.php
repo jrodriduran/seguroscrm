@@ -9,12 +9,12 @@
                     <span class="text-2xl">💊</span>
                     <div>
                         <h3 class="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            Formulario de Fármacos y Red Médica
+                            @lang('admin::insurance.rx_and_doctors.title')
                             <span v-if="metrics" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                                @{{ metrics.total_drugs }} medicinas | @{{ metrics.total_doctors }} proveedores
+                                @{{ metrics.total_drugs }} @lang('admin::insurance.rx_and_doctors.kpi_total_drugs') | @{{ metrics.total_doctors }} @lang('admin::insurance.rx_and_doctors.doc_table_title')
                             </span>
                         </h3>
-                        <p class="text-xs text-gray-500">Verificación de cobertura de medicamentos y disponibilidad de médicos dentro de la red (In-Network)</p>
+                        <p class="text-xs text-gray-500">@lang('admin::insurance.rx_and_doctors.subtitle')</p>
                     </div>
                 </div>
 
@@ -26,7 +26,7 @@
                         :disabled="isLoading"
                     >
                         <span class="icon-refresh text-sm" :class="{'animate-spin': isLoading}"></span>
-                        Actualizar
+                        @lang('admin::insurance.rx_and_doctors.btn_refresh')
                     </button>
 
                     <a
@@ -36,7 +36,7 @@
                         v-if="medications.length > 0 || doctors.length > 0"
                     >
                         <span>📥</span>
-                        Descargar PDF
+                        @lang('admin::insurance.rx_and_doctors.btn_download_pdf')
                     </a>
 
                     <button
@@ -45,7 +45,7 @@
                         @click="openMedModal"
                     >
                         <span>➕</span>
-                        Medicamento
+                        @lang('admin::insurance.rx_and_doctors.btn_add_med')
                     </button>
 
                     <button
@@ -54,7 +54,7 @@
                         @click="openDocModal"
                     >
                         <span>🩺</span>
-                        Médico / Proveedor
+                        @lang('admin::insurance.rx_and_doctors.btn_add_doc')
                     </button>
                 </div>
             </div>
@@ -62,46 +62,46 @@
             <!-- Metrics Summary Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" v-if="metrics">
                 <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="text-xs text-gray-500">Total Medicamentos</div>
+                    <div class="text-xs text-gray-500">@lang('admin::insurance.rx_and_doctors.kpi_total_drugs')</div>
                     <div class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">
-                        @{{ metrics.total_drugs }} fármacos
+                        @{{ metrics.total_drugs }}
                     </div>
                     <div class="text-xs text-amber-600 mt-1" v-if="metrics.specialty_drugs_count > 0">
-                        ⚠️ @{{ metrics.specialty_drugs_count }} Especialidad (Tier 5)
+                        ⚠️ @{{ metrics.specialty_drugs_count }} @lang('admin::insurance.rx_and_doctors.kpi_specialty_drugs')
                     </div>
-                    <div class="text-xs text-gray-400 mt-1" v-else>Todos estándar/genéricos</div>
+                    <div class="text-xs text-gray-400 mt-1" v-else>@lang('admin::insurance.rx_and_doctors.kpi_standard_drugs')</div>
                 </div>
 
                 <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="text-xs text-gray-500">Copago Mensual Estimado</div>
+                    <div class="text-xs text-gray-500">@lang('admin::insurance.rx_and_doctors.kpi_copay_monthly')</div>
                     <div class="text-lg font-bold text-blue-600 dark:text-blue-400 mt-0.5">
-                        $@{{ Number(metrics.total_copay_30d).toFixed(2) }} / mes
+                        $@{{ Number(metrics.total_copay_30d).toFixed(2) }} / @lang('admin::insurance.policies.period_month')
                     </div>
                     <div class="text-xs text-emerald-600 mt-1">
-                        90d Correo: $@{{ Number(metrics.total_copay_90d_mail).toFixed(2) }}
+                        @lang('admin::insurance.rx_and_doctors.kpi_copay_mail') $@{{ Number(metrics.total_copay_90d_mail).toFixed(2) }}
                     </div>
                 </div>
 
                 <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="text-xs text-gray-500">Médico Primario (PCP)</div>
+                    <div class="text-xs text-gray-500">@lang('admin::insurance.rx_and_doctors.kpi_pcp')</div>
                     <div class="text-lg font-bold text-gray-900 dark:text-white mt-0.5 truncate">
-                        @{{ metrics.has_pcp ? metrics.pcp_name : 'No asignado' }}
+                        @{{ metrics.has_pcp ? metrics.pcp_name : '@lang('admin::insurance.ai_snapshot.pcp_pending')' }}
                     </div>
                     <div class="text-xs text-emerald-600 mt-1" v-if="metrics.has_pcp">
-                        ✅ Asignado en red
+                        ✅ @lang('admin::insurance.rx_and_doctors.kpi_pcp_assigned')
                     </div>
                     <div class="text-xs text-amber-600 mt-1" v-else>
-                        ⚠️ Requiere seleccionar PCP
+                        ⚠️ @lang('admin::insurance.rx_and_doctors.kpi_pcp_required')
                     </div>
                 </div>
 
                 <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="text-xs text-gray-500">Restricciones de Cobertura</div>
+                    <div class="text-xs text-gray-500">@lang('admin::insurance.rx_and_doctors.kpi_restrictions')</div>
                     <div class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">
-                        @{{ metrics.prior_auth_count }} con Autorización
+                        @{{ metrics.prior_auth_count }} @lang('admin::insurance.rx_and_doctors.with_prior_auth')
                     </div>
                     <div class="text-xs text-gray-500 mt-1">
-                        PA / Terapia Escalonada
+                        @lang('admin::insurance.rx_and_doctors.pa_step_therapy')
                     </div>
                 </div>
             </div>
@@ -117,26 +117,26 @@
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <h4 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
-                            <span>💊</span> Medicamentos Recetados (Rx Formulario)
+                            <span>💊</span> @lang('admin::insurance.rx_and_doctors.med_table_title')
                         </h4>
-                        <span class="text-xs text-gray-500">@{{ medications.length }} registrados</span>
+                        <span class="text-xs text-gray-500">@{{ medications.length }} @lang('admin::insurance.rx_and_doctors.registered')</span>
                     </div>
 
                     <div v-if="medications.length === 0" class="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700 text-center text-xs text-gray-500">
-                        No hay medicamentos registrados aún. Haz clic en "➕ Medicamento" para registrar prescripciones del asegurado.
+                        @lang('admin::insurance.rx_and_doctors.med_table_empty')
                     </div>
 
                     <div v-else class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-lg">
                         <table class="w-full text-left text-xs text-gray-600 dark:text-gray-300">
                             <thead class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-400 font-semibold border-b border-gray-200 dark:border-gray-700">
                                 <tr>
-                                    <th class="p-2.5">Medicamento</th>
-                                    <th class="p-2.5">Dosis / Frecuencia</th>
-                                    <th class="p-2.5">Nivel (Tier)</th>
-                                    <th class="p-2.5">Restricciones</th>
-                                    <th class="p-2.5 text-right">Copago 30d</th>
-                                    <th class="p-2.5 text-right">Copago 90d</th>
-                                    <th class="p-2.5 text-center">Acción</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_drug_name')</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_dosage')</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_tier')</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_restrictions')</th>
+                                    <th class="p-2.5 text-right">@lang('admin::insurance.rx_and_doctors.form_copay_30d')</th>
+                                    <th class="p-2.5 text-right">@lang('admin::insurance.rx_and_doctors.form_copay_90d_mail')</th>
+                                    <th class="p-2.5 text-center">@lang('admin::insurance.rx_and_doctors.col_action')</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -155,10 +155,10 @@
                                     </td>
                                     <td class="p-2.5">
                                         <div class="flex items-center gap-1">
-                                            <span v-if="med.requires_prior_authorization" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-amber-100 text-amber-800" title="Requiere Autorización Previa">PA</span>
-                                            <span v-if="med.requires_step_therapy" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-100 text-blue-800" title="Requiere Terapia Escalonada">ST</span>
-                                            <span v-if="med.has_quantity_limit" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-rose-100 text-rose-800" title="Límite de Cantidad">QL</span>
-                                            <span v-if="!med.requires_prior_authorization && !med.requires_step_therapy && !med.has_quantity_limit" class="text-[10px] text-emerald-600">✓ Libre</span>
+                                            <span v-if="med.requires_prior_authorization" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-amber-100 text-amber-800" title="@lang('admin::insurance.rx_and_doctors.form_pa')">PA</span>
+                                            <span v-if="med.requires_step_therapy" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-100 text-blue-800" title="@lang('admin::insurance.rx_and_doctors.form_st')">ST</span>
+                                            <span v-if="med.has_quantity_limit" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-rose-100 text-rose-800" title="@lang('admin::insurance.rx_and_doctors.form_ql')">QL</span>
+                                            <span v-if="!med.requires_prior_authorization && !med.requires_step_therapy && !med.has_quantity_limit" class="text-[10px] text-emerald-600">@lang('admin::insurance.rx_and_doctors.badge_unrestricted')</span>
                                         </div>
                                     </td>
                                     <td class="p-2.5 text-right font-medium text-gray-900 dark:text-white">
@@ -172,7 +172,7 @@
                                             type="button"
                                             class="text-red-500 hover:text-red-700 text-xs px-2 py-1"
                                             @click="deleteMedication(med.id)"
-                                            title="Eliminar medicamento"
+                                            title="@lang('admin::insurance.rx_and_doctors.delete_med')"
                                         >
                                             🗑️
                                         </button>
@@ -187,24 +187,24 @@
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <h4 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
-                            <span>🩺</span> Red de Médicos y Especialistas Preferidos
+                            <span>🩺</span> @lang('admin::insurance.rx_and_doctors.doc_table_title')
                         </h4>
-                        <span class="text-xs text-gray-500">@{{ doctors.length }} registrados</span>
+                        <span class="text-xs text-gray-500">@{{ doctors.length }} @lang('admin::insurance.rx_and_doctors.registered')</span>
                     </div>
 
                     <div v-if="doctors.length === 0" class="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700 text-center text-xs text-gray-500">
-                        No hay médicos registrados. Haz clic en "🩺 Médico / Proveedor" para vincular los doctores del cliente y verificar su cobertura.
+                        @lang('admin::insurance.rx_and_doctors.doc_table_empty')
                     </div>
 
                     <div v-else class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-lg">
                         <table class="w-full text-left text-xs text-gray-600 dark:text-gray-300">
                             <thead class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-400 font-semibold border-b border-gray-200 dark:border-gray-700">
                                 <tr>
-                                    <th class="p-2.5">Médico / Especialidad</th>
-                                    <th class="p-2.5">Clínica / Hospital</th>
-                                    <th class="p-2.5">NPI / Teléfono</th>
-                                    <th class="p-2.5">Estatus en Red (In-Network)</th>
-                                    <th class="p-2.5 text-center">Acción</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_doc_name')</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_clinic')</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_npi')</th>
+                                    <th class="p-2.5">@lang('admin::insurance.rx_and_doctors.col_network_status')</th>
+                                    <th class="p-2.5 text-center">@lang('admin::insurance.rx_and_doctors.col_action')</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -219,7 +219,7 @@
                                         <div class="text-[10px] text-gray-500 font-normal">@{{ doc.specialty }}</div>
                                     </td>
                                     <td class="p-2.5">
-                                        @{{ doc.clinic_or_hospital || 'Práctica Privada' }}
+                                        @{{ doc.clinic_or_hospital || '@lang('admin::insurance.rx_and_doctors.private_practice')' }}
                                         <div v-if="doc.address_city_state" class="text-[10px] text-gray-400">@{{ doc.address_city_state }}</div>
                                     </td>
                                     <td class="p-2.5">
@@ -237,14 +237,14 @@
                                                 @{{ carrier }}: @{{ status }}
                                             </span>
                                         </div>
-                                        <span v-else class="text-gray-400 text-[10px]">Por verificar</span>
+                                        <span v-else class="text-gray-400 text-[10px]">@lang('admin::insurance.rx_and_doctors.to_verify')</span>
                                     </td>
                                     <td class="p-2.5 text-center">
                                         <button
                                             type="button"
                                             class="text-red-500 hover:text-red-700 text-xs px-2 py-1"
                                             @click="deleteDoctor(doc.id)"
-                                            title="Eliminar médico"
+                                            title="@lang('admin::insurance.rx_and_doctors.delete_doc')"
                                         >
                                             🗑️
                                         </button>
@@ -261,14 +261,14 @@
                 <div class="bg-white dark:bg-gray-900 rounded-xl max-w-md w-full p-5 shadow-2xl border border-gray-200 dark:border-gray-800 space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-200 dark:border-gray-800">
                         <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <span>💊</span> Agregar Medicamento (Rx)
+                            <span>💊</span> @lang('admin::insurance.rx_and_doctors.modal_med_title')
                         </h3>
                         <button type="button" class="text-gray-400 hover:text-gray-600 text-xl font-bold" @click="showMedModal = false">&times;</button>
                     </div>
 
                     <form @submit.prevent="saveMedication" class="space-y-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Nombre del Medicamento *</label>
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_drug_name')</label>
                             <input
                                 type="text"
                                 v-model="medForm.medication_name"
@@ -280,7 +280,7 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Dosis</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_dosage')</label>
                                 <input
                                     type="text"
                                     v-model="medForm.dosage"
@@ -289,11 +289,11 @@
                                 />
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Frecuencia</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_frequency')</label>
                                 <input
                                     type="text"
                                     v-model="medForm.frequency"
-                                    placeholder="Ej. 1 vez al día"
+                                    placeholder="Ej. 1 / día"
                                     class="w-full text-xs rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700"
                                 />
                             </div>
@@ -301,17 +301,17 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Nivel (Drug Tier) *</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_tier')</label>
                                 <select v-model="medForm.drug_tier" required class="w-full text-xs rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-                                    <option value="Tier 1: Preferred Generic">Tier 1: Genérico Preferido</option>
-                                    <option value="Tier 2: Generic">Tier 2: Genérico</option>
-                                    <option value="Tier 3: Preferred Brand">Tier 3: Marca Preferida</option>
-                                    <option value="Tier 4: Non-Preferred">Tier 4: No Preferido</option>
-                                    <option value="Tier 5: Specialty">Tier 5: Especialidad</option>
+                                    <option value="Tier 1: Preferred Generic">@lang('admin::insurance.rx_and_doctors.tier_1')</option>
+                                    <option value="Tier 2: Generic">@lang('admin::insurance.rx_and_doctors.tier_2')</option>
+                                    <option value="Tier 3: Preferred Brand">@lang('admin::insurance.rx_and_doctors.tier_3')</option>
+                                    <option value="Tier 4: Non-Preferred">@lang('admin::insurance.rx_and_doctors.tier_4')</option>
+                                    <option value="Tier 5: Specialty">@lang('admin::insurance.rx_and_doctors.tier_5')</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Cantidad (30 días)</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_qty_30d')</label>
                                 <input
                                     type="number"
                                     v-model="medForm.quantity_per_30_days"
@@ -323,7 +323,7 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Copago 30d ($)</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_copay_30d')</label>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -333,7 +333,7 @@
                                 />
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Copago 90d Correo ($)</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_copay_90d_mail')</label>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -347,21 +347,21 @@
                         <div class="space-y-1.5 pt-1">
                             <label class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
                                 <input type="checkbox" v-model="medForm.requires_prior_authorization" class="rounded text-blue-600">
-                                <span>Requiere Autorización Previa (PA)</span>
+                                <span>@lang('admin::insurance.rx_and_doctors.form_pa')</span>
                             </label>
                             <label class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
                                 <input type="checkbox" v-model="medForm.requires_step_therapy" class="rounded text-blue-600">
-                                <span>Requiere Terapia Escalonada (ST)</span>
+                                <span>@lang('admin::insurance.rx_and_doctors.form_st')</span>
                             </label>
                             <label class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
                                 <input type="checkbox" v-model="medForm.has_quantity_limit" class="rounded text-blue-600">
-                                <span>Tiene Límite de Cantidad (QL)</span>
+                                <span>@lang('admin::insurance.rx_and_doctors.form_ql')</span>
                             </label>
                         </div>
 
                         <div class="flex justify-end gap-2 pt-3 border-t border-gray-200 dark:border-gray-800">
-                            <button type="button" class="secondary-button text-xs py-1.5 px-3" @click="showMedModal = false">Cancelar</button>
-                            <button type="submit" class="primary-button text-xs py-1.5 px-3" :disabled="isSaving">Guardar Fármaco</button>
+                            <button type="button" class="secondary-button text-xs py-1.5 px-3" @click="showMedModal = false">@lang('admin::insurance.rx_and_doctors.cancel')</button>
+                            <button type="submit" class="primary-button text-xs py-1.5 px-3" :disabled="isSaving">@lang('admin::insurance.rx_and_doctors.save_med')</button>
                         </div>
                     </form>
                 </div>
@@ -372,14 +372,14 @@
                 <div class="bg-white dark:bg-gray-900 rounded-xl max-w-md w-full p-5 shadow-2xl border border-gray-200 dark:border-gray-800 space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-gray-200 dark:border-gray-800">
                         <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <span>🩺</span> Agregar Médico / Proveedor
+                            <span>🩺</span> @lang('admin::insurance.rx_and_doctors.modal_doc_title')
                         </h3>
                         <button type="button" class="text-gray-400 hover:text-gray-600 text-xl font-bold" @click="showDocModal = false">&times;</button>
                     </div>
 
                     <form @submit.prevent="saveDoctor" class="space-y-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Nombre Completo del Médico *</label>
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_doc_name')</label>
                             <input
                                 type="text"
                                 v-model="docForm.doctor_name"
@@ -391,7 +391,7 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Especialidad</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_specialty')</label>
                                 <input
                                     type="text"
                                     v-model="docForm.specialty"
@@ -400,7 +400,7 @@
                                 />
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">NPI (10 dígitos)</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_npi')</label>
                                 <input
                                     type="text"
                                     v-model="docForm.npi_number"
@@ -413,7 +413,7 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Clínica / Hospital</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_clinic')</label>
                                 <input
                                     type="text"
                                     v-model="docForm.clinic_or_hospital"
@@ -422,7 +422,7 @@
                                 />
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Ciudad / Estado</label>
+                                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_city_state')</label>
                                 <input
                                     type="text"
                                     v-model="docForm.address_city_state"
@@ -433,7 +433,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Teléfono</label>
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.rx_and_doctors.form_phone')</label>
                             <input
                                 type="text"
                                 v-model="docForm.phone"
@@ -445,13 +445,13 @@
                         <div class="pt-1">
                             <label class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
                                 <input type="checkbox" v-model="docForm.is_primary_physician" class="rounded text-blue-600">
-                                <span class="font-semibold text-emerald-700">Designar como Médico Primario (PCP)</span>
+                                <span class="font-semibold text-emerald-700">@lang('admin::insurance.rx_and_doctors.form_pcp_designation')</span>
                             </label>
                         </div>
 
                         <div class="flex justify-end gap-2 pt-3 border-t border-gray-200 dark:border-gray-800">
-                            <button type="button" class="secondary-button text-xs py-1.5 px-3" @click="showDocModal = false">Cancelar</button>
-                            <button type="submit" class="primary-button text-xs py-1.5 px-3" :disabled="isSaving">Guardar Médico</button>
+                            <button type="button" class="secondary-button text-xs py-1.5 px-3" @click="showDocModal = false">@lang('admin::insurance.rx_and_doctors.cancel')</button>
+                            <button type="submit" class="primary-button text-xs py-1.5 px-3" :disabled="isSaving">@lang('admin::insurance.rx_and_doctors.save_doc')</button>
                         </div>
                     </form>
                 </div>
@@ -472,6 +472,14 @@
                     metrics: null,
                     showMedModal: false,
                     showDocModal: false,
+                    labels: {
+                        confirmDeleteMed: @json(trans('admin::insurance.rx_and_doctors.confirm_delete_med')),
+                        confirmDeleteDoc: @json(trans('admin::insurance.rx_and_doctors.confirm_delete_doc')),
+                        errorSaveMed: @json(trans('admin::insurance.rx_and_doctors.error_save_med')),
+                        errorDeleteMed: @json(trans('admin::insurance.rx_and_doctors.error_delete_med')),
+                        errorSaveDoc: @json(trans('admin::insurance.rx_and_doctors.error_save_doc')),
+                        errorDeleteDoc: @json(trans('admin::insurance.rx_and_doctors.error_delete_doc')),
+                    },
                     medForm: {
                         medication_name: '',
                         dosage: '',
@@ -550,14 +558,14 @@
                             this.showMedModal = false;
                             this.fetchData();
                         })
-                        .catch(err => alert('Error al guardar medicamento.'))
+                        .catch(err => alert(this.labels.errorSaveMed))
                         .finally(() => this.isSaving = false);
                 },
                 deleteMedication(id) {
-                    if (!confirm('¿Deseas eliminar este medicamento?')) return;
+                    if (!confirm(this.labels.confirmDeleteMed)) return;
                     this.$axios.delete(`/admin/insurance/leads/${this.leadId}/rx-medications/${id}`)
                         .then(() => this.fetchData())
-                        .catch(err => alert('Error al eliminar medicamento.'));
+                        .catch(err => alert(this.labels.errorDeleteMed));
                 },
                 saveDoctor() {
                     this.isSaving = true;
@@ -566,14 +574,14 @@
                             this.showDocModal = false;
                             this.fetchData();
                         })
-                        .catch(err => alert('Error al guardar médico.'))
+                        .catch(err => alert(this.labels.errorSaveDoc))
                         .finally(() => this.isSaving = false);
                 },
                 deleteDoctor(id) {
-                    if (!confirm('¿Deseas eliminar este médico?')) return;
+                    if (!confirm(this.labels.confirmDeleteDoc)) return;
                     this.$axios.delete(`/admin/insurance/leads/${this.leadId}/doctor-networks/${id}`)
                         .then(() => this.fetchData())
-                        .catch(err => alert('Error al eliminar médico.'));
+                        .catch(err => alert(this.labels.errorDeleteDoc));
                 },
             }
         });

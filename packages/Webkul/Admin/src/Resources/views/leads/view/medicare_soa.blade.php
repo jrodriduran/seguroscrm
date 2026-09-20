@@ -9,12 +9,12 @@
                     <span class="text-2xl">📋</span>
                     <div>
                         <h3 class="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            Scope of Appointment (SOA) Medicare
+                            @lang('admin::insurance.medicare_soa.title')
                             <span v-if="soa" :class="statusBadgeClass" class="text-xs font-semibold px-2.5 py-0.5 rounded-full">
                                 @{{ statusLabel }}
                             </span>
                         </h3>
-                        <p class="text-xs text-gray-500">Regulación obligatoria CMS 42 CFR § 422.2274 con regla de espera de 48 horas</p>
+                        <p class="text-xs text-gray-500">@lang('admin::insurance.medicare_soa.subtitle')</p>
                     </div>
                 </div>
 
@@ -26,7 +26,7 @@
                         :disabled="isLoading"
                     >
                         <span class="icon-refresh text-sm" :class="{'animate-spin': isLoading}"></span>
-                        Actualizar
+                        @lang('admin::insurance.medicare_soa.btn_refresh')
                     </button>
 
                     <a
@@ -36,7 +36,7 @@
                         class="secondary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
                     >
                         <span>🖨️</span>
-                        Ver / Imprimir
+                        @lang('admin::insurance.medicare_soa.btn_certificate')
                     </a>
 
                     <a
@@ -46,7 +46,7 @@
                         class="primary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
                     >
                         <span>📥</span>
-                        Descargar PDF
+                        @lang('admin::insurance.medicare_soa.btn_pdf')
                     </a>
                 </div>
             </div>
@@ -66,17 +66,17 @@
                             <span class="text-3xl">@{{ isEligible ? '✅' : '⏳' }}</span>
                             <div>
                                 <h4 class="text-sm font-bold" :class="isEligible ? 'text-emerald-900 dark:text-emerald-300' : 'text-amber-900 dark:text-amber-300'">
-                                    @{{ isEligible ? 'Regla CMS de 48 Horas Cumplida' : 'Esperando Cumplimiento del Período de 48 Horas CMS' }}
+                                    @{{ isEligible ? '{{ trans('admin::insurance.medicare_soa.rule_48h_met') }}' : '{{ trans('admin::insurance.medicare_soa.rule_48h_waiting') }}' }}
                                 </h4>
                                 <p class="text-xs" :class="isEligible ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'">
                                     <span v-if="soa.exception_reason && soa.exception_reason !== 'none'">
-                                        Excepción CMS aplicada: <strong>@{{ soa.exception_reason === 'walk_in' ? 'Visita espontánea (Walk-in)' : 'Fin de período de enrolamiento' }}</strong>.
+                                        @lang('admin::insurance.medicare_soa.rule_48h_exception'): <strong>@{{ soa.exception_reason === 'walk_in' ? '{{ trans('admin::insurance.medicare_soa.walk_in') }}' : '{{ trans('admin::insurance.medicare_soa.end_of_enrollment') }}' }}</strong>.
                                     </span>
                                     <span v-else-if="isEligible">
-                                        El agente está legalmente autorizado por CMS para realizar la presentación personal desde el <strong>@{{ formatDateTime(soa.appointment_eligible_at) }}</strong>.
+                                        @lang('admin::insurance.medicare_soa.authorized_from', ['date' => '']) <strong>@{{ formatDateTime(soa.appointment_eligible_at) }}</strong>.
                                     </span>
                                     <span v-else>
-                                        Tiempo restante para poder reunirse legalmente con el beneficiario: <strong class="text-amber-900 dark:text-amber-200">@{{ soa.hours_remaining_until_eligible }} hora(s)</strong> (Habilitada desde el @{{ formatDateTime(soa.appointment_eligible_at) }}).
+                                        @lang('admin::insurance.medicare_soa.waiting_time', ['hours' => '']) <strong class="text-amber-900 dark:text-amber-200">@{{ soa.hours_remaining_until_eligible }}</strong> (@{{ formatDateTime(soa.appointment_eligible_at) }}).
                                     </span>
                                 </p>
                             </div>
@@ -88,7 +88,7 @@
                             @click="showExceptionModal = true"
                             class="text-xs font-semibold px-2.5 py-1.5 bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 hover:bg-amber-200 rounded-lg transition"
                         >
-                            ⚡ Aplicar Excepción CMS
+                            @lang('admin::insurance.medicare_soa.apply_exception')
                         </button>
                     </div>
                 </div>
@@ -98,30 +98,30 @@
                     <!-- Audit Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                         <div>
-                            <span class="text-gray-400 block font-medium">Beneficiario:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.beneficiary')</span>
                             <strong class="text-gray-900 dark:text-white text-sm">@{{ soa.beneficiary_name }}</strong>
                         </div>
                         <div>
-                            <span class="text-gray-400 block font-medium">Fecha y Hora de Firma:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.signed_at_label')</span>
                             <strong class="text-gray-800 dark:text-gray-200">@{{ formatDateTime(soa.signed_at) }}</strong>
                         </div>
                         <div>
-                            <span class="text-gray-400 block font-medium">IP Auditada:</span>
-                            <strong class="text-gray-800 dark:text-gray-200 font-mono">@{{ soa.ip_address || 'Registrada' }}</strong>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.audited_ip')</span>
+                            <strong class="text-gray-800 dark:text-gray-200 font-mono">@{{ soa.ip_address || '{{ trans('admin::insurance.medicare_soa.registered') }}' }}</strong>
                         </div>
                         <div class="md:col-span-2">
-                            <span class="text-gray-400 block font-medium">Agente Certificado:</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.certified_agent')</span>
                             <span class="text-gray-700 dark:text-gray-300">@{{ soa.agent_name }} • NPN: <strong class="text-blue-600">@{{ soa.agent_npn }}</strong></span>
                         </div>
                         <div>
-                            <span class="text-gray-400 block font-medium">Dispositivo:</span>
-                            <span class="text-gray-600 dark:text-gray-400 truncate block">@{{ soa.user_agent || 'Web/Móvil' }}</span>
+                            <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.device')</span>
+                            <span class="text-gray-600 dark:text-gray-400 truncate block">@{{ soa.user_agent || '{{ trans('admin::insurance.medicare_soa.web_mobile') }}' }}</span>
                         </div>
                     </div>
 
                     <!-- Products Authorized List -->
                     <div class="border-t border-gray-100 dark:border-gray-800 pt-3 text-xs">
-                        <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-2">Planes Autorizados por el Beneficiario:</span>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-2">@lang('admin::insurance.medicare_soa.authorized_plans')</span>
                         <div class="flex flex-wrap gap-2">
                             <span
                                 v-for="product in soa.products_list"
@@ -135,9 +135,9 @@
 
                     <!-- Signature Preview -->
                     <div v-if="soa.signature_data" class="border-t border-gray-100 dark:border-gray-800 pt-3">
-                        <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-2">Firma Digital Capturada:</span>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-2">@lang('admin::insurance.medicare_soa.digital_signature_captured')</span>
                         <div class="flex items-center justify-center p-2 bg-gray-50 dark:bg-gray-950 rounded border border-gray-200 dark:border-gray-800">
-                            <img :src="soa.signature_data" alt="Firma SOA" class="h-16 object-contain max-w-full">
+                            <img :src="soa.signature_data" alt="Signature" class="h-16 object-contain max-w-full">
                         </div>
                     </div>
 
@@ -147,7 +147,7 @@
                             @click="regenerateLink"
                             class="text-xs font-medium text-gray-500 hover:text-gray-700 underline"
                         >
-                            Solicitar nueva firma SOA
+                            @lang('admin::insurance.medicare_soa.request_new_soa')
                         </button>
                     </div>
                 </div>
@@ -159,8 +159,8 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-2xl">⏳</span>
                                 <div>
-                                    <h4 class="text-sm font-bold text-amber-900 dark:text-amber-300">Scope of Appointment Pendiente de Firma</h4>
-                                    <p class="text-xs text-amber-700 dark:text-amber-400">Envíe el enlace directo al beneficiario por WhatsApp o SMS para que firme en pantalla desde su celular.</p>
+                                    <h4 class="text-sm font-bold text-amber-900 dark:text-amber-300">@lang('admin::insurance.medicare_soa.pending_title')</h4>
+                                    <p class="text-xs text-amber-700 dark:text-amber-400">@lang('admin::insurance.medicare_soa.pending_subtitle')</p>
                                 </div>
                             </div>
 
@@ -170,7 +170,7 @@
                                 class="secondary-button text-xs py-1 px-2.5 flex items-center gap-1"
                             >
                                 <span>🔗</span>
-                                Probar Enlace
+                                @lang('admin::insurance.medicare_soa.test_link')
                             </a>
                         </div>
 
@@ -182,7 +182,7 @@
                                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg shadow-sm transition-colors"
                             >
                                 <span class="text-sm">📲</span>
-                                Enviar SOA por WhatsApp en 1 Clic
+                                @lang('admin::insurance.medicare_soa.send_whatsapp_1click')
                             </button>
 
                             <button
@@ -198,7 +198,7 @@
 
                     <!-- URL Box -->
                     <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 text-xs">
-                        <span class="text-gray-400 block font-medium mb-1">Enlace público de firma rápida:</span>
+                        <span class="text-gray-400 block font-medium mb-1">@lang('admin::insurance.medicare_soa.public_quick_link')</span>
                         <input
                             type="text"
                             readonly
@@ -217,39 +217,39 @@
                     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 max-w-md w-full overflow-hidden">
                         <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
                             <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-                                <span>⚡</span> Aplicar Excepción Regulatoria CMS a Regla de 48h
+                                <span>⚡</span> @lang('admin::insurance.medicare_soa.modal_exception_title')
                             </h3>
                             <button @click="showExceptionModal = false" class="text-gray-400 hover:text-gray-600">✕</button>
                         </div>
 
                         <div class="p-4 space-y-3 text-xs">
-                            <p class="text-gray-500">CMS solo permite omitir las 48 horas bajo causas estrictamente tipificadas:</p>
+                            <p class="text-gray-500">@lang('admin::insurance.medicare_soa.modal_exception_notice')</p>
 
                             <div>
-                                <label class="block font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de Excepción *</label>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.medicare_soa.modal_reason_label')</label>
                                 <select
                                     v-model="exceptionForm.reason"
                                     class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-2"
                                 >
-                                    <option value="walk_in">Beneficiario se presentó espontáneamente en la oficina (Walk-in)</option>
-                                    <option value="end_of_enrollment">Final del período de inscripción (faltan menos de 4 días para AEP/OEP)</option>
+                                    <option value="walk_in">@lang('admin::insurance.medicare_soa.walk_in')</option>
+                                    <option value="end_of_enrollment">@lang('admin::insurance.medicare_soa.end_of_enrollment')</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label class="block font-medium text-gray-700 dark:text-gray-300 mb-1">Justificación del Agente para Auditoría CMS *</label>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300 mb-1">@lang('admin::insurance.medicare_soa.modal_notes_label')</label>
                                 <textarea
                                     v-model="exceptionForm.notes"
                                     rows="3"
                                     class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-2"
-                                    placeholder="Detalle las circunstancias específicas de la visita o la fecha límite de inscripción..."
+                                    placeholder="{{ trans('admin::insurance.medicare_soa.modal_notes_placeholder') }}"
                                 ></textarea>
                             </div>
 
                             <div class="flex justify-end gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
-                                <button type="button" @click="showExceptionModal = false" class="secondary-button">Cancelar</button>
+                                <button type="button" @click="showExceptionModal = false" class="secondary-button">@lang('admin::insurance.medicare_soa.cancel')</button>
                                 <button type="button" @click="applyException" class="primary-button" :disabled="isSubmittingException">
-                                    @{{ isSubmittingException ? 'Registrando...' : 'Confirmar Excepción' }}
+                                    @{{ isSubmittingException ? '{{ trans('admin::insurance.medicare_soa.registering') }}' : '{{ trans('admin::insurance.medicare_soa.confirm_exception') }}' }}
                                 </button>
                             </div>
                         </div>
@@ -272,7 +272,7 @@
                     whatsappUrl: '',
                     whatsappMessage: '',
                     isLoading: true,
-                    copyBtnText: 'Copiar Enlace',
+                    copyBtnText: '{{ trans('admin::insurance.medicare_soa.copy_link') }}',
                     showExceptionModal: false,
                     isSubmittingException: false,
                     exceptionForm: {
@@ -284,14 +284,14 @@
 
             computed: {
                 statusLabel() {
-                    if (!this.soa) return 'Cargando...';
+                    if (!this.soa) return '{{ trans('admin::insurance.medicare_soa.loading') }}';
                     if (this.soa.status === 'signed') {
                         if (this.soa.exception_reason && this.soa.exception_reason !== 'none') {
-                            return 'Excepción CMS Aplicada';
+                            return '{{ trans('admin::insurance.medicare_soa.status_exception_applied') }}';
                         }
-                        return this.soa.is_eligible_for_appointment ? 'Cumplido 48h (Listo para Cita)' : 'Firmado (Esperando 48h)';
+                        return this.soa.is_eligible_for_appointment ? '{{ trans('admin::insurance.medicare_soa.status_ready_for_appointment') }}' : '{{ trans('admin::insurance.medicare_soa.status_waiting_48h') }}';
                     }
-                    return 'Pendiente de Firma';
+                    return '{{ trans('admin::insurance.medicare_soa.status_pending') }}';
                 },
 
                 statusBadgeClass() {
@@ -345,16 +345,16 @@
                     if (!this.publicUrl) return;
 
                     navigator.clipboard.writeText(this.publicUrl).then(() => {
-                        this.copyBtnText = '¡Copiado! ✓';
+                        this.copyBtnText = '{{ trans('admin::insurance.medicare_soa.copied') }}';
                         setTimeout(() => {
-                            this.copyBtnText = 'Copiar Enlace';
+                            this.copyBtnText = '{{ trans('admin::insurance.medicare_soa.copy_link') }}';
                         }, 2500);
                     });
                 },
 
                 applyException() {
                     if (!this.exceptionForm.notes || this.exceptionForm.notes.length < 5) {
-                        alert('Por favor ingrese la justificación de la excepción para el archivo de auditoría.');
+                        alert('{{ trans('admin::insurance.medicare_soa.prompt_missing_notes') }}');
                         return;
                     }
 
@@ -379,13 +379,13 @@
                         this.isSubmittingException = false;
                         this.$emitter.emit('add-flash', {
                             type: 'error',
-                            message: error.response?.data?.message || 'Error al aplicar excepción.',
+                            message: error.response?.data?.message || 'Error.',
                         });
                     });
                 },
 
                 regenerateLink() {
-                    if (!confirm('¿Desea regenerar el enlace y solicitar una nueva firma SOA?')) return;
+                    if (!confirm('{{ trans('admin::insurance.medicare_soa.confirm_regenerate') }}')) return;
 
                     const url = "{{ route('admin.leads.soa.regenerate', ['lead_id' => 'xxx']) }}".replace('xxx', this.leadId);
 
@@ -404,7 +404,7 @@
 
                 formatDateTime(dt) {
                     if (!dt) return 'N/A';
-                    return new Date(dt).toLocaleString('es-ES', {
+                    return new Date(dt).toLocaleString('{{ app()->getLocale() }}', {
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',

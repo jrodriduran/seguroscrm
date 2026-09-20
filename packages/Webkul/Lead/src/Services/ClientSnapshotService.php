@@ -37,47 +37,44 @@ class ClientSnapshotService
         $urgentDmi = $lead->dmiDocuments?->first(fn ($d) => $d->urgency_level === 'critical');
 
         $aiInsights = $this->aiScoringService->evaluateLead($lead);
-        $nextAction = ! empty($aiInsights['next_best_actions']) ? $aiInsights['next_best_actions'][0]['title'] : 'Seguimiento de rutina';
+        $nextAction = ! empty($aiInsights['next_best_actions']) ? $aiInsights['next_best_actions'][0]['title'] : trans('admin::insurance.ai_insights.tier_nurture');
 
         // Age calculation
-        $ageText = 'Edad no especificada';
+        $ageText = trans('admin::insurance.ai_snapshot.age_unspecified');
         if ($person?->date_of_birth) {
-            $ageText = Carbon::parse($person->date_of_birth)->age.' años';
+            $ageText = trans('admin::insurance.ai_snapshot.age_years', ['age' => Carbon::parse($person->date_of_birth)->age]);
         }
 
         // Meds summary
         $medsSummary = $medications->isNotEmpty()
             ? $medications->pluck('medication_name')->implode(', ')
-            : 'Sin medicamentos de uso continuo reportados';
+            : trans('admin::insurance.ai_snapshot.no_meds');
 
         $pcpSummary = $primaryDoctor
             ? "{$primaryDoctor->doctor_name} ({$primaryDoctor->specialty})"
-            : 'Pendiente por seleccionar';
+            : trans('admin::insurance.ai_snapshot.pcp_pending');
 
         $complianceStatus = ($consent && $consent->status === 'signed')
-            ? 'Consentimiento CMS firmado legalmente'
-            : 'Requiere firma de Consentimiento CMS';
+            ? trans('admin::insurance.ai_snapshot.consent_signed')
+            : trans('admin::insurance.ai_snapshot.consent_required');
 
         if ($urgentDmi) {
-            $complianceStatus .= " • ⚠️ DMI Crítico ({$urgentDmi->days_remaining}d restantes)";
+            $complianceStatus .= ' • ⚠️ '.trans('admin::insurance.ai_snapshot.dmi_critical_suffix', ['days' => $urgentDmi->days_remaining]);
         }
 
         // Narrative Brief
-        $narrative = sprintf(
-            'El beneficiario %s (%s) reside en %s. Cuenta con un censo de %d personas en su hogar. '.
-            'Médico primario: %s. Medicamentos activos: %s. Estatus de cumplimiento: %s. '.
-            'Score IA: %d/100 (%s). Acción prioritaria recomendada: %s.',
-            $person?->name ?: $lead->title,
-            $ageText,
-            $person?->address ?: 'código postal asignado',
-            $household->count() + 1,
-            $pcpSummary,
-            $medsSummary,
-            $complianceStatus,
-            $aiInsights['total_score'],
-            $aiInsights['tier']['label'],
-            $nextAction
-        );
+        $narrative = trans('admin::insurance.ai_snapshot.narrative_template', [
+            'name' => $person?->name ?: $lead->title,
+            'age' => $ageText,
+            'location' => $person?->address ?: trans('admin::insurance.policies.address_not_specified', [], 'en') ?: 'Zipcode',
+            'household' => $household->count() + 1,
+            'pcp' => $pcpSummary,
+            'meds' => $medsSummary,
+            'compliance' => $complianceStatus,
+            'score' => $aiInsights['total_score'],
+            'tier' => $aiInsights['tier']['label'],
+            'action' => $nextAction,
+        ]);
 
         return [
             'lead_id' => $lead->id,

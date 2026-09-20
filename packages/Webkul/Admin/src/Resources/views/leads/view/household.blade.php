@@ -10,7 +10,7 @@
                     <h3 class="text-base font-semibold dark:text-white">
                         @lang('admin::insurance.household.title')
                         <span class="ml-1 text-xs font-normal text-gray-500" v-if="members.length">
-                            (@{{ members.length }} @{{ members.length === 1 ? 'member' : 'members' }})
+                            (@{{ members.length }} @{{ members.length === 1 ? labels.memberSingle : labels.memberPlural }})
                         </span>
                     </h3>
                 </div>
@@ -75,7 +75,7 @@
                             <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">
                                 <span v-if="member.date_of_birth">
                                     @{{ member.date_of_birth }}
-                                    <span v-if="member.age !== null" class="text-xs text-gray-500">(@{{ member.age }} yrs)</span>
+                                    <span v-if="member.age !== null" class="text-xs text-gray-500">(@{{ member.age }} @{{ labels.yearsShort }})</span>
                                 </span>
                                 <span v-else class="text-gray-400">--</span>
                             </td>
@@ -104,7 +104,7 @@
                                     <button
                                         type="button"
                                         class="text-gray-500 hover:text-brandColor transition"
-                                        :title="trans('admin::insurance.household.edit')"
+                                        :title="labels.edit"
                                         @click="openEditModal(member)"
                                     >
                                         <span class="icon-edit text-lg"></span>
@@ -112,7 +112,7 @@
                                     <button
                                         type="button"
                                         class="text-gray-500 hover:text-red-600 transition"
-                                        :title="trans('admin::insurance.household.delete')"
+                                        :title="labels.delete"
                                         @click="deleteMember(member.id)"
                                     >
                                         <span class="icon-delete text-lg"></span>
@@ -128,7 +128,7 @@
             <x-admin::modal ref="memberModal" position="center">
                 <x-slot:header>
                     <h3 class="text-base font-semibold dark:text-white">
-                        @{{ isEditing ? trans('admin::insurance.household.edit_modal_title') : trans('admin::insurance.household.add_modal_title') }}
+                        @{{ isEditing ? labels.editModalTitle : labels.addModalTitle }}
                     </h3>
                 </x-slot>
 
@@ -144,7 +144,6 @@
                                 v-model="form.name"
                                 required
                                 class="rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm dark:bg-gray-950 dark:text-white"
-                                placeholder="e.g. Maria Gonzalez"
                             />
                         </div>
 
@@ -258,7 +257,6 @@
                                 v-model="form.notes"
                                 rows="2"
                                 class="rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm dark:bg-gray-950 dark:text-white"
-                                placeholder="Additional notes or doctor preferences..."
                             ></textarea>
                         </div>
                     </form>
@@ -279,7 +277,7 @@
                             :disabled="isSaving"
                             @click="saveMember"
                         >
-                            @{{ isSaving ? 'Saving...' : (isEditing ? trans('admin::insurance.household.update_btn') : trans('admin::insurance.household.save_btn')) }}
+                            @{{ isSaving ? labels.saving : (isEditing ? labels.updateBtn : labels.saveBtn) }}
                         </button>
                     </div>
                 </x-slot>
@@ -305,6 +303,22 @@
                     isSaving: false,
                     isEditing: false,
                     editingId: null,
+                    labels: {
+                        edit: @json(trans('admin::insurance.household.edit')),
+                        delete: @json(trans('admin::insurance.household.delete')),
+                        addModalTitle: @json(trans('admin::insurance.household.add_modal_title')),
+                        editModalTitle: @json(trans('admin::insurance.household.edit_modal_title')),
+                        saveBtn: @json(trans('admin::insurance.household.save_btn')),
+                        updateBtn: @json(trans('admin::insurance.household.update_btn')),
+                        cancel: @json(trans('admin::insurance.household.cancel')),
+                        confirmDelete: @json(trans('admin::insurance.household.confirm_delete')),
+                        memberSingle: @json(trans('admin::insurance.household.member_single')),
+                        memberPlural: @json(trans('admin::insurance.household.member_plural')),
+                        yearsShort: @json(trans('admin::insurance.household.years_short')),
+                        saving: @json(trans('admin::insurance.household.saving')),
+                        errorSave: @json(trans('admin::insurance.household.error_save')),
+                        errorDelete: @json(trans('admin::insurance.household.error_delete')),
+                    },
                     form: {
                         name: '',
                         relationship: 'spouse',
@@ -317,16 +331,16 @@
                         notes: '',
                     },
                     relationshipLabels: {
-                        spouse: "{{ trans('admin::insurance.household.relationships.spouse') }}",
-                        child: "{{ trans('admin::insurance.household.relationships.child') }}",
-                        parent: "{{ trans('admin::insurance.household.relationships.parent') }}",
-                        dependent: "{{ trans('admin::insurance.household.relationships.dependent') }}",
-                        other: "{{ trans('admin::insurance.household.relationships.other') }}",
+                        spouse: @json(trans('admin::insurance.household.relationships.spouse')),
+                        child: @json(trans('admin::insurance.household.relationships.child')),
+                        parent: @json(trans('admin::insurance.household.relationships.parent')),
+                        dependent: @json(trans('admin::insurance.household.relationships.dependent')),
+                        other: @json(trans('admin::insurance.household.relationships.other')),
                     },
                     genderLabels: {
-                        male: "{{ trans('admin::insurance.household.genders.male') }}",
-                        female: "{{ trans('admin::insurance.household.genders.female') }}",
-                        other: "{{ trans('admin::insurance.household.genders.other') }}",
+                        male: @json(trans('admin::insurance.household.genders.male')),
+                        female: @json(trans('admin::insurance.household.genders.female')),
+                        other: @json(trans('admin::insurance.household.genders.other')),
                     },
                 };
             },
@@ -336,10 +350,6 @@
             },
 
             methods: {
-                trans(key) {
-                    return key;
-                },
-
                 getRelationshipLabel(rel) {
                     return this.relationshipLabels[rel] || rel;
                 },
@@ -422,7 +432,7 @@
                         })
                         .catch(error => {
                             this.isSaving = false;
-                            const msg = error.response?.data?.message || 'Error saving member';
+                            const msg = error.response?.data?.message || this.labels.errorSave;
                             this.$emitter.emit('add-flash', {
                                 type: 'error',
                                 message: msg
@@ -431,7 +441,7 @@
                 },
 
                 deleteMember(id) {
-                    if (! confirm("{{ trans('admin::insurance.household.confirm_delete') }}")) {
+                    if (! confirm(this.labels.confirmDelete)) {
                         return;
                     }
 
@@ -444,7 +454,7 @@
                             this.fetchMembers();
                         })
                         .catch(error => {
-                            const msg = error.response?.data?.message || 'Error deleting member';
+                            const msg = error.response?.data?.message || this.labels.errorDelete;
                             this.$emitter.emit('add-flash', {
                                 type: 'error',
                                 message: msg

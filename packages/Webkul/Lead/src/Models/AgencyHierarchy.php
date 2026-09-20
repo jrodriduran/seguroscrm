@@ -65,11 +65,11 @@ class AgencyHierarchy extends Model
     public static function getTierLabels(): array
     {
         return [
-            'fmo' => 'FMO / Agencia Máster Principal',
-            'mga' => 'Managing General Agent (MGA)',
-            'ga' => 'General Agent (GA) / Sub-Agencia',
-            'producer' => 'Agente Productor (Escritor)',
-            'sub_agent' => 'Sub-Agente / Downline Junior',
+            'fmo' => trans('admin::insurance.hierarchy.tier_fmo'),
+            'mga' => trans('admin::insurance.hierarchy.tier_mga'),
+            'ga' => trans('admin::insurance.hierarchy.tier_ga'),
+            'producer' => trans('admin::insurance.hierarchy.tier_producer'),
+            'sub_agent' => trans('admin::insurance.hierarchy.tier_sub_agent'),
         ];
     }
 

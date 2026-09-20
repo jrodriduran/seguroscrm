@@ -1,6 +1,6 @@
 <x-admin::layouts>
     <x-slot:title>
-        Jerarquía de Sub-agencias & Overrides Multinivel
+        @lang('admin::insurance.hierarchy.title_page')
     </x-slot>
 
     <v-agency-hierarchy></v-agency-hierarchy>
@@ -15,11 +15,11 @@
                         <div class="flex items-center gap-2">
                             <span class="text-2xl">🏛️</span>
                             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                                Jerarquía de Sub-agencias & Overrides Multinivel
+                                @lang('admin::insurance.hierarchy.title_page')
                             </h1>
                         </div>
                         <p class="text-xs text-slate-500 mt-1">
-                            Estructura de agencias aliadas, MGA, GA, agentes downline y liquidación de sobrecomisiones ($ PMPM).
+                            @lang('admin::insurance.hierarchy.subtitle')
                         </p>
                     </div>
 
@@ -29,7 +29,7 @@
                             class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-bold transition-colors"
                         >
                             <span>📥</span>
-                            <span>Descargar Reporte CSV</span>
+                            <span>@lang('admin::insurance.hierarchy.btn_export')</span>
                         </a>
 
                         <button
@@ -38,7 +38,7 @@
                             class="inline-flex items-center gap-1.5 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"
                         >
                             <span>➕</span>
-                            <span>Configurar Upline / Sub-Agencia</span>
+                            <span>@lang('admin::insurance.hierarchy.btn_add_subagency')</span>
                         </button>
                     </div>
                 </div>
@@ -46,32 +46,32 @@
                 <!-- KPI Metric Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Overrides Distribuidos (@{{ currentPeriod }})</span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">@lang('admin::insurance.hierarchy.kpi_overrides') (@{{ currentPeriod }})</span>
                         <div class="text-3xl font-extrabold text-sky-600 dark:text-sky-400 mt-2">
                             $@{{ formatMoney(totalOverrides) }}
                         </div>
                         <p class="text-xs text-slate-400 mt-1">
-                            Liquidación mensual a uplines y sub-agencias
+                            @lang('admin::insurance.hierarchy.col_monthly_overrides')
                         </p>
                     </div>
 
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sub-Agencias / GAs Registradas</span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">@lang('admin::insurance.hierarchy.kpi_subagencies')</span>
                         <div class="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
                             @{{ totalSubAgencies }}
                         </div>
                         <p class="text-xs text-slate-400 mt-1">
-                            Líderes de equipo y agencias socias con contrato
+                            @lang('admin::insurance.hierarchy.tier_ga')
                         </p>
                     </div>
 
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Productores / Downlines</span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">@lang('admin::insurance.hierarchy.kpi_producers')</span>
                         <div class="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
                             @{{ totalProducers }}
                         </div>
                         <p class="text-xs text-slate-400 mt-1">
-                            Agentes de campo bajo jerarquía
+                            @lang('admin::insurance.hierarchy.tier_producer')
                         </p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                             :class="activeTab === 'tree' ? 'text-sky-600 font-extrabold border-b-2 border-sky-600 pb-3 -mb-3.5' : 'text-slate-500 hover:text-slate-800 font-semibold'"
                             class="text-xs transition-colors flex items-center gap-1.5"
                         >
-                            <span>🌳</span> Árbol Organizacional & Producción de Downlines
+                            <span>🌳</span> @lang('admin::insurance.hierarchy.org_tree')
                         </button>
 
                         <button
@@ -95,7 +95,7 @@
                             :class="activeTab === 'ledger' ? 'text-sky-600 font-extrabold border-b-2 border-sky-600 pb-3 -mb-3.5' : 'text-slate-500 hover:text-slate-800 font-semibold'"
                             class="text-xs transition-colors flex items-center gap-1.5"
                         >
-                            <span>📑</span> Libro Mayor de Overrides (Liquidación PMPM)
+                            <span>📑</span> @lang('admin::insurance.hierarchy.btn_export_statement')
                         </button>
                     </div>
 

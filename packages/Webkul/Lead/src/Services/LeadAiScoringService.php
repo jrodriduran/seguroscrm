@@ -39,9 +39,9 @@ class LeadAiScoringService
                 $nextBestActions[] = [
                     'priority' => 'urgent',
                     'icon' => '🚨',
-                    'title' => "Ventana SEP por vencer en {$daysRemaining} días",
-                    'description' => 'El período especial de inscripción expira inminentemente. Cierra la aplicación hoy para no perder el derecho a cobertura federal.',
-                    'action_label' => 'Revisar SEP',
+                    'title' => trans('admin::insurance.ai_insights.sep_urgent_title', ['days' => $daysRemaining]),
+                    'description' => trans('admin::insurance.ai_insights.sep_urgent_desc'),
+                    'action_label' => trans('admin::insurance.ai_insights.sep_urgent_action'),
                     'tab' => 'enrollment_period',
                 ];
             } elseif ($daysRemaining > 7 && $daysRemaining <= 30) {
@@ -49,9 +49,9 @@ class LeadAiScoringService
                 $nextBestActions[] = [
                     'priority' => 'high',
                     'icon' => '⏳',
-                    'title' => "Ventana SEP activa ({$daysRemaining} días restantes)",
-                    'description' => 'Verifica la documentación del evento de vida calificado (QLE) y presenta las opciones de planes.',
-                    'action_label' => 'Ver Documentos SEP',
+                    'title' => trans('admin::insurance.ai_insights.sep_active_title', ['days' => $daysRemaining]),
+                    'description' => trans('admin::insurance.ai_insights.sep_active_desc'),
+                    'action_label' => trans('admin::insurance.ai_insights.sep_active_action'),
                     'tab' => 'enrollment_period',
                 ];
             }
@@ -60,9 +60,9 @@ class LeadAiScoringService
             $nextBestActions[] = [
                 'priority' => 'high',
                 'icon' => '🗓️',
-                'title' => 'Inscripción Abierta (OEP) en Curso',
-                'description' => 'Temporada alta federal. Presenta la propuesta de planes de salud y selecciona plan antes del 15 de enero.',
-                'action_label' => 'Ver Cotizaciones',
+                'title' => trans('admin::insurance.ai_insights.oep_active_title'),
+                'description' => trans('admin::insurance.ai_insights.oep_active_desc'),
+                'action_label' => trans('admin::insurance.ai_insights.oep_active_action'),
                 'tab' => 'quotes',
             ];
         } else {
@@ -70,9 +70,9 @@ class LeadAiScoringService
             $nextBestActions[] = [
                 'priority' => 'medium',
                 'icon' => '🔍',
-                'title' => 'Calificar Evento de Vida (SEP)',
-                'description' => 'Para inscribir fuera de OEP, valida si el cliente tuvo pérdida de cobertura, mudanza, cambio de ingresos o matrimonio.',
-                'action_label' => 'Validar SEP',
+                'title' => trans('admin::insurance.ai_insights.sep_qualify_title'),
+                'description' => trans('admin::insurance.ai_insights.sep_qualify_desc'),
+                'action_label' => trans('admin::insurance.ai_insights.sep_qualify_action'),
                 'tab' => 'enrollment_period',
             ];
         }
@@ -102,9 +102,9 @@ class LeadAiScoringService
                 $nextBestActions[] = [
                     'priority' => 'high',
                     'icon' => '🎂',
-                    'title' => 'Oportunidad Medicare: Transición a 65 Años',
-                    'description' => 'El cliente está en su Ventana de Inscripción Inicial (IEP). Califica para Medicare Advantage (Parte C) y Parte D.',
-                    'action_label' => 'Crear Medicare SOA',
+                    'title' => trans('admin::insurance.ai_insights.medicare_title'),
+                    'description' => trans('admin::insurance.ai_insights.medicare_desc'),
+                    'action_label' => trans('admin::insurance.ai_insights.medicare_action'),
                     'tab' => 'medicare_soa',
                 ];
             }
@@ -129,9 +129,9 @@ class LeadAiScoringService
             $nextBestActions[] = [
                 'priority' => 'urgent',
                 'icon' => '📋',
-                'title' => 'Falta Consentimiento Electrónico CMS',
-                'description' => 'Obligatorio según 45 CFR § 155.220 antes de someter cualquier cotización o aplicación en HealthCare.gov.',
-                'action_label' => 'Enviar Enlace de Consentimiento',
+                'title' => trans('admin::insurance.ai_insights.consent_missing_title'),
+                'description' => trans('admin::insurance.ai_insights.consent_missing_desc'),
+                'action_label' => trans('admin::insurance.ai_insights.consent_missing_action'),
                 'tab' => 'consent',
             ];
         }
@@ -146,9 +146,9 @@ class LeadAiScoringService
             $nextBestActions[] = [
                 'priority' => 'info',
                 'icon' => '💊',
-                'title' => 'Registrar Medicamentos y Doctores del Cliente',
-                'description' => 'Asegura la retención verificando si sus médicos habituales y medicinas están cubiertos en la red.',
-                'action_label' => 'Abrir Ficha Rx & Red',
+                'title' => trans('admin::insurance.ai_insights.rx_missing_title'),
+                'description' => trans('admin::insurance.ai_insights.rx_missing_desc'),
+                'action_label' => trans('admin::insurance.ai_insights.rx_missing_action'),
                 'tab' => 'rx_network',
             ];
         }
@@ -160,9 +160,9 @@ class LeadAiScoringService
             $nextBestActions[] = [
                 'priority' => 'urgent',
                 'icon' => '⚠️',
-                'title' => "Documento DMI Crítico: {$urgentDmi->days_remaining}d restantes",
-                'description' => "Riesgo de perder el subsidio APTC: Debe subir prueba de '{$urgentDmi->title}' urgentemente.",
-                'action_label' => 'Subir Documento DMI',
+                'title' => trans('admin::insurance.ai_insights.dmi_urgent_title', ['days' => $urgentDmi->days_remaining]),
+                'description' => trans('admin::insurance.ai_insights.dmi_urgent_desc', ['title' => $urgentDmi->title]),
+                'action_label' => trans('admin::insurance.ai_insights.dmi_urgent_action'),
                 'tab' => 'dmi_documents',
             ];
         }
@@ -171,9 +171,9 @@ class LeadAiScoringService
         $totalScore = min(100, array_sum($scoreBreakdown));
 
         $tier = match (true) {
-            $totalScore >= 75 => ['label' => 'Hot Lead', 'badge' => '🔥 Prioridad Alta', 'color' => 'rose'],
-            $totalScore >= 50 => ['label' => 'Warm Lead', 'badge' => '⚡ Oportunidad Activa', 'color' => 'amber'],
-            default => ['label' => 'Nurture Lead', 'badge' => '❄️ Seguimiento Estándar', 'color' => 'blue'],
+            $totalScore >= 75 => ['label' => trans('admin::insurance.ai_insights.hot_lead'), 'badge' => trans('admin::insurance.ai_insights.tier_hot'), 'color' => 'rose'],
+            $totalScore >= 50 => ['label' => trans('admin::insurance.ai_insights.warm_lead'), 'badge' => trans('admin::insurance.ai_insights.tier_warm'), 'color' => 'amber'],
+            default => ['label' => trans('admin::insurance.ai_insights.nurture_lead'), 'badge' => trans('admin::insurance.ai_insights.tier_nurture'), 'color' => 'blue'],
         };
 
         // Sort next best actions by priority: urgent, high, medium, info

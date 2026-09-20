@@ -94,9 +94,9 @@
                         href="{{ route('admin.leads.healthsherpa.redirect', $lead->id) }}"
                         target="_blank"
                         class="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700 transition"
-                        title="Abrir HealthSherpa con datos y dependientes prellenados"
+                        title="{{ trans('admin::insurance.quick_actions.healthsherpa_title') }}"
                     >
-                        🚀 HealthSherpa
+                        {{ trans('admin::insurance.quick_actions.healthsherpa') }}
                     </a>
 
                     @include ('admin::leads.view.ai_client_snapshot')
@@ -134,13 +134,13 @@
                 :activeType="request()->query('tab') ?? (request()->query('from') === 'quotes' ? 'quotes' : 'all')"
                 :extra-types="[
                     ['name' => 'household', 'label' => trans('admin::insurance.tabs.household')],
-                    ['name' => 'consent', 'label' => '📋 Consentimiento CMS'],
-                    ['name' => 'medicare_soa', 'label' => '🛡️ Medicare SOA (48h)'],
-                    ['name' => 'enrollment_period', 'label' => '🗓️ Inscripción (SEP/OEP)'],
-                    ['name' => 'dmi_documents', 'label' => '⏳ Documentos DMI (90d)'],
-                    ['name' => 'rx_network', 'label' => '💊 Medicinas & Doctores'],
-                    ['name' => 'cross_sell', 'label' => '🛍️ Venta Cruzada (Bundles)'],
-                    ['name' => 'chatwoot', 'label' => '💬 Chatwoot (WhatsApp / SMS)'],
+                    ['name' => 'consent', 'label' => trans('admin::insurance.tabs.consent')],
+                    ['name' => 'medicare_soa', 'label' => trans('admin::insurance.tabs.medicare_soa')],
+                    ['name' => 'enrollment_period', 'label' => trans('admin::insurance.tabs.enrollment_period')],
+                    ['name' => 'dmi_documents', 'label' => trans('admin::insurance.tabs.dmi_documents')],
+                    ['name' => 'rx_network', 'label' => trans('admin::insurance.tabs.rx_network')],
+                    ['name' => 'cross_sell', 'label' => trans('admin::insurance.tabs.cross_sell')],
+                    ['name' => 'chatwoot', 'label' => trans('admin::insurance.tabs.chatwoot')],
                     ['name' => 'quotes', 'label' => trans('admin::app.leads.view.tabs.quotes')],
                     ['name' => 'products', 'label' => trans('admin::app.leads.view.tabs.products')],
                     ['name' => 'description', 'label' => trans('admin::app.leads.view.tabs.description')],

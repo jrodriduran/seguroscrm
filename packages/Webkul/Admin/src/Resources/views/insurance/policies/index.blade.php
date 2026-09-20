@@ -1,6 +1,6 @@
 <x-admin::layouts>
     <x-slot:title>
-        Libro de Negocios (Book of Business) & Retención
+        @lang('admin::insurance.policies.title_page')
     </x-slot>
 
     <v-book-of-business></v-book-of-business>
@@ -15,11 +15,11 @@
                         <div class="flex items-center gap-2">
                             <span class="text-2xl">📚</span>
                             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                                Libro de Negocios (Book of Business) & Retención
+                                @lang('admin::insurance.policies.title_page')
                             </h1>
                         </div>
                         <p class="text-xs text-slate-500 mt-1">
-                            Monitoreo de pólizas vigentes, retención de cartera y prevención de cancelaciones en Período de Gracia (ACA 90d).
+                            @lang('admin::insurance.policies.subtitle')
                         </p>
                     </div>
 
@@ -31,7 +31,7 @@
                             class="inline-flex items-center gap-2 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
                         >
                             <span :class="{'animate-spin': isScanning}">🔄</span>
-                            <span>@{{ isScanning ? 'Analizando Cartera...' : 'Escanear Pagos & Gracia' }}</span>
+                            <span>@{{ isScanning ? '@lang('admin::insurance.policies.scanning')' : '@lang('admin::insurance.policies.scan_btn')' }}</span>
                         </button>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                     <!-- In Force Policies -->
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Pólizas Vigentes</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">@lang('admin::insurance.policies.kpi_in_force')</span>
                             <span class="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 flex items-center justify-center font-bold">
                                 🛡️
                             </span>
@@ -51,14 +51,14 @@
                             @{{ metrics.in_force_count || 0 }}
                         </div>
                         <div class="text-xs text-slate-500 mt-1">
-                            <strong>@{{ metrics.covered_lives_count || 0 }}</strong> vidas aseguradas en total
+                            <strong>@{{ metrics.covered_lives_count || 0 }}</strong> @lang('admin::insurance.policies.covered_lives')
                         </div>
                     </div>
 
                     <!-- Persistency Rate -->
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tasa de Persistencia</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">@lang('admin::insurance.policies.kpi_persistency')</span>
                             <span class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 flex items-center justify-center font-bold">
                                 📈
                             </span>
@@ -67,14 +67,14 @@
                             @{{ metrics.persistency_rate || 0 }}%
                         </div>
                         <div class="text-xs text-slate-500 mt-1">
-                            Retención activa de cartera
+                            @lang('admin::insurance.policies.persistency_sub')
                         </div>
                     </div>
 
                     <!-- Monthly Net Volume -->
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Volumen Primas / Mes</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">@lang('admin::insurance.policies.kpi_premium')</span>
                             <span class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 flex items-center justify-center font-bold">
                                 💵
                             </span>
@@ -83,14 +83,14 @@
                             $@{{ formatMoney(metrics.net_monthly_volume) }}
                         </div>
                         <div class="text-xs text-slate-500 mt-1">
-                            Bruto: $@{{ formatMoney(metrics.gross_monthly_volume) }}
+                            @lang('admin::insurance.policies.gross') $@{{ formatMoney(metrics.gross_monthly_volume) }}
                         </div>
                     </div>
 
                     <!-- Grace Period At Risk -->
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-rose-600 uppercase tracking-wider">En Período de Gracia</span>
+                            <span class="text-xs font-bold text-rose-600 uppercase tracking-wider">@lang('admin::insurance.policies.kpi_grace_period')</span>
                             <span class="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 flex items-center justify-center font-bold">
                                 ⚠️
                             </span>
@@ -99,7 +99,7 @@
                             @{{ metrics.grace_count || 0 }}
                         </div>
                         <div class="text-xs text-rose-500 mt-1">
-                            $@{{ formatMoney(metrics.premium_at_risk) }} en riesgo de pérdida
+                            $@{{ formatMoney(metrics.premium_at_risk) }} @lang('admin::insurance.policies.grace_period_sub')
                         </div>
                     </div>
 
@@ -117,7 +117,7 @@
                                 :class="statusFilter === 'all' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'"
                                 class="px-3 py-1.5 rounded-md transition-all"
                             >
-                                Todas (@{{ metrics.total_policies || 0 }})
+                                @lang('admin::insurance.policies.tabs_all') (@{{ metrics.total_policies || 0 }})
                             </button>
                             <button
                                 type="button"
@@ -125,7 +125,7 @@
                                 :class="statusFilter === 'active' ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
                                 class="px-3 py-1.5 rounded-md transition-all"
                             >
-                                Vigentes (@{{ metrics.in_force_count || 0 }})
+                                @lang('admin::insurance.policies.tabs_active') (@{{ metrics.in_force_count || 0 }})
                             </button>
                             <button
                                 type="button"
@@ -133,7 +133,7 @@
                                 :class="statusFilter === 'in_grace' ? 'bg-rose-600 text-white font-bold shadow-sm' : 'text-rose-600 hover:bg-rose-50'"
                                 class="px-3 py-1.5 rounded-md transition-all"
                             >
-                                ⚠️ En Gracia (@{{ metrics.grace_count || 0 }})
+                                ⚠️ @lang('admin::insurance.policies.tabs_grace') (@{{ metrics.grace_count || 0 }})
                             </button>
                             <button
                                 type="button"
@@ -141,7 +141,7 @@
                                 :class="statusFilter === 'cancelled' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'"
                                 class="px-3 py-1.5 rounded-md transition-all"
                             >
-                                Canceladas (@{{ metrics.cancelled_count || 0 }})
+                                @lang('admin::insurance.policies.tabs_cancelled') (@{{ metrics.cancelled_count || 0 }})
                             </button>
                         </div>
 
@@ -153,7 +153,7 @@
                             type="text"
                             v-model="searchTerm"
                             @input="debounceSearch()"
-                            placeholder="Buscar por póliza, cliente o plan..."
+                            placeholder="{{ trans('admin::insurance.policies.search_placeholder') }}"
                             class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500"
                         >
                     </div>
@@ -165,24 +165,24 @@
                         <table class="w-full text-left text-xs border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
-                                    <th class="p-3.5">N° Póliza / Aseguradora</th>
-                                    <th class="p-3.5">Asegurado (Cliente)</th>
-                                    <th class="p-3.5">Plan & Red</th>
-                                    <th class="p-3.5">Prima Cliente</th>
-                                    <th class="p-3.5">Pagado Hasta</th>
-                                    <th class="p-3.5">Estado de Pago</th>
-                                    <th class="p-3.5 text-right">Acciones de Cartera</th>
+                                    <th class="p-3.5">@lang('admin::insurance.policies.col_carrier')</th>
+                                    <th class="p-3.5">@lang('admin::insurance.policies.col_client')</th>
+                                    <th class="p-3.5">@lang('admin::insurance.policies.col_plan_network')</th>
+                                    <th class="p-3.5">@lang('admin::insurance.policies.col_premium')</th>
+                                    <th class="p-3.5">@lang('admin::insurance.policies.col_paid_to')</th>
+                                    <th class="p-3.5">@lang('admin::insurance.policies.col_payment_status')</th>
+                                    <th class="p-3.5 text-right">@lang('admin::insurance.policies.col_retention_actions')</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                                 <tr v-if="isLoading">
                                     <td colspan="7" class="p-8 text-center text-slate-500">
-                                        Cargando cartera de pólizas...
+                                        @lang('admin::insurance.policies.loading')
                                     </td>
                                 </tr>
                                 <tr v-else-if="!policies.length">
                                     <td colspan="7" class="p-8 text-center text-slate-500">
-                                        No se encontraron pólizas registradas bajo los filtros seleccionados.
+                                        @lang('admin::insurance.policies.no_records')
                                     </td>
                                 </tr>
                                 <tr v-else v-for="policy in policies" :key="policy.id" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -203,7 +203,7 @@
                                             @{{ (policy.person && policy.person.name) || (policy.lead && policy.lead.person && policy.lead.person.name) || (policy.lead && policy.lead.title) || 'Cliente' }}
                                         </div>
                                         <div class="text-[11px] text-slate-500 mt-0.5">
-                                            Agente: @{{ (policy.user && policy.user.name) || 'Principal' }}
+                                            @lang('admin::insurance.policies.agent') @{{ (policy.user && policy.user.name) || 'Principal' }}
                                         </div>
                                     </td>
 
@@ -228,7 +228,7 @@
                                             $@{{ formatMoney(policy.net_premium) }}
                                         </div>
                                         <div class="text-[10px] text-slate-400">
-                                            Subsidio: $@{{ formatMoney(policy.aptc_subsidy) }}
+                                            @lang('admin::insurance.policies.subsidy') $@{{ formatMoney(policy.aptc_subsidy) }}
                                         </div>
                                     </td>
 
@@ -238,7 +238,7 @@
                                             @{{ policy.paid_to_date || 'N/A' }}
                                         </div>
                                         <div v-if="policy.days_overdue > 0" class="text-[10px] text-rose-500 font-bold">
-                                            Vencido (@{{ policy.days_overdue }}d)
+                                            @lang('admin::insurance.policies.overdue') (@{{ policy.days_overdue }}d)
                                         </div>
                                     </td>
 
@@ -259,27 +259,27 @@
                                             :href="policy.portal_url"
                                             target="_blank"
                                             class="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold transition-colors inline-block"
-                                            title="Abrir Tarjeta Médica Digital / Portal"
+                                            title="{{ trans('admin::insurance.policies.portal_link') }}"
                                         >
-                                            🪪 Tarjeta
+                                            @lang('admin::insurance.policies.btn_card')
                                         </a>
 
                                         <button
                                             type="button"
                                             @click="openPaymentModal(policy)"
                                             class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold transition-colors"
-                                            title="Registrar Pago"
+                                            title="{{ trans('admin::insurance.policies.btn_payment') }}"
                                         >
-                                            💳 Pago
+                                            @lang('admin::insurance.policies.btn_payment')
                                         </button>
 
                                         <button
                                             type="button"
                                             @click="sendWhatsAppReminder(policy.id)"
                                             class="px-2.5 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded text-xs font-bold transition-colors"
-                                            title="Recordatorio WhatsApp"
+                                            title="{{ trans('admin::insurance.policies.btn_reminder') }}"
                                         >
-                                            📱 Cobro
+                                            @lang('admin::insurance.policies.btn_reminder')
                                         </button>
 
                                         <button
@@ -287,9 +287,9 @@
                                             type="button"
                                             @click="renewPolicy(policy.id)"
                                             class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded text-xs font-bold transition-colors"
-                                            title="Renovar OEP"
+                                            title="{{ trans('admin::insurance.policies.btn_renew') }}"
                                         >
-                                            🔄 Renovar
+                                            @lang('admin::insurance.policies.btn_renew')
                                         </button>
                                     </td>
 
@@ -303,15 +303,15 @@
                 <div v-if="showPaymentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800">
                         <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">
-                            Registrar Pago de Mensualidad
+                            @lang('admin::insurance.policies.modal_payment_title')
                         </h3>
                         <p class="text-xs text-slate-500 mb-4">
-                            Póliza: <strong>@{{ activePolicy.policy_number }}</strong> (@{{ activePolicy.carrier_name }})
+                            @lang('admin::insurance.policies.modal_policy_label') <strong>@{{ activePolicy.policy_number }}</strong> (@{{ activePolicy.carrier_name }})
                         </p>
 
                         <div class="mb-4">
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                                Cubierto / Pagado Hasta la Fecha *
+                                @lang('admin::insurance.policies.modal_paid_to_label')
                             </label>
                             <input
                                 type="date"
@@ -319,18 +319,18 @@
                                 class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-white dark:bg-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500"
                             >
                             <p class="text-[11px] text-slate-400 mt-1">
-                                Al registrar esta fecha, la póliza volverá automáticamente a estado Vigente (Al Día) y se cancelarán las alertas de período de gracia.
+                                @lang('admin::insurance.policies.modal_paid_to_hint')
                             </p>
                         </div>
 
                         <div class="mb-5">
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                                Nota o Comprobante
+                                @lang('admin::insurance.policies.modal_notes_label')
                             </label>
                             <input
                                 type="text"
                                 v-model="paymentForm.notes"
-                                placeholder="Ej. Pago confirmado por portal de aseguradora..."
+                                placeholder="{{ trans('admin::insurance.policies.modal_notes_placeholder') }}"
                                 class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
                             >
                         </div>
@@ -341,18 +341,19 @@
                                 @click="showPaymentModal = false"
                                 class="flex-1 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold rounded-lg text-xs"
                             >
-                                Cancelar
+                                @lang('admin::insurance.policies.btn_cancel')
                             </button>
                             <button
                                 type="button"
                                 @click="submitPayment()"
                                 class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition-colors"
                             >
-                                Confirmar Pago
+                                @lang('admin::insurance.policies.btn_confirm_payment')
                             </button>
                         </div>
                     </div>
                 </div>
+
 
             </div>
         </script>

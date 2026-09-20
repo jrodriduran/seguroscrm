@@ -184,31 +184,31 @@ class InsurancePolicy extends Model
     {
         return match ($this->status) {
             'active' => [
-                'label' => 'Al Día (Vigente)',
+                'label' => trans('admin::insurance.policies.status_active'),
                 'color' => 'emerald',
                 'bg' => 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300',
                 'icon' => '✓',
             ],
             'grace_period_1' => [
-                'label' => "Gracia Mes 1 ({$this->grace_period_days}d)",
+                'label' => trans('admin::insurance.policies.status_grace_1', ['days' => $this->grace_period_days]),
                 'color' => 'amber',
                 'bg' => 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300',
                 'icon' => '⚠️',
             ],
             'grace_period_2_3' => [
-                'label' => "Gracia Crítica ({$this->grace_period_days}d)",
+                'label' => trans('admin::insurance.policies.status_grace_critical', ['days' => $this->grace_period_days]),
                 'color' => 'rose',
                 'bg' => 'bg-rose-100 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-300 animate-pulse',
                 'icon' => '🚨',
             ],
             'cancelled' => [
-                'label' => 'Cancelada / Lapsada',
+                'label' => trans('admin::insurance.policies.status_cancelled'),
                 'color' => 'slate',
                 'bg' => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300',
                 'icon' => '✕',
             ],
             'renewed' => [
-                'label' => 'Renovada OEP',
+                'label' => trans('admin::insurance.policies.status_renewed'),
                 'color' => 'blue',
                 'bg' => 'bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-300',
                 'icon' => '🔄',

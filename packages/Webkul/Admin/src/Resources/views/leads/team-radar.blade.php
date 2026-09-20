@@ -12,7 +12,7 @@
                 </h1>
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                     <span class="h-2 w-2 animate-pulse rounded-full bg-blue-500"></span>
-                    {{ ($assignmentRule?->strategy ?? 'round_robin') === 'round_robin' ? '🔄 Round Robin' : (($assignmentRule?->strategy ?? '') === 'least_loaded' ? '⚖️ Menor Carga' : '✍️ Manual') }}
+                    {{ ($assignmentRule?->strategy ?? 'round_robin') === 'round_robin' ? '🔄 ' . trans('admin::insurance.team_radar.strategy_round_robin') : (($assignmentRule?->strategy ?? '') === 'least_loaded' ? '⚖️ ' . trans('admin::insurance.team_radar.strategy_least_loaded') : '✍️ ' . trans('admin::insurance.team_radar.strategy_manual')) }}
                 </span>
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -64,7 +64,7 @@
             <p class="mt-2 text-3xl font-extrabold text-red-700 dark:text-red-400">
                 {{ $escalatedLeads->count() }}
             </p>
-            <p class="mt-1 text-xs text-red-500">Requieren intervención MA</p>
+            <p class="mt-1 text-xs text-red-500">@lang('admin::insurance.team_radar.sub_escalated')</p>
         </div>
 
         <div class="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-white p-4 shadow-sm dark:border-rose-900/50 dark:from-rose-950/20 dark:to-gray-900">
@@ -74,7 +74,7 @@
             <p class="mt-2 text-3xl font-extrabold text-rose-700 dark:text-rose-400" id="stat-overdue">
                 —
             </p>
-            <p class="mt-1 text-xs text-rose-500">Sin contacto en ventana SLA</p>
+            <p class="mt-1 text-xs text-rose-500">@lang('admin::insurance.team_radar.sub_overdue')</p>
         </div>
 
         <div class="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-4 shadow-sm dark:border-amber-900/50 dark:from-amber-950/20 dark:to-gray-900">
@@ -84,7 +84,7 @@
             <p class="mt-2 text-3xl font-extrabold text-amber-700 dark:text-amber-400" id="stat-pending">
                 —
             </p>
-            <p class="mt-1 text-xs text-amber-500">En reloj de primer contacto</p>
+            <p class="mt-1 text-xs text-amber-500">@lang('admin::insurance.team_radar.sub_pending')</p>
         </div>
 
         <div class="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4 shadow-sm dark:border-emerald-900/50 dark:from-emerald-950/20 dark:to-gray-900">
@@ -94,7 +94,7 @@
             <p class="mt-2 text-3xl font-extrabold text-emerald-700 dark:text-emerald-400" id="stat-active">
                 —
             </p>
-            <p class="mt-1 text-xs text-emerald-500">Contactados en tiempo</p>
+            <p class="mt-1 text-xs text-emerald-500">@lang('admin::insurance.team_radar.sub_on_time')</p>
         </div>
 
         <div class="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-4 shadow-sm dark:border-blue-900/50 dark:from-blue-950/20 dark:to-gray-900">
@@ -104,7 +104,7 @@
             <p class="mt-2 text-3xl font-extrabold text-blue-700 dark:text-blue-400" id="stat-policies">
                 —
             </p>
-            <p class="mt-1 text-xs text-blue-500">Pólizas cerradas ganadas hoy</p>
+            <p class="mt-1 text-xs text-blue-500">@lang('admin::insurance.team_radar.sub_policies')</p>
         </div>
     </div>
 
@@ -115,7 +115,7 @@
                 👥 @lang('admin::insurance.team_radar.workload')
             </h2>
             <span class="text-xs text-gray-500">
-                Tope configurado: {{ ($assignmentRule?->max_capacity) ? $assignmentRule->max_capacity.' leads/agente' : 'Sin límite' }}
+                @lang('admin::insurance.team_radar.limit_prefix') {{ ($assignmentRule?->max_capacity) ? $assignmentRule->max_capacity . ' ' . trans('admin::insurance.team_radar.per_agent') : trans('admin::insurance.team_radar.no_limit') }}
             </span>
         </div>
 
@@ -143,7 +143,7 @@
                     {{-- Capacity progress bar --}}
                     <div class="mt-4">
                         <div class="flex items-center justify-between text-xs">
-                            <span class="font-medium text-gray-600 dark:text-gray-400">Leads Activos</span>
+                            <span class="font-medium text-gray-600 dark:text-gray-400">@lang('admin::insurance.team_radar.active_leads')</span>
                             <span class="font-bold text-gray-800 dark:text-gray-200">
                                 {{ $agent->active_leads }}
                                 @if($agent->max_capacity > 0)
@@ -161,8 +161,8 @@
 
                     {{-- Mini stats row --}}
                     <div class="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                        <span>🔴 {{ $agent->overdue_leads }} vencidos</span>
-                        <span>🟡 {{ $agent->pending_leads }} pendientes</span>
+                        <span>🔴 {{ $agent->overdue_leads }} @lang('admin::insurance.team_radar.overdue')</span>
+                        <span>🟡 {{ $agent->pending_leads }} @lang('admin::insurance.team_radar.pending_contact')</span>
                     </div>
                 </div>
             @endforeach
@@ -180,7 +180,7 @@
                     </h2>
                 </div>
                 <span class="text-xs font-medium text-red-700 dark:text-red-300">
-                    Intervención prioritaria del Agente Maestro requerida
+                    @lang('admin::insurance.team_radar.ma_intervention_required')
                 </span>
             </div>
 
@@ -199,10 +199,10 @@
                                 @endif
                             </div>
                             <p class="mt-1 text-xs text-red-600 dark:text-red-400">
-                                <strong>Motivo:</strong> {{ $lead->escalation_reason ?? 'Incumplimiento de SLA' }}
-                                · Asignado a: {{ $lead->user?->name ?? 'Sin asignar' }}
+                                <strong>@lang('admin::insurance.team_radar.reason')</strong> {{ $lead->escalation_reason ?? trans('admin::insurance.team_radar.sla_breach') }}
+                                · @lang('admin::insurance.team_radar.assigned_to') {{ $lead->user?->name ?? trans('admin::insurance.team_radar.unassigned') }}
                                 @if($lead->escalated_at)
-                                    · Escalado: {{ $lead->escalated_at->diffForHumans() }}
+                                    · @lang('admin::insurance.team_radar.escalated_time') {{ $lead->escalated_at->diffForHumans() }}
                                 @endif
                             </p>
                         </div>
@@ -213,7 +213,7 @@
                                 onchange="reassignSingleLead({{ $lead->id }}, this.value)"
                                 class="rounded-lg border border-gray-300 bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                             >
-                                <option value="">Reasignar a...</option>
+                                <option value="">@lang('admin::insurance.team_radar.reassign_to_ph')</option>
                                 @foreach($agents as $ag)
                                     <option value="{{ $ag->id }}">{{ $ag->name }}</option>
                                 @endforeach
@@ -243,7 +243,7 @@
                     </h2>
                 </div>
                 <span class="text-xs font-medium text-amber-700 dark:text-amber-300">
-                    Distribuye manualmente o por estrategia
+                    @lang('admin::insurance.team_radar.distribute_sub')
                 </span>
             </div>
 
@@ -255,7 +255,7 @@
                                 {{ $lead->title ?? '#'.$lead->id }}
                             </a>
                             <p class="mt-0.5 text-xs text-gray-500">
-                                Cliente: {{ $lead->person?->name ?? '—' }} · Creado: {{ $lead->created_at->diffForHumans() }}
+                                @lang('admin::insurance.team_radar.client') {{ $lead->person?->name ?? '—' }} · @lang('admin::insurance.team_radar.created') {{ $lead->created_at->diffForHumans() }}
                             </p>
                         </div>
 
@@ -264,7 +264,7 @@
                                 id="unassigned-agent-{{ $lead->id }}"
                                 class="rounded-lg border border-gray-300 bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                             >
-                                <option value="">Seleccionar agente...</option>
+                                <option value="">@lang('admin::insurance.team_radar.select_agent_ph')</option>
                                 @foreach($agents as $ag)
                                     <option value="{{ $ag->id }}">{{ $ag->name }}</option>
                                 @endforeach
@@ -274,7 +274,7 @@
                                 onclick="assignUnassignedLead({{ $lead->id }})"
                                 class="primary-button !py-1 !text-xs"
                             >
-                                Asignar
+                                @lang('admin::insurance.team_radar.btn_assign')
                             </button>
                         </div>
                     </div>
@@ -340,7 +340,7 @@
         <div class="w-full max-w-2xl rounded-2xl bg-white shadow-2xl dark:bg-gray-900">
             <div class="flex items-center justify-between border-b border-gray-200 p-5 dark:border-gray-800">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">
-                    ⚙️ Configurar Workflow, Asignación y SLA
+                    ⚙️ @lang('admin::insurance.team_radar.modal_config_title')
                 </h3>
                 <button onclick="document.getElementById('rules-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                     ✕
@@ -370,7 +370,7 @@
                                 @lang('admin::insurance.team_radar.strategy_manual')
                             </option>
                         </select>
-                        <p class="mt-1 text-xs text-gray-400">El Master Agent define cómo se distribuyen los nuevos casos.</p>
+                        <p class="mt-1 text-xs text-gray-400">@lang('admin::insurance.team_radar.strategy_help')</p>
                     </div>
 
                     {{-- Max Capacity --}}
@@ -385,7 +385,7 @@
                             value="{{ $assignmentRule?->max_capacity ?? 0 }}"
                             class="mt-2 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         >
-                        <p class="mt-1 text-xs text-gray-400">0 = sin límite de carga por agente.</p>
+                        <p class="mt-1 text-xs text-gray-400">@lang('admin::insurance.team_radar.capacity_help')</p>
                     </div>
 
                     {{-- SLA First Contact Hours --}}
@@ -400,7 +400,7 @@
                             value="{{ $slaRules->first()?->first_contact_hours ?? 2 }}"
                             class="mt-2 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         >
-                        <p class="mt-1 text-xs text-gray-400">Horas permitidas para realizar el primer contacto.</p>
+                        <p class="mt-1 text-xs text-gray-400">@lang('admin::insurance.team_radar.first_contact_help')</p>
                     </div>
 
                     {{-- SLA Escalation Hours --}}
@@ -415,7 +415,7 @@
                             value="{{ $slaRules->first()?->escalation_hours ?? 4 }}"
                             class="mt-2 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         >
-                        <p class="mt-1 text-xs text-gray-400">Horas tras vencer antes de alertar y escalar al MA.</p>
+                        <p class="mt-1 text-xs text-gray-400">@lang('admin::insurance.team_radar.escalation_help')</p>
                     </div>
 
                     {{-- Follow-up hours --}}
@@ -435,7 +435,7 @@
                     {{-- Pool of Active Agents --}}
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                            Agentes Elegibles para Distribución en este Pipeline
+                            @lang('admin::insurance.team_radar.eligible_agents')
                         </label>
                         <div class="mt-2 max-h-40 overflow-y-auto rounded-lg border border-gray-200 p-3 dark:border-gray-700">
                             @php
@@ -463,7 +463,7 @@
                         onclick="document.getElementById('rules-modal').classList.add('hidden')"
                         class="secondary-button"
                     >
-                        Cancelar
+                        @lang('admin::insurance.team_radar.btn_cancel')
                     </button>
                     <button
                         type="submit"
@@ -479,6 +479,14 @@
     @pushOnce('scripts')
         <script type="module">
         (function () {
+            const i18n = {
+                promptEscalate: @json(trans('admin::insurance.team_radar.prompt_escalate')),
+                promptEscalateDefault: @json(trans('admin::insurance.team_radar.prompt_escalate_default')),
+                alertSelectAgent: @json(trans('admin::insurance.team_radar.alert_select_agent')),
+                alertSelectBulk: @json(trans('admin::insurance.team_radar.alert_select_bulk')),
+                alertSaveError: @json(trans('admin::insurance.team_radar.alert_save_error')),
+            };
+
             // ── Load overdue leads panel ──────────────────────────────────────
             async function loadOverdueLeads () {
                 const res  = await fetch('{{ route('admin.leads.index') }}?sla_status=overdue&format=json');
@@ -516,7 +524,7 @@
                                 class="rounded-lg bg-rose-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-rose-700"
                                 onclick="window.escalateLeadQuick(${lead.id})"
                             >
-                                🚨 Escalar a MA
+                                🚨 @lang('admin::insurance.team_radar.escalate_to_ma')
                             </button>
                         </div>
                     </div>`;
@@ -549,7 +557,7 @@
 
             // ── Escalate Lead Quick ───────────────────────────────────────────
             window.escalateLeadQuick = async function (leadId) {
-                const reason = prompt('Motivo de escalación al Agente Maestro:', 'SLA Vencido - Solicitud de intervención');
+                const reason = prompt(i18n.promptEscalate, i18n.promptEscalateDefault);
                 if (!reason) return;
 
                 const res = await fetch(`{{ url(config('app.admin_path').'/leads') }}/${leadId}/escalate`, {
@@ -590,7 +598,7 @@
             window.assignUnassignedLead = async function (leadId) {
                 const newUserId = document.getElementById(`unassigned-agent-${leadId}`).value;
                 if (!newUserId) {
-                    alert('Por favor selecciona un agente.');
+                    alert(i18n.alertSelectAgent);
                     return;
                 }
                 await window.reassignSingleLead(leadId, newUserId);
@@ -619,7 +627,7 @@
                 const leadIds   = checked.map(cb => cb.value);
 
                 if (! newUserId || leadIds.length === 0) {
-                    alert('Por favor selecciona los leads y el agente de destino.');
+                    alert(i18n.alertSelectBulk);
                     return;
                 }
 
@@ -690,7 +698,7 @@
                 if (aData.success && sData.success) {
                     window.location.reload();
                 } else {
-                    alert('Error guardando la configuración.');
+                    alert(i18n.alertSaveError);
                 }
             };
         })();

@@ -1,6 +1,6 @@
 <x-admin::layouts>
     <x-slot:title>
-        Reconciliador de Comisiones de Aseguradoras
+        @lang('admin::insurance.reconciliation.title')
     </x-slot>
 
     <v-commission-reconciliation
@@ -25,20 +25,20 @@
                                 href="{{ route('admin.commissions.index') }}"
                                 class="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
                             >
-                                <span>←</span> Volver al Libro de Comisiones PMPM
+                                <span>←</span> @lang('admin::insurance.reconciliation.back_btn')
                             </a>
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="text-3xl">⚖️</span>
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    Reconciliador de Statements de Aseguradoras
+                                    @lang('admin::insurance.reconciliation.title')
                                     <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                                        Audit & Matching Engine
+                                        @lang('admin::insurance.reconciliation.engine_badge')
                                     </span>
                                 </h1>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Cruce masivo de liquidaciones de aseguradoras vs. pólizas activas. Detección automática de comisiones omitidas (*missed commissions*), variaciones de pago y chargebacks.
+                                    @lang('admin::insurance.reconciliation.subtitle')
                                 </p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             class="primary-button text-xs py-2 px-4 flex items-center gap-1.5 shadow-sm"
                         >
                             <span>📥</span>
-                            Cargar Statement (CSV)
+                            @lang('admin::insurance.reconciliation.btn_upload')
                         </button>
                     </div>
                 </div>
@@ -61,13 +61,13 @@
                     <!-- Total Paid -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden">
                         <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
-                            Total Pagado por Carriers
+                            @lang('admin::insurance.commissions.kpi_gross_monthly')
                         </div>
                         <div class="text-2xl font-extrabold text-gray-900 dark:text-white">
                             $@{{ formatMoney(kpis.total_paid) }}
                         </div>
                         <div class="text-xs text-gray-500 mt-2 flex items-center gap-1">
-                            <span>🧾</span> En @{{ kpis.total_statements }} statement(s) procesados
+                            <span>🧾</span> @{{ kpis.total_statements }} @lang('admin::insurance.commissions.col_statement')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">💰</div>
                     </div>
@@ -75,13 +75,13 @@
                     <!-- Total Missed / Unpaid -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-red-200 dark:border-red-900/50 shadow-sm relative overflow-hidden bg-gradient-to-br from-white to-red-50/25 dark:from-gray-900 dark:to-red-950/20">
                         <div class="text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400 mb-1">
-                            Comisiones Omitidas Detectadas
+                            @lang('admin::insurance.reconciliation.discrepancies')
                         </div>
                         <div class="text-2xl font-extrabold text-red-600 dark:text-red-400">
                             $@{{ formatMoney(kpis.total_missed) }}
                         </div>
                         <div class="text-xs text-red-700 dark:text-red-300 mt-2 font-semibold flex items-center gap-1">
-                            <span>🚨</span> Dinero no pagado listo para reclamar
+                            <span>🚨</span> @lang('admin::insurance.reconciliation.status_missed_commission')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">⚠️</div>
                     </div>
@@ -89,13 +89,13 @@
                     <!-- Average Match Rate -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-emerald-100 dark:border-emerald-900/40 shadow-sm relative overflow-hidden">
                         <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
-                            Tasa de Coincidencia Promedio
+                            @lang('admin::insurance.reconciliation.matched')
                         </div>
                         <div class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">
                             @{{ kpis.avg_match_rate }}%
                         </div>
                         <div class="text-xs text-emerald-600/80 mt-2 flex items-center gap-1">
-                            <span>✓</span> Precisión del libro activo
+                            <span>✓</span> @lang('admin::insurance.policies.persistency_sub')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">🎯</div>
                     </div>
@@ -103,13 +103,13 @@
                     <!-- Total Statements -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-blue-100 dark:border-blue-900/40 shadow-sm relative overflow-hidden">
                         <div class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">
-                            Archivos Reconciliados
+                            @lang('admin::insurance.commissions.col_statement')
                         </div>
                         <div class="text-2xl font-extrabold text-blue-700 dark:text-blue-300">
                             @{{ kpis.total_statements }}
                         </div>
                         <div class="text-xs text-blue-600/80 mt-2 flex items-center gap-1">
-                            <span>📁</span> Historial de auditoría mensual
+                            <span>📁</span> @lang('admin::insurance.commissions.col_statement')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">📑</div>
                     </div>
@@ -120,10 +120,10 @@
                     <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
                         <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <span>📂</span>
-                            Historial de Estados de Cuenta Procesados
+                            @lang('admin::insurance.commissions.col_statement')
                         </h3>
                         <span class="text-xs text-gray-500">
-                            @{{ statements.length }} archivo(s) registrados
+                            @{{ statements.length }}
                         </span>
                     </div>
 
@@ -131,24 +131,23 @@
                         <table class="w-full text-left text-xs">
                             <thead class="bg-gray-50 dark:bg-gray-800/60 border-b border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 uppercase font-semibold">
                                 <tr>
-                                    <th class="py-3 px-4">Aseguradora</th>
-                                    <th class="py-3 px-4">Período</th>
-                                    <th class="py-3 px-4">Archivo</th>
-                                    <th class="py-3 px-4 text-center">Líneas</th>
-                                    <th class="py-3 px-4 text-center">Conciliadas (100%)</th>
-                                    <th class="py-3 px-4 text-center">Discrepancias</th>
-                                    <th class="py-3 px-4 text-center">Omitidas</th>
-                                    <th class="py-3 px-4 text-right">Total Pagado</th>
-                                    <th class="py-3 px-4 text-right text-red-600 dark:text-red-400">Total Faltante</th>
-                                    <th class="py-3 px-4 text-right">Acciones</th>
+                                    <th class="py-3 px-4">@lang('admin::insurance.commissions.col_carrier')</th>
+                                    <th class="py-3 px-4">@lang('admin::insurance.commissions.col_statement')</th>
+                                    <th class="py-3 px-4">@lang('admin::insurance.hierarchy.btn_export')</th>
+                                    <th class="py-3 px-4 text-center">@lang('admin::insurance.commissions.col_lives')</th>
+                                    <th class="py-3 px-4 text-center">@lang('admin::insurance.reconciliation.matched')</th>
+                                    <th class="py-3 px-4 text-center">@lang('admin::insurance.reconciliation.discrepancies')</th>
+                                    <th class="py-3 px-4 text-center">@lang('admin::insurance.reconciliation.status_missed_commission')</th>
+                                    <th class="py-3 px-4 text-right">@lang('admin::insurance.commissions.col_gross')</th>
+                                    <th class="py-3 px-4 text-right text-red-600 dark:text-red-400">@lang('admin::insurance.reconciliation.status_missed_commission')</th>
+                                    <th class="py-3 px-4 text-right">@lang('admin::insurance.policies.col_actions')</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                 <tr v-if="statements.length === 0">
                                     <td colspan="10" class="py-12 text-center text-gray-400">
                                         <div class="text-3xl mb-2">⚖️</div>
-                                        <div class="font-medium text-sm">Aún no se ha cargado ningún statement de comisiones.</div>
-                                        <div class="text-xs mt-1">Sube un archivo CSV de Florida Blue, Ambetter, Oscar, etc. para iniciar el cruce automático.</div>
+                                        <div class="font-medium text-sm">@lang('admin::insurance.policies.no_records')</div>
                                     </td>
                                 </tr>
 

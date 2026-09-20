@@ -14,9 +14,9 @@
             <span class="text-lg">🤖</span>
             <div>
                 <h4 class="text-xs font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">
-                    Copiloto IA & Lead Score
+                    @lang('admin::insurance.ai_insights.copilot_title')
                 </h4>
-                <div class="text-[10px] text-gray-500">Priorización Predictiva de Cierre</div>
+                <div class="text-[10px] text-gray-500">@lang('admin::insurance.ai_insights.predictive_priority')</div>
             </div>
         </div>
 
@@ -69,22 +69,22 @@
     <div class="flex flex-wrap gap-1 pt-1 text-[10px]">
         @if ($aiEvaluation['breakdown']['sep_oep_urgency'] > 0)
             <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                +{{ $aiEvaluation['breakdown']['sep_oep_urgency'] }} SEP/OEP
+                +{{ $aiEvaluation['breakdown']['sep_oep_urgency'] }} @lang('admin::insurance.ai_insights.pills_sep')
             </span>
         @endif
         @if ($aiEvaluation['breakdown']['medicare_turning_65'] > 0)
             <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                +25 Medicare 65
+                +25 @lang('admin::insurance.ai_insights.pills_medicare')
             </span>
         @endif
         @if ($aiEvaluation['breakdown']['subsidy_potential'] > 0)
             <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                +{{ $aiEvaluation['breakdown']['subsidy_potential'] }} Subsidio APTC
+                +{{ $aiEvaluation['breakdown']['subsidy_potential'] }} @lang('admin::insurance.ai_insights.pills_subsidy')
             </span>
         @endif
         @if ($aiEvaluation['breakdown']['compliance_readiness'] > 0)
             <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 dark:bg-gray-800 dark:text-gray-300 border border-slate-200 dark:border-gray-700">
-                +{{ $aiEvaluation['breakdown']['compliance_readiness'] }} Cumplimiento
+                +{{ $aiEvaluation['breakdown']['compliance_readiness'] }} @lang('admin::insurance.ai_insights.pills_compliance')
             </span>
         @endif
     </div>

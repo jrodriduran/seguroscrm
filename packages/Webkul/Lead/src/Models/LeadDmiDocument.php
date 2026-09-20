@@ -95,13 +95,13 @@ class LeadDmiDocument extends Model implements LeadDmiDocumentContract
     public function getDocTypeLabelAttribute(): string
     {
         return match ($this->doc_type) {
-            'income' => 'Prueba de Ingresos (W-2, Taxes, Paystubs)',
-            'immigration' => 'Estatus Migratorio (Green Card, EAD I-766)',
-            'citizenship' => 'Ciudadanía / Pasaporte / Certificado',
-            'ssn' => 'Validación de SSN / Identidad',
-            'incarceration' => 'Estatus de Encarcelamiento',
-            'american_indian' => 'Tribus / Nativos Americanos',
-            default => 'Otro Documento Solicitado',
+            'income' => trans('admin::insurance.dmi_documents.doc_income'),
+            'immigration' => trans('admin::insurance.dmi_documents.doc_immigration'),
+            'citizenship' => trans('admin::insurance.dmi_documents.doc_citizenship'),
+            'ssn' => trans('admin::insurance.dmi_documents.doc_ssn'),
+            'incarceration' => trans('admin::insurance.dmi_documents.doc_incarceration'),
+            'american_indian' => trans('admin::insurance.dmi_documents.doc_american_indian'),
+            default => trans('admin::insurance.dmi_documents.doc_other'),
         };
     }
 
@@ -111,11 +111,11 @@ class LeadDmiDocument extends Model implements LeadDmiDocumentContract
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'pending_upload' => 'Pendiente de Subir',
-            'uploaded_to_marketplace' => 'Subido a Healthcare.gov',
-            'verified_by_cms' => 'Aprobado por CMS',
-            'rejected' => 'Rechazado por CMS',
-            default => 'Pendiente',
+            'pending_upload' => trans('admin::insurance.dmi_documents.status_pending_upload'),
+            'uploaded_to_marketplace' => trans('admin::insurance.dmi_documents.status_uploaded'),
+            'verified_by_cms' => trans('admin::insurance.dmi_documents.status_verified'),
+            'rejected' => trans('admin::insurance.dmi_documents.status_rejected'),
+            default => trans('admin::insurance.dmi_documents.status_pending'),
         };
     }
 

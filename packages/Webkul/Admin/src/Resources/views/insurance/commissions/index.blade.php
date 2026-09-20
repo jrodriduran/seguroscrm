@@ -25,13 +25,13 @@
                             <span class="text-3xl">💰</span>
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    Comisiones de Seguros (ACA / Salud)
+                                    @lang('admin::insurance.commissions.title_page')
                                     <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                                        PMPM Ledger 2026
+                                        @lang('admin::insurance.commissions.ledger_badge')
                                     </span>
                                 </h1>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Control mensual de comisiones por miembro, distribución de splits entre agencia y agentes productores.
+                                    @lang('admin::insurance.commissions.subtitle')
                                 </p>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                             class="secondary-button text-xs py-2 px-3 flex items-center gap-1.5 font-semibold text-blue-700 dark:text-blue-300"
                         >
                             <span>⚖️</span>
-                            Reconciliador de Statements
+                            @lang('admin::insurance.commissions.btn_reconcile')
                         </a>
 
                         <button
@@ -52,7 +52,7 @@
                             class="secondary-button text-xs py-2 px-3 flex items-center gap-1.5"
                         >
                             <span>⚙️</span>
-                            Tarifas por Aseguradora
+                            @lang('admin::insurance.commissions.btn_rates')
                         </button>
 
                         <button
@@ -61,7 +61,7 @@
                             class="primary-button text-xs py-2 px-4 flex items-center gap-1.5"
                         >
                             <span>+</span>
-                            Registrar Póliza Manual
+                            @lang('admin::insurance.commissions.btn_create')
                         </button>
                     </div>
                 </div>
@@ -71,13 +71,13 @@
                     <!-- Total Gross -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden">
                         <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
-                            Proyección Bruta Mensual
+                            @lang('admin::insurance.commissions.kpi_gross_monthly')
                         </div>
                         <div class="text-2xl font-extrabold text-gray-900 dark:text-white">
                             $@{{ formatMoney(kpis.total_gross_monthly) }}
                         </div>
                         <div class="text-xs text-gray-500 mt-2 flex items-center gap-1">
-                            <span class="text-blue-500 font-bold">@{{ kpis.active_policies }}</span> pólizas activas en cartera
+                            <span class="text-blue-500 font-bold">@{{ kpis.active_policies }}</span> @lang('admin::insurance.policies.tabs_active')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">📈</div>
                     </div>
@@ -85,13 +85,13 @@
                     <!-- Total Agent Net -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-emerald-100 dark:border-emerald-900/40 shadow-sm relative overflow-hidden bg-gradient-to-br from-white to-emerald-50/20 dark:from-gray-900 dark:to-emerald-950/20">
                         <div class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
-                            Comisiones Agentes (Neto)
+                            @lang('admin::insurance.commissions.kpi_agent_monthly')
                         </div>
                         <div class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">
                             $@{{ formatMoney(kpis.total_agent_monthly) }}
                         </div>
                         <div class="text-xs text-emerald-600/80 mt-2 flex items-center gap-1">
-                            <span>👥</span> Pago estimado a productores
+                            <span>👥</span> @lang('admin::insurance.commissions.col_agent_split')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">💵</div>
                     </div>
@@ -99,13 +99,13 @@
                     <!-- Total Agency Net -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-blue-100 dark:border-blue-900/40 shadow-sm relative overflow-hidden bg-gradient-to-br from-white to-blue-50/20 dark:from-gray-900 dark:to-blue-950/20">
                         <div class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">
-                            Retención / Spread Agencia
+                            @lang('admin::insurance.commissions.kpi_agency_monthly')
                         </div>
                         <div class="text-2xl font-extrabold text-blue-700 dark:text-blue-300">
                             $@{{ formatMoney(kpis.total_agency_monthly) }}
                         </div>
                         <div class="text-xs text-blue-600/80 mt-2 flex items-center gap-1">
-                            <span>🏢</span> Ganancia neta de la agencia
+                            <span>🏢</span> @lang('admin::insurance.commissions.col_agency_split')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">🏛️</div>
                     </div>
@@ -113,13 +113,13 @@
                     <!-- Active Policies -->
                     <div class="bg-white dark:bg-gray-900 p-5 rounded-xl border border-purple-100 dark:border-purple-900/40 shadow-sm relative overflow-hidden">
                         <div class="text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400 mb-1">
-                            Total Vidas Cubiertas
+                            @lang('admin::insurance.policies.covered_lives')
                         </div>
                         <div class="text-2xl font-extrabold text-purple-700 dark:text-purple-300">
                             @{{ totalMembersCount }}
                         </div>
                         <div class="text-xs text-purple-600/80 mt-2 flex items-center gap-1">
-                            <span>👨‍👩‍👧‍👦</span> Miembros familiares registrados
+                            <span>👨‍👩‍👧‍👦</span> @lang('admin::insurance.policies.covered_lives')
                         </div>
                         <div class="absolute right-3 top-4 text-3xl opacity-15">🛡️</div>
                     </div>
@@ -132,7 +132,7 @@
                             v-model="filterCarrier"
                             class="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 font-medium text-gray-700 dark:text-gray-200"
                         >
-                            <option value="">Todas las Aseguradoras</option>
+                            <option value="">@lang('admin::insurance.products.carrier_id')</option>
                             <option v-for="rate in rates" :key="rate.id" :value="rate.carrier_name">
                                 @{{ rate.carrier_name }} ($@{{ rate.rate_per_member }}/m)
                             </option>
@@ -142,7 +142,7 @@
                             v-model="filterAgent"
                             class="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 font-medium text-gray-700 dark:text-gray-200"
                         >
-                            <option value="">Todos los Agentes</option>
+                            <option value="">@lang('admin::insurance.policies.col_agent')</option>
                             <option v-for="agent in agents" :key="agent.id" :value="agent.id">
                                 @{{ agent.name }}
                             </option>
@@ -152,16 +152,12 @@
                             v-model="filterStatus"
                             class="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 font-medium text-gray-700 dark:text-gray-200"
                         >
-                            <option value="">Todos los Estados</option>
-                            <option value="active">Activas</option>
-                            <option value="pending">Pendientes</option>
-                            <option value="paid">Pagadas</option>
-                            <option value="cancelled">Canceladas</option>
+                            <option value="">@lang('admin::insurance.policies.col_status')</option>
+                            <option value="active">@lang('admin::insurance.policies.status_active')</option>
+                            <option value="pending">@lang('admin::insurance.quotes.status_presented')</option>
+                            <option value="paid">@lang('admin::insurance.policies.btn_payment')</option>
+                            <option value="cancelled">@lang('admin::insurance.policies.status_cancelled')</option>
                         </select>
-                    </div>
-
-                    <div class="text-gray-500 dark:text-gray-400">
-                        Mostrando <strong>@{{ filteredCommissions.length }}</strong> de <strong>@{{ commissions.length }}</strong> registros
                     </div>
                 </div>
 
@@ -171,25 +167,24 @@
                         <table class="w-full text-left text-xs">
                             <thead class="bg-gray-50 dark:bg-gray-800/60 border-b border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 uppercase font-semibold">
                                 <tr>
-                                    <th class="py-3 px-4">Póliza / Cliente</th>
-                                    <th class="py-3 px-4">Aseguradora & Plan</th>
-                                    <th class="py-3 px-4">Agente Productor</th>
-                                    <th class="py-3 px-4 text-center">Vidas (Miembros)</th>
-                                    <th class="py-3 px-4 text-right">Tarifa PMPM</th>
-                                    <th class="py-3 px-4 text-right">Bruto / Mes</th>
-                                    <th class="py-3 px-4 text-center">Split Agente</th>
-                                    <th class="py-3 px-4 text-right text-emerald-600 dark:text-emerald-400">Neto Agente</th>
-                                    <th class="py-3 px-4 text-right text-blue-600 dark:text-blue-400">Agencia</th>
-                                    <th class="py-3 px-4 text-center">Estado</th>
-                                    <th class="py-3 px-4 text-right">Acciones</th>
+                                    <th class="py-3 px-4">@lang('admin::insurance.commissions.col_policy') / @lang('admin::insurance.commissions.col_client')</th>
+                                    <th class="py-3 px-4">@lang('admin::insurance.commissions.col_carrier')</th>
+                                    <th class="py-3 px-4">@lang('admin::insurance.policies.col_agent')</th>
+                                    <th class="py-3 px-4 text-center">@lang('admin::insurance.commissions.col_lives')</th>
+                                    <th class="py-3 px-4 text-right">PMPM</th>
+                                    <th class="py-3 px-4 text-right">@lang('admin::insurance.commissions.col_gross')</th>
+                                    <th class="py-3 px-4 text-center">Split %</th>
+                                    <th class="py-3 px-4 text-right text-emerald-600 dark:text-emerald-400">@lang('admin::insurance.commissions.col_agent_split')</th>
+                                    <th class="py-3 px-4 text-right text-blue-600 dark:text-blue-400">@lang('admin::insurance.commissions.col_agency_split')</th>
+                                    <th class="py-3 px-4 text-center">@lang('admin::insurance.commissions.col_status')</th>
+                                    <th class="py-3 px-4 text-right">@lang('admin::insurance.policies.col_actions')</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                 <tr v-if="filteredCommissions.length === 0">
                                     <td colspan="11" class="py-12 text-center text-gray-400">
                                         <div class="text-3xl mb-2">📋</div>
-                                        <div class="font-medium text-sm">No hay registros de comisiones que coincidan con los filtros.</div>
-                                        <div class="text-xs mt-1">Al emitir pólizas desde las cotizaciones o agregar registros manuales se acumularán aquí.</div>
+                                        <div class="font-medium text-sm">@lang('admin::insurance.policies.no_records')</div>
                                     </td>
                                 </tr>
 

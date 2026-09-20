@@ -52,6 +52,47 @@
             </div>
         </v-dark>
 
+        <!-- Language Switcher -->
+        <x-admin::dropdown position="bottom-right">
+            <x-slot:toggle>
+                <button
+                    type="button"
+                    class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-semibold hover:bg-gray-100 dark:hover:bg-gray-950 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-800 transition-all cursor-pointer"
+                    title="Change Language / Cambiar Idioma"
+                >
+                    @if (app()->getLocale() === 'es')
+                        <span class="text-sm">🇪🇸</span> <span class="font-bold">ES</span>
+                    @elseif (app()->getLocale() === 'pt_BR')
+                        <span class="text-sm">🇧🇷</span> <span class="font-bold">PT</span>
+                    @else
+                        <span class="text-sm">🇺🇸</span> <span class="font-bold">EN</span>
+                    @endif
+                    <span class="icon-down-arrow text-xs"></span>
+                </button>
+            </x-slot>
+
+            <x-slot:content class="mt-2 !p-1 w-36 shadow-lg">
+                <a
+                    href="{{ request()->fullUrlWithQuery(['locale' => 'es']) }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded text-xs hover:bg-gray-100 dark:hover:bg-gray-800 transition {{ app()->getLocale() === 'es' ? 'font-bold text-brandColor bg-gray-50 dark:bg-gray-800' : 'text-gray-700 dark:text-gray-300' }}"
+                >
+                    <span>🇪🇸</span> Español
+                </a>
+                <a
+                    href="{{ request()->fullUrlWithQuery(['locale' => 'en']) }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded text-xs hover:bg-gray-100 dark:hover:bg-gray-800 transition {{ app()->getLocale() === 'en' ? 'font-bold text-brandColor bg-gray-50 dark:bg-gray-800' : 'text-gray-700 dark:text-gray-300' }}"
+                >
+                    <span>🇺🇸</span> English
+                </a>
+                <a
+                    href="{{ request()->fullUrlWithQuery(['locale' => 'pt_BR']) }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded text-xs hover:bg-gray-100 dark:hover:bg-gray-800 transition {{ app()->getLocale() === 'pt_BR' ? 'font-bold text-brandColor bg-gray-50 dark:bg-gray-800' : 'text-gray-700 dark:text-gray-300' }}"
+                >
+                    <span>🇧🇷</span> Português
+                </a>
+            </x-slot>
+        </x-admin::dropdown>
+
         <div class="md:hidden">
             <!-- Quick Creation Bar -->
             @include('admin::components.layouts.header.quick-creation')

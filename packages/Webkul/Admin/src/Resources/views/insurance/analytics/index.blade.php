@@ -1,6 +1,6 @@
 <x-admin::layouts>
     <x-slot:title>
-        Analítica Ejecutiva & Valuación de Cartera | Krayin Health CRM
+        @lang('admin::insurance.analytics.title_page')
     </x-slot>
 
     <div class="flex flex-col gap-6 p-6">
@@ -11,12 +11,12 @@
                     <span class="text-3xl">📊</span>
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            Analítica Ejecutiva & Valuación de Cartera
+                            @lang('admin::insurance.analytics.title_page')
                             <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">
-                                Book of Business 2026
+                                @lang('admin::insurance.policies.title')
                             </span>
                         </h1>
-                        <p class="text-sm text-gray-500">Valoración financiera del libro de negocio de salud, KPIs de retención y leaderboard de productores</p>
+                        <p class="text-sm text-gray-500">@lang('admin::insurance.analytics.subtitle')</p>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     class="secondary-button text-sm py-2 px-4 flex items-center gap-2"
                 >
                     <span>📥</span>
-                    Exportar Informe Ejecutivo (CSV)
+                    @lang('admin::insurance.analytics.btn_export_csv')
                 </a>
 
                 <a
@@ -35,7 +35,7 @@
                     class="primary-button text-sm py-2 px-4 flex items-center gap-2"
                 >
                     <span>📁</span>
-                    Ver Cartera de Pólizas
+                    @lang('admin::insurance.analytics.view_policies')
                 </a>
             </div>
         </div>
@@ -44,55 +44,43 @@
         <div>
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                    <span>💎</span> Valuación Estimada del Libro de Negocio (M&A / Mercado USA)
+                    <span>💎</span> @lang('admin::insurance.analytics.valuation_title')
                 </h2>
-                <span class="text-xs text-gray-500">Basado en Ingreso Anual Recurrente (ARR) de ${{ number_format($metrics['valuation']['annual_recurring_revenue'], 2) }}</span>
+                <span class="text-xs text-gray-500">@lang('admin::insurance.analytics.annualized_run_rate'): ${{ number_format($metrics['valuation']['annual_recurring_revenue'], 2) }}</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Conservative (1.5x) -->
                 <div class="p-5 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-800 dark:to-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl shadow-sm">
                     <div class="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">
-                        <span>Valuación Conservadora</span>
+                        <span>@lang('admin::insurance.analytics.valuation_conservative')</span>
                         <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-300 font-bold">1.5x ARR</span>
                     </div>
                     <div class="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
                         ${{ number_format($metrics['valuation']['valuation_conservative'], 2) }}
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-gray-400 mt-2">
-                        Referencia para liquidación rápida, compraventa interna o carteras con persistencia estándar (<80%).
-                    </p>
                 </div>
 
                 <!-- Standard (2.0x) -->
                 <div class="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border-2 border-blue-400 dark:border-blue-600 rounded-xl shadow-md relative">
-                    <div class="absolute -top-3 right-4 px-2.5 py-0.5 bg-blue-600 text-white text-[10px] font-bold rounded-full uppercase tracking-wider">
-                        Múltiplo Recomendado
-                    </div>
                     <div class="flex items-center justify-between text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider">
-                        <span>Valor de Mercado Estándar</span>
+                        <span>@lang('admin::insurance.analytics.valuation_standard')</span>
                         <span class="px-2 py-0.5 rounded bg-blue-200 dark:bg-blue-900 text-blue-900 dark:text-blue-200 font-bold">2.0x ARR</span>
                     </div>
                     <div class="text-3xl font-extrabold text-blue-900 dark:text-blue-100 mt-2">
                         ${{ number_format($metrics['valuation']['valuation_standard'], 2) }}
                     </div>
-                    <p class="text-xs text-blue-700/80 dark:text-blue-300/80 mt-2">
-                        Múltiplo promedio en transacciones de agencias ACA/Medicare con retención saludable y contratos directos.
-                    </p>
                 </div>
 
                 <!-- High Growth (2.5x) -->
                 <div class="p-5 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-300 dark:border-emerald-700 rounded-xl shadow-sm">
                     <div class="flex items-center justify-between text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
-                        <span>Alta Retención & Expansión</span>
+                        <span>@lang('admin::insurance.analytics.valuation_high_growth')</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-200 dark:bg-emerald-900 text-emerald-900 dark:text-emerald-200 font-bold">2.5x ARR</span>
                     </div>
                     <div class="text-3xl font-extrabold text-emerald-900 dark:text-emerald-100 mt-2">
                         ${{ number_format($metrics['valuation']['valuation_aggressive'], 2) }}
                     </div>
-                    <p class="text-xs text-emerald-700/80 dark:text-emerald-300/80 mt-2">
-                        Valor premium para carteras con persistencia superior al 90%, baja siniestralidad y diversificación multicarrier.
-                    </p>
                 </div>
             </div>
         </div>

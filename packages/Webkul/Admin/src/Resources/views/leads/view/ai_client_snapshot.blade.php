@@ -8,10 +8,10 @@
                 type="button"
                 class="secondary-button text-xs py-1.5 px-3 flex items-center gap-1.5 bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 hover:from-purple-100 hover:to-indigo-100 border border-purple-200 dark:from-purple-950/40 dark:to-indigo-950/40 dark:text-purple-300 dark:border-purple-800 shadow-sm font-semibold"
                 @click="openModal"
-                title="Resumen ejecutivo instantáneo generado con IA"
+                title="@lang('admin::insurance.tabs.ai_snapshot_title')"
             >
                 <span class="animate-pulse">✨</span>
-                AI Snapshot 360°
+                @lang('admin::insurance.tabs.ai_snapshot')
             </button>
 
             <!-- Modal Backdrop -->
@@ -23,12 +23,12 @@
                             <span class="text-2xl">✨</span>
                             <div>
                                 <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    Resumen Ejecutivo 360° (AI Client Snapshot)
+                                    @lang('admin::insurance.ai_snapshot.modal_title')
                                     <span v-if="snapshot" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">
                                         Score: @{{ snapshot.ai_score }}/100
                                     </span>
                                 </h3>
-                                <p class="text-xs text-gray-500">Briefing instantáneo para llamadas y orientación del asegurado</p>
+                                <p class="text-xs text-gray-500">@lang('admin::insurance.ai_snapshot.executive_narrative')</p>
                             </div>
                         </div>
                         <button type="button" class="text-gray-400 hover:text-gray-600 text-2xl font-bold" @click="showModal = false">&times;</button>
@@ -37,7 +37,7 @@
                     <!-- Loading -->
                     <div v-if="isLoading" class="py-12 flex flex-col items-center justify-center gap-3 text-xs text-gray-400">
                         <div class="w-8 h-8 border-3 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-                        <span>Generando síntesis de cliente...</span>
+                        <span>@lang('admin::insurance.ai_snapshot.loading')</span>
                     </div>
 
                     <!-- Content -->
@@ -45,7 +45,7 @@
                         <!-- AI Narrative Card -->
                         <div class="p-4 rounded-xl bg-gradient-to-br from-purple-50/70 to-indigo-50/50 dark:from-purple-950/30 dark:to-indigo-950/20 border border-purple-200 dark:border-purple-800/60 leading-relaxed text-gray-800 dark:text-gray-200">
                             <div class="font-bold text-purple-900 dark:text-purple-300 text-[11px] mb-1 uppercase tracking-wider flex items-center gap-1.5">
-                                <span>🤖</span> Diagnóstico Ejecutivo
+                                <span>🤖</span> @lang('admin::insurance.ai_snapshot.diagnosis_title')
                             </div>
                             @{{ snapshot.executive_narrative }}
                         </div>
@@ -53,24 +53,24 @@
                         <!-- 2-Column Key Metrics Grid -->
                         <div class="grid grid-cols-2 gap-3 text-xs">
                             <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-                                <div class="text-[10px] text-gray-500 uppercase font-semibold">Beneficiario & Censo</div>
+                                <div class="text-[10px] text-gray-500 uppercase font-semibold">@lang('admin::insurance.ai_snapshot.beneficiary_census')</div>
                                 <div class="font-bold text-gray-900 dark:text-white mt-1">@{{ snapshot.client_name }}</div>
-                                <div class="text-[11px] text-gray-500">@{{ snapshot.age_text }} • @{{ snapshot.household_size }} persona(s)</div>
+                                <div class="text-[11px] text-gray-500">@{{ snapshot.age_text }} • @{{ snapshot.household_size }}</div>
                             </div>
 
                             <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-                                <div class="text-[10px] text-gray-500 uppercase font-semibold">Médico Primario (PCP)</div>
+                                <div class="text-[10px] text-gray-500 uppercase font-semibold">@lang('admin::insurance.ai_snapshot.pcp_doctor')</div>
                                 <div class="font-bold text-gray-900 dark:text-white mt-1 truncate">@{{ snapshot.primary_doctor }}</div>
-                                <div class="text-[11px] text-emerald-600">Asignación médica verificada</div>
+                                <div class="text-[11px] text-emerald-600">@lang('admin::insurance.ai_snapshot.verified_assignment')</div>
                             </div>
 
                             <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-                                <div class="text-[10px] text-gray-500 uppercase font-semibold">Medicamentos Registrados</div>
+                                <div class="text-[10px] text-gray-500 uppercase font-semibold">@lang('admin::insurance.ai_snapshot.rx_summary')</div>
                                 <div class="font-medium text-gray-800 dark:text-gray-200 mt-1 line-clamp-2">@{{ snapshot.medications_summary }}</div>
                             </div>
 
                             <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-                                <div class="text-[10px] text-gray-500 uppercase font-semibold">Estatus de Cumplimiento</div>
+                                <div class="text-[10px] text-gray-500 uppercase font-semibold">@lang('admin::insurance.ai_snapshot.cms_compliance')</div>
                                 <div class="font-bold text-gray-900 dark:text-white mt-1">@{{ snapshot.compliance_status }}</div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                         <!-- Next Action Callout -->
                         <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 flex items-center justify-between">
                             <div>
-                                <div class="text-[10px] uppercase font-bold text-blue-800 dark:text-blue-300">Próxima Mejor Acción:</div>
+                                <div class="text-[10px] uppercase font-bold text-blue-800 dark:text-blue-300">@lang('admin::insurance.ai_snapshot.next_best_action')</div>
                                 <div class="font-bold text-gray-900 dark:text-white">@{{ snapshot.next_action }}</div>
                             </div>
                             <span class="text-xl">🎯</span>
@@ -87,7 +87,7 @@
 
                     <!-- Footer -->
                     <div class="flex justify-end pt-2 border-t border-gray-200 dark:border-gray-800">
-                        <button type="button" class="primary-button text-xs py-1.5 px-4" @click="showModal = false">Cerrar Briefing</button>
+                        <button type="button" class="primary-button text-xs py-1.5 px-4" @click="showModal = false">@lang('admin::insurance.ai_snapshot.close')</button>
                     </div>
                 </div>
             </div>
