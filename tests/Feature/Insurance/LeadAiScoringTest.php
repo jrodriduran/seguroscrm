@@ -13,7 +13,7 @@ use Webkul\User\Models\User;
 
 uses(DatabaseTransactions::class);
 
-function createTestLeadWithPerson(string $name, ?string $dob = null): Lead
+function createAiScoringTestLead(string $name, ?string $dob = null): Lead
 {
     $admin = User::first();
     $pipeline = Pipeline::first() ?: Pipeline::create(['name' => 'AI Scoring Pipeline', 'is_default' => 1]);
@@ -35,7 +35,7 @@ function createTestLeadWithPerson(string $name, ?string $dob = null): Lead
 }
 
 it('evaluates lead with urgent SEP expiring in less than 7 days as high priority', function () {
-    $lead = createTestLeadWithPerson('Elena Delgado');
+    $lead = createAiScoringTestLead('Elena Delgado');
 
     // Create SEP qualification with event date 55 days ago (only 5 days remaining in 60-day window)
     LeadSepQualification::create([
@@ -60,7 +60,7 @@ it('evaluates lead with urgent SEP expiring in less than 7 days as high priority
 });
 
 it('detects turning 65 Medicare initial enrollment period opportunity', function () {
-    $lead = createTestLeadWithPerson('Roberto Morales');
+    $lead = createAiScoringTestLead('Roberto Morales');
 
     // Add household member turning 65 in 2 months (64 years and 10 months)
     $lead->householdMembers()->create([
@@ -80,7 +80,7 @@ it('detects turning 65 Medicare initial enrollment period opportunity', function
 });
 
 it('boosts score and triggers urgent alert when critical DMI document deadline is pending', function () {
-    $lead = createTestLeadWithPerson('Lucia Mendez');
+    $lead = createAiScoringTestLead('Lucia Mendez');
 
     LeadDmiDocument::create([
         'lead_id' => $lead->id,
@@ -99,7 +99,7 @@ it('boosts score and triggers urgent alert when critical DMI document deadline i
 });
 
 it('returns AI evaluation data from JSON endpoint', function () {
-    $lead = createTestLeadWithPerson('Mario Casas');
+    $lead = createAiScoringTestLead('Mario Casas');
     $admin = User::first();
 
     $response = $this->actingAs($admin)
