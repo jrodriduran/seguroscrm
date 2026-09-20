@@ -47,7 +47,7 @@ it('allows admin to access carrier reconciliation dashboard', function () {
     $admin = getDefaultAdmin();
 
     test()->actingAs($admin)
-        ->get(route('admin.commissions.reconciliation.index'))
+        ->get(route('admin.commissions.reconciliation.index', ['locale' => 'es']))
         ->assertOk()
         ->assertSee('Reconciliador de Statements de Aseguradoras');
 });

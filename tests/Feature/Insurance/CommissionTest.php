@@ -14,7 +14,7 @@ it('allows admin to see the commissions dashboard and KPIs', function () {
     $admin = getDefaultAdmin();
 
     test()->actingAs($admin)
-        ->get(route('admin.commissions.index'))
+        ->get(route('admin.commissions.index', ['locale' => 'es']))
         ->assertOk()
         ->assertSee('Comisiones de Seguros');
 });

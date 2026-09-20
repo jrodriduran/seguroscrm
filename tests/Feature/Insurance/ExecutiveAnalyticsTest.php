@@ -78,7 +78,7 @@ it('displays the executive analytics & book of business valuation dashboard', fu
     $admin = User::first();
 
     $response = $this->actingAs($admin)
-        ->get(route('admin.insurance.analytics.index'));
+        ->get(route('admin.insurance.analytics.index', ['locale' => 'es']));
 
     $response->assertOk()
         ->assertSee('Analítica Ejecutiva &amp; Valuación de Cartera', false)

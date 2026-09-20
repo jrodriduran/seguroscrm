@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
-    <title>Resumen de Medicinas y Red Médica - {{ $lead->person?->name ?: $lead->title }}</title>
+    <title>@lang('admin::insurance.rx_and_doctors.pdf_title') - {{ $lead->person?->name ?: $lead->title }}</title>
     <style>
         @page {
             margin: 25px 30px;
@@ -107,12 +107,12 @@
     <table class="header-table">
         <tr>
             <td style="width: 65%;">
-                <div class="logo-title">FICHA DE FARMACOTERAPIA Y RED MÉDICA</div>
-                <div class="subtitle">Verificación de Formulario de Medicamentos y Médicos Preferidos (CMS & ACA Compliant)</div>
+                <div class="logo-title">@lang('admin::insurance.rx_and_doctors.pdf_header_title')</div>
+                <div class="subtitle">@lang('admin::insurance.rx_and_doctors.pdf_header_subtitle')</div>
             </td>
             <td style="width: 35%; text-align: right;">
-                <div style="font-size: 10px; color: #64748b;">Fecha de Emisión: <strong>{{ $generatedAt }}</strong></div>
-                <div style="font-size: 10px; color: #64748b;">Agente Responsable: <strong>{{ $lead->user?->name ?: 'Agencia de Seguros' }}</strong></div>
+                <div style="font-size: 10px; color: #64748b;">@lang('admin::insurance.rx_and_doctors.pdf_issue_date') <strong>{{ $generatedAt }}</strong></div>
+                <div style="font-size: 10px; color: #64748b;">@lang('admin::insurance.rx_and_doctors.pdf_agent') <strong>{{ $lead->user?->name ?: 'Prime Health CRM' }}</strong></div>
             </td>
         </tr>
     </table>
@@ -122,42 +122,42 @@
         <table>
             <tr>
                 <td style="width: 25%;">
-                    <div class="meta-label">Beneficiario Titular</div>
+                    <div class="meta-label">@lang('admin::insurance.rx_and_doctors.pdf_beneficiary')</div>
                     <div class="meta-value">{{ $lead->person?->name ?: $lead->title }}</div>
                 </td>
                 <td style="width: 25%;">
-                    <div class="meta-label">Teléfono de Contacto</div>
-                    <div class="meta-value">{{ $lead->person?->contact_numbers?->first()?->number ?: 'N/A' }}</div>
+                    <div class="meta-label">@lang('admin::insurance.rx_and_doctors.pdf_phone')</div>
+                    <div class="meta-value">{{ data_get($lead->person?->contact_numbers, '0.value', 'N/A') }}</div>
                 </td>
                 <td style="width: 25%;">
-                    <div class="meta-label">Total Medicamentos Registrados</div>
-                    <div class="meta-value">{{ $medications->count() }} fármacos</div>
+                    <div class="meta-label">@lang('admin::insurance.rx_and_doctors.pdf_total_meds')</div>
+                    <div class="meta-value">{{ trans('admin::insurance.rx_and_doctors.pdf_meds_count', ['count' => $medications->count()]) }}</div>
                 </td>
                 <td style="width: 25%;">
-                    <div class="meta-label">Gasto Mensual Estimado en Copagos</div>
-                    <div class="meta-value" style="color: #0369a1;">${{ number_format($medications->sum('estimated_copay_30d'), 2) }} / mes</div>
+                    <div class="meta-label">@lang('admin::insurance.rx_and_doctors.pdf_monthly_copay')</div>
+                    <div class="meta-value" style="color: #0369a1;">${{ number_format($medications->sum('estimated_copay_30d'), 2) }} @lang('admin::insurance.rx_and_doctors.pdf_per_month')</div>
                 </td>
             </tr>
         </table>
     </div>
 
     <!-- 1. Formulary / Prescription Medications -->
-    <div class="section-title">1. Formulario de Medicamentos Recetados (Prescription Drugs / Part D & ACA)</div>
+    <div class="section-title">@lang('admin::insurance.rx_and_doctors.pdf_section_1')</div>
 
     @if ($medications->isEmpty())
         <div style="padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; color: #64748b; font-style: italic;">
-            No se han registrado medicamentos continuos para este cliente.
+            @lang('admin::insurance.rx_and_doctors.pdf_no_meds')
         </div>
     @else
         <table class="data-table">
             <thead>
                 <tr>
-                    <th style="width: 28%;">Medicamento</th>
-                    <th style="width: 14%;">Dosis / Frecuencia</th>
-                    <th style="width: 12%;">Cant. (30d)</th>
-                    <th style="width: 16%;">Nivel (Tier)</th>
-                    <th style="width: 15%;">Restricciones</th>
-                    <th style="width: 15%; text-align: right;">Copago Estimado</th>
+                    <th style="width: 28%;">@lang('admin::insurance.rx_and_doctors.pdf_col_drug')</th>
+                    <th style="width: 14%;">@lang('admin::insurance.rx_and_doctors.pdf_col_dosage')</th>
+                    <th style="width: 12%;">@lang('admin::insurance.rx_and_doctors.pdf_col_qty')</th>
+                    <th style="width: 16%;">@lang('admin::insurance.rx_and_doctors.pdf_col_tier')</th>
+                    <th style="width: 15%;">@lang('admin::insurance.rx_and_doctors.pdf_col_restrictions')</th>
+                    <th style="width: 15%; text-align: right;">@lang('admin::insurance.rx_and_doctors.pdf_col_copay')</th>
                 </tr>
             </thead>
             <tbody>
@@ -170,7 +170,7 @@
                             @endif
                         </td>
                         <td>{{ $med->dosage }}<br><span style="color: #64748b; font-size: 8px;">{{ $med->frequency }}</span></td>
-                        <td>{{ $med->quantity_per_30_days }} un.</td>
+                        <td>{{ $med->quantity_per_30_days }} @lang('admin::insurance.rx_and_doctors.pdf_units')</td>
                         <td>
                             @php
                                 $badgeClass = match(true) {
@@ -187,7 +187,7 @@
                         <td>
                             @php $codes = $med->getRestrictionCodes(); @endphp
                             @if (empty($codes))
-                                <span style="color: #10b981; font-size: 8px;">Sin restricción</span>
+                                <span style="color: #10b981; font-size: 8px;">@lang('admin::insurance.rx_and_doctors.pdf_no_restrictions')</span>
                             @else
                                 @foreach ($codes as $c)
                                     <span class="badge badge-warn" title="{{ $c['label'] }}">{{ $c['code'] }}</span>
@@ -196,7 +196,7 @@
                         </td>
                         <td style="text-align: right;">
                             <strong>${{ number_format($med->estimated_copay_30d, 2) }}</strong><br>
-                            <span style="font-size: 8px; color: #0284c7;">90d Correo: ${{ number_format($med->estimated_copay_90d_mail, 2) }}</span>
+                            <span style="font-size: 8px; color: #0284c7;">@lang('admin::insurance.rx_and_doctors.pdf_mail_90d') ${{ number_format($med->estimated_copay_90d_mail, 2) }}</span>
                         </td>
                     </tr>
                 @endforeach
@@ -205,20 +205,20 @@
     @endif
 
     <!-- 2. Doctors & Providers Network -->
-    <div class="section-title" style="margin-top: 20px;">2. Red de Médicos y Especialistas Preferidos (Provider Network Verification)</div>
+    <div class="section-title" style="margin-top: 20px;">@lang('admin::insurance.rx_and_doctors.pdf_section_2')</div>
 
     @if ($doctors->isEmpty())
         <div style="padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; color: #64748b; font-style: italic;">
-            No se han registrado proveedores médicos para este cliente.
+            @lang('admin::insurance.rx_and_doctors.pdf_no_docs')
         </div>
     @else
         <table class="data-table">
             <thead>
                 <tr>
-                    <th style="width: 25%;">Nombre del Médico</th>
-                    <th style="width: 20%;">Especialidad</th>
-                    <th style="width: 25%;">Clínica / Hospital / NPI</th>
-                    <th style="width: 30%;">Estatus en Red de Carriers</th>
+                    <th style="width: 25%;">@lang('admin::insurance.rx_and_doctors.pdf_col_doctor')</th>
+                    <th style="width: 20%;">@lang('admin::insurance.rx_and_doctors.pdf_col_specialty')</th>
+                    <th style="width: 25%;">@lang('admin::insurance.rx_and_doctors.pdf_col_clinic')</th>
+                    <th style="width: 30%;">@lang('admin::insurance.rx_and_doctors.pdf_col_status')</th>
                 </tr>
             </thead>
             <tbody>
@@ -227,15 +227,15 @@
                         <td>
                             <strong>{{ $doc->doctor_name }}</strong>
                             @if ($doc->is_primary_physician)
-                                <span class="badge badge-t1">Médico Primario (PCP)</span>
+                                <span class="badge badge-t1">@lang('admin::insurance.rx_and_doctors.pdf_pcp_badge')</span>
                             @endif
                             @if ($doc->phone)
-                                <div style="font-size: 8px; color: #64748b;">Tel: {{ $doc->phone }}</div>
+                                <div style="font-size: 8px; color: #64748b;">@lang('admin::insurance.rx_and_doctors.pdf_tel') {{ $doc->phone }}</div>
                             @endif
                         </td>
                         <td>{{ $doc->specialty }}</td>
                         <td>
-                            {{ $doc->clinic_or_hospital ?: 'Práctica Privada' }}<br>
+                            {{ $doc->clinic_or_hospital ?: trans('admin::insurance.rx_and_doctors.pdf_private_practice') }}<br>
                             <span style="font-size: 8px; color: #64748b;">NPI: {{ $doc->npi_number ?: 'N/A' }} | {{ $doc->address_city_state ?: '' }}</span>
                         </td>
                         <td>
@@ -249,7 +249,7 @@
                                     </span>
                                 @endforeach
                             @else
-                                <span style="color: #64748b; font-size: 8px;">En verificación</span>
+                                <span style="color: #64748b; font-size: 8px;">@lang('admin::insurance.rx_and_doctors.pdf_in_verification')</span>
                             @endif
                         </td>
                     </tr>
@@ -260,12 +260,12 @@
 
     <!-- Compliance Disclaimer -->
     <div style="margin-top: 25px; padding: 10px; background-color: #f8fafc; border-left: 3px solid #0284c7; font-size: 8px; color: #475569;">
-        <strong>Nota Regulatoria & Descargo de Responsabilidad:</strong> La disponibilidad en red de médicos y el nivel de cobertura (formularios y copagos) de fármacos están sujetos a cambios periódicos por parte de cada aseguradora según las pautas de CMS y Marketplace. Este resumen constituye una estimación consultiva elaborada en base a la información proporcionada por el asegurado al momento de la cotización.
+        <strong>@lang('admin::insurance.rx_and_doctors.pdf_disclaimer_title')</strong> @lang('admin::insurance.rx_and_doctors.pdf_disclaimer_body')
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        Documento confidencial generado por Krayin Health CRM — Prohibida su reproducción sin autorización.
+        @lang('admin::insurance.rx_and_doctors.pdf_footer')
     </div>
 
 </body>
