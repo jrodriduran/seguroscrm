@@ -80,13 +80,13 @@ class AgencyHierarchyController extends Controller
         $hierarchy = AgencyHierarchy::updateOrCreate(
             ['user_id' => $validated['user_id']],
             [
-                'parent_user_id' => $validated['parent_user_id'] ?: null,
+                'parent_user_id' => $validated['parent_user_id'] ?? null,
                 'agency_tier' => $validated['agency_tier'],
                 'sub_agency_name' => $validated['sub_agency_name'] ?? null,
                 'npn_number' => $validated['npn_number'] ?? null,
-                'contract_level_percentage' => $validated['contract_level_percentage'] ?: 70.0,
-                'override_pmpm' => $validated['override_pmpm'] ?: 0.0,
-                'override_percentage' => $validated['override_percentage'] ?: 0.0,
+                'contract_level_percentage' => $validated['contract_level_percentage'] ?? 70.0,
+                'override_pmpm' => $validated['override_pmpm'] ?? 0.0,
+                'override_percentage' => $validated['override_percentage'] ?? 0.0,
                 'status' => 'active',
             ]
         );

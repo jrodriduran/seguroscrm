@@ -53,7 +53,7 @@ class BookOfBusinessController extends Controller
 
         $policies = $query->latest('id')->paginate(25);
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'metrics' => $metrics,

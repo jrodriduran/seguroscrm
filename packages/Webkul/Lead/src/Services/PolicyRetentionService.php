@@ -150,7 +150,7 @@ class PolicyRetentionService
      */
     protected function createGracePeriodAlertActivity(InsurancePolicy $policy, int $overdueDays): bool
     {
-        $existing = Activity::where('lead_id', $policy->lead_id)
+        $existing = Activity::whereHas('leads', fn ($q) => $q->where('leads.id', $policy->lead_id))
             ->where('title', 'like', "%Período de Gracia: Póliza {$policy->policy_number}%")
             ->where('is_done', 0)
             ->exists();
@@ -162,7 +162,7 @@ class PolicyRetentionService
         $beneficiary = $policy->person?->name ?: ($policy->lead?->person?->name ?: 'Titular');
 
         try {
-            Activity::create([
+            $activity = Activity::create([
                 'title' => "🚨 Período de Gracia: Póliza {$policy->policy_number} ({$policy->carrier_name})",
                 'type' => 'call',
                 'comment' => "URGENTE: La póliza de salud de {$beneficiary} lleva {$overdueDays} días en período de gracia por falta de pago. Riesgo inminente de cancelación retroactiva y contracargo (clawback). Contactar al cliente de inmediato.",
@@ -170,8 +170,15 @@ class PolicyRetentionService
                 'schedule_to' => Carbon::now()->addHours(24),
                 'is_done' => 0,
                 'user_id' => $policy->user_id ?: 1,
-                'lead_id' => $policy->lead_id,
             ]);
+
+            if ($policy->lead_id) {
+                $activity->leads()->attach($policy->lead_id);
+            }
+
+            if ($policy->person_id) {
+                $activity->persons()->attach($policy->person_id);
+            }
 
             return true;
         } catch (\Throwable $e) {
