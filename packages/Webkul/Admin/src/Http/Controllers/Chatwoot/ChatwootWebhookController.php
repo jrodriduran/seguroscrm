@@ -126,7 +126,7 @@ class ChatwootWebhookController extends Controller
 
         // Record interaction in CRM activity timeline
         try {
-            Activity::create([
+            $activity = Activity::create([
                 'title' => "💬 Mensaje WhatsApp/Chatwoot de {$senderName}",
                 'type' => 'call',
                 'comment' => "Mensaje recibido vía Chatwoot (#{$conversationId}):\n\n\"{$content}\"",
@@ -134,8 +134,13 @@ class ChatwootWebhookController extends Controller
                 'schedule_to' => Carbon::now(),
                 'is_done' => 1,
                 'user_id' => $lead->user_id ?: 1,
-                'lead_id' => $lead->id,
             ]);
+
+            $activity->leads()->attach($lead->id);
+
+            if ($person?->id) {
+                $activity->persons()->attach($person->id);
+            }
         } catch (\Throwable $e) {
             Log::error('Failed to log Chatwoot message activity: '.$e->getMessage());
         }

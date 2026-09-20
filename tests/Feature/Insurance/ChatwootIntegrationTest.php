@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Webkul\Activity\Models\Activity;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\Pipeline;
@@ -100,8 +101,13 @@ it('processes incoming webhook message and creates or links CRM lead with activi
 
     // Check CRM activity was created
     $this->assertDatabaseHas('activities', [
-        'lead_id' => $lead->id,
         'title' => '💬 Mensaje WhatsApp/Chatwoot de Manuel Garcia',
+    ]);
+
+    $activity = Activity::where('title', '💬 Mensaje WhatsApp/Chatwoot de Manuel Garcia')->first();
+    $this->assertDatabaseHas('lead_activities', [
+        'lead_id' => $lead->id,
+        'activity_id' => $activity->id,
     ]);
 });
 
@@ -130,7 +136,12 @@ it('allows sending an outbound message from CRM to Chatwoot', function () {
 
     // Check outbound activity was created in CRM
     $this->assertDatabaseHas('activities', [
-        'lead_id' => $lead->id,
         'title' => '📤 Mensaje Saliente Chatwoot a Daniela Morales',
+    ]);
+
+    $outActivity = Activity::where('title', '📤 Mensaje Saliente Chatwoot a Daniela Morales')->first();
+    $this->assertDatabaseHas('lead_activities', [
+        'lead_id' => $lead->id,
+        'activity_id' => $outActivity->id,
     ]);
 });

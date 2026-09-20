@@ -127,7 +127,7 @@ class ChatwootController extends Controller
 
         // Record in CRM activities
         try {
-            Activity::create([
+            $activity = Activity::create([
                 'title' => "📤 Mensaje Saliente Chatwoot a {$lead->person?->name}",
                 'type' => 'call',
                 'comment' => "Mensaje enviado al asegurado vía Chatwoot (#{$conversationId}):\n\n\"{$content}\"",
@@ -135,8 +135,13 @@ class ChatwootController extends Controller
                 'schedule_to' => Carbon::now(),
                 'is_done' => 1,
                 'user_id' => auth()->id() ?: 1,
-                'lead_id' => $lead->id,
             ]);
+
+            $activity->leads()->attach($lead->id);
+
+            if ($lead->person_id) {
+                $activity->persons()->attach($lead->person_id);
+            }
         } catch (\Throwable $e) {
         }
 
