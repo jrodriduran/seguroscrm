@@ -1067,4 +1067,3 @@ return [
         'download_pdf' => 'Descargar PDF',
     ],
 ];
-
