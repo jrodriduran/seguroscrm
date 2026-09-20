@@ -19,6 +19,9 @@ Route::controller(ConsentPortalController::class)->prefix('consent')->group(func
     Route::get('{token}', 'show')->name('consent.portal.show');
     Route::post('{token}', 'sign')->name('consent.portal.sign');
     Route::get('{token}/receipt', 'receipt')->name('consent.portal.receipt');
+
+    Route::get('{token}', 'show')->name('consent.portal');
+    Route::post('{token}', 'sign')->name('consent.sign');
 });
 
 /**

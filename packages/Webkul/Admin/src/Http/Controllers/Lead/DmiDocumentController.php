@@ -46,14 +46,14 @@ class DmiDocumentController extends Controller
         $request->validate([
             'doc_type' => 'required|string|max:50',
             'title' => 'required|string|max:150',
-            'notice_date' => 'required|date',
+            'notice_date' => 'nullable|date',
             'deadline_date' => 'nullable|date',
             'status' => 'nullable|string|max:40',
             'notes' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ]);
 
-        $noticeDate = Carbon::parse($request->input('notice_date'));
+        $noticeDate = $request->input('notice_date') ? Carbon::parse($request->input('notice_date')) : Carbon::today();
         $deadlineDate = $request->input('deadline_date')
             ? Carbon::parse($request->input('deadline_date'))
             : $noticeDate->copy()->addDays(90);

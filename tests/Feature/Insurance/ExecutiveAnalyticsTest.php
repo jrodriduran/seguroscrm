@@ -81,7 +81,7 @@ it('displays the executive analytics & book of business valuation dashboard', fu
         ->get(route('admin.insurance.analytics.index', ['locale' => 'es']));
 
     $response->assertOk()
-        ->assertSee('Analítica Ejecutiva &amp; Valuación de Cartera', false)
+        ->assertSee(trans('admin::insurance.analytics.title_page'), false)
         ->assertSee('Valuación Conservadora')
         ->assertSee('Valor de Mercado Estándar')
         ->assertSee('Florida Blue')

@@ -3,16 +3,20 @@
         @lang('admin::insurance.commissions.title')
     </x-slot>
 
+    @php
+        $initialKpis = [
+            'total_gross_monthly' => $totalGrossMonthly,
+            'total_agent_monthly' => $totalAgentMonthly,
+            'total_agency_monthly' => $totalAgencyMonthly,
+            'active_policies' => $activePoliciesCount,
+        ];
+    @endphp
+
     <v-insurance-commissions
         :initial-commissions='@json($commissions)'
         :initial-rates='@json($rates)'
         :agents='@json($agents)'
-        :initial-kpis='@json([
-            "total_gross_monthly" => $totalGrossMonthly,
-            "total_agent_monthly" => $totalAgentMonthly,
-            "total_agency_monthly" => $totalAgencyMonthly,
-            "active_policies" => $activePoliciesCount
-        ])'
+        :initial-kpis='@json($initialKpis)'
     ></v-insurance-commissions>
 
     @pushOnce('scripts')

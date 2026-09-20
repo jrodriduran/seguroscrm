@@ -618,7 +618,7 @@ return [
         'view_policies' => 'Ver Cartera de Pólizas',
         'valuation_title' => 'Valuación Estimada del Libro de Negocio (M&A / Mercado USA)',
         'valuation_conservative' => 'Valuación Conservadora (1.5x ARR)',
-        'valuation_standard' => 'Estándar de Mercado (2.0x ARR)',
+        'valuation_standard' => 'Valor de Mercado Estándar (2.0x ARR)',
         'valuation_high_growth' => 'Crecimiento Alto / Retención (2.5x ARR)',
         'annualized_run_rate' => 'Ingreso Anual Recurrente (ARR)',
         'carrier_share' => 'Participación por Aseguradora',
