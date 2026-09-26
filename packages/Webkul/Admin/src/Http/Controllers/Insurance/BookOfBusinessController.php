@@ -100,6 +100,74 @@ class BookOfBusinessController extends Controller
     }
 
     /**
+     * Record initial binder payment and effectuate policy coverage.
+     */
+    public function recordBinderPayment(Request $request, int $id): JsonResponse
+    {
+        $policy = InsurancePolicy::findOrFail($id);
+
+        $validated = $request->validate([
+            'confirmation_number' => 'required|string|max:100',
+            'payment_method' => 'required|string|max:50',
+            'paid_at' => 'nullable|date',
+            'paid_to_date' => 'nullable|date',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $policy->recordBinderPayment(
+            $validated['confirmation_number'],
+            $validated['payment_method'],
+            $validated['paid_at'] ?? null,
+            $validated['paid_to_date'] ?? null,
+            auth()->guard('user')->id(),
+            $validated['notes'] ?? null
+        );
+
+        // Also if policy is linked to lead, record an activity
+        if ($policy->lead_id) {
+            try {
+                $activity = \Webkul\Activity\Models\ActivityProxy::modelClass()::create([
+                    'title' => "Primer Pago (Binder) Confirmado - Póliza #{$policy->policy_number}",
+                    'type' => 'note',
+                    'comment' => "Pago inicial verificado exitosamente con confirmación #{$validated['confirmation_number']} vía {$validated['payment_method']}. Cobertura médica activada y en vigor.",
+                    'user_id' => auth()->guard('user')->id() ?: $policy->user_id,
+                ]);
+
+                \Illuminate\Support\Facades\DB::table('lead_activities')->insert([
+                    'lead_id' => $policy->lead_id,
+                    'activity_id' => $activity->id,
+                ]);
+            } catch (\Throwable $e) {
+                // Ignore if activity fails
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "¡Pago inicial (Binder) registrado con éxito para la póliza {$policy->policy_number}! La cobertura médica ha sido efectuada y activada.",
+            'policy' => $policy->fresh(['coverageHistories']),
+        ]);
+    }
+
+    /**
+     * Get coverage history timeline for a policy.
+     */
+    public function coverageHistory(int $id): JsonResponse
+    {
+        $policy = InsurancePolicy::with(['coverageHistories.verifiedBy'])->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'policy_number' => $policy->policy_number,
+            'status' => $policy->status,
+            'binder_payment_status' => $policy->binder_payment_status,
+            'effectuation_date' => $policy->effectuation_date?->toDateString(),
+            'effectuation_source' => $policy->effectuation_source,
+            'history' => $policy->coverageHistories,
+        ]);
+    }
+
+    /**
      * Get preformatted WhatsApp payment reminder for client.
      */
     public function getWhatsAppReminder(int $id): JsonResponse

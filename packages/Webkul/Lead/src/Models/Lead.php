@@ -171,6 +171,22 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get the tax household eligibility records for the lead.
+     */
+    public function taxHouseholds(): HasMany
+    {
+        return $this->hasMany(LeadTaxHouseholdProxy::modelClass());
+    }
+
+    /**
+     * Get the primary / latest tax household record.
+     */
+    public function taxHousehold(): HasOne
+    {
+        return $this->hasOne(LeadTaxHouseholdProxy::modelClass())->latestOfMany();
+    }
+
+    /**
      * Get the CMS consent associated with the lead.
      */
     public function consent(): HasOne

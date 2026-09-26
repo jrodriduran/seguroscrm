@@ -86,6 +86,60 @@ class LeadConsent extends Model implements LeadConsentContract
     }
 
     /**
+     * Immutable version history relation (CMS 45 CFR § 155.220 - 10-year rule)
+     */
+    public function versions()
+    {
+        return $this->hasMany(LeadConsentVersionProxy::modelClass(), 'lead_consent_id')->orderBy('version_number', 'desc');
+    }
+
+    /**
+     * Record client signature and freeze immutable version with cryptographic hash.
+     */
+    public function recordSignature(string $signatureData, ?string $ip = null, ?string $userAgent = null, ?string $pdfPath = null): LeadConsentVersion
+    {
+        $signedAt = now();
+        $this->update([
+            'status' => 'signed',
+            'signature_data' => $signatureData,
+            'signed_at' => $signedAt,
+            'ip_address' => $ip,
+            'user_agent' => $userAgent,
+            'pdf_path' => $pdfPath,
+        ]);
+
+        $nextVersion = ((int) $this->versions()->max('version_number')) + 1;
+
+        $fileHash = LeadConsentVersion::generateHash(
+            $signatureData,
+            (string) $this->consent_text,
+            (string) $this->client_name,
+            $signedAt->toIso8601String(),
+            $ip
+        );
+
+        return LeadConsentVersion::create([
+            'lead_consent_id' => $this->id,
+            'lead_id' => $this->lead_id,
+            'version_number' => $nextVersion,
+            'status' => 'signed',
+            'client_name' => $this->client_name,
+            'client_phone' => $this->client_phone,
+            'client_email' => $this->client_email,
+            'agent_name' => $this->agent_name,
+            'agent_npn' => $this->agent_npn,
+            'agency_name' => $this->agency_name,
+            'consent_text' => $this->consent_text,
+            'signature_data' => $signatureData,
+            'signed_at' => $signedAt,
+            'ip_address' => $ip,
+            'user_agent' => $userAgent,
+            'pdf_path' => $pdfPath,
+            'file_hash' => $fileHash,
+        ]);
+    }
+
+    /**
      * WhatsApp message generator
      */
     public function getWhatsAppMessageAttribute(): string

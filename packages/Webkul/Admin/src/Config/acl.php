@@ -37,6 +37,11 @@ return [
         'route' => ['admin.leads.delete', 'admin.leads.mass_delete'],
         'sort' => 4,
     ], [
+        'key' => 'leads.view_sensitive_pii',
+        'name' => 'admin::insurance.acl.view_sensitive_pii',
+        'route' => 'admin.leads.household.reveal_pii',
+        'sort' => 5,
+    ], [
         'key' => 'quotes',
         'name' => 'admin::app.acl.quotes',
         'route' => 'admin.quotes.index',

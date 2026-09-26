@@ -25,6 +25,90 @@
                 </button>
             </div>
 
+            <!-- FPL Eligibility & ACA Subsidy Card -->
+            <div class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm">
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-xs">
+                            %
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-semibold dark:text-white flex items-center gap-2">
+                                @lang('admin::insurance.household.fpl_title')
+                                <span class="text-xs px-2 py-0.5 rounded font-mono font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" v-if="fplCalc">
+                                    Año @{{ fplCalc.tax_year }} • @{{ fplCalc.state_code }}
+                                </span>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span v-if="fplCalc && fplCalc.is_zero_premium_eligible" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300">
+                            <i class="fal fa-check-circle"></i> @lang('admin::insurance.household.fpl_zero_premium_badge')
+                        </span>
+
+                        <button
+                            type="button"
+                            class="secondary-button text-xs py-1.5 px-3 flex items-center gap-1.5"
+                            @click="openFplModal"
+                        >
+                            <i class="fal fa-calculator"></i>
+                            @lang('admin::insurance.household.fpl_edit_btn')
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FPL Metrics Grid -->
+                <div v-if="fplCalc" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+                    <!-- FPL % & CSR Tier -->
+                    <div class="p-2.5 rounded bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800">
+                        <div class="text-[11px] font-medium text-gray-500 uppercase">@lang('admin::insurance.household.fpl_badge') / CSR</div>
+                        <div class="mt-1 flex items-baseline gap-1.5 flex-wrap">
+                            <span class="text-lg font-bold text-gray-900 dark:text-white">@{{ fplCalc.fpl_percentage }}%</span>
+                            <span class="text-xs font-semibold px-1.5 py-0.5 rounded border" :class="getCsrBadgeClass(fplCalc.fpl_category)">
+                                @{{ fplCalc.csr_tier }}
+                            </span>
+                        </div>
+                        <div class="text-[11px] text-gray-400 mt-0.5 truncate" :title="fplCalc.csr_description">@{{ fplCalc.csr_description }}</div>
+                    </div>
+
+                    <!-- Annual Income & HH Size -->
+                    <div class="p-2.5 rounded bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800">
+                        <div class="text-[11px] font-medium text-gray-500 uppercase">@lang('admin::insurance.household.fpl_projected_income')</div>
+                        <div class="mt-1 text-lg font-bold text-gray-900 dark:text-white">
+                            $@{{ Number(fplCalc.projected_annual_income).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                        </div>
+                        <div class="text-[11px] text-gray-400 mt-0.5">
+                            @{{ fplCalc.household_size }} @{{ fplCalc.household_size === 1 ? labels.memberSingle : labels.memberPlural }} (Umbral: $@{{ Number(fplCalc.fpl_guideline_threshold).toLocaleString('en-US') }})
+                        </div>
+                    </div>
+
+                    <!-- Estimated APTC Monthly Subsidy -->
+                    <div class="p-2.5 rounded bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800">
+                        <div class="text-[11px] font-medium text-gray-500 uppercase">@lang('admin::insurance.household.fpl_aptc_monthly')</div>
+                        <div class="mt-1 text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                            $@{{ Number(fplCalc.estimated_monthly_aptc).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                            <span class="text-xs font-normal text-gray-500">/ mes</span>
+                        </div>
+                        <div class="text-[11px] text-gray-400 mt-0.5">
+                            Aporte máx: $@{{ Number(fplCalc.max_monthly_contribution).toFixed(2) }}/mes (@{{ fplCalc.applicable_percentage }}%)
+                        </div>
+                    </div>
+
+                    <!-- Net Benchmark Premium -->
+                    <div class="p-2.5 rounded bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800">
+                        <div class="text-[11px] font-medium text-gray-500 uppercase">@lang('admin::insurance.household.fpl_net_premium')</div>
+                        <div class="mt-1 text-lg font-bold" :class="fplCalc.estimated_net_premium <= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-white'">
+                            $@{{ Number(fplCalc.estimated_net_premium).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                            <span class="text-xs font-normal text-gray-500">/ mes</span>
+                        </div>
+                        <div class="text-[11px] text-gray-400 mt-0.5">
+                            Benchmark Silver: $@{{ Number(fplCalc.estimated_benchmark_premium).toFixed(2) }}/mes
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Loading Skeleton -->
             <div v-if="isLoading" class="flex flex-col gap-2 py-4">
                 <div class="h-10 bg-gray-100 dark:bg-gray-800 animate-pulse rounded"></div>
@@ -83,7 +167,19 @@
                                 @{{ getGenderLabel(member.gender) }}
                             </td>
                             <td class="py-2.5 px-3 font-mono text-xs text-gray-700 dark:text-gray-300">
-                                @{{ member.ssn_itin || '--' }}
+                                <div class="inline-flex items-center gap-1.5">
+                                    <span>@{{ member.ssn_itin || '--' }}</span>
+                                    <button
+                                        v-if="member.can_reveal_ssn && !member.is_revealed"
+                                        type="button"
+                                        @click="revealSsn(member)"
+                                        class="text-gray-400 hover:text-blue-600 transition p-0.5 rounded cursor-pointer"
+                                        title="@lang('admin::insurance.household.reveal_pii')"
+                                    >
+                                        <i class="fal fa-eye text-xs"></i>
+                                    </button>
+                                    <span v-if="member.is_revealed" class="text-[10px] text-emerald-600 font-sans font-bold">@lang('admin::insurance.household.revealed_badge')</span>
+                                </div>
                             </td>
                             <td class="py-2.5 px-3">
                                 <span
@@ -282,6 +378,162 @@
                     </div>
                 </x-slot>
             </x-admin::modal>
+
+            <!-- FPL Calculator & Income Modal -->
+            <x-admin::modal ref="fplModal" position="center">
+                <x-slot:header>
+                    <h3 class="text-base font-semibold dark:text-white flex items-center gap-2">
+                        <i class="fal fa-calculator text-brandColor"></i>
+                        @lang('admin::insurance.household.fpl_modal_title')
+                    </h3>
+                </x-slot>
+
+                <x-slot:content>
+                    <form @submit.prevent="saveFpl" class="flex flex-col gap-4">
+                        <!-- Projected Annual Income (MAGI) -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-medium text-gray-700 dark:text-gray-300 required">
+                                @lang('admin::insurance.household.fpl_projected_income') ($ USD)
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2 text-gray-400 font-bold">$</span>
+                                <input
+                                    type="number"
+                                    step="100"
+                                    min="0"
+                                    v-model.number="fplForm.projected_annual_income"
+                                    @input="onFplInputChange"
+                                    required
+                                    placeholder="35000"
+                                    class="w-full pl-7 rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm font-semibold dark:bg-gray-950 dark:text-white"
+                                />
+                            </div>
+                            <span class="text-[11px] text-gray-400">
+                                @lang('admin::insurance.household.fpl_benchmark_note')
+                            </span>
+                        </div>
+
+                        <!-- Household Size & Quick Sync -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-gray-700 dark:text-gray-300 required">
+                                    @lang('admin::insurance.household.fpl_household_size')
+                                </label>
+                                <div class="flex items-center gap-1.5">
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="20"
+                                        v-model.number="fplForm.household_size"
+                                        @input="onFplInputChange"
+                                        required
+                                        class="w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm dark:bg-gray-950 dark:text-white"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="secondary-button text-[11px] py-1 px-2 whitespace-nowrap"
+                                        @click="syncHouseholdCount"
+                                        title="Auto-completar según titular + dependientes registrados"
+                                    >
+                                        Auto (@{{ members.length + 1 }})
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                    @lang('admin::insurance.household.fpl_tax_year')
+                                </label>
+                                <select
+                                    v-model.number="fplForm.tax_year"
+                                    @change="onFplInputChange"
+                                    class="rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm dark:bg-gray-950 dark:text-white"
+                                >
+                                    <option :value="2026">2026 (Guías HHS Vigentes)</option>
+                                    <option :value="2025">2025</option>
+                                    <option :value="2024">2024</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- State Code & Notes -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                    @lang('admin::insurance.household.fpl_state')
+                                </label>
+                                <input
+                                    type="text"
+                                    maxlength="2"
+                                    v-model="fplForm.state_code"
+                                    @input="onFplInputChange"
+                                    placeholder="FL"
+                                    class="uppercase rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm dark:bg-gray-950 dark:text-white"
+                                />
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                    Notas Adicionales
+                                </label>
+                                <input
+                                    type="text"
+                                    v-model="fplForm.notes"
+                                    placeholder="Ej. W2 + 1099 Proyectado"
+                                    class="rounded border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm dark:bg-gray-950 dark:text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Live Preview Box -->
+                        <div v-if="fplPreview" class="p-3 rounded-lg border border-dashed border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex flex-col gap-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Resultado Proyectado:</span>
+                                <span class="text-xs font-bold px-2 py-0.5 rounded border" :class="getCsrBadgeClass(fplPreview.fpl_category)">
+                                    @{{ fplPreview.fpl_percentage }}% FPL • @{{ fplPreview.csr_tier }}
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2 text-xs pt-1">
+                                <div>
+                                    <span class="text-gray-400 block text-[10px]">Umbral HHS:</span>
+                                    <span class="font-bold text-gray-800 dark:text-gray-200">$@{{ Number(fplPreview.fpl_guideline_threshold).toLocaleString('en-US') }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-400 block text-[10px]">Subsidio APTC:</span>
+                                    <span class="font-bold text-emerald-600 dark:text-emerald-400">$@{{ Number(fplPreview.estimated_monthly_aptc).toFixed(2) }}/mes</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-400 block text-[10px]">Prima Neta Estimada:</span>
+                                    <span class="font-bold" :class="fplPreview.estimated_net_premium <= 0 ? 'text-emerald-600 font-extrabold' : 'text-gray-800 dark:text-gray-200'">
+                                        $@{{ Number(fplPreview.estimated_net_premium).toFixed(2) }}/mes
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </x-slot>
+
+                <x-slot:footer>
+                    <div class="flex items-center justify-end gap-2">
+                        <button
+                            type="button"
+                            class="secondary-button text-xs"
+                            @click="$refs.fplModal.close()"
+                        >
+                            @lang('admin::insurance.household.cancel')
+                        </button>
+                        <button
+                            type="button"
+                            class="primary-button text-xs"
+                            :disabled="isSavingFpl"
+                            @click="saveFpl"
+                        >
+                            @{{ isSavingFpl ? labels.saving : labels.saveBtn }}
+                        </button>
+                    </div>
+                </x-slot>
+            </x-admin::modal>
         </div>
     </script>
 
@@ -303,6 +555,17 @@
                     isSaving: false,
                     isEditing: false,
                     editingId: null,
+                    fplCalc: null,
+                    fplPreview: null,
+                    isSavingFpl: false,
+                    fplDebounceTimer: null,
+                    fplForm: {
+                        projected_annual_income: 0,
+                        household_size: 1,
+                        tax_year: 2026,
+                        state_code: 'FL',
+                        notes: '',
+                    },
                     labels: {
                         edit: @json(trans('admin::insurance.household.edit')),
                         delete: @json(trans('admin::insurance.household.delete')),
@@ -318,6 +581,7 @@
                         saving: @json(trans('admin::insurance.household.saving')),
                         errorSave: @json(trans('admin::insurance.household.error_save')),
                         errorDelete: @json(trans('admin::insurance.household.error_delete')),
+                        fplSavedSuccess: @json(trans('admin::insurance.household.fpl_saved_success')),
                     },
                     form: {
                         name: '',
@@ -347,6 +611,7 @@
 
             mounted() {
                 this.fetchMembers();
+                this.fetchFpl();
             },
 
             methods: {
@@ -369,6 +634,22 @@
                         .catch(error => {
                             console.error(error);
                             this.isLoading = false;
+                        });
+                },
+
+                revealSsn(member) {
+                    this.$axios.get(`/admin/leads/${this.leadId}/household-members/${member.id}/reveal-pii`)
+                        .then(response => {
+                            if (response.data.success) {
+                                member.ssn_itin = response.data.full_ssn;
+                                member.is_revealed = true;
+                            }
+                        })
+                        .catch(error => {
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: error.response?.data?.message || 'Error al consultar SSN/PII.'
+                            });
                         });
                 },
 
@@ -429,6 +710,7 @@
                                 message: response.data.message
                             });
                             this.fetchMembers();
+                            this.fetchFpl();
                         })
                         .catch(error => {
                             this.isSaving = false;
@@ -452,6 +734,7 @@
                                 message: response.data.message
                             });
                             this.fetchMembers();
+                            this.fetchFpl();
                         })
                         .catch(error => {
                             const msg = error.response?.data?.message || this.labels.errorDelete;
@@ -460,6 +743,98 @@
                                 message: msg
                             });
                         });
+                },
+
+                fetchFpl() {
+                    this.$axios.get(`/admin/leads/${this.leadId}/household-members/fpl-eligibility`)
+                        .then(response => {
+                            if (response.data.success) {
+                                this.fplCalc = response.data.calculation;
+                                if (response.data.tax_household) {
+                                    this.fplForm.projected_annual_income = response.data.tax_household.projected_annual_income;
+                                    this.fplForm.household_size = response.data.tax_household.household_size;
+                                    this.fplForm.tax_year = response.data.tax_household.tax_year;
+                                    this.fplForm.state_code = response.data.tax_household.state_code;
+                                    this.fplForm.notes = response.data.tax_household.notes || '';
+                                } else if (this.fplCalc) {
+                                    this.fplForm.projected_annual_income = this.fplCalc.projected_annual_income;
+                                    this.fplForm.household_size = this.fplCalc.household_size;
+                                    this.fplForm.tax_year = this.fplCalc.tax_year;
+                                    this.fplForm.state_code = this.fplCalc.state_code;
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                },
+
+                openFplModal() {
+                    if (! this.fplForm.household_size || this.fplForm.household_size <= 1) {
+                        this.fplForm.household_size = Math.max(1, this.members.length + 1);
+                    }
+                    this.previewFpl();
+                    this.$refs.fplModal.open();
+                },
+
+                syncHouseholdCount() {
+                    this.fplForm.household_size = Math.max(1, this.members.length + 1);
+                    this.previewFpl();
+                },
+
+                onFplInputChange() {
+                    clearTimeout(this.fplDebounceTimer);
+                    this.fplDebounceTimer = setTimeout(() => {
+                        this.previewFpl();
+                    }, 300);
+                },
+
+                previewFpl() {
+                    if (! this.fplForm.household_size) return;
+                    this.$axios.post(`/admin/leads/${this.leadId}/household-members/preview-fpl`, this.fplForm)
+                        .then(response => {
+                            if (response.data.success) {
+                                this.fplPreview = response.data.calculation;
+                            }
+                        })
+                        .catch(error => console.error(error));
+                },
+
+                saveFpl() {
+                    this.isSavingFpl = true;
+                    this.$axios.post(`/admin/leads/${this.leadId}/household-members/fpl-eligibility`, this.fplForm)
+                        .then(response => {
+                            this.isSavingFpl = false;
+                            this.$refs.fplModal.close();
+                            this.fplCalc = response.data.calculation;
+                            this.$emitter.emit('add-flash', {
+                                type: 'success',
+                                message: response.data.message || this.labels.fplSavedSuccess
+                            });
+                        })
+                        .catch(error => {
+                            this.isSavingFpl = false;
+                            const msg = error.response?.data?.message || 'Error al guardar elegibilidad FPL';
+                            this.$emitter.emit('add-flash', {
+                                type: 'error',
+                                message: msg
+                            });
+                        });
+                },
+
+                getCsrBadgeClass(category) {
+                    switch (category) {
+                        case 'silver_94':
+                            return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-300';
+                        case 'silver_87':
+                            return 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border-blue-300';
+                        case 'silver_73':
+                            return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border-indigo-300';
+                        case 'medicaid_gap':
+                            return 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border-amber-300';
+                        default:
+                            return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border-gray-300';
+                    }
                 },
             },
         });

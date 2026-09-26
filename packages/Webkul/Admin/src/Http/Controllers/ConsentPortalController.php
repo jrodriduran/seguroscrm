@@ -55,14 +55,16 @@ class ConsentPortalController extends Controller
             ], 422);
         }
 
-        $consent->update([
-            'status' => 'signed',
-            'signature_data' => $signatureData,
-            'signed_at' => now(),
-            'ip_address' => $request->ip(),
-            'user_agent' => substr((string) $request->userAgent(), 0, 255),
-            'client_name' => $request->input('client_name') ?: $consent->client_name,
-        ]);
+        if ($request->filled('client_name')) {
+            $consent->client_name = $request->input('client_name');
+            $consent->save();
+        }
+
+        $consent->recordSignature(
+            $signatureData,
+            $request->ip(),
+            substr((string) $request->userAgent(), 0, 255)
+        );
 
         return response()->json([
             'success' => true,

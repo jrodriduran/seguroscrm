@@ -129,6 +129,14 @@
                             </button>
                             <button
                                 type="button"
+                                @click="filterStatus('binder_pending')"
+                                :class="statusFilter === 'binder_pending' ? 'bg-amber-500 text-white font-bold shadow-sm' : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950'"
+                                class="px-3 py-1.5 rounded-md transition-all"
+                            >
+                                💳 @lang('admin::insurance.policies.status_binder_pending')
+                            </button>
+                            <button
+                                type="button"
                                 @click="filterStatus('in_grace')"
                                 :class="statusFilter === 'in_grace' ? 'bg-rose-600 text-white font-bold shadow-sm' : 'text-rose-600 hover:bg-rose-50'"
                                 class="px-3 py-1.5 rounded-md transition-all"
@@ -265,6 +273,16 @@
                                         </a>
 
                                         <button
+                                            v-if="policy.status === 'binder_pending'"
+                                            type="button"
+                                            @click="openBinderModal(policy)"
+                                            class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded text-xs font-bold transition-colors"
+                                            title="{{ trans('admin::insurance.policies.btn_confirm_binder') }}"
+                                        >
+                                            💳 @lang('admin::insurance.policies.btn_confirm_binder')
+                                        </button>
+
+                                        <button
                                             type="button"
                                             @click="openPaymentModal(policy)"
                                             class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold transition-colors"
@@ -354,6 +372,80 @@
                     </div>
                 </div>
 
+                <!-- RECORD BINDER PAYMENT MODAL -->
+                <div v-if="showBinderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-1">
+                            @lang('admin::insurance.policies.modal_binder_title')
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-4">
+                            @lang('admin::insurance.policies.modal_policy_label') <strong>@{{ activePolicy.policy_number }}</strong> (@{{ activePolicy.carrier_name }})
+                        </p>
+
+                        <div class="p-3 bg-amber-50 dark:bg-amber-950/50 rounded-xl border border-amber-200 dark:border-amber-800 mb-4 text-xs text-amber-800 dark:text-amber-300">
+                            @lang('admin::insurance.policies.modal_binder_hint')
+                        </div>
+
+                        <div class="space-y-3 mb-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                    @lang('admin::insurance.policies.confirmation_number')
+                                </label>
+                                <input
+                                    type="text"
+                                    v-model="binderForm.confirmation_number"
+                                    placeholder="Ej. REC-FLB-987654"
+                                    class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800 dark:text-white"
+                                >
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                    @lang('admin::insurance.policies.payment_method')
+                                </label>
+                                <select
+                                    v-model="binderForm.payment_method"
+                                    class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800 dark:text-white"
+                                >
+                                    <option value="carrier_portal">@lang('admin::insurance.policies.payment_method_options.carrier_portal')</option>
+                                    <option value="credit_card">@lang('admin::insurance.policies.payment_method_options.credit_card')</option>
+                                    <option value="ach">@lang('admin::insurance.policies.payment_method_options.ach')</option>
+                                    <option value="phone">@lang('admin::insurance.policies.payment_method_options.phone')</option>
+                                    <option value="check">@lang('admin::insurance.policies.payment_method_options.check')</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                    @lang('admin::insurance.policies.modal_notes_label')
+                                </label>
+                                <textarea
+                                    v-model="binderForm.notes"
+                                    rows="2"
+                                    placeholder="{{ trans('admin::insurance.policies.modal_notes_placeholder') }}"
+                                    class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800 dark:text-white"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button
+                                type="button"
+                                @click="showBinderModal = false"
+                                class="flex-1 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold rounded-lg text-xs"
+                            >
+                                @lang('admin::insurance.policies.btn_cancel')
+                            </button>
+                            <button
+                                type="button"
+                                @click="submitBinderPayment()"
+                                class="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg text-xs transition-colors"
+                            >
+                                @lang('admin::insurance.policies.btn_confirm_binder')
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </script>
@@ -371,9 +463,15 @@
                         statusFilter: 'all',
                         searchTerm: '',
                         showPaymentModal: false,
+                        showBinderModal: false,
                         activePolicy: {},
                         paymentForm: {
                             paid_to_date: '',
+                            notes: '',
+                        },
+                        binderForm: {
+                            confirmation_number: '',
+                            payment_method: 'carrier_portal',
                             notes: '',
                         },
                         searchTimeout: null,
@@ -465,6 +563,29 @@
                             })
                             .catch(err => {
                                 alert(err?.response?.data?.message || 'Error al registrar el pago');
+                            });
+                    },
+
+                    openBinderModal(policy) {
+                        this.activePolicy = policy;
+                        this.binderForm.confirmation_number = '';
+                        this.binderForm.payment_method = 'carrier_portal';
+                        this.binderForm.notes = '';
+                        this.showBinderModal = true;
+                    },
+
+                    submitBinderPayment() {
+                        this.$axios.post("{{ route('admin.policies.record_binder_payment', ['id' => 'xxx']) }}".replace('xxx', this.activePolicy.id), this.binderForm)
+                            .then(res => {
+                                this.showBinderModal = false;
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: res.data.message,
+                                });
+                                this.loadPolicies();
+                            })
+                            .catch(err => {
+                                alert(err?.response?.data?.message || 'Error al registrar pago inicial (Binder)');
                             });
                     },
 

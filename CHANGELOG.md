@@ -4,6 +4,22 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] HHS Federal Poverty Level (FPL) Calculator & Silver CSR Subsidies Engine (Entrega 1 Cerrada): Implemented official HHS poverty guidelines calculation engine (`FplCalculatorService`) evaluating tax household size, projected annual income (MAGI), and state geography to automatically determine % FPL, classify Cost-Sharing Reduction tiers (Silver CSR 94%, 87%, 73%, Standard, Medicaid Gap), calculate ACA/IRA maximum family contribution percentages, and estimate monthly APTC subsidies with $0 net premium qualification indicators.
+
+* [feature] Tax Household Persistence & Real-time Live Preview: Added `lead_tax_households` table and interactive UI calculator in lead details (`household.blade.php`), enabling agents to update projected annual income, simulate family size variations with auto-sync from census dependents, and preview subsidy impacts in real-time.
+
+* [feature] HIPAA Sensitive PII Encryption & Masked SSN Access Control: Implemented at-rest encryption via `Crypt::encryptString` for Social Security Numbers (SSN/ITIN) in `household_members`, default masked rendering (`***-**-1234`) across API endpoints and views, backwards compatibility with legacy plaintext entries, and strict permission-controlled reveal workflow (`leads.view_sensitive_pii` ACL gate).
+
+* [feature] CMS 10-Year Immutable Consent Versioning & Cryptographic Integrity: Added immutable versioning engine for CMS 45 CFR § 155.220 compliance (`lead_consent_versions`). Captures client electronic signature, timestamp, IP address, user-agent, and SHA-256 tamper-evident integrity hash. Superseded and revoked consents preserve permanent historical evidence rather than overwriting records. Added 10-year CMS audit JSON export endpoint (`/admin/leads/{id}/consent/audit-export`).
+
+* [feature] Coverage Effectuation Pipeline & Binder Payment Tracking: Separated sales conversion from policy activation by introducing `binder_pending` state and tracking initial binder payment confirmation number, payment method (carrier portal, credit card, ACH, phone, check), and payment timestamp. Policies with $0 net premium automatically effectuate as `waived_zero_premium`, while positive premium plans require binder payment verification.
+
+* [feature] Policy Coverage Status History & Audit Trail: Implemented granular transition history (`policy_coverage_status_histories`) tracking chronological coverage state movements, effectuation dates, binder payment logs, and cancellation reasons for carrier audits and federal review (`/admin/policies/{id}/coverage-history`).
+
+* [migration] Added `lead_tax_households` table (`2026_09_18_000020`), `lead_consent_versions` table (`2026_09_18_000018`), and binder/effectuation columns to `insurance_policies` plus `policy_coverage_status_histories` table (`2026_09_18_000019`).
+
+* [tests] Added Pest feature tests `FplEligibilityTest`, `SensitivePiiComplianceTest`, `ConsentVersioningAuditTest`, and `CoverageEffectuationBinderTest` covering HHS poverty calculations, Silver CSR tier brackets, PII encryption, ACL gates, 10-year CMS consent versioning with SHA-256 verification, quote binder status routing, and effectuation transitions.
+
 * [feature] HealthSherpa 1-Click Enrollment Bridge: Implemented instant deep-link prefill integration (`/admin/leads/{id}/healthsherpa/redirect`) connecting Krayin CRM directly to HealthSherpa EDE, pre-populating applicant demographics, household dependents, projected FPL income, zip code, and tobacco status to eliminate 15-20 minutes of manual re-keying per ACA application.
 
 * [feature] Cross-Sell Bundle Engine (Dental, Vision, Hospital Indemnity & Critical Illness): Built automated gap-filling matrix evaluating ACA and Medicare out-of-pocket exposure to identify, calculate, and present lucrative supplemental protection packages with tailored client pitch scripts and projected annual agency commission tracking.

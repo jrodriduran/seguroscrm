@@ -82,6 +82,10 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::post('', 'store')->name('admin.leads.household.store');
         Route::put('{id}', 'update')->name('admin.leads.household.update');
         Route::delete('{id}', 'destroy')->name('admin.leads.household.delete');
+        Route::get('{id}/reveal-pii', 'revealPii')->name('admin.leads.household.reveal_pii');
+        Route::get('fpl-eligibility', 'getFplEligibility')->name('admin.leads.household.fpl');
+        Route::post('fpl-eligibility', 'saveFplEligibility')->name('admin.leads.household.fpl.save');
+        Route::post('preview-fpl', 'previewFplCalculation')->name('admin.leads.household.fpl.preview');
     });
 
     Route::controller(ConsentController::class)->prefix('{lead_id}/consent')->group(function () {
@@ -91,6 +95,7 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
         Route::post('revoke', 'revoke')->name('admin.leads.consent.revoke');
         Route::get('certificate', 'printCertificate')->name('admin.leads.consent.certificate');
         Route::get('certificate/pdf', 'downloadCertificatePdf')->name('admin.leads.consent.certificate.pdf');
+        Route::get('audit-export', 'auditExport')->name('admin.leads.consent.audit_export');
     });
 
     Route::controller(DmiDocumentController::class)->prefix('{lead_id}/dmi-documents')->group(function () {

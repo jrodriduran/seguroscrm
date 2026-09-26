@@ -5,6 +5,7 @@ namespace Webkul\Lead\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Webkul\Contact\Models\PersonProxy;
@@ -37,6 +38,16 @@ class InsurancePolicy extends Model
         'renewal_date',
         'paid_to_date',
         'status',
+        'binder_payment_status',
+        'binder_amount',
+        'binder_due_date',
+        'binder_paid_at',
+        'binder_confirmation_number',
+        'binder_payment_method',
+        'effectuation_date',
+        'effectuation_source',
+        'effectuation_verified_by',
+        'prior_policy_id',
         'grace_period_start_date',
         'grace_period_days',
         'members_count',
@@ -47,9 +58,13 @@ class InsurancePolicy extends Model
         'gross_premium' => 'float',
         'aptc_subsidy' => 'float',
         'net_premium' => 'float',
+        'binder_amount' => 'float',
         'effective_date' => 'date',
         'renewal_date' => 'date',
         'paid_to_date' => 'date',
+        'binder_due_date' => 'date',
+        'binder_paid_at' => 'datetime',
+        'effectuation_date' => 'date',
         'grace_period_start_date' => 'date',
         'grace_period_days' => 'integer',
         'members_count' => 'integer',
@@ -189,6 +204,18 @@ class InsurancePolicy extends Model
                 'bg' => 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300',
                 'icon' => '✓',
             ],
+            'binder_pending' => [
+                'label' => trans('admin::insurance.policies.status_binder_pending'),
+                'color' => 'amber',
+                'bg' => 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300',
+                'icon' => '💳',
+            ],
+            'dmi_pending' => [
+                'label' => trans('admin::insurance.policies.status_dmi_pending'),
+                'color' => 'indigo',
+                'bg' => 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-indigo-300',
+                'icon' => '📄',
+            ],
             'grace_period_1' => [
                 'label' => trans('admin::insurance.policies.status_grace_1', ['days' => $this->grace_period_days]),
                 'color' => 'amber',
@@ -241,6 +268,103 @@ class InsurancePolicy extends Model
     }
 
     /**
+     * Coverage status audit histories relation.
+     */
+    public function coverageHistories(): HasMany
+    {
+        return $this->hasMany(PolicyCoverageStatusHistoryProxy::modelClass(), 'policy_id')->orderBy('id', 'desc');
+    }
+
+    /**
+     * Prior year policy link (renewal chain).
+     */
+    public function priorPolicy(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'prior_policy_id');
+    }
+
+    /**
+     * Renewed policies for subsequent years.
+     */
+    public function renewedPolicies(): HasMany
+    {
+        return $this->hasMany(self::class, 'prior_policy_id');
+    }
+
+    /**
+     * User who verified effectuation.
+     */
+    public function effectuationVerifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'effectuation_verified_by');
+    }
+
+    /**
+     * Record coverage status transition with source and verifier audit trail.
+     */
+    public function recordCoverageTransition(
+        string $toStatus,
+        ?string $binderStatus = null,
+        ?string $reason = null,
+        string $source = 'agent_manual',
+        ?int $userId = null
+    ): PolicyCoverageStatusHistory {
+        $fromStatus = $this->getOriginal('status') ?: ($this->status ?: 'application_submitted');
+
+        return PolicyCoverageStatusHistory::create([
+            'policy_id' => $this->id,
+            'lead_id' => $this->lead_id,
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+            'binder_status' => $binderStatus ?: $this->binder_payment_status,
+            'source' => $source,
+            'reason' => $reason,
+            'verified_by_user_id' => $userId ?: (auth()->guard('user')->id() ?: $this->user_id),
+            'verified_at' => now(),
+        ]);
+    }
+
+    /**
+     * Record the initial binder payment to effectuate coverage.
+     */
+    public function recordBinderPayment(
+        string $confirmationNumber,
+        string $method = 'carrier_portal',
+        ?string $paidAt = null,
+        ?string $paidToDate = null,
+        ?int $userId = null,
+        ?string $notes = null
+    ): self {
+        $paidTimestamp = $paidAt ? Carbon::parse($paidAt) : now();
+        $newPaidTo = $paidToDate ? Carbon::parse($paidToDate) : ($this->effective_date ? Carbon::parse($this->effective_date)->endOfMonth() : now()->endOfMonth());
+
+        $this->update([
+            'status' => 'active',
+            'binder_payment_status' => 'paid',
+            'binder_paid_at' => $paidTimestamp,
+            'binder_confirmation_number' => $confirmationNumber,
+            'binder_payment_method' => $method,
+            'effectuation_date' => $paidTimestamp->toDateString(),
+            'effectuation_source' => 'agent_verified',
+            'effectuation_verified_by' => $userId ?: auth()->guard('user')->id(),
+            'paid_to_date' => $newPaidTo->toDateString(),
+            'grace_period_days' => 0,
+            'grace_period_start_date' => null,
+            'notes' => trim(($this->notes ?: '')."\n[".$paidTimestamp->toDateString()."] Primer pago (Binder) confirmado: #{$confirmationNumber} vía {$method}.".($notes ? " Nota: {$notes}" : '')),
+        ]);
+
+        $this->recordCoverageTransition(
+            'active',
+            'paid',
+            "Primer pago (Binder) confirmado con éxito. Confirmación #{$confirmationNumber}. Cobertura médica en vigor.",
+            'agent_verified',
+            $userId
+        );
+
+        return $this;
+    }
+
+    /**
      * Create or update policy from a bound/converted quote.
      */
     public static function createOrUpdateFromQuote(Quote $quote, ?string $customPolicyNumber = null): self
@@ -262,7 +386,22 @@ class InsurancePolicy extends Model
         // Paid to date defaults to 1 month after effective
         $paidTo = $effective->copy()->endOfMonth();
 
-        return self::updateOrCreate(
+        // Coverage Effectuation rules
+        if ($net <= 0) {
+            $status = 'active';
+            $binderStatus = 'waived_zero_premium';
+            $effectuationDate = $effective->toDateString();
+            $effectuationSource = 'zero_dollar_subsidy';
+            $reason = 'Cobertura emitida con subsidio APTC 100% (Prima neta $0). Cobertura efectuada automáticamente sin pago inicial requerido.';
+        } else {
+            $status = 'binder_pending';
+            $binderStatus = 'pending';
+            $effectuationDate = null;
+            $effectuationSource = 'pending_binder_payment';
+            $reason = "Solicitud emitida. Cobertura condicionada al pago inicial (Binder Payment) de \${$net} antes del {$effective->format('d/m/Y')}.";
+        }
+
+        $policy = self::updateOrCreate(
             ['quote_id' => $quote->id],
             [
                 'policy_number' => $policyNum,
@@ -280,11 +419,26 @@ class InsurancePolicy extends Model
                 'effective_date' => $effective->toDateString(),
                 'renewal_date' => $renewal->toDateString(),
                 'paid_to_date' => $paidTo->toDateString(),
-                'status' => 'active',
+                'status' => $status,
+                'binder_payment_status' => $binderStatus,
+                'binder_amount' => $net,
+                'binder_due_date' => $effective->toDateString(),
+                'effectuation_date' => $effectuationDate,
+                'effectuation_source' => $effectuationSource,
                 'grace_period_days' => 0,
                 'members_count' => $members,
             ]
         );
+
+        $policy->recordCoverageTransition(
+            $status,
+            $binderStatus,
+            $reason,
+            $effectuationSource,
+            $quote->user_id
+        );
+
+        return $policy;
     }
 
     /**

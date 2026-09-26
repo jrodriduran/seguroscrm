@@ -7,6 +7,8 @@ use Webkul\Admin\Http\Controllers\Insurance\ExecutiveAnalyticsController;
 Route::controller(BookOfBusinessController::class)->prefix('policies')->group(function () {
     Route::get('', 'index')->name('admin.policies.index');
     Route::post('{id}/record-payment', 'recordPayment')->name('admin.policies.record_payment');
+    Route::post('{id}/binder-payment', 'recordBinderPayment')->name('admin.policies.record_binder_payment');
+    Route::get('{id}/coverage-history', 'coverageHistory')->name('admin.policies.coverage_history');
     Route::get('{id}/whatsapp-reminder', 'getWhatsAppReminder')->name('admin.policies.whatsapp_reminder');
     Route::post('{id}/renew', 'renew')->name('admin.policies.renew');
     Route::post('scan-grace-periods', 'scanGracePeriods')->name('admin.policies.scan_grace_periods');
