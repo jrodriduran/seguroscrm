@@ -889,6 +889,22 @@ return [
         'loading' => 'Cargando conversación...',
         'agent' => 'Agente',
         'client' => 'Cliente',
+        'tcpa_consent_required_error' => 'Violación de Cumplimiento TCPA: No se puede enviar mensajes salientes sin consentimiento expreso previo (47 U.S.C. § 227). Por favor registre el consentimiento TCPA antes de contactar.',
+        'tcpa_consent_recorded_success' => 'Consentimiento expreso TCPA registrado con éxito. Canal de mensajería habilitado.',
+        'tcpa_verified_badge' => 'Consentimiento TCPA Verificado',
+        'tcpa_missing_badge' => 'Sin Consentimiento TCPA',
+        'tcpa_warning_text' => 'Bloqueo Regulatorio TCPA (47 U.S.C. § 227): La ley federal prohíbe el envío de mensajes comerciales o de atención sin consentimiento previo expreso. Registre el consentimiento para desbloquear el canal de mensajería.',
+        'btn_record_tcpa' => 'Registrar Consentimiento TCPA',
+        'tcpa_modal_title' => 'Registro de Consentimiento TCPA Expreso',
+        'tcpa_consent_type_label' => 'Tipo / Origen de Consentimiento',
+        'tcpa_type_web_form' => 'Formulario Web con Opt-In Expreso',
+        'tcpa_type_inbound_call' => 'Llamada Entrante (Autorización Verbal Grabada)',
+        'tcpa_type_signed_doc' => 'Documento de Consentimiento Físico / Digital Firmado',
+        'tcpa_type_sms_keyword' => 'SMS con Palabra Clave (START / UNETE / ACEPTO)',
+        'tcpa_proof_label' => 'Evidencia / Comprobante (IP, URL, ID Grabación o Firma)',
+        'tcpa_proof_placeholder' => 'Ej: IP 192.168.1.1 en form.seguros.com / Audio Rec #98231',
+        'btn_save_tcpa' => 'Guardar y Desbloquear Envíos',
+        'tcpa_cancel' => 'Cancelar',
     ],
 
     'medicare_soa' => [
@@ -1091,6 +1107,9 @@ return [
         'docs_in_order' => ':count doc(s) en orden',
         'no_open_alerts' => 'Sin alertas abiertas',
         'manage' => 'Gestionar',
+        'tcpa_consent_row' => 'Consentimiento TCPA (47 U.S.C. § 227)',
+        'tcpa_verified' => 'Consentimiento Expreso Activo',
+        'tcpa_unverified' => 'Sin Consentimiento TCPA (Bloqueado)',
     ],
 
     'quotes' => [
@@ -1255,5 +1274,16 @@ return [
         'type_reserve_release' => 'Liberación Fondo Reserva',
         'modal_clawback_title' => 'Aplicar Clawback / Cargo por Cancelación',
         'modal_disburse_title' => 'Liquidar Saldo a Favor del Agente',
+    ],
+
+    'assignment' => [
+        'licensed_routing' => 'Enrutamiento por Licencia Estatal',
+        'language_routing' => 'Enrutamiento por Idioma Preferido',
+        'reasons' => [
+            'no_licensed_agents_in_state' => 'No existen agentes con licencia activa de salud en el estado del lead.',
+            'no_language_match' => 'No se encontraron agentes que hablen el idioma preferido en el estado.',
+            'max_capacity_exceeded' => 'Todos los agentes elegibles han alcanzado su capacidad máxima.',
+            'no_active_agents_configured' => 'No hay agentes activos configurados en el pipeline.',
+        ],
     ],
 ];

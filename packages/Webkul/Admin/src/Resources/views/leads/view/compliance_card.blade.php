@@ -79,4 +79,30 @@
             @lang('admin::insurance.compliance_card.manage')
         </a>
     </div>
+
+    <!-- TCPA Consent Row (47 U.S.C. § 227) -->
+    <div class="flex items-center justify-between p-2.5 rounded-lg border bg-white dark:bg-gray-900 {{ $lead->has_tcpa_consent ? 'border-emerald-200 dark:border-emerald-800' : 'border-rose-300 dark:border-rose-900 bg-rose-50/20' }}">
+        <div class="space-y-0.5">
+            <span class="text-[11px] text-gray-400 block font-medium">@lang('admin::insurance.compliance_card.tcpa_consent_row')</span>
+            @if ($lead->has_tcpa_consent)
+                <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                    <span>🟢</span> @lang('admin::insurance.compliance_card.tcpa_verified')
+                    @if ($lead->tcpa_consent_type)
+                        <span class="text-[10px] font-normal text-gray-500">({{ $lead->tcpa_consent_type }})</span>
+                    @endif
+                </div>
+            @else
+                <div class="flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400">
+                    <span>🔴</span> @lang('admin::insurance.compliance_card.tcpa_unverified')
+                </div>
+            @endif
+        </div>
+
+        <a
+            href="?tab=chatwoot"
+            class="text-[11px] font-semibold {{ $lead->has_tcpa_consent ? 'text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-950/60' }} px-2 py-1 rounded hover:opacity-80 transition-colors"
+        >
+            {{ $lead->has_tcpa_consent ? trans('admin::insurance.compliance_card.manage') : '⚡ Registrar' }}
+        </a>
+    </div>
 </div>

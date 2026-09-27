@@ -28,6 +28,16 @@ class User extends Authenticatable implements UserContract
         'status',
         'view_permission',
         'created_by',
+        'spoken_languages',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'spoken_languages' => 'array',
     ];
 
     /**
@@ -110,5 +120,42 @@ class User extends Authenticatable implements UserContract
         }
 
         return in_array($permission, $this->role->permissions);
+    }
+
+    /**
+     * Check if user speaks the given language.
+     */
+    public function speaksLanguage(string $language): bool
+    {
+        $languages = $this->spoken_languages ?? ['es', 'en'];
+
+        if (! is_array($languages)) {
+            $languages = json_decode($languages, true) ?: ['es', 'en'];
+        }
+
+        return in_array(strtolower($language), array_map('strtolower', $languages));
+    }
+
+    /**
+     * Check if agent holds an active, non-expired license in the specified state.
+     */
+    public function isLicensedInState(string $stateCode, string $line = 'health'): bool
+    {
+        return $this->agentLicenses()
+            ->where('state_code', strtoupper($stateCode))
+            ->where('status', 'active')
+            ->whereDate('expires_at', '>=', \Carbon\Carbon::today())
+            ->get()
+            ->contains(function ($lic) use ($line) {
+                $lines = $lic->lines_of_authority ?? [];
+
+                if (empty($lines)) {
+                    return true;
+                }
+
+                $lines = array_map('strtolower', (array) $lines);
+
+                return in_array(strtolower($line), $lines) || in_array('aca', $lines) || in_array('health', $lines);
+            });
     }
 }

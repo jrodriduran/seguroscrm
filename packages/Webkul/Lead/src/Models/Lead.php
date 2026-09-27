@@ -49,6 +49,13 @@ class Lead extends Model implements LeadContract
         'chatwoot_conversation_id',
         'chatwoot_inbox_id',
         'chatwoot_last_message_at',
+        'state_code',
+        'preferred_language',
+        'assignment_failure_reason',
+        'has_tcpa_consent',
+        'tcpa_consented_at',
+        'tcpa_consent_type',
+        'tcpa_consent_proof',
     ];
 
     /**
@@ -62,6 +69,8 @@ class Lead extends Model implements LeadContract
         'assigned_at' => 'datetime',
         'escalated_at' => 'datetime',
         'chatwoot_last_message_at' => 'datetime',
+        'has_tcpa_consent' => 'boolean',
+        'tcpa_consented_at' => 'datetime',
     ];
 
     /**
@@ -335,5 +344,13 @@ class Lead extends Model implements LeadContract
         return $query
             ->where('user_id', $userId)
             ->whereDate('assigned_at', Carbon::today());
+    }
+
+    /**
+     * Check if lead has valid express TCPA consent.
+     */
+    public function hasTcpaConsent(): bool
+    {
+        return (bool) $this->has_tcpa_consent;
     }
 }

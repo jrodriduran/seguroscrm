@@ -141,6 +141,7 @@ Route::controller(LeadController::class)->prefix('leads')->group(function () {
     Route::controller(ChatwootController::class)->prefix('{lead_id}/chatwoot')->group(function () {
         Route::get('conversation', 'getConversation')->name('admin.leads.chatwoot.conversation');
         Route::post('send', 'sendMessage')->name('admin.leads.chatwoot.send');
+        Route::post('tcpa-consent', 'recordTcpaConsent')->name('admin.leads.chatwoot.record_tcpa_consent');
     });
 
     Route::controller(HealthSherpaBridgeController::class)->prefix('{lead_id}/healthsherpa')->group(function () {

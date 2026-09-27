@@ -872,6 +872,22 @@ return [
         'loading' => 'Loading conversation...',
         'agent' => 'Agent',
         'client' => 'Client',
+        'tcpa_consent_required_error' => 'TCPA Compliance Violation: Outbound messages cannot be sent without prior express consent (47 U.S.C. § 227). Please capture TCPA consent before contacting.',
+        'tcpa_consent_recorded_success' => 'Express TCPA consent recorded successfully. Messaging channel unlocked.',
+        'tcpa_verified_badge' => 'TCPA Consent Verified',
+        'tcpa_missing_badge' => 'No TCPA Consent',
+        'tcpa_warning_text' => 'TCPA Regulatory Gate (47 U.S.C. § 227): Federal law strictly prohibits outbound promotional and servicing text messaging without prior express consent. Record consent to unlock the messaging inbox.',
+        'btn_record_tcpa' => 'Record TCPA Consent',
+        'tcpa_modal_title' => 'Express TCPA Consent Capture',
+        'tcpa_consent_type_label' => 'Consent Type / Origin',
+        'tcpa_type_web_form' => 'Web Lead Form Express Opt-In',
+        'tcpa_type_inbound_call' => 'Inbound Phone Call (Recorded Verbal Auth)',
+        'tcpa_type_signed_doc' => 'Physical / Electronic Signed Consent Doc',
+        'tcpa_type_sms_keyword' => 'SMS Keyword Opt-In (START / YES / JOIN)',
+        'tcpa_proof_label' => 'Proof / Evidence (IP Address, URL, Recording ID, or Doc ID)',
+        'tcpa_proof_placeholder' => 'E.g., IP 192.168.1.1 on enroll.health.com / Audio Rec #98231',
+        'btn_save_tcpa' => 'Save & Unlock Messaging',
+        'tcpa_cancel' => 'Cancel',
     ],
 
     'medicare_soa' => [
@@ -1074,6 +1090,9 @@ return [
         'docs_in_order' => ':count doc(s) in order',
         'no_open_alerts' => 'No open alerts',
         'manage' => 'Manage',
+        'tcpa_consent_row' => 'TCPA Express Consent (47 U.S.C. § 227)',
+        'tcpa_verified' => 'Express Consent Active',
+        'tcpa_unverified' => 'No TCPA Consent (Blocked)',
     ],
 
     'quotes' => [
@@ -1238,5 +1257,16 @@ return [
         'type_reserve_release' => 'Reserve Escrow Release',
         'modal_clawback_title' => 'Post Clawback / Policy Cancellation Charge',
         'modal_disburse_title' => 'Disburse Net Commission Payout',
+    ],
+
+    'assignment' => [
+        'licensed_routing' => 'State Licensing Routing',
+        'language_routing' => 'Preferred Language Routing',
+        'reasons' => [
+            'no_licensed_agents_in_state' => 'No active agents hold a valid health insurance license in the lead state.',
+            'no_language_match' => 'No agents speaking the customer preferred language found in the state.',
+            'max_capacity_exceeded' => 'All eligible licensed agents have reached their maximum active lead capacity.',
+            'no_active_agents_configured' => 'No active agents configured in this pipeline.',
+        ],
     ],
 ];

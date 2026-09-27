@@ -5,6 +5,7 @@ namespace Webkul\Lead\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Webkul\Contact\Models\Person;
+use Webkul\Lead\Exceptions\TcpaConsentRequiredException;
 use Webkul\Lead\Models\Lead;
 
 class ChatwootService
@@ -95,8 +96,14 @@ class ChatwootService
     /**
      * Create a new conversation with an initial outbound or inbound message.
      */
-    public function createConversation(int $contactId, string $initialMessage, ?int $inboxId = null): ?array
+    public function createConversation(int $contactId, string $initialMessage, ?int $inboxId = null, ?Lead $lead = null): ?array
     {
+        if ($lead && ! $lead->hasTcpaConsent()) {
+            throw new TcpaConsentRequiredException(
+                'Violación de Cumplimiento TCPA: No se puede iniciar comunicación saliente sin consentimiento expreso previo (47 U.S.C. § 227).'
+            );
+        }
+
         $targetInboxId = $inboxId ?: $this->defaultInboxId;
 
         try {
@@ -116,6 +123,9 @@ class ChatwootService
                 return $response->json();
             }
         } catch (\Throwable $e) {
+            if ($e instanceof TcpaConsentRequiredException) {
+                throw $e;
+            }
             Log::error('Chatwoot createConversation failed: '.$e->getMessage());
         }
 
@@ -125,8 +135,14 @@ class ChatwootService
     /**
      * Send an outbound message in an active conversation.
      */
-    public function sendMessage(int $conversationId, string $content): ?array
+    public function sendMessage(int $conversationId, string $content, ?Lead $lead = null): ?array
     {
+        if ($lead && ! $lead->hasTcpaConsent()) {
+            throw new TcpaConsentRequiredException(
+                'Violación de Cumplimiento TCPA: No se puede enviar mensajes salientes sin consentimiento expreso previo (47 U.S.C. § 227).'
+            );
+        }
+
         try {
             $url = "{$this->baseUrl}/api/v1/accounts/{$this->accountId}/conversations/{$conversationId}/messages";
 
@@ -142,6 +158,9 @@ class ChatwootService
                 return $response->json();
             }
         } catch (\Throwable $e) {
+            if ($e instanceof TcpaConsentRequiredException) {
+                throw $e;
+            }
             Log::error('Chatwoot sendMessage failed: '.$e->getMessage());
         }
 
