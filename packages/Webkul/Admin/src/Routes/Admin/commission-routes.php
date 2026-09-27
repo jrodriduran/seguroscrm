@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Webkul\Admin\Http\Controllers\Insurance\AgentLedgerController;
 use Webkul\Admin\Http\Controllers\Insurance\CommissionController;
 
 Route::group(['middleware' => ['web', 'admin_locale', 'user']], function () {
@@ -16,5 +16,13 @@ Route::group(['middleware' => ['web', 'admin_locale', 'user']], function () {
         Route::post('reconciliation/upload', 'uploadStatement')->name('admin.commissions.reconciliation.upload');
         Route::get('reconciliation/{id}', 'showStatement')->name('admin.commissions.reconciliation.show');
         Route::delete('reconciliation/{id}', 'deleteStatement')->name('admin.commissions.reconciliation.destroy');
+    });
+
+    Route::controller(AgentLedgerController::class)->prefix('insurance/ledger')->group(function () {
+        Route::get('', 'index')->name('admin.insurance.ledger.index');
+        Route::get('{userId}', 'agentHistory')->name('admin.insurance.ledger.agent_history');
+        Route::post('{userId}/clawback', 'recordClawback')->name('admin.insurance.ledger.clawback');
+        Route::post('{userId}/disburse', 'disburse')->name('admin.insurance.ledger.disburse');
+        Route::post('{userId}/adjustment', 'adjustment')->name('admin.insurance.ledger.adjustment');
     });
 });

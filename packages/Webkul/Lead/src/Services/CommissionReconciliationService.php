@@ -20,19 +20,29 @@ class CommissionReconciliationService
     ): CarrierStatement {
         $fileName = $originalFileName ?: 'statement_'.$carrierName.'_'.$periodMonth.'.csv';
 
-        // 1. Create statement record
+        // 1. Compute SHA-256 hash for file idempotency
+        $fileHash = hash('sha256', trim($csvContent));
+
+        // Check if this exact file content has already been processed
+        $existing = CarrierStatement::where('file_hash', $fileHash)->first();
+        if ($existing) {
+            throw new \Webkul\Lead\Exceptions\DuplicateStatementException($existing, $fileHash);
+        }
+
+        // 2. Create statement record
         $statement = CarrierStatement::create([
             'carrier_name' => $carrierName,
             'file_name' => $fileName,
+            'file_hash' => $fileHash,
             'period_month' => $periodMonth,
             'status' => 'processing',
             'user_id' => $userId,
         ]);
 
-        // 2. Parse CSV
+        // 3. Parse CSV
         $rows = $this->parseCsv($csvContent);
 
-        // 3. Retrieve all active commissions for this carrier
+        // 4. Retrieve all active commissions for this carrier
         $activeCommissions = InsuranceCommission::with(['lead.person', 'user'])
             ->where('carrier_name', 'LIKE', "%{$carrierName}%")
             ->get();
@@ -41,12 +51,16 @@ class CommissionReconciliationService
         $totalCarrierAmount = 0.0;
         $totalExpectedAmount = 0.0;
         $totalMissedAmount = 0.0;
+        $totalDuplicateAmount = 0.0;
 
         $matchedCount = 0;
         $discrepancyCount = 0;
         $missedCount = 0;
+        $duplicateCount = 0;
 
-        // 4. Process statement rows
+        $seenPolicyNumbersInBatch = [];
+
+        // 5. Process statement rows
         foreach ($rows as $row) {
             $policyNumber = trim((string) ($row['policy_number'] ?? ''));
             $insuredName = trim((string) ($row['insured_name'] ?? ''));
@@ -58,6 +72,44 @@ class CommissionReconciliationService
 
             // Find match in CRM
             $comm = $this->findMatchingCommission($activeCommissions, $policyNumber, $insuredName);
+
+            // IDEMPOTENCY CHECK: Block duplicate payout attempts for carrier + policy_number + period_month
+            if (! empty($policyNumber)) {
+                $priorPayout = CarrierStatementItem::whereHas('statement', function ($q) use ($carrierName, $periodMonth) {
+                    $q->where('carrier_name', $carrierName)
+                        ->where('period_month', $periodMonth)
+                        ->where('status', 'completed');
+                })->where('policy_number', $policyNumber)
+                    ->whereIn('match_status', ['matched_exact', 'matched_variance'])
+                    ->first();
+
+                if ($priorPayout || in_array($policyNumber, $seenPolicyNumbersInBatch, true)) {
+                    $duplicateCount++;
+                    $totalDuplicateAmount += $paidAmount;
+
+                    CarrierStatementItem::create([
+                        'carrier_statement_id' => $statement->id,
+                        'policy_number' => $policyNumber,
+                        'period_month' => $periodMonth,
+                        'insured_name' => $insuredName ?: ($comm?->lead?->person?->name ?: $comm?->lead?->title ?: 'No Registrado'),
+                        'carrier_amount' => $paidAmount,
+                        'expected_amount' => 0.0,
+                        'difference' => $paidAmount,
+                        'match_status' => 'duplicate_blocked',
+                        'is_duplicate' => true,
+                        'duplicate_of_item_id' => $priorPayout?->id,
+                        'commission_id' => $comm?->id,
+                        'lead_id' => $comm?->lead_id,
+                        'notes' => $priorPayout
+                            ? "Pago duplicado bloqueado: La póliza {$policyNumber} ya recibió comisión para el período {$periodMonth} en Statement #{$priorPayout->carrier_statement_id}."
+                            : "Pago duplicado bloqueado: Registro duplicado dentro del mismo archivo para la póliza {$policyNumber}.",
+                    ]);
+
+                    continue;
+                }
+
+                $seenPolicyNumbersInBatch[] = $policyNumber;
+            }
 
             if ($comm) {
                 $matchedCommissionIds[] = $comm->id;
@@ -76,9 +128,10 @@ class CommissionReconciliationService
                     $discrepancyCount++;
                 }
 
-                CarrierStatementItem::create([
+                $statementItem = CarrierStatementItem::create([
                     'carrier_statement_id' => $statement->id,
                     'policy_number' => $policyNumber ?: ($comm->policy_number ?: ('#POL-'.$comm->id)),
+                    'period_month' => $periodMonth,
                     'insured_name' => $insuredName ?: ($comm->lead?->person?->name ?: $comm->lead?->title),
                     'carrier_amount' => $paidAmount,
                     'expected_amount' => $expected,
@@ -88,6 +141,38 @@ class CommissionReconciliationService
                     'lead_id' => $comm->lead_id,
                     'notes' => $status === 'matched_variance' ? 'Discrepancia detectada en monto pagado por la aseguradora.' : null,
                 ]);
+
+                // Sync to Agent Ledger (credits on exact match, debits on clawbacks)
+                if ($comm->user_id) {
+                    $ledgerService = app(\Webkul\Lead\Services\AgentLedgerService::class);
+                    $splitPercent = (float) ($comm->agent_split_percent ?: 70.0);
+
+                    if ($status === 'matched_exact') {
+                        $agentCredit = (float) ($comm->agent_monthly ?: ($paidAmount * ($splitPercent / 100.0)));
+                        $ledgerService->recordCommissionCredit(
+                            userId: $comm->user_id,
+                            amount: $agentCredit,
+                            policyNumber: $statementItem->policy_number,
+                            carrierName: $carrierName,
+                            periodMonth: $periodMonth,
+                            statementId: $statement->id,
+                            statementItemId: $statementItem->id,
+                            actorUserId: $userId
+                        );
+                    } elseif ($status === 'chargeback') {
+                        $agentClawback = abs($paidAmount) * ($splitPercent / 100.0);
+                        $ledgerService->recordClawback(
+                            userId: $comm->user_id,
+                            amount: $agentClawback,
+                            policyNumber: $statementItem->policy_number,
+                            carrierName: $carrierName,
+                            periodMonth: $periodMonth,
+                            reason: "Clawback de comisión por liquidación negativa en statement {$carrierName}.",
+                            statementItemId: $statementItem->id,
+                            actorUserId: $userId
+                        );
+                    }
+                }
 
                 $totalCarrierAmount += $paidAmount;
                 $totalExpectedAmount += $expected;
@@ -99,6 +184,7 @@ class CommissionReconciliationService
                 CarrierStatementItem::create([
                     'carrier_statement_id' => $statement->id,
                     'policy_number' => $policyNumber ?: 'DESCONOCIDO',
+                    'period_month' => $periodMonth,
                     'insured_name' => $insuredName ?: 'No Registrado',
                     'carrier_amount' => $paidAmount,
                     'expected_amount' => 0.0,
@@ -113,7 +199,7 @@ class CommissionReconciliationService
             }
         }
 
-        // 5. DETECT MISSED COMMISSIONS (Active in CRM but NOT paid in this statement)
+        // 6. DETECT MISSED COMMISSIONS (Active in CRM but NOT paid in this statement)
         $unpaidCommissions = $activeCommissions->whereNotIn('id', $matchedCommissionIds);
 
         foreach ($unpaidCommissions as $unpaid) {
@@ -123,6 +209,7 @@ class CommissionReconciliationService
             CarrierStatementItem::create([
                 'carrier_statement_id' => $statement->id,
                 'policy_number' => $unpaid->policy_number ?: ('#CRM-POL-'.$unpaid->id),
+                'period_month' => $periodMonth,
                 'insured_name' => $unpaid->lead?->person?->name ?: $unpaid->lead?->title ?: 'Asegurado Registrado',
                 'carrier_amount' => 0.0,
                 'expected_amount' => $expected,
@@ -140,15 +227,17 @@ class CommissionReconciliationService
 
         $totalRecords = $statement->items()->count();
 
-        // 6. Finalize statement summary
+        // 7. Finalize statement summary
         $statement->update([
             'total_records' => $totalRecords,
             'matched_records' => $matchedCount,
             'discrepancy_records' => $discrepancyCount,
             'missed_records' => $missedCount,
+            'duplicate_records' => $duplicateCount,
             'total_carrier_amount' => round($totalCarrierAmount, 2),
             'total_expected_amount' => round($totalExpectedAmount, 2),
             'total_missed_amount' => round($totalMissedAmount, 2),
+            'total_duplicate_amount' => round($totalDuplicateAmount, 2),
             'status' => 'completed',
         ]);
 

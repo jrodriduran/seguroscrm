@@ -214,6 +214,63 @@
             @endif
         </div>
 
+        <!-- TAX DOCUMENTS & 1095-A SERVICE REQUEST -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📄</span>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900">Documentos Fiscales (1095-A) y Trámites</h3>
+                        <p class="text-[11px] text-slate-500">Formularios de impuestos de Marketplace y trámites de posventa</p>
+                    </div>
+                </div>
+
+                <button 
+                    type="button" 
+                    onclick="open1095aModal()" 
+                    class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center gap-1"
+                >
+                    <span>+</span> Solicitar 1095-A
+                </button>
+            </div>
+
+            <!-- Shared Documents List -->
+            @if(isset($sharedCases) && $sharedCases->isNotEmpty())
+                <div class="space-y-2">
+                    @foreach($sharedCases as $case)
+                        <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+                            <div class="space-y-0.5">
+                                <div class="font-bold text-slate-800 flex items-center gap-2">
+                                    <span>{{ $case->subject }}</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold {{ $case->status === 'resolved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
+                                        {{ $case->status_label }}
+                                    </span>
+                                </div>
+                                <div class="text-[11px] text-slate-500">
+                                    Ticket: <span class="font-mono">{{ $case->ticket_number }}</span> • {{ $case->created_at->format('d/m/Y') }}
+                                </div>
+                            </div>
+
+                            @if($case->attachment_path)
+                                <a 
+                                    href="{{ route('front.insured_portal.download_document', ['token' => $token, 'case_id' => $case->id]) }}" 
+                                    class="px-3 py-1.5 bg-sky-700 hover:bg-sky-800 text-white rounded-lg text-xs font-bold transition-colors inline-flex items-center gap-1 shadow-sm"
+                                >
+                                    <span>📥</span> Descargar PDF
+                                </a>
+                            @else
+                                <span class="text-[11px] text-slate-400 italic">En trámite con agente</span>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="p-4 rounded-xl border border-dashed border-slate-200 text-center text-xs text-slate-400">
+                    No tiene formularios fiscales pendientes. Si necesita su declaración 1095-A para sus impuestos, haga clic en "Solicitar 1095-A".
+                </div>
+            @endif
+        </div>
+
         <!-- SELF-SERVICE DOCUMENT UPLOAD (DMI / PROOF OF INCOME) -->
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center gap-2 mb-2">
@@ -292,6 +349,33 @@
                 btn.disabled = false;
                 btn.innerText = 'Enviar Documento';
                 alert('Error de conexión al cargar archivo.');
+            });
+        }
+
+        function open1095aModal() {
+            const taxYear = prompt('Ingrese el año fiscal para el Formulario 1095-A:', new Date().getFullYear() - 1);
+            if (! taxYear) return;
+
+            fetch("{{ route('front.insured_portal.request_1095a', $token) }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ tax_year: taxYear })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message + "\n\nTicket asignado: " + data.ticket_number);
+                    window.location.reload();
+                } else {
+                    alert(data.message || 'Error al procesar solicitud');
+                }
+            })
+            .catch(err => {
+                alert('Error de conexión al enviar solicitud.');
             });
         }
     </script>

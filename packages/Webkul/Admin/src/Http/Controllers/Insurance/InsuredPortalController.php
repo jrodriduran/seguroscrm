@@ -6,10 +6,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Models\LeadDmiDocument;
+use Webkul\Lead\Models\PolicyServiceCase;
 
 class InsuredPortalController extends Controller
 {
@@ -20,13 +22,21 @@ class InsuredPortalController extends Controller
      */
     public function show(string $token): View
     {
-        $policy = InsurancePolicy::with(['lead.householdMembers', 'lead.person', 'user', 'quote', 'person'])
+        $policy = InsurancePolicy::with([
+            'lead.householdMembers',
+            'lead.person',
+            'user',
+            'quote',
+            'person',
+            'serviceCases' => fn ($q) => $q->where('is_shared_with_client', true)->orderBy('created_at', 'desc'),
+        ])
             ->where('portal_token', $token)
             ->firstOrFail();
 
         $support = $policy->getCarrierSupportContacts();
         $coveredMembers = $policy->lead?->householdMembers ?: collect();
         $agent = $policy->user ?: $policy->lead?->user;
+        $sharedCases = $policy->serviceCases;
 
         return view('admin::insurance.portal.index', [
             'policy' => $policy,
@@ -34,6 +44,7 @@ class InsuredPortalController extends Controller
             'coveredMembers' => $coveredMembers,
             'agent' => $agent,
             'token' => $token,
+            'sharedCases' => $sharedCases,
         ]);
     }
 
@@ -98,4 +109,59 @@ class InsuredPortalController extends Controller
             'document' => $dmi,
         ]);
     }
+
+    /**
+     * Submit a 1095-A tax form request or post-sale service request from client portal.
+     */
+    public function requestTaxDocument(Request $request, string $token): JsonResponse
+    {
+        $policy = InsurancePolicy::where('portal_token', $token)->firstOrFail();
+
+        $request->validate([
+            'tax_year' => 'nullable|integer',
+            'notes' => 'nullable|string',
+        ]);
+
+        $taxYear = (int) $request->input('tax_year', date('Y') - 1);
+
+        $serviceCase = PolicyServiceCase::create([
+            'policy_id' => $policy->id,
+            'lead_id' => $policy->lead_id,
+            'person_id' => $policy->person_id ?: $policy->lead?->person_id,
+            'user_id' => $policy->user_id ?: $policy->lead?->user_id,
+            'category' => 'tax_1095a',
+            'priority' => 'normal',
+            'status' => 'open',
+            'subject' => "Solicitud de Declaración 1095-A (Año Fiscal {$taxYear})",
+            'description' => $request->input('notes') ?: "El asegurado solicitó su formulario fiscal 1095-A para la declaración de renta correspondiente al año fiscal {$taxYear}.",
+            'due_date' => now()->addDays(5),
+            'is_shared_with_client' => true,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "¡Solicitud de Formulario 1095-A enviada con éxito! Su agente tramitará el documento con el Marketplace y se lo compartirá aquí.",
+            'ticket_number' => $serviceCase->ticket_number,
+            'data' => $serviceCase,
+        ]);
+    }
+
+    /**
+     * Download shared document (e.g. 1095-A) from member portal.
+     */
+    public function downloadSharedDocument(string $token, int $caseId)
+    {
+        $policy = InsurancePolicy::where('portal_token', $token)->firstOrFail();
+
+        $serviceCase = PolicyServiceCase::where('policy_id', $policy->id)
+            ->where('is_shared_with_client', true)
+            ->findOrFail($caseId);
+
+        if (! $serviceCase->attachment_path || ! Storage::disk('public')->exists($serviceCase->attachment_path)) {
+            abort(404, 'El documento aún no ha sido cargado por su agente.');
+        }
+
+        return Storage::disk('public')->download($serviceCase->attachment_path);
+    }
 }
+

@@ -26,6 +26,15 @@
                     <div class="flex items-center gap-3">
                         <button
                             type="button"
+                            @click="openOepHub()"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
+                        >
+                            <span>🔄</span>
+                            <span>@lang('admin::insurance.renewals.btn_hub')</span>
+                        </button>
+
+                        <button
+                            type="button"
                             @click="scanGracePeriods()"
                             :disabled="isScanning"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
@@ -301,6 +310,15 @@
                                         </button>
 
                                         <button
+                                            type="button"
+                                            @click="openRenewalComparator(policy)"
+                                            class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 dark:hover:bg-indigo-900 rounded text-xs font-bold transition-colors inline-flex items-center gap-1"
+                                            title="{{ trans('admin::insurance.renewals.modal_title') }}"
+                                        >
+                                            ⚖️ @lang('admin::insurance.renewals.btn_preview')
+                                        </button>
+
+                                        <button
                                             v-if="policy.status !== 'renewed'"
                                             type="button"
                                             @click="renewPolicy(policy.id)"
@@ -308,6 +326,15 @@
                                             title="{{ trans('admin::insurance.policies.btn_renew') }}"
                                         >
                                             @lang('admin::insurance.policies.btn_renew')
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            @click="openCasesModal(policy)"
+                                            class="px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-colors inline-flex items-center gap-1"
+                                            title="Casos de Servicio y 1095-A"
+                                        >
+                                            🎧 Casos
                                         </button>
                                     </td>
 
@@ -447,6 +474,635 @@
                     </div>
                 </div>
 
+                <!-- SERVICE CASES MODAL (1095-A, Address Change, Claims) -->
+                <div v-if="showCasesModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span>🎧</span> @lang('admin::insurance.service_cases.title')
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-0.5">
+                                    Póliza: <strong>@{{ activePolicy.policy_number }}</strong> (@{{ activePolicy.carrier_name }})
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                @click="showNewCaseForm = !showNewCaseForm"
+                                class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition-colors"
+                            >
+                                @{{ showNewCaseForm ? 'Ver Casos' : '@lang('admin::insurance.service_cases.create_btn')' }}
+                            </button>
+                        </div>
+
+                        <!-- Form Create New Case -->
+                        <div v-if="showNewCaseForm" class="py-4 space-y-3 overflow-y-auto">
+                            <form @submit.prevent="createServiceCase" class="space-y-3">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 required">
+                                            @lang('admin::insurance.service_cases.category')
+                                        </label>
+                                        <select
+                                            v-model="caseForm.category"
+                                            required
+                                            class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-white dark:bg-slate-900 dark:text-white"
+                                        >
+                                            <option value="tax_1095a">Fiscal / Declaración 1095-A</option>
+                                            <option value="address_change">Cambio de Dirección</option>
+                                            <option value="income_update">Actualización de Ingresos (Marketplace)</option>
+                                            <option value="pcp_change">Cambio de Médico Primario (PCP)</option>
+                                            <option value="id_card_replacement">Reemplazo de Tarjeta / Carnet</option>
+                                            <option value="claims_billing">Facturación y Reclamos Médicos</option>
+                                            <option value="dependent_change">Modificación de Dependientes</option>
+                                            <option value="general">Consulta / Trámite General</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 required">
+                                            @lang('admin::insurance.service_cases.priority')
+                                        </label>
+                                        <select
+                                            v-model="caseForm.priority"
+                                            required
+                                            class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-white dark:bg-slate-900 dark:text-white"
+                                        >
+                                            <option value="low">Baja</option>
+                                            <option value="normal">Normal</option>
+                                            <option value="high">Alta</option>
+                                            <option value="urgent">Urgente</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 required">
+                                        @lang('admin::insurance.service_cases.subject')
+                                    </label>
+                                    <input
+                                        type="text"
+                                        v-model="caseForm.subject"
+                                        required
+                                        placeholder="Ej. Solicitud de Forma 1095-A para declaración de impuestos"
+                                        class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-white dark:bg-slate-900 dark:text-white"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                        @lang('admin::insurance.service_cases.description')
+                                    </label>
+                                    <textarea
+                                        v-model="caseForm.description"
+                                        rows="2"
+                                        placeholder="Detalles del trámite o solicitud del asegurado..."
+                                        class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 bg-white dark:bg-slate-900 dark:text-white"
+                                    ></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                        @lang('admin::insurance.service_cases.attachment')
+                                    </label>
+                                    <input
+                                        type="file"
+                                        ref="caseAttachment"
+                                        accept=".pdf,image/*"
+                                        class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-bold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
+                                    />
+                                </div>
+
+                                <div class="flex items-center gap-2 pt-1">
+                                    <input
+                                        type="checkbox"
+                                        id="shareClient"
+                                        v-model="caseForm.is_shared_with_client"
+                                        class="rounded text-purple-600"
+                                    />
+                                    <label for="shareClient" class="text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        @lang('admin::insurance.service_cases.share_client')
+                                    </label>
+                                </div>
+
+                                <div class="flex justify-end gap-2 pt-2">
+                                    <button
+                                        type="button"
+                                        @click="showNewCaseForm = false"
+                                        class="px-4 py-2 border border-slate-300 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-bold"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        :disabled="isSubmittingCase"
+                                        class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold"
+                                    >
+                                        @{{ isSubmittingCase ? 'Guardando...' : 'Crear Caso' }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- List of Existing Cases -->
+                        <div v-else class="py-4 space-y-3 overflow-y-auto flex-1">
+                            <div v-if="isLoadingCases" class="py-6 text-center text-xs text-slate-400">
+                                Cargando casos...
+                            </div>
+                            <div v-else-if="!policyCases.length" class="py-8 text-center text-xs text-slate-400">
+                                @lang('admin::insurance.service_cases.empty_cases')
+                            </div>
+                            <div v-else class="space-y-2">
+                                <div
+                                    v-for="kase in policyCases"
+                                    :key="kase.id"
+                                    class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2"
+                                >
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-xs font-extrabold text-purple-600 dark:text-purple-400">
+                                                @{{ kase.ticket_number }}
+                                            </span>
+                                            <span class="text-xs font-bold text-slate-800 dark:text-white">
+                                                @{{ kase.subject }}
+                                            </span>
+                                        </div>
+
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                v-if="kase.is_shared_with_client"
+                                                class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300"
+                                            >
+                                                🌐 @lang('admin::insurance.service_cases.shared_badge')
+                                            </span>
+                                            <select
+                                                :value="kase.status"
+                                                @change="updateCaseStatus(kase.id, $event.target.value)"
+                                                class="text-[11px] font-bold py-0.5 px-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+                                            >
+                                                <option value="open">Abierto</option>
+                                                <option value="in_progress">En Trámite</option>
+                                                <option value="pending_carrier">Pend. Aseguradora</option>
+                                                <option value="pending_client">Pend. Cliente</option>
+                                                <option value="resolved">Resuelto</option>
+                                                <option value="closed">Cerrado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <p v-if="kase.description" class="text-xs text-slate-600 dark:text-slate-300">
+                                        @{{ kase.description }}
+                                    </p>
+
+                                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-800">
+                                        <div>
+                                            <span>@{{ kase.category_label }}</span> •
+                                            <span>Prioridad: @{{ kase.priority_label }}</span> •
+                                            <span>@{{ kase.created_at ? kase.created_at.substring(0, 10) : '' }}</span>
+                                        </div>
+
+                                        <div v-if="kase.attachment_path">
+                                            <a
+                                                :href="`/admin/service-cases/${kase.id}/download`"
+                                                target="_blank"
+                                                class="font-bold text-sky-600 hover:text-sky-700 inline-flex items-center gap-1"
+                                            >
+                                                📥 @lang('admin::insurance.service_cases.download_file')
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                            <button
+                                type="button"
+                                @click="showCasesModal = false"
+                                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold"
+                            >
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                <!-- OEP RENEWALS HUB MODAL -->
+                <div v-if="showOepHubModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-5xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span>🔄</span> @lang('admin::insurance.renewals.title')
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-0.5">
+                                    @lang('admin::insurance.renewals.subtitle')
+                                </p>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">
+                                    @lang('admin::insurance.renewals.cohort_year'):
+                                </label>
+                                <select
+                                    v-model="oepCohortYear"
+                                    @change="loadOepHubData"
+                                    class="text-xs font-bold py-1.5 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                                >
+                                    <option :value="2025">Campaña 2025</option>
+                                    <option :value="2026">Campaña 2026</option>
+                                    <option :value="2027">Campaña 2027</option>
+                                </select>
+                                <button
+                                    type="button"
+                                    @click="showOepHubModal = false"
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- OEP KPI Stats Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 py-4">
+                            <div class="p-3.5 bg-indigo-50/70 dark:bg-indigo-950/40 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
+                                <span class="text-[11px] font-bold text-indigo-700 dark:text-indigo-400 uppercase">@lang('admin::insurance.renewals.kpi_retention_rate')</span>
+                                <div class="text-2xl font-black text-indigo-950 dark:text-white mt-1">
+                                    @{{ oepData.kpis ? (oepData.kpis.retention_rate || 0) : 0 }}%
+                                </div>
+                                <span class="text-[10px] text-indigo-600/80 dark:text-indigo-400">@{{ oepData.kpis ? (oepData.kpis.renewed_total || 0) : 0 }} de @{{ oepData.kpis ? (oepData.kpis.total_cohort || 0) : 0 }} renovadas</span>
+                            </div>
+
+                            <div class="p-3.5 bg-emerald-50/70 dark:bg-emerald-950/40 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
+                                <span class="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 uppercase">@lang('admin::insurance.renewals.kpi_retained_same_carrier')</span>
+                                <div class="text-2xl font-black text-emerald-950 dark:text-white mt-1">
+                                    @{{ oepData.kpis ? (oepData.kpis.renewed_same_carrier || 0) : 0 }}
+                                </div>
+                                <span class="text-[10px] text-emerald-600/80 dark:text-emerald-400">Fidelidad con misma aseguradora</span>
+                            </div>
+
+                            <div class="p-3.5 bg-sky-50/70 dark:bg-sky-950/40 rounded-xl border border-sky-100 dark:border-sky-900/50">
+                                <span class="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase">@lang('admin::insurance.renewals.kpi_switched_carrier')</span>
+                                <div class="text-2xl font-black text-sky-950 dark:text-white mt-1">
+                                    @{{ oepData.kpis ? (oepData.kpis.renewed_cross_carrier || 0) : 0 }}
+                                </div>
+                                <span class="text-[10px] text-sky-600/80 dark:text-sky-400">Cliente retenido / cambio de carrier</span>
+                            </div>
+
+                            <div class="p-3.5 bg-amber-50/70 dark:bg-amber-950/40 rounded-xl border border-amber-100 dark:border-amber-900/50">
+                                <span class="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase">@lang('admin::insurance.renewals.kpi_pending')</span>
+                                <div class="text-2xl font-black text-amber-950 dark:text-white mt-1">
+                                    @{{ oepData.kpis ? (oepData.kpis.pending_review || 0) : 0 }}
+                                </div>
+                                <span class="text-[10px] text-amber-600/80 dark:text-amber-400">Acción requerida para OEP</span>
+                            </div>
+                        </div>
+
+                        <!-- Cohort Policy List -->
+                        <div class="overflow-y-auto flex-1 border border-slate-200 dark:border-slate-800 rounded-xl">
+                            <div v-if="isLoadingOepHub" class="py-12 text-center text-xs text-slate-400">
+                                Cargando cohorte de renovación...
+                            </div>
+                            <div v-else-if="!oepData.policies || !oepData.policies.length" class="py-12 text-center text-xs text-slate-400">
+                                No se encontraron pólizas para la campaña seleccionada.
+                            </div>
+                            <table v-else class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 font-bold uppercase text-[10px]">
+                                        <th class="p-3">Cliente / Teléfono</th>
+                                        <th class="p-3">Póliza Base</th>
+                                        <th class="p-3">Aseguradora / Plan</th>
+                                        <th class="p-3">Prima Neta</th>
+                                        <th class="p-3">Estado OEP</th>
+                                        <th class="p-3 text-right">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
+                                    <tr v-for="item in oepData.policies" :key="item.id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                                        <td class="p-3">
+                                            <div class="font-bold text-slate-900 dark:text-white">@{{ item.client_name }}</div>
+                                            <div class="text-[11px] text-slate-400">@{{ item.client_phone || 'Sin Tel.' }}</div>
+                                        </td>
+                                        <td class="p-3 font-mono font-bold text-slate-700 dark:text-slate-300">
+                                            @{{ item.policy_number }}
+                                        </td>
+                                        <td class="p-3">
+                                            <div class="font-bold text-slate-800 dark:text-slate-200">@{{ item.carrier_name }}</div>
+                                            <div class="text-[11px] text-slate-400">@{{ item.plan_name }}</div>
+                                        </td>
+                                        <td class="p-3 font-extrabold text-slate-900 dark:text-white">
+                                            $@{{ formatMoney(item.net_premium) }}/mes
+                                        </td>
+                                        <td class="p-3">
+                                            <span
+                                                v-if="item.oep_renewal_status === 'renewed_same_carrier'"
+                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+                                            >
+                                                🟢 Mismo Carrier
+                                            </span>
+                                            <span
+                                                v-else-if="item.oep_renewal_status === 'renewed_cross_carrier'"
+                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300"
+                                            >
+                                                🔵 Cross-Carrier
+                                            </span>
+                                            <span
+                                                v-else-if="item.oep_renewal_status === 'cancelled'"
+                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300"
+                                            >
+                                                🔴 Cancelada
+                                            </span>
+                                            <span
+                                                v-else
+                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
+                                            >
+                                                🟡 Pendiente
+                                            </span>
+                                        </td>
+                                        <td class="p-3 text-right">
+                                            <button
+                                                type="button"
+                                                @click="openRenewalComparator(item)"
+                                                class="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold transition-colors inline-flex items-center gap-1"
+                                            >
+                                                ⚖️ Comparar / Renovar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                            <button
+                                type="button"
+                                @click="showOepHubModal = false"
+                                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 rounded-lg text-xs font-bold"
+                            >
+                                @lang('admin::insurance.renewals.btn_close')
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YEAR-OVER-YEAR RENEWAL COMPARATOR MODAL -->
+                <div v-if="showRenewalModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] flex flex-col">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span>⚖️</span> @lang('admin::insurance.renewals.modal_title')
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-0.5">
+                                    Asegurado: <strong>@{{ activePolicy.client_name || (activePolicy.person ? activePolicy.person.name : activePolicy.policy_number) }}</strong>
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                @click="showRenewalModal = false"
+                                class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div class="py-4 space-y-4 overflow-y-auto flex-1">
+                            <!-- Side-by-Side Comparison Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Prior Policy Column (Base) -->
+                                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 space-y-3">
+                                    <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                                        <span class="text-xs font-extrabold uppercase text-slate-500">
+                                            @lang('admin::insurance.renewals.prior_year_col')
+                                        </span>
+                                        <span class="text-xs font-bold text-purple-600 font-mono">
+                                            @{{ activePolicy.policy_number }}
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase">@lang('admin::insurance.renewals.carrier')</span>
+                                        <div class="text-xs font-bold text-slate-800 dark:text-white">@{{ activePolicy.carrier_name }}</div>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase">@lang('admin::insurance.renewals.plan_name')</span>
+                                        <div class="text-xs font-semibold text-slate-700 dark:text-slate-300">@{{ activePolicy.plan_name }}</div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2 text-xs">
+                                        <div>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase">@lang('admin::insurance.renewals.metal_tier')</span>
+                                            <div class="capitalize font-bold text-slate-700 dark:text-slate-300">@{{ activePolicy.metal_tier }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase">Año Cobertura</span>
+                                            <div class="font-bold text-slate-700 dark:text-slate-300">@{{ activePolicy.plan_year || (activePolicy.effective_date ? activePolicy.effective_date.substring(0,4) : 'Base') }}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-xs">
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-500">@lang('admin::insurance.renewals.gross_premium'):</span>
+                                            <span class="font-bold text-slate-800 dark:text-white">$@{{ formatMoney(activePolicy.gross_premium) }}/m</span>
+                                        </div>
+                                        <div class="flex justify-between text-emerald-600 dark:text-emerald-400">
+                                            <span>@lang('admin::insurance.renewals.subsidy'):</span>
+                                            <span class="font-bold">-$@{{ formatMoney(activePolicy.aptc_subsidy) }}/m</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm font-extrabold text-slate-900 dark:text-white pt-1 border-t border-slate-200 dark:border-slate-800">
+                                            <span>@lang('admin::insurance.renewals.net_premium'):</span>
+                                            <span>$@{{ formatMoney(activePolicy.net_premium) }}/m</span>
+                                        </div>
+                                        <div class="flex justify-between text-[11px] text-slate-500 pt-1">
+                                            <span>@lang('admin::insurance.renewals.deductible'):</span>
+                                            <span>$@{{ formatMoney(activePolicy.deductible || 0) }}</span>
+                                        </div>
+                                        <div class="flex justify-between text-[11px] text-slate-500">
+                                            <span>@lang('admin::insurance.renewals.max_out_of_pocket'):</span>
+                                            <span>$@{{ formatMoney(activePolicy.max_out_of_pocket || 0) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- New Year Renewal Form Column -->
+                                <div class="p-4 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/20 dark:bg-indigo-950/20 space-y-3">
+                                    <div class="flex items-center justify-between pb-2 border-b border-indigo-100 dark:border-indigo-900/50">
+                                        <span class="text-xs font-extrabold uppercase text-indigo-700 dark:text-indigo-400">
+                                            @lang('admin::insurance.renewals.renewed_year_col')
+                                        </span>
+                                        <span class="text-xs font-bold text-indigo-600">
+                                            Año @{{ renewalForm.plan_year }}
+                                        </span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">Año Plan</label>
+                                            <input
+                                                type="number"
+                                                v-model="renewalForm.plan_year"
+                                                class="w-full text-xs font-bold border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">@lang('admin::insurance.renewals.metal_tier')</label>
+                                            <select
+                                                v-model="renewalForm.metal_tier"
+                                                class="w-full text-xs font-bold border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                            >
+                                                <option value="bronze">Bronce</option>
+                                                <option value="silver">Plata (Silver CSR)</option>
+                                                <option value="gold">Oro (Gold)</option>
+                                                <option value="platinum">Platino</option>
+                                                <option value="catastrophic">Catastrófico</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">@lang('admin::insurance.renewals.carrier')</label>
+                                        <input
+                                            type="text"
+                                            v-model="renewalForm.carrier_name"
+                                            required
+                                            class="w-full text-xs font-bold border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">@lang('admin::insurance.renewals.plan_name')</label>
+                                        <input
+                                            type="text"
+                                            v-model="renewalForm.plan_name"
+                                            required
+                                            class="w-full text-xs font-bold border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                        />
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">Prima Bruta ($)</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                v-model="renewalForm.gross_premium"
+                                                @input="updateRenewalPreview"
+                                                class="w-full text-xs font-bold border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">Subsidio APTC ($)</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                v-model="renewalForm.aptc_subsidy"
+                                                @input="updateRenewalPreview"
+                                                class="w-full text-xs font-bold border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white text-emerald-600"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">Prima Neta</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                v-model="renewalForm.net_premium"
+                                                class="w-full text-xs font-extrabold border border-indigo-300 dark:border-indigo-700 rounded-lg p-2 bg-indigo-50/50 dark:bg-indigo-950/50 dark:text-white text-indigo-900"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">Deducible</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                v-model="renewalForm.deductible"
+                                                class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-0.5">MOOP</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                v-model="renewalForm.max_out_of_pocket"
+                                                class="w-full text-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Variance Analysis Badge Card -->
+                            <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+                                <div>
+                                    <div class="font-bold text-slate-700 dark:text-slate-200">
+                                        @lang('admin::insurance.renewals.variance_title'):
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <!-- Net Premium Variance -->
+                                        <span
+                                            v-if="calculatedVariance.net_diff < 0"
+                                            class="px-2 py-1 rounded-md text-xs font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+                                        >
+                                            🟢 Ahorro Cliente: -$@{{ formatMoney(Math.abs(calculatedVariance.net_diff)) }}/mes
+                                        </span>
+                                        <span
+                                            v-else-if="calculatedVariance.net_diff > 0"
+                                            class="px-2 py-1 rounded-md text-xs font-extrabold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300"
+                                        >
+                                            🔴 Incremento: +$@{{ formatMoney(calculatedVariance.net_diff) }}/mes
+                                        </span>
+                                        <span
+                                            v-else
+                                            class="px-2 py-1 rounded-md text-xs font-bold bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                                        >
+                                            ⚪ Misma Prima Neta ($0.00)
+                                        </span>
+
+                                        <!-- Carrier Status -->
+                                        <span
+                                            v-if="calculatedVariance.is_carrier_changed"
+                                            class="px-2 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300"
+                                        >
+                                            🔀 @lang('admin::insurance.renewals.cross_carrier_switch')
+                                        </span>
+                                        <span
+                                            v-else
+                                            class="px-2 py-1 rounded-md text-xs font-bold bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300"
+                                        >
+                                            🛡️ @lang('admin::insurance.renewals.same_carrier_switch')
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div v-if="calculatedVariance.subsidy_loss_warning" class="text-xs font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 p-2 rounded-lg border border-amber-200 dark:border-amber-800">
+                                    ⚠️ @lang('admin::insurance.renewals.subsidy_warning')
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2">
+                            <button
+                                type="button"
+                                @click="showRenewalModal = false"
+                                class="px-4 py-2 border border-slate-300 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-bold"
+                            >
+                                @lang('admin::insurance.renewals.btn_close')
+                            </button>
+                            <button
+                                type="button"
+                                @click="submitRenewal"
+                                :disabled="isSubmittingRenewal"
+                                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
+                            >
+                                @{{ isSubmittingRenewal ? 'Procesando...' : '@lang('admin::insurance.renewals.btn_confirm_renewal')' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </script>
 
@@ -464,6 +1120,40 @@
                         searchTerm: '',
                         showPaymentModal: false,
                         showBinderModal: false,
+                        showCasesModal: false,
+                        showNewCaseForm: false,
+                        showOepHubModal: false,
+                        showRenewalModal: false,
+                        isLoadingOepHub: false,
+                        isSubmittingRenewal: false,
+                        oepCohortYear: new Date().getMonth() >= 9 ? new Date().getFullYear() + 1 : new Date().getFullYear(),
+                        oepData: {
+                            kpis: {},
+                            policies: [],
+                        },
+                        policyCases: [],
+                        isLoadingCases: false,
+                        isSubmittingCase: false,
+                        caseForm: {
+                            category: 'tax_1095a',
+                            priority: 'normal',
+                            subject: '',
+                            description: '',
+                            is_shared_with_client: false,
+                        },
+                        renewalForm: {
+                            plan_year: 2026,
+                            carrier_name: '',
+                            plan_name: '',
+                            metal_tier: 'silver',
+                            network_type: 'HMO',
+                            gross_premium: 0,
+                            aptc_subsidy: 0,
+                            net_premium: 0,
+                            deductible: 0,
+                            max_out_of_pocket: 0,
+                            notes: '',
+                        },
                         activePolicy: {},
                         paymentForm: {
                             paid_to_date: '',
@@ -617,6 +1307,171 @@
                             .catch(err => {
                                 alert('Error al renovar la póliza');
                             });
+                    },
+
+                    openCasesModal(policy) {
+                        this.activePolicy = policy;
+                        this.showCasesModal = true;
+                        this.showNewCaseForm = false;
+                        this.loadCasesForPolicy(policy.id);
+                    },
+
+                    loadCasesForPolicy(policyId) {
+                        this.isLoadingCases = true;
+                        this.$axios.get(`/admin/policies/${policyId}/service-cases`)
+                            .then(res => {
+                                this.isLoadingCases = false;
+                                this.policyCases = res.data.cases || [];
+                            })
+                            .catch(err => {
+                                this.isLoadingCases = false;
+                                console.error('Error loading service cases:', err);
+                            });
+                    },
+
+                    createServiceCase() {
+                        this.isSubmittingCase = true;
+                        const formData = new FormData();
+                        formData.append('category', this.caseForm.category);
+                        formData.append('priority', this.caseForm.priority);
+                        formData.append('subject', this.caseForm.subject);
+                        formData.append('description', this.caseForm.description || '');
+                        formData.append('is_shared_with_client', this.caseForm.is_shared_with_client ? 1 : 0);
+
+                        if (this.$refs.caseAttachment && this.$refs.caseAttachment.files[0]) {
+                            formData.append('attachment', this.$refs.caseAttachment.files[0]);
+                        }
+
+                        this.$axios.post(`/admin/policies/${this.activePolicy.id}/service-cases`, formData, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                        })
+                            .then(res => {
+                                this.isSubmittingCase = false;
+                                this.showNewCaseForm = false;
+                                this.caseForm.subject = '';
+                                this.caseForm.description = '';
+                                this.caseForm.is_shared_with_client = false;
+                                if (this.$refs.caseAttachment) {
+                                    this.$refs.caseAttachment.value = '';
+                                }
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: res.data.message || 'Caso creado exitosamente',
+                                });
+                                this.loadCasesForPolicy(this.activePolicy.id);
+                            })
+                            .catch(err => {
+                                this.isSubmittingCase = false;
+                                alert(err?.response?.data?.message || 'Error al crear el caso de servicio');
+                            });
+                    },
+
+                    updateCaseStatus(caseId, newStatus) {
+                        this.$axios.put(`/admin/service-cases/${caseId}`, { status: newStatus })
+                            .then(res => {
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: res.data.message || 'Estado actualizado',
+                                });
+                                this.loadCasesForPolicy(this.activePolicy.id);
+                            })
+                            .catch(err => {
+                                alert(err?.response?.data?.message || 'Error al actualizar estado del caso');
+                            });
+                    },
+
+                    openOepHub() {
+                        this.showOepHubModal = true;
+                        this.loadOepHubData();
+                    },
+
+                    loadOepHubData() {
+                        this.isLoadingOepHub = true;
+                        this.$axios.get("{{ route('admin.policies.renewals.hub') }}", {
+                            params: { plan_year: this.oepCohortYear }
+                        })
+                            .then(res => {
+                                this.isLoadingOepHub = false;
+                                this.oepData = res.data.data || { kpis: {}, policies: [] };
+                            })
+                            .catch(err => {
+                                this.isLoadingOepHub = false;
+                                console.error('Error loading OEP hub data:', err);
+                            });
+                    },
+
+                    openRenewalComparator(policy) {
+                        this.activePolicy = policy;
+                        const priorYear = policy.plan_year || (policy.effective_date ? parseInt(policy.effective_date.substring(0, 4)) : new Date().getFullYear());
+                        this.renewalForm.plan_year = priorYear + 1;
+                        this.renewalForm.carrier_name = policy.carrier_name || '';
+                        this.renewalForm.plan_name = policy.plan_name || '';
+                        this.renewalForm.metal_tier = policy.metal_tier || 'silver';
+                        this.renewalForm.network_type = policy.network_type || 'HMO';
+                        this.renewalForm.gross_premium = parseFloat(policy.gross_premium || 0);
+                        this.renewalForm.aptc_subsidy = parseFloat(policy.aptc_subsidy || 0);
+                        this.renewalForm.net_premium = parseFloat(policy.net_premium || 0);
+                        this.renewalForm.deductible = parseFloat(policy.deductible || 0);
+                        this.renewalForm.max_out_of_pocket = parseFloat(policy.max_out_of_pocket || 0);
+                        this.renewalForm.notes = '';
+                        this.showRenewalModal = true;
+                    },
+
+                    updateRenewalPreview() {
+                        const gross = parseFloat(this.renewalForm.gross_premium || 0);
+                        const subsidy = parseFloat(this.renewalForm.aptc_subsidy || 0);
+                        this.renewalForm.net_premium = Math.max(0, Math.round((gross - subsidy) * 100) / 100);
+                    },
+
+                    submitRenewal() {
+                        if (! this.renewalForm.carrier_name || ! this.renewalForm.plan_name) {
+                            alert('Ingrese aseguradora y nombre del plan');
+                            return;
+                        }
+
+                        this.isSubmittingRenewal = true;
+                        const url = "{{ route('admin.policies.process_renewal', ['id' => 'xxx']) }}".replace('xxx', this.activePolicy.id);
+
+                        this.$axios.post(url, this.renewalForm)
+                            .then(res => {
+                                this.isSubmittingRenewal = false;
+                                this.showRenewalModal = false;
+                                this.$emitter.emit('add-flash', {
+                                    type: 'success',
+                                    message: res.data.message || 'Renovación procesada con éxito',
+                                });
+                                this.loadPolicies();
+                                if (this.showOepHubModal) {
+                                    this.loadOepHubData();
+                                }
+                            })
+                            .catch(err => {
+                                this.isSubmittingRenewal = false;
+                                alert(err?.response?.data?.message || 'Error al procesar la renovación');
+                            });
+                    }
+                },
+
+                computed: {
+                    calculatedVariance() {
+                        const priorGross = parseFloat(this.activePolicy.gross_premium || 0);
+                        const priorSubsidy = parseFloat(this.activePolicy.aptc_subsidy || 0);
+                        const priorNet = parseFloat(this.activePolicy.net_premium || 0);
+
+                        const newGross = parseFloat(this.renewalForm.gross_premium || 0);
+                        const newSubsidy = parseFloat(this.renewalForm.aptc_subsidy || 0);
+                        const newNet = parseFloat(this.renewalForm.net_premium || 0);
+
+                        const netDiff = Math.round((newNet - priorNet) * 100) / 100;
+                        const subsidyDiff = Math.round((newSubsidy - priorSubsidy) * 100) / 100;
+                        const isCarrierChanged = (this.renewalForm.carrier_name || '').trim().toLowerCase() !== (this.activePolicy.carrier_name || '').trim().toLowerCase();
+
+                        return {
+                            net_diff: netDiff,
+                            subsidy_diff: subsidyDiff,
+                            is_carrier_changed: isCarrierChanged,
+                            subsidy_loss_warning: subsidyDiff < -50 || (priorNet === 0 && newNet > 0),
+                        };
                     }
                 }
             });

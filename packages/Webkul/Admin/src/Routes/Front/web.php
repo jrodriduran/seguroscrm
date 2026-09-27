@@ -48,6 +48,8 @@ Route::controller(InsuredPortalController::class)->prefix('my-policy')->group(fu
     Route::get('{token}', 'show')->name('insured.portal.show');
     Route::get('{token}/card-pdf', 'downloadCard')->name('insured.portal.download_card');
     Route::post('{token}/upload-doc', 'uploadDocument')->name('insured.portal.upload_doc');
+    Route::post('{token}/request-1095a', 'requestTaxDocument')->name('front.insured_portal.request_1095a');
+    Route::get('{token}/service-cases/{case_id}/download', 'downloadSharedDocument')->name('front.insured_portal.download_document');
 });
 
 /**

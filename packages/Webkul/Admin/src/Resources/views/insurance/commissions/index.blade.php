@@ -43,6 +43,14 @@
 
                     <div class="flex items-center gap-3">
                         <a
+                            href="{{ route('admin.insurance.ledger.index') }}"
+                            class="secondary-button text-xs py-2 px-3 flex items-center gap-1.5 font-semibold text-indigo-700 dark:text-indigo-300"
+                        >
+                            <span>📒</span>
+                            <span>Libro Mayor & Clawbacks</span>
+                        </a>
+
+                        <a
                             href="{{ route('admin.commissions.reconciliation.index') }}"
                             class="secondary-button text-xs py-2 px-3 flex items-center gap-1.5 font-semibold text-blue-700 dark:text-blue-300"
                         >

@@ -187,6 +187,14 @@ class Lead extends Model implements LeadContract
     }
 
     /**
+     * Get the service cases / post-sale tickets associated with the lead.
+     */
+    public function serviceCases(): HasMany
+    {
+        return $this->hasMany(PolicyServiceCaseProxy::modelClass(), 'lead_id')->orderBy('id', 'desc');
+    }
+
+    /**
      * Get the CMS consent associated with the lead.
      */
     public function consent(): HasOne

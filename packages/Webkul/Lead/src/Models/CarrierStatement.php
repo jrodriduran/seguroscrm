@@ -15,14 +15,17 @@ class CarrierStatement extends Model
         'carrier_name',
         'file_name',
         'file_path',
+        'file_hash',
         'period_month',
         'total_records',
         'matched_records',
         'discrepancy_records',
         'missed_records',
+        'duplicate_records',
         'total_carrier_amount',
         'total_expected_amount',
         'total_missed_amount',
+        'total_duplicate_amount',
         'status',
         'user_id',
     ];
@@ -32,9 +35,11 @@ class CarrierStatement extends Model
         'matched_records' => 'integer',
         'discrepancy_records' => 'integer',
         'missed_records' => 'integer',
+        'duplicate_records' => 'integer',
         'total_carrier_amount' => 'float',
         'total_expected_amount' => 'float',
         'total_missed_amount' => 'float',
+        'total_duplicate_amount' => 'float',
     ];
 
     protected $appends = [

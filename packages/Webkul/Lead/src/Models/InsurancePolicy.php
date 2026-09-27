@@ -31,9 +31,12 @@ class InsurancePolicy extends Model
         'metal_tier',
         'network_type',
         'market_type',
+        'plan_year',
         'gross_premium',
         'aptc_subsidy',
         'net_premium',
+        'deductible',
+        'max_out_of_pocket',
         'effective_date',
         'renewal_date',
         'paid_to_date',
@@ -48,6 +51,9 @@ class InsurancePolicy extends Model
         'effectuation_source',
         'effectuation_verified_by',
         'prior_policy_id',
+        'renewal_type',
+        'renewal_cohort_year',
+        'renewal_notes',
         'grace_period_start_date',
         'grace_period_days',
         'members_count',
@@ -55,10 +61,14 @@ class InsurancePolicy extends Model
     ];
 
     protected $casts = [
+        'plan_year' => 'integer',
         'gross_premium' => 'float',
         'aptc_subsidy' => 'float',
         'net_premium' => 'float',
+        'deductible' => 'float',
+        'max_out_of_pocket' => 'float',
         'binder_amount' => 'float',
+        'renewal_cohort_year' => 'integer',
         'effective_date' => 'date',
         'renewal_date' => 'date',
         'paid_to_date' => 'date',
@@ -276,6 +286,14 @@ class InsurancePolicy extends Model
     }
 
     /**
+     * Service cases / post-sale tickets associated with the policy.
+     */
+    public function serviceCases(): HasMany
+    {
+        return $this->hasMany(PolicyServiceCaseProxy::modelClass(), 'policy_id')->orderBy('id', 'desc');
+    }
+
+    /**
      * Prior year policy link (renewal chain).
      */
     public function priorPolicy(): BelongsTo
@@ -289,6 +307,71 @@ class InsurancePolicy extends Model
     public function renewedPolicies(): HasMany
     {
         return $this->hasMany(self::class, 'prior_policy_id');
+    }
+
+    /**
+     * Compute year-over-year comparison against prior policy or a custom target.
+     */
+    public function getYearOverYearComparison(?InsurancePolicy $comparisonTarget = null): ?array
+    {
+        $prior = $comparisonTarget ?: $this->priorPolicy;
+
+        if (! $prior) {
+            return null;
+        }
+
+        $grossDiff = round((float) $this->gross_premium - (float) $prior->gross_premium, 2);
+        $subsidyDiff = round((float) $this->aptc_subsidy - (float) $prior->aptc_subsidy, 2);
+        $netDiff = round((float) $this->net_premium - (float) $prior->net_premium, 2);
+        $deductibleDiff = round((float) ($this->deductible ?? 0) - (float) ($prior->deductible ?? 0), 2);
+        $moopDiff = round((float) ($this->max_out_of_pocket ?? 0) - (float) ($prior->max_out_of_pocket ?? 0), 2);
+
+        $isCarrierChanged = strcasecmp((string) $this->carrier_name, (string) $prior->carrier_name) !== 0;
+        $isPlanChanged = strcasecmp((string) $this->plan_name, (string) $prior->plan_name) !== 0;
+
+        return [
+            'prior_policy' => [
+                'id' => $prior->id,
+                'policy_number' => $prior->policy_number,
+                'carrier_name' => $prior->carrier_name,
+                'plan_name' => $prior->plan_name,
+                'metal_tier' => $prior->metal_tier,
+                'plan_year' => $prior->plan_year ?: ($prior->effective_date ? Carbon::parse($prior->effective_date)->year : null),
+                'gross_premium' => (float) $prior->gross_premium,
+                'aptc_subsidy' => (float) $prior->aptc_subsidy,
+                'net_premium' => (float) $prior->net_premium,
+                'deductible' => (float) ($prior->deductible ?? 0),
+                'max_out_of_pocket' => (float) ($prior->max_out_of_pocket ?? 0),
+                'status' => $prior->status,
+            ],
+            'current_policy' => [
+                'id' => $this->id,
+                'policy_number' => $this->policy_number,
+                'carrier_name' => $this->carrier_name,
+                'plan_name' => $this->plan_name,
+                'metal_tier' => $this->metal_tier,
+                'plan_year' => $this->plan_year ?: ($this->effective_date ? Carbon::parse($this->effective_date)->year : null),
+                'gross_premium' => (float) $this->gross_premium,
+                'aptc_subsidy' => (float) $this->aptc_subsidy,
+                'net_premium' => (float) $this->net_premium,
+                'deductible' => (float) ($this->deductible ?? 0),
+                'max_out_of_pocket' => (float) ($this->max_out_of_pocket ?? 0),
+                'status' => $this->status,
+                'renewal_type' => $this->renewal_type,
+            ],
+            'variance' => [
+                'gross_premium_diff' => $grossDiff,
+                'aptc_subsidy_diff' => $subsidyDiff,
+                'net_premium_diff' => $netDiff,
+                'deductible_diff' => $deductibleDiff,
+                'moop_diff' => $moopDiff,
+                'is_carrier_changed' => $isCarrierChanged,
+                'is_plan_changed' => $isPlanChanged,
+                'is_net_savings' => $netDiff < 0,
+                'is_net_increase' => $netDiff > 0,
+                'subsidy_loss_warning' => $subsidyDiff < -50 || ($prior->net_premium == 0 && $this->net_premium > 0),
+            ],
+        ];
     }
 
     /**

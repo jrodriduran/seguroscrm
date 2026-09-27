@@ -4,6 +4,38 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Agent Commission Ledger & Running Balance Management (Historia 2.4): Implemented double-entry accounting ledger system for agency writing agents (`agent_commission_balances` and `agent_commission_ledger_transactions`), tracking real-time running balances, cumulative earnings, deductions, and payouts with database-level row locking.
+
+* [feature] Automated Clawback Debt Amortization & Negative Balance Alerts: Built automated chargeback recovery engine offsetting cancellation debits directly against agent commission accruals. Flags negative account balances (`negative_balance_alert`), prevents over-disbursements beyond available net funds, and links chargebacks directly from carrier reconciliation statements. Added dedicated Ledger administrative interface (`/admin/insurance/ledger`).
+
+* [migration] Added `agent_commission_balances` and `agent_commission_ledger_transactions` tables (Lead package migration `2026_09_18_000024`).
+
+* [tests] Added Pest feature test `AgentCommissionLedgerTest` covering running balance initialization, clawback debt amortization, negative balance safeguards, disbursement validation, and HTTP audit endpoints.
+
+* [feature] Carrier Statement Idempotency & SHA-256 Anti-Duplication Engine (Historia 2.3): Built cryptographic protection preventing double-payouts and duplicate statement processing in commission reconciliation. Calculates SHA-256 hashes of statement files (`file_hash`), rejecting re-uploaded statements with HTTP 409 Conflict.
+
+* [feature] Line-Item Duplicate Lock & Intra-batch Guard: Implemented multi-layered duplicate detection blocking multiple commission credits for the same carrier, policy number, and service month (`[carrier_name, policy_number, period_month]`). Flags duplicate payouts as `duplicate_blocked`, prevents double ledger accounting, and references the original payment item (`duplicate_of_item_id`).
+
+* [migration] Added `file_hash`, `duplicate_records`, and `total_duplicate_amount` to `carrier_statements` table, plus `period_month`, `is_duplicate`, and `duplicate_of_item_id` to `carrier_statement_items` table (Lead package migration `2026_09_18_000023`).
+
+* [tests] Added Pest feature test `CommissionIdempotencyTest` covering cryptographic SHA-256 upload rejection, inter-statement policy duplicate blocking, intra-batch duplicate line isolation, and legitimate multi-month recurring payout processing.
+
+* [feature] OEP Renewal Center & Year-Over-Year Plan Comparator (Historia 2.2): Implemented agency Open Enrollment Period (OEP) renewal campaign control center (`PolicyRenewalService` and `PolicyRenewalController`), tracking cohort persistency rates, retained gross/net volume, and policy renewal taxonomy (`same_plan`, `same_carrier_switch`, `cross_carrier_switch`).
+
+* [feature] Year-Over-Year Comparative Audit Engine & Live Variance Preview: Added side-by-side plan comparator (`getYearOverYearComparison`) evaluating prior year base policies against renewed coverage across carriers, plan benefits, deductibles, max out-of-pocket (MOOP), gross premiums, and APTC subsidies. Automatically flags client monthly net savings, premium increases, and critical subsidy drop warnings (> $50/mo reduction). Built interactive modal comparator in Book of Business (`policies/index.blade.php`).
+
+* [migration] Added `plan_year`, `deductible`, `max_out_of_pocket`, `renewal_type`, `renewal_cohort_year`, and `renewal_notes` to `insurance_policies` table (Lead package migration `2026_09_18_000022`).
+
+* [tests] Added Pest feature test `OepRenewalComparatorTest` covering renewal cohort analytics, parent policy chaining via `prior_policy_id`, $0 premium auto-effectuation, cross-carrier binder requirements, and year-over-year variance computation.
+
+* [feature] Post-Sale Service Cases & Client Self-Service 1095-A Portal (Historia 2.1): Implemented comprehensive post-sale service ticketing for active health policies (`policy_service_cases` and `policy_service_case_comments`), supporting automated ticket sequencing (`CAS-YYYY-XXXXXX`), category taxonomy (1095-A tax statement requests, address changes, Marketplace income updates, PCP assignments, ID card replacements, and claims/billing inquiries), priority levels, multi-file attachments, and client visibility sharing.
+
+* [feature] Self-Service 1095-A Tax Form Workflow & Document Vault: Enabled insured clients to request 1095-A tax statements directly from their digital policy portal (`/my-policy/{token}/request-1095a`) and download secure tax documents once verified and uploaded by the agency. Added administrative case management modal in Book of Business ledger (`policies/index.blade.php`).
+
+* [migration] Added `policy_service_cases` and `policy_service_case_comments` tables (Lead package migration `2026_09_18_000021`).
+
+* [tests] Added Pest feature test `PolicyServiceCaseTest` covering administrative ticket generation, file attachments, status resolution transitions, client portal self-service 1095-A requests, and permission-checked document downloads.
+
 * [feature] HHS Federal Poverty Level (FPL) Calculator & Silver CSR Subsidies Engine (Entrega 1 Cerrada): Implemented official HHS poverty guidelines calculation engine (`FplCalculatorService`) evaluating tax household size, projected annual income (MAGI), and state geography to automatically determine % FPL, classify Cost-Sharing Reduction tiers (Silver CSR 94%, 87%, 73%, Standard, Medicaid Gap), calculate ACA/IRA maximum family contribution percentages, and estimate monthly APTC subsidies with $0 net premium qualification indicators.
 
 * [feature] Tax Household Persistence & Real-time Live Preview: Added `lead_tax_households` table and interactive UI calculator in lead details (`household.blade.php`), enabling agents to update projected annual income, simulate family size variations with auto-sync from census dependents, and preview subsidy impacts in real-time.

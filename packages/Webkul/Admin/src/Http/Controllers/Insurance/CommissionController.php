@@ -278,17 +278,31 @@ class CommissionController extends Controller
 
         $userId = auth()->guard('user')->id();
 
-        $statement = $service->reconcileCsv(
-            $csvContent,
-            $validated['carrier_name'],
-            $validated['period_month'],
-            $userId,
-            $originalFileName
-        );
+        try {
+            $statement = $service->reconcileCsv(
+                $csvContent,
+                $validated['carrier_name'],
+                $validated['period_month'],
+                $userId,
+                $originalFileName
+            );
+        } catch (\Webkul\Lead\Exceptions\DuplicateStatementException $e) {
+            return response()->json([
+                'success' => false,
+                'is_duplicate' => true,
+                'message' => $e->getMessage(),
+                'existing_statement_id' => $e->existingStatement->id,
+                'file_hash' => $e->fileHash,
+            ], 409);
+        }
+
+        $dupMsg = $statement->duplicate_records > 0
+            ? " Se bloquearon {$statement->duplicate_records} pagos duplicados (\${$statement->total_duplicate_amount})."
+            : '';
 
         return response()->json([
             'success' => true,
-            'message' => "Statement de {$statement->carrier_name} procesado. Se conciliaron {$statement->matched_records} pólizas y se identificaron {$statement->missed_records} comisiones omitidas.",
+            'message' => "Statement de {$statement->carrier_name} procesado. Se conciliaron {$statement->matched_records} pólizas y se identificaron {$statement->missed_records} comisiones omitidas.{$dupMsg}",
             'statement' => $statement->load(['items.lead.person', 'items.commission']),
         ]);
     }

@@ -15,16 +15,22 @@ use Webkul\Lead\Models\LeadRxMedication;
 use Webkul\Lead\Models\LeadTaxHousehold;
 use Webkul\Lead\Models\Pipeline;
 use Webkul\Lead\Models\PolicyCoverageStatusHistory;
+use Webkul\Lead\Models\PolicyServiceCase;
+use Webkul\Lead\Models\PolicyServiceCaseComment;
 use Webkul\Lead\Models\Product;
 use Webkul\Lead\Models\SlaRule;
 use Webkul\Lead\Models\Source;
 use Webkul\Lead\Models\Stage;
 use Webkul\Lead\Models\Type;
+use Webkul\Lead\Models\AgentCommissionBalance;
+use Webkul\Lead\Models\AgentCommissionLedgerTransaction;
 use Webkul\Lead\Models\UserAgentLicense;
 
 class ModuleServiceProvider extends BaseModuleServiceProvider
 {
     protected $models = [
+        AgentCommissionBalance::class,
+        AgentCommissionLedgerTransaction::class,
         AssignmentRule::class,
         HouseholdMember::class,
         Lead::class,
@@ -37,6 +43,8 @@ class ModuleServiceProvider extends BaseModuleServiceProvider
         LeadTaxHousehold::class,
         Pipeline::class,
         PolicyCoverageStatusHistory::class,
+        PolicyServiceCase::class,
+        PolicyServiceCaseComment::class,
         Product::class,
         SlaRule::class,
         Source::class,
