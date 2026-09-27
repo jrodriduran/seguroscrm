@@ -5,10 +5,13 @@ namespace Webkul\Lead\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Webkul\Lead\Traits\BelongsToAgency;
 use Webkul\User\Models\User;
 
 class CarrierStatement extends Model
 {
+    use BelongsToAgency;
+
     protected $table = 'carrier_statements';
 
     protected $fillable = [
@@ -28,6 +31,7 @@ class CarrierStatement extends Model
         'total_duplicate_amount',
         'status',
         'user_id',
+        'agency_id',
     ];
 
     protected $casts = [

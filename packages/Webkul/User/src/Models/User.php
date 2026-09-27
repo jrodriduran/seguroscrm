@@ -25,6 +25,7 @@ class User extends Authenticatable implements UserContract
         'password',
         'api_token',
         'role_id',
+        'agency_id',
         'status',
         'view_permission',
         'created_by',
@@ -157,5 +158,13 @@ class User extends Authenticatable implements UserContract
 
                 return in_array(strtolower($line), $lines) || in_array('aca', $lines) || in_array('health', $lines);
             });
+    }
+
+    /**
+     * Get the agency that this user belongs to.
+     */
+    public function agency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\Webkul\Lead\Models\Agency::class);
     }
 }

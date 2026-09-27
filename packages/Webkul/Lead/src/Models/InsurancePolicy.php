@@ -12,8 +12,12 @@ use Webkul\Contact\Models\PersonProxy;
 use Webkul\Quote\Models\Quote;
 use Webkul\User\Models\User;
 
+use Webkul\Lead\Traits\BelongsToAgency;
+
 class InsurancePolicy extends Model
 {
+    use BelongsToAgency;
+
     protected $table = 'insurance_policies';
 
     protected $fillable = [
@@ -24,6 +28,7 @@ class InsurancePolicy extends Model
         'lead_id',
         'person_id',
         'user_id',
+        'agency_id',
         'quote_id',
         'carrier_name',
         'plan_name',
@@ -54,6 +59,11 @@ class InsurancePolicy extends Model
         'renewal_type',
         'renewal_cohort_year',
         'renewal_notes',
+        'missing_commission_flag',
+        'missing_commission_detected_at',
+        'missing_commission_amount',
+        'missing_commission_days',
+        'missing_commission_notes',
         'grace_period_start_date',
         'grace_period_days',
         'members_count',
@@ -61,6 +71,10 @@ class InsurancePolicy extends Model
     ];
 
     protected $casts = [
+        'missing_commission_flag' => 'boolean',
+        'missing_commission_detected_at' => 'datetime',
+        'missing_commission_amount' => 'float',
+        'missing_commission_days' => 'integer',
         'plan_year' => 'integer',
         'gross_premium' => 'float',
         'aptc_subsidy' => 'float',

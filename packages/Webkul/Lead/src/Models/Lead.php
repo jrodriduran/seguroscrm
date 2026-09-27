@@ -14,13 +14,14 @@ use Webkul\Attribute\Traits\CustomAttribute;
 use Webkul\Contact\Models\PersonProxy;
 use Webkul\Email\Models\EmailProxy;
 use Webkul\Lead\Contracts\Lead as LeadContract;
+use Webkul\Lead\Traits\BelongsToAgency;
 use Webkul\Quote\Models\QuoteProxy;
 use Webkul\Tag\Models\TagProxy;
 use Webkul\User\Models\UserProxy;
 
 class Lead extends Model implements LeadContract
 {
-    use CustomAttribute, LogsActivity;
+    use BelongsToAgency, CustomAttribute, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +37,7 @@ class Lead extends Model implements LeadContract
         'expected_close_date',
         'closed_at',
         'user_id',
+        'agency_id',
         'person_id',
         'lead_source_id',
         'lead_type_id',

@@ -22,6 +22,7 @@ use Webkul\Lead\Models\SlaRule;
 use Webkul\Lead\Models\Source;
 use Webkul\Lead\Models\Stage;
 use Webkul\Lead\Models\Type;
+use Webkul\Lead\Models\Agency;
 use Webkul\Lead\Models\AgentCommissionBalance;
 use Webkul\Lead\Models\AgentCommissionLedgerTransaction;
 use Webkul\Lead\Models\UserAgentLicense;
@@ -29,6 +30,7 @@ use Webkul\Lead\Models\UserAgentLicense;
 class ModuleServiceProvider extends BaseModuleServiceProvider
 {
     protected $models = [
+        Agency::class,
         AgentCommissionBalance::class,
         AgentCommissionLedgerTransaction::class,
         AssignmentRule::class,

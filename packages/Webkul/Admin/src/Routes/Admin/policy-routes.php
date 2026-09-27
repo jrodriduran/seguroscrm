@@ -2,9 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\Insurance\BookOfBusinessController;
+use Webkul\Admin\Http\Controllers\Insurance\DailyActionBoardController;
 use Webkul\Admin\Http\Controllers\Insurance\ExecutiveAnalyticsController;
 use Webkul\Admin\Http\Controllers\Insurance\PolicyRenewalController;
+use Webkul\Admin\Http\Controllers\Insurance\RevenueShieldController;
 use Webkul\Admin\Http\Controllers\Insurance\ServiceCaseController;
+
+Route::controller(DailyActionBoardController::class)->prefix('insurance/action-board')->group(function () {
+    Route::get('', 'index')->name('admin.insurance.action_board.index');
+    Route::get('data', 'data')->name('admin.insurance.action_board.data');
+});
+
+Route::controller(RevenueShieldController::class)->prefix('insurance/revenue-shield')->group(function () {
+    Route::get('', 'index')->name('admin.insurance.revenue_shield.index');
+    Route::post('scan', 'runScan')->name('admin.insurance.revenue_shield.scan');
+    Route::post('{id}/resolve', 'resolve')->name('admin.insurance.revenue_shield.resolve');
+});
 
 Route::controller(BookOfBusinessController::class)->prefix('policies')->group(function () {
     Route::get('', 'index')->name('admin.policies.index');
