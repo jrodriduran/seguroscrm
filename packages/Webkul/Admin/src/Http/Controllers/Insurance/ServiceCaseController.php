@@ -54,6 +54,7 @@ class ServiceCaseController extends Controller
         return response()->json([
             'success' => true,
             'data' => $cases,
+            'cases' => $cases,
             'summary' => [
                 'total' => $cases->count(),
                 'open' => $cases->where('status', 'open')->count(),
@@ -121,7 +122,7 @@ class ServiceCaseController extends Controller
             'success' => true,
             'message' => trans('admin::insurance.service_cases.created_success'),
             'data' => $serviceCase->load(['policy', 'user', 'comments']),
-        ], 201);
+        ], 200);
     }
 
     /**

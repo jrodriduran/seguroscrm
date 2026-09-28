@@ -154,8 +154,11 @@ class InsuredPortalController extends Controller
         $policy = InsurancePolicy::where('portal_token', $token)->firstOrFail();
 
         $serviceCase = PolicyServiceCase::where('policy_id', $policy->id)
-            ->where('is_shared_with_client', true)
             ->findOrFail($caseId);
+
+        if (! $serviceCase->is_shared_with_client) {
+            abort(403, 'Acceso denegado: este documento no ha sido compartido con el cliente.');
+        }
 
         if (! $serviceCase->attachment_path || ! Storage::disk('public')->exists($serviceCase->attachment_path)) {
             abort(404, 'El documento aún no ha sido cargado por su agente.');

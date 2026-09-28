@@ -164,7 +164,7 @@ it('allows authorized admin with permission to reveal decrypted SSN and prevents
         'status' => 1,
     ]);
 
-    test()->actingAs($restrictedUser)
+    test()->actingAs($restrictedUser, 'user')
         ->getJson(route('admin.leads.household.reveal_pii', ['lead_id' => $lead->id, 'id' => $member->id]))
         ->assertForbidden();
 });

@@ -67,14 +67,15 @@ it('does not flag active policy if reconciled commission exists within 60 days',
     $policyNumber = 'POL-PAID-'.uniqid();
     $policy = createRevenueShieldTestPolicy($policyNumber, 'Florida Blue', 'active', Carbon::today()->subDays(75));
 
+    $admin = User::first();
+
     // Create a paid commission item
     InsuranceCommission::create([
-        'policy_id' => $policy->id,
+        'user_id' => $admin->id,
         'policy_number' => $policyNumber,
         'carrier_name' => 'Florida Blue',
-        'commission_amount' => 28.00,
+        'rate_per_member' => 28.00,
         'status' => 'paid',
-        'statement_date' => Carbon::today()->subDays(15),
         'created_at' => Carbon::today()->subDays(15),
     ]);
 

@@ -228,7 +228,7 @@ it('computes year-over-year comparison and detects variance and warnings', funct
     $variance = $response->json('comparison.variance');
     expect($variance['is_carrier_changed'])->toBeTrue();
     expect($variance['is_net_increase'])->toBeTrue();
-    expect($variance['net_premium_diff'])->toBe(140.0);
-    expect($variance['subsidy_diff'])->toBe(-70.0);
+    expect($variance['net_premium_diff'])->toEqual(140.0);
+    expect($variance['subsidy_diff'])->toEqual(-70.0);
     expect($variance['subsidy_loss_warning'])->toBeTrue();
 });

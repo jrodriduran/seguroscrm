@@ -39,10 +39,7 @@ class RevenueShieldService
 
         foreach ($activePolicies as $policy) {
             // Check if any commission was reconciled for this policy within the last 60 days
-            $hasRecentCommission = InsuranceCommission::where(function ($q) use ($policy) {
-                $q->where('policy_id', $policy->id)
-                    ->orWhere('policy_number', $policy->policy_number);
-            })
+            $hasRecentCommission = InsuranceCommission::where('policy_number', $policy->policy_number)
                 ->where('status', 'paid')
                 ->whereDate('created_at', '>=', $recentCommissionThreshold)
                 ->exists();

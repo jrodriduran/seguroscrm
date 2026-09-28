@@ -93,16 +93,13 @@ class DailyActionBoardService
     {
         $query = LeadDmiDocument::with(['lead.person'])
             ->where('status', 'pending_upload')
-            ->where(function ($q) {
-                $q->where('days_remaining', '<=', 15)
-                    ->orWhereDate('due_date', '<=', Carbon::today()->addDays(15));
-            });
+            ->whereDate('due_date', '<=', Carbon::today()->addDays(15));
 
         if ($userId) {
             $query->whereHas('lead', fn ($q) => $q->where('user_id', $userId));
         }
 
-        $docs = $query->orderBy('days_remaining', 'asc')->limit(15)->get();
+        $docs = $query->orderBy('due_date', 'asc')->limit(15)->get();
 
         return $docs->map(function ($doc) {
             $days = (int) $doc->days_remaining;
