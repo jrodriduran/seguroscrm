@@ -686,6 +686,8 @@
                             </button>
                         </div>
                     </div>
+                </div>
+
                 <!-- OEP RENEWALS HUB MODAL -->
                 <div v-if="showOepHubModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-5xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col">
