@@ -10,7 +10,9 @@
                 <div class="px-4 group/item {{ $menuItem->isActive() ? 'active' : 'inactive' }}">
                     <a
                         class="flex gap-2 p-1.5 items-center cursor-pointer hover:rounded-lg {{ $menuItem->isActive() == 'active' ? 'bg-brandColor rounded-lg' : ' hover:bg-gray-100 hover:dark:bg-gray-950' }} peer transition-colors"
-                        :class="{'!bg-blue-600 !text-white rounded-lg shadow-sm': isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}')}"
+                        :class="{
+                            '!bg-brandColor !text-white rounded-lg shadow-sm': hoveringMenu == '{{$menuItem->getKey()}}'
+                        }"
                         href="{{ ! in_array($menuItem->getKey(), ['settings', 'configuration']) && $menuItem->haveChildren() ? 'javascript:void(0)' : $menuItem->getUrl() }}"
                         @mouseleave="!isMenuActive ? hoveringMenu = '' : {}"
                         @mouseover="hoveringMenu='{{$menuItem->getKey()}}'"
@@ -18,19 +20,19 @@
                     >
                         <span
                             class="{{ $menuItem->getIcon() }} text-2xl {{ $menuItem->isActive() ? 'text-white' : ''}}"
-                            :class="{'!text-white': isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}')}"
+                            :class="{'!text-white': hoveringMenu == '{{$menuItem->getKey()}}'}"
                         ></span>
 
                         <div
                             class="flex-1 flex justify-between items-center text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap group-[.sidebar-collapsed]/container:hidden {{ $menuItem->isActive() ? 'text-white' : ''}} group"
-                            :class="{'!text-white font-semibold': isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}')}"
+                            :class="{'!text-white font-semibold': hoveringMenu == '{{$menuItem->getKey()}}'}"
                         >
                             <p>{{ $menuItem->getName() }}</p>
                         
                             @if ( ! in_array($menuItem->getKey(), ['settings', 'configuration']) && $menuItem->haveChildren())
                                 <i
                                     class="icon-right-arrow rtl:icon-left-arrow invisible text-2xl group-hover/item:visible transition-transform duration-200 {{ $menuItem->isActive() ? 'text-white' : ''}}"
-                                    :class="{'!visible !text-white ltr:translate-x-0.5 rtl:-translate-x-0.5': isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}')}"
+                                    :class="{'!visible !text-white': hoveringMenu == '{{$menuItem->getKey()}}'}"
                                 ></i>
                             @endif
                         </div>
@@ -42,26 +44,21 @@
                         && $menuItem->haveChildren()
                     )
                         <div
-                            class="absolute top-0 hidden flex-col ltr:left-[200px] rtl:right-[199px]"
+                            class="absolute top-0 hidden flex-col ltr:left-[200px] rtl:right-[199px] group-[.sidebar-collapsed]/container:ltr:left-[70px] group-[.sidebar-collapsed]/container:rtl:right-[69px]"
                             :class="[isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}') ? '!flex' : 'hidden']"
                         >
-                            <div class="sidebar-rounded fixed z-[1000] h-full min-w-[220px] max-w-max bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-md pt-3 pb-6 shadow-2xl border-y border-r border-slate-300 dark:border-slate-700 max-lg:hidden ltr:border-r rtl:border-x">
-                                <!-- Section Category Header -->
-                                <div class="px-4 pb-2.5 mb-2 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
-                                    <span class="{{ $menuItem->getIcon() }} text-lg text-blue-600 dark:text-blue-400"></span>
-                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">{{ $menuItem->getName() }}</span>
-                                </div>
-
-                                <div class="journal-scroll h-[calc(100vh-140px)] overflow-hidden">
-                                    <nav class="grid w-full gap-1.5">
+                            <div
+                                class="sidebar-flyout-panel sidebar-rounded fixed top-[58px] z-[1000] h-full min-w-[180px] max-w-max pt-2 pb-6 shadow-xl border-r border-gray-300 dark:border-gray-800 max-lg:hidden ltr:border-r rtl:border-x"
+                            >
+                                <div class="journal-scroll h-[calc(100vh-80px)] overflow-hidden">
+                                    <nav class="grid w-full gap-1 pt-1">
                                         @foreach ($menuItem->getChildren() as $subMenuItem)
                                             <div class="px-3 group/item {{ $subMenuItem->isActive() ? 'active' : 'inactive' }}">
                                                 <a
                                                     href="{{ $subMenuItem->getUrl() }}"
-                                                    class="flex gap-2.5 px-3 py-2 items-center cursor-pointer rounded-lg transition-colors {{ $subMenuItem->isActive() == 'active' ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-700 hover:text-blue-700 hover:bg-blue-100/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800' }} peer"
+                                                    class="flex gap-2.5 px-3 py-2 items-center cursor-pointer rounded-lg transition-colors {{ $subMenuItem->isActive() == 'active' ? 'bg-brandColor text-white font-semibold shadow-sm' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200/80 dark:text-gray-200 dark:hover:bg-gray-800' }} peer"
                                                 >
-                                                    <span class="h-1.5 w-1.5 rounded-full {{ $subMenuItem->isActive() == 'active' ? 'bg-white' : 'bg-slate-400 group-hover/item:bg-blue-600' }}"></span>
-                                                    <p class="font-medium text-xs whitespace-nowrap {{ $subMenuItem->isActive() ? 'text-white' : ''}}">
+                                                    <p class="font-medium text-sm whitespace-nowrap {{ $subMenuItem->isActive() ? 'text-white' : ''}}">
                                                         {{ $subMenuItem->getName() }}
                                                     </p>
                                                 </a>
@@ -148,4 +145,15 @@
             },
         });
     </script>
+@endPushOnce
+
+@pushOnce('styles')
+    <style>
+        .sidebar-flyout-panel {
+            background-color: #f1f5f9 !important;
+        }
+        .dark .sidebar-flyout-panel {
+            background-color: #111827 !important;
+        }
+    </style>
 @endPushOnce
