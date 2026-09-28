@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\LeadDmiDocument;
-use Webkul\Lead\Models\SepQualification;
+use Webkul\Lead\Models\LeadSepQualification;
 
 class DailyActionBoardService
 {
@@ -158,8 +158,8 @@ class DailyActionBoardService
      */
     public function getSepExpiringUrgent(?int $userId = null): array
     {
-        $query = SepQualification::with(['lead.person'])
-            ->where('status', 'active');
+        $query = LeadSepQualification::with(['lead.person'])
+            ->where('is_eligible', true);
 
         if ($userId) {
             $query->whereHas('lead', fn ($q) => $q->where('user_id', $userId));
@@ -167,7 +167,7 @@ class DailyActionBoardService
 
         $today = Carbon::today();
         $seps = $query->get()->filter(function ($sep) use ($today) {
-            $deadline = $sep->event_date ? Carbon::parse($sep->event_date)->addDays(60) : null;
+            $deadline = $sep->sep_deadline ? Carbon::parse($sep->sep_deadline) : ($sep->event_date ? Carbon::parse($sep->event_date)->addDays(60) : null);
             if (! $deadline) {
                 return false;
             }
@@ -177,13 +177,13 @@ class DailyActionBoardService
         })->values();
 
         return $seps->map(function ($sep) use ($today) {
-            $deadline = Carbon::parse($sep->event_date)->addDays(60);
+            $deadline = $sep->sep_deadline ? Carbon::parse($sep->sep_deadline) : Carbon::parse($sep->event_date)->addDays(60);
             $diff = (int) $today->diffInDays($deadline, false);
 
             return [
                 'id' => $sep->id,
                 'lead_id' => $sep->lead_id,
-                'sep_type' => $sep->sep_type,
+                'sep_type' => $sep->event_type,
                 'client_name' => $sep->lead?->person?->name ?? 'Prospecto',
                 'client_phone' => $this->extractLeadPhone($sep->lead),
                 'days_remaining' => $diff,

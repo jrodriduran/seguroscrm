@@ -7,7 +7,7 @@ use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\LeadDmiDocument;
 use Webkul\Lead\Models\Pipeline;
-use Webkul\Lead\Models\SepQualification;
+use Webkul\Lead\Models\LeadSepQualification;
 use Webkul\Lead\Models\Stage;
 use Webkul\Lead\Services\DailyActionBoardService;
 use Webkul\User\Models\User;
@@ -71,11 +71,13 @@ it('compiles critical urgent actions across binder, dmi, and grace periods in th
     ]);
 
     // 4. SEP Expiring in 5 days
-    $sep = SepQualification::create([
+    $sep = LeadSepQualification::create([
         'lead_id' => $lead->id,
-        'sep_type' => 'loss_of_coverage',
-        'event_date' => Carbon::today()->subDays(55)->toDateString(), // 60 - 55 = 5 days left
-        'status' => 'active',
+        'user_id' => $admin->id,
+        'event_type' => 'loss_of_coverage',
+        'event_date' => Carbon::today()->subDays(55)->toDateString(),
+        'sep_deadline' => Carbon::today()->addDays(5)->toDateString(),
+        'is_eligible' => true,
     ]);
 
     $service = app(DailyActionBoardService::class);
