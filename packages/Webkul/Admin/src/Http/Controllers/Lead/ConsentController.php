@@ -228,6 +228,7 @@ class ConsentController extends Controller
         return response()->json([
             'success' => true,
             'regulation' => 'CMS 45 CFR § 155.220 (10-Year Record Retention Rule)',
+            'retention_standard' => 'CMS 45 CFR 155.220 (10-Year Immutable Audit Trail)',
             'consumer' => [
                 'name' => $consent->client_name,
                 'phone' => $consent->client_phone,

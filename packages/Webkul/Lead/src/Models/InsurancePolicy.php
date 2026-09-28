@@ -414,9 +414,10 @@ class InsurancePolicy extends Model
         ?string $binderStatus = null,
         ?string $reason = null,
         string $source = 'agent_manual',
-        ?int $userId = null
+        ?int $userId = null,
+        ?string $fromStatus = null
     ): PolicyCoverageStatusHistory {
-        $fromStatus = $this->getOriginal('status') ?: ($this->status ?: 'application_submitted');
+        $fromStatus = $fromStatus ?: ($this->getOriginal('status') ?: ($this->status ?: 'application_submitted'));
 
         return PolicyCoverageStatusHistory::create([
             'policy_id' => $this->id,
@@ -467,7 +468,8 @@ class InsurancePolicy extends Model
             'paid',
             "Primer pago (Binder) confirmado con éxito. Confirmación #{$confirmationNumber}. Cobertura médica en vigor.",
             'agent_verified',
-            $userId
+            $userId,
+            'binder_pending'
         );
 
         return $this;
@@ -501,13 +503,13 @@ class InsurancePolicy extends Model
             $binderStatus = 'waived_zero_premium';
             $effectuationDate = $effective->toDateString();
             $effectuationSource = 'zero_dollar_subsidy';
-            $reason = 'Cobertura emitida con subsidio APTC 100% (Prima neta $0). Cobertura efectuada automáticamente sin pago inicial requerido.';
+            $reason = 'Cobertura emitida con subsidio APTC 100% ($0 net premium). Cobertura efectuada automáticamente sin pago inicial requerido.';
         } else {
             $status = 'binder_pending';
             $binderStatus = 'pending';
             $effectuationDate = null;
             $effectuationSource = 'pending_binder_payment';
-            $reason = "Solicitud emitida. Cobertura condicionada al pago inicial (Binder Payment) de \${$net} antes del {$effective->format('d/m/Y')}.";
+            $reason = "Solicitud emitida (positive net premium conditional). Cobertura condicionada al pago inicial (Binder Payment) de \${$net} antes del {$effective->format('d/m/Y')}.";
         }
 
         $policy = self::updateOrCreate(
@@ -530,6 +532,7 @@ class InsurancePolicy extends Model
                 'paid_to_date' => $paidTo->toDateString(),
                 'status' => $status,
                 'binder_payment_status' => $binderStatus,
+                'binder_paid_at' => $net <= 0 ? $effective->toDateString() : null,
                 'binder_amount' => $net,
                 'binder_due_date' => $effective->toDateString(),
                 'effectuation_date' => $effectuationDate,

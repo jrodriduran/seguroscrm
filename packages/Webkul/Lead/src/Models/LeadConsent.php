@@ -123,7 +123,7 @@ class LeadConsent extends Model implements LeadConsentContract
             'lead_consent_id' => $this->id,
             'lead_id' => $this->lead_id,
             'version_number' => $nextVersion,
-            'status' => 'signed',
+            'status' => 'active',
             'client_name' => $this->client_name,
             'client_phone' => $this->client_phone,
             'client_email' => $this->client_email,
