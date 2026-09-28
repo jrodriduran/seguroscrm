@@ -226,7 +226,7 @@
                     )
                         <div
                             class="ghl-flyout-card fixed z-[10010] w-[256px] max-lg:hidden {{ $isLowerItem ? 'ghl-flyout-bottom' : '' }}"
-                            :class="{'!flex': hoveringMenu == '{{$key}}'}"
+                            :class="hoveringMenu == '{{$key}}' ? 'active-flyout' : 'hidden'"
                             style="left: 226px;"
                         >
                             <div class="ghl-card-inner w-full flex flex-col rounded-2xl border overflow-hidden">
@@ -379,8 +379,7 @@
         margin-top: -46px !important;
         z-index: 10020 !important;
     }
-    .ghl-flyout-card.\!flex,
-    .group\/item:hover > .ghl-flyout-card {
+    .ghl-flyout-card.active-flyout {
         display: flex !important;
         animation: ghlFlyoutSlide 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
