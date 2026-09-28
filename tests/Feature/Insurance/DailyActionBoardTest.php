@@ -64,6 +64,7 @@ it('compiles critical urgent actions across binder, dmi, and grace periods in th
         'plan_name' => 'Ambetter Balanced Care',
         'status' => 'grace_period_2_3',
         'grace_period_days' => 45,
+        'net_premium' => 60.00,
         'premium_amount' => 60.00,
         'paid_to_date' => Carbon::today()->subDays(45)->toDateString(),
         'lead_id' => $lead->id,

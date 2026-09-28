@@ -143,7 +143,7 @@ class DailyActionBoardService
                 'carrier_name' => $policy->carrier_name,
                 'client_name' => $policy->insured_name ?: ($policy->lead?->person?->name ?? 'Asegurado'),
                 'client_phone' => $this->extractLeadPhone($policy->lead),
-                'monthly_premium' => (float) ($policy->premium_amount ?? 0),
+                'monthly_premium' => (float) ($policy->net_premium ?? $policy->premium_amount ?? 0),
                 'status' => $policy->status,
                 'grace_period_days' => (int) $policy->grace_period_days,
                 'stage_label' => $isCritical ? 'Mes 2-3 (Reclamos Suspendidos / Riesgo Clawback)' : 'Mes 1 (Cobertura Activa)',
