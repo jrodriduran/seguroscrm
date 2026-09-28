@@ -11,29 +11,20 @@
                     <a
                         class="flex gap-2 p-1.5 items-center cursor-pointer hover:rounded-lg {{ $menuItem->isActive() == 'active' ? 'bg-brandColor rounded-lg' : ' hover:bg-gray-100 hover:dark:bg-gray-950' }} peer transition-colors"
                         :class="{
-                            '!bg-brandColor !text-white rounded-lg shadow-sm': hoveringMenu == '{{$menuItem->getKey()}}'
+                            'menu-parent-highlight': hoveringMenu == '{{$menuItem->getKey()}}'
                         }"
                         href="{{ ! in_array($menuItem->getKey(), ['settings', 'configuration']) && $menuItem->haveChildren() ? 'javascript:void(0)' : $menuItem->getUrl() }}"
                         @mouseleave="!isMenuActive ? hoveringMenu = '' : {}"
                         @mouseover="hoveringMenu='{{$menuItem->getKey()}}'"
                         @click="isMenuActive = !isMenuActive"
                     >
-                        <span
-                            class="{{ $menuItem->getIcon() }} text-2xl {{ $menuItem->isActive() ? 'text-white' : ''}}"
-                            :class="{'!text-white': hoveringMenu == '{{$menuItem->getKey()}}'}"
-                        ></span>
+                        <span class="{{ $menuItem->getIcon() }} text-2xl {{ $menuItem->isActive() ? 'text-white' : ''}}"></span>
 
-                        <div
-                            class="flex-1 flex justify-between items-center text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap group-[.sidebar-collapsed]/container:hidden {{ $menuItem->isActive() ? 'text-white' : ''}} group"
-                            :class="{'!text-white font-semibold': hoveringMenu == '{{$menuItem->getKey()}}'}"
-                        >
+                        <div class="flex-1 flex justify-between items-center text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap group-[.sidebar-collapsed]/container:hidden {{ $menuItem->isActive() ? 'text-white' : ''}} group">
                             <p>{{ $menuItem->getName() }}</p>
                         
                             @if ( ! in_array($menuItem->getKey(), ['settings', 'configuration']) && $menuItem->haveChildren())
-                                <i
-                                    class="icon-right-arrow rtl:icon-left-arrow invisible text-2xl group-hover/item:visible transition-transform duration-200 {{ $menuItem->isActive() ? 'text-white' : ''}}"
-                                    :class="{'!visible !text-white': hoveringMenu == '{{$menuItem->getKey()}}'}"
-                                ></i>
+                                <i class="icon-right-arrow rtl:icon-left-arrow invisible text-2xl group-hover/item:visible transition-transform duration-200 {{ $menuItem->isActive() ? 'text-white' : ''}}"></i>
                             @endif
                         </div>
                     </a>
@@ -48,17 +39,17 @@
                             :class="[isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}') ? '!flex' : 'hidden']"
                         >
                             <div
-                                class="sidebar-flyout-panel sidebar-rounded fixed top-[58px] z-[1000] h-full min-w-[180px] max-w-max pt-2 pb-6 shadow-xl border-r border-gray-300 dark:border-gray-800 max-lg:hidden ltr:border-r rtl:border-x"
+                                class="sidebar-flyout-panel sidebar-rounded fixed z-[1000] h-full min-w-[180px] max-w-max pb-6 max-lg:hidden ltr:border-r rtl:border-x"
                             >
-                                <div class="journal-scroll h-[calc(100vh-80px)] overflow-hidden">
+                                <div class="journal-scroll h-[calc(100vh-60px)] overflow-hidden">
                                     <nav class="grid w-full gap-1 pt-1">
                                         @foreach ($menuItem->getChildren() as $subMenuItem)
                                             <div class="px-3 group/item {{ $subMenuItem->isActive() ? 'active' : 'inactive' }}">
                                                 <a
                                                     href="{{ $subMenuItem->getUrl() }}"
-                                                    class="flex gap-2.5 px-3 py-2 items-center cursor-pointer rounded-lg transition-colors {{ $subMenuItem->isActive() == 'active' ? 'bg-brandColor text-white font-semibold shadow-sm' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200/80 dark:text-gray-200 dark:hover:bg-gray-800' }} peer"
+                                                    class="sidebar-flyout-item flex gap-2.5 px-3 py-2 items-center cursor-pointer {{ $subMenuItem->isActive() == 'active' ? 'active' : '' }} peer"
                                                 >
-                                                    <p class="font-medium text-sm whitespace-nowrap {{ $subMenuItem->isActive() ? 'text-white' : ''}}">
+                                                    <p class="font-medium text-sm whitespace-nowrap">
                                                         {{ $subMenuItem->getName() }}
                                                     </p>
                                                 </a>
@@ -81,6 +72,60 @@
 
     {!! view_render_event('admin.layout.sidebar.toggle.after') !!}
 </div>
+
+<style>
+    /* Notable background and elevation for deployed flyout submenu */
+    .sidebar-flyout-panel {
+        background-color: #f1f5f9 !important; /* Noticeable soft slate-100 */
+        box-shadow: 4px 0 15px -3px rgba(0, 0, 0, 0.12), 2px 0 6px -2px rgba(0, 0, 0, 0.06) !important;
+        border-right: 1px solid #cbd5e1 !important;
+        top: 52px !important; /* Raised up neatly under the navbar */
+        padding-top: 6px !important;
+    }
+    .dark .sidebar-flyout-panel {
+        background-color: #1e293b !important; /* Dark mode slate-800 */
+        border-right: 1px solid #334155 !important;
+        box-shadow: 4px 0 15px -3px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    /* Submenu item links inside flyout */
+    .sidebar-flyout-item {
+        color: #334155 !important;
+        border-radius: 0.5rem !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+    .sidebar-flyout-item:hover {
+        background-color: #e2e8f0 !important;
+        color: #0f172a !important;
+    }
+    .dark .sidebar-flyout-item {
+        color: #e2e8f0 !important;
+    }
+    .dark .sidebar-flyout-item:hover {
+        background-color: #334155 !important;
+        color: #ffffff !important;
+    }
+    .sidebar-flyout-item.active {
+        background-color: var(--brand-color, #0E90D9) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    /* Parent menu item when deployed / hovering */
+    .menu-parent-highlight {
+        background-color: var(--brand-color, #0E90D9) !important;
+        border-radius: 0.5rem !important;
+    }
+    .menu-parent-highlight span,
+    .menu-parent-highlight div,
+    .menu-parent-highlight p,
+    .menu-parent-highlight i {
+        color: #ffffff !important;
+    }
+    .menu-parent-highlight i {
+        visibility: visible !important;
+    }
+</style>
 
 @pushOnce('scripts')
     <script
@@ -145,15 +190,4 @@
             },
         });
     </script>
-@endPushOnce
-
-@pushOnce('styles')
-    <style>
-        .sidebar-flyout-panel {
-            background-color: #f1f5f9 !important;
-        }
-        .dark .sidebar-flyout-panel {
-            background-color: #111827 !important;
-        }
-    </style>
 @endPushOnce
