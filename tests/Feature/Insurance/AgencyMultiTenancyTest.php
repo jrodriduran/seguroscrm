@@ -7,6 +7,7 @@ use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\Pipeline;
 use Webkul\Lead\Models\Stage;
+use Webkul\User\Models\Role;
 use Webkul\User\Models\User;
 
 uses(DatabaseTransactions::class);
@@ -15,7 +16,7 @@ it('isolates leads and policies between distinct agencies using agency global sc
     $pipeline = Pipeline::first() ?: Pipeline::create(['name' => 'Agency Pipeline', 'is_default' => 1]);
     $stage = Stage::where('lead_pipeline_id', $pipeline->id)->first() ?: Stage::create(['name' => 'New', 'code' => 'new', 'lead_pipeline_id' => $pipeline->id]);
 
-    $role = \Webkul\User\Models\Role::first() ?: \Webkul\User\Models\Role::create([
+    $role = Role::first() ?: Role::create([
         'name' => 'Agent Role',
         'permission_type' => 'all',
     ]);

@@ -3,13 +3,14 @@
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Webkul\Lead\Models\AgentCommissionBalance;
 use Webkul\Lead\Services\AgentLedgerService;
+use Webkul\User\Models\Role;
 use Webkul\User\Models\User;
 
 uses(DatabaseTransactions::class);
 
 function createAgentLedgerUser(array $attributes = []): User
 {
-    $role = \Webkul\User\Models\Role::first() ?: \Webkul\User\Models\Role::create([
+    $role = Role::first() ?: Role::create([
         'name' => 'Agent Role',
         'permission_type' => 'all',
     ]);
