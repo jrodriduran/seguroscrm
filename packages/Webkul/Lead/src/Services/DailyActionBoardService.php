@@ -81,7 +81,7 @@ class DailyActionBoardService
                 'due_date' => $dueDate?->format('Y-m-d'),
                 'days_remaining' => $daysRemaining,
                 'urgency' => $daysRemaining <= 3 ? 'critical' : ($daysRemaining <= 7 ? 'warning' : 'info'),
-                'action_url' => route('admin.insurance.policies.index', ['policy_id' => $policy->id]),
+                'action_url' => route('admin.policies.index', ['policy_id' => $policy->id]),
             ];
         })->toArray();
     }
@@ -148,7 +148,7 @@ class DailyActionBoardService
                 'grace_period_days' => (int) $policy->grace_period_days,
                 'stage_label' => $isCritical ? 'Mes 2-3 (Reclamos Suspendidos / Riesgo Clawback)' : 'Mes 1 (Cobertura Activa)',
                 'urgency' => $isCritical ? 'critical' : 'warning',
-                'action_url' => route('admin.insurance.policies.index', ['policy_id' => $policy->id]),
+                'action_url' => route('admin.policies.index', ['policy_id' => $policy->id]),
             ];
         })->toArray();
     }
