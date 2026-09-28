@@ -10,53 +10,58 @@
                 <div class="px-4 group/item {{ $menuItem->isActive() ? 'active' : 'inactive' }}">
                     <a
                         class="flex gap-2 p-1.5 items-center cursor-pointer hover:rounded-lg {{ $menuItem->isActive() == 'active' ? 'bg-brandColor rounded-lg' : ' hover:bg-gray-100 hover:dark:bg-gray-950' }} peer transition-colors"
-                        :class="{
-                            'menu-parent-highlight': hoveringMenu == '{{$menuItem->getKey()}}'
-                        }"
+                        :style="hoveringMenu == '{{$menuItem->getKey()}}' ? 'background-color: var(--brand-color, #0E90D9) !important; color: #ffffff !important; border-radius: 0.5rem !important;' : ''"
                         href="{{ ! in_array($menuItem->getKey(), ['settings', 'configuration']) && $menuItem->haveChildren() ? 'javascript:void(0)' : $menuItem->getUrl() }}"
                         @mouseleave="!isMenuActive ? hoveringMenu = '' : {}"
                         @mouseover="hoveringMenu='{{$menuItem->getKey()}}'"
                         @click="isMenuActive = !isMenuActive"
                     >
-                        <span class="{{ $menuItem->getIcon() }} text-2xl {{ $menuItem->isActive() ? 'text-white' : ''}}"></span>
+                        <span
+                            class="{{ $menuItem->getIcon() }} text-2xl {{ $menuItem->isActive() ? 'text-white' : ''}}"
+                            :style="hoveringMenu == '{{$menuItem->getKey()}}' ? 'color: #ffffff !important;' : ''"
+                        ></span>
 
-                        <div class="flex-1 flex justify-between items-center text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap group-[.sidebar-collapsed]/container:hidden {{ $menuItem->isActive() ? 'text-white' : ''}} group">
+                        <div
+                            class="flex-1 flex justify-between items-center text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap group-[.sidebar-collapsed]/container:hidden {{ $menuItem->isActive() ? 'text-white' : ''}} group"
+                            :style="hoveringMenu == '{{$menuItem->getKey()}}' ? 'color: #ffffff !important;' : ''"
+                        >
                             <p>{{ $menuItem->getName() }}</p>
                         
                             @if ( ! in_array($menuItem->getKey(), ['settings', 'configuration']) && $menuItem->haveChildren())
-                                <i class="icon-right-arrow rtl:icon-left-arrow invisible text-2xl group-hover/item:visible transition-transform duration-200 {{ $menuItem->isActive() ? 'text-white' : ''}}"></i>
+                                <i
+                                    class="icon-right-arrow rtl:icon-left-arrow invisible text-2xl group-hover/item:visible transition-transform duration-200 {{ $menuItem->isActive() ? 'text-white' : ''}}"
+                                    :style="hoveringMenu == '{{$menuItem->getKey()}}' ? 'color: #ffffff !important; visibility: visible !important;' : ''"
+                                ></i>
                             @endif
                         </div>
                     </a>
 
-                    <!-- Submenu -->
+                    <!-- Submenu Flyout -->
                     @if (
                         ! in_array($menuItem->getKey(), ['settings', 'configuration'])
                         && $menuItem->haveChildren()
                     )
                         <div
-                            class="absolute top-0 hidden flex-col ltr:left-[200px] rtl:right-[199px] group-[.sidebar-collapsed]/container:ltr:left-[70px] group-[.sidebar-collapsed]/container:rtl:right-[69px]"
-                            :class="[isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}') ? '!flex' : 'hidden']"
+                            class="sidebar-flyout-panel fixed top-[54px] z-[10005] h-[calc(100vh-54px)] w-[220px] max-lg:hidden ltr:left-[200px] rtl:right-[200px] group-[.sidebar-collapsed]/container:ltr:left-[70px] group-[.sidebar-collapsed]/container:rtl:right-[70px] shadow-2xl border-r border-slate-300 dark:border-slate-800"
+                            :class="[isMenuActive && (hoveringMenu == '{{$menuItem->getKey()}}') ? 'flex flex-col' : 'hidden']"
+                            style="background-color: #f1f5f9;"
                         >
-                            <div
-                                class="sidebar-flyout-panel sidebar-rounded fixed z-[1000] h-full min-w-[180px] max-w-max pb-6 max-lg:hidden ltr:border-r rtl:border-x"
-                            >
-                                <div class="journal-scroll h-[calc(100vh-60px)] overflow-hidden">
-                                    <nav class="grid w-full gap-1 pt-1">
-                                        @foreach ($menuItem->getChildren() as $subMenuItem)
-                                            <div class="px-3 group/item {{ $subMenuItem->isActive() ? 'active' : 'inactive' }}">
-                                                <a
-                                                    href="{{ $subMenuItem->getUrl() }}"
-                                                    class="sidebar-flyout-item flex gap-2.5 px-3 py-2 items-center cursor-pointer {{ $subMenuItem->isActive() == 'active' ? 'active' : '' }} peer"
-                                                >
-                                                    <p class="font-medium text-sm whitespace-nowrap">
-                                                        {{ $subMenuItem->getName() }}
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        @endforeach
-                                    </nav>
-                                </div>
+                            <div class="journal-scroll h-full overflow-y-auto px-2 pt-2.5 pb-6">
+                                <nav class="grid w-full gap-1">
+                                    @foreach ($menuItem->getChildren() as $subMenuItem)
+                                        <div class="group/item {{ $subMenuItem->isActive() ? 'active' : 'inactive' }}">
+                                            <a
+                                                href="{{ $subMenuItem->getUrl() }}"
+                                                class="sidebar-flyout-item flex gap-2.5 px-3 py-2 items-center cursor-pointer rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-200 {{ $subMenuItem->isActive() == 'active' ? 'active' : '' }} peer transition-colors"
+                                                style="{{ $subMenuItem->isActive() == 'active' ? 'background-color: var(--brand-color, #0E90D9) !important; color: #ffffff !important;' : '' }}"
+                                            >
+                                                <p class="font-medium text-sm whitespace-nowrap">
+                                                    {{ $subMenuItem->getName() }}
+                                                </p>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </nav>
                             </div>
                         </div>
                     @endif
@@ -74,76 +79,16 @@
 </div>
 
 <style>
-    /* Notable background, fixed coordinates and elevation for deployed flyout submenu */
-    .sidebar-flyout-panel {
-        position: fixed !important;
-        left: 200px !important;
-        top: 52px !important; /* Raised up neatly under the navbar */
-        width: 220px !important;
-        min-width: 220px !important;
-        background-color: #f1f5f9 !important; /* Noticeable soft slate-100 */
-        box-shadow: 4px 4px 15px -3px rgba(0, 0, 0, 0.12), 2px 2px 6px -2px rgba(0, 0, 0, 0.06) !important;
-        border-right: 1px solid #cbd5e1 !important;
-        border-bottom: 1px solid #cbd5e1 !important;
-        padding-top: 6px !important;
-        z-index: 10005 !important;
-    }
-    .group-[.sidebar-collapsed]/container .sidebar-flyout-panel {
-        left: 70px !important;
-    }
-    [dir="rtl"] .sidebar-flyout-panel {
-        left: auto !important;
-        right: 200px !important;
-        border-right: none !important;
-        border-left: 1px solid #cbd5e1 !important;
-    }
-    [dir="rtl"] .group-[.sidebar-collapsed]/container .sidebar-flyout-panel {
-        right: 70px !important;
-    }
-
     .dark .sidebar-flyout-panel {
-        background-color: #1e293b !important; /* Dark mode slate-800 */
-        border-right: 1px solid #334155 !important;
-        border-bottom: 1px solid #334155 !important;
-        box-shadow: 4px 4px 15px -3px rgba(0, 0, 0, 0.35) !important;
-    }
-
-    /* Submenu item links inside flyout */
-    .sidebar-flyout-item {
-        color: #334155 !important;
-        border-radius: 0.5rem !important;
-        transition: background-color 0.15s ease, color 0.15s ease !important;
-    }
-    .sidebar-flyout-item:hover {
-        background-color: #e2e8f0 !important;
-        color: #0f172a !important;
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
     }
     .dark .sidebar-flyout-item {
-        color: #e2e8f0 !important;
+        color: #cbd5e1 !important;
     }
     .dark .sidebar-flyout-item:hover {
         background-color: #334155 !important;
         color: #ffffff !important;
-    }
-    .sidebar-flyout-item.active {
-        background-color: var(--brand-color, #0E90D9) !important;
-        color: #ffffff !important;
-        font-weight: 600 !important;
-    }
-
-    /* Parent menu item when deployed / hovering */
-    .menu-parent-highlight {
-        background-color: var(--brand-color, #0E90D9) !important;
-        border-radius: 0.5rem !important;
-    }
-    .menu-parent-highlight span,
-    .menu-parent-highlight div,
-    .menu-parent-highlight p,
-    .menu-parent-highlight i {
-        color: #ffffff !important;
-    }
-    .menu-parent-highlight i {
-        visibility: visible !important;
     }
 </style>
 
