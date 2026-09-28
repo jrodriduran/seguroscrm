@@ -74,18 +74,38 @@
 </div>
 
 <style>
-    /* Notable background and elevation for deployed flyout submenu */
+    /* Notable background, fixed coordinates and elevation for deployed flyout submenu */
     .sidebar-flyout-panel {
-        background-color: #f1f5f9 !important; /* Noticeable soft slate-100 */
-        box-shadow: 4px 0 15px -3px rgba(0, 0, 0, 0.12), 2px 0 6px -2px rgba(0, 0, 0, 0.06) !important;
-        border-right: 1px solid #cbd5e1 !important;
+        position: fixed !important;
+        left: 200px !important;
         top: 52px !important; /* Raised up neatly under the navbar */
+        width: 220px !important;
+        min-width: 220px !important;
+        background-color: #f1f5f9 !important; /* Noticeable soft slate-100 */
+        box-shadow: 4px 4px 15px -3px rgba(0, 0, 0, 0.12), 2px 2px 6px -2px rgba(0, 0, 0, 0.06) !important;
+        border-right: 1px solid #cbd5e1 !important;
+        border-bottom: 1px solid #cbd5e1 !important;
         padding-top: 6px !important;
+        z-index: 10005 !important;
     }
+    .group-[.sidebar-collapsed]/container .sidebar-flyout-panel {
+        left: 70px !important;
+    }
+    [dir="rtl"] .sidebar-flyout-panel {
+        left: auto !important;
+        right: 200px !important;
+        border-right: none !important;
+        border-left: 1px solid #cbd5e1 !important;
+    }
+    [dir="rtl"] .group-[.sidebar-collapsed]/container .sidebar-flyout-panel {
+        right: 70px !important;
+    }
+
     .dark .sidebar-flyout-panel {
         background-color: #1e293b !important; /* Dark mode slate-800 */
         border-right: 1px solid #334155 !important;
-        box-shadow: 4px 0 15px -3px rgba(0, 0, 0, 0.35) !important;
+        border-bottom: 1px solid #334155 !important;
+        box-shadow: 4px 4px 15px -3px rgba(0, 0, 0, 0.35) !important;
     }
 
     /* Submenu item links inside flyout */
