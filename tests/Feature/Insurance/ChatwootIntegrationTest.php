@@ -38,8 +38,9 @@ function createTestLeadForChatwoot(): Lead
         'lead_pipeline_stage_id' => $stage->id,
         'person_id' => $person->id,
         'user_id' => $admin->id,
-        'tcpa_consent_given' => 1,
-        'tcpa_consent_at' => now(),
+        'has_tcpa_consent' => true,
+        'tcpa_consented_at' => now(),
+        'tcpa_consent_type' => 'digital_form',
     ]);
 }
 
