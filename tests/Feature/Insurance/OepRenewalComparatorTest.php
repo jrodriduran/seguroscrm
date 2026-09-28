@@ -1,6 +1,5 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
 use Webkul\Contact\Models\Person;

@@ -198,10 +198,10 @@ class HouseholdMemberController extends Controller
     {
         $this->validate($request, [
             'projected_annual_income' => 'required|numeric|min:0',
-            'household_size'          => 'nullable|integer|min:1|max:20',
-            'tax_year'                => 'nullable|integer',
-            'state_code'              => 'nullable|string|max:2',
-            'notes'                   => 'nullable|string',
+            'household_size' => 'nullable|integer|min:1|max:20',
+            'tax_year' => 'nullable|integer',
+            'state_code' => 'nullable|string|max:2',
+            'notes' => 'nullable|string',
         ]);
 
         $lead = $this->leadRepository->findOrFail($leadId);
@@ -226,20 +226,20 @@ class HouseholdMemberController extends Controller
         $record = $lead->taxHouseholds()->updateOrCreate(
             ['tax_year' => $taxYear],
             [
-                'state_code'                  => $stateCode,
-                'household_size'              => $size,
-                'projected_annual_income'     => $annualIncome,
-                'fpl_guideline_threshold'     => $calc['fpl_guideline_threshold'],
-                'fpl_percentage'              => $calc['fpl_percentage'],
-                'fpl_category'                => $calc['fpl_category'],
-                'csr_tier'                    => $calc['csr_tier'],
-                'applicable_percentage'       => $calc['applicable_percentage'],
-                'max_annual_contribution'     => $calc['max_annual_contribution'],
-                'max_monthly_contribution'    => $calc['max_monthly_contribution'],
+                'state_code' => $stateCode,
+                'household_size' => $size,
+                'projected_annual_income' => $annualIncome,
+                'fpl_guideline_threshold' => $calc['fpl_guideline_threshold'],
+                'fpl_percentage' => $calc['fpl_percentage'],
+                'fpl_category' => $calc['fpl_category'],
+                'csr_tier' => $calc['csr_tier'],
+                'applicable_percentage' => $calc['applicable_percentage'],
+                'max_annual_contribution' => $calc['max_annual_contribution'],
+                'max_monthly_contribution' => $calc['max_monthly_contribution'],
                 'estimated_benchmark_premium' => $calc['estimated_benchmark_premium'],
-                'estimated_monthly_aptc'      => $calc['estimated_monthly_aptc'],
-                'estimated_net_premium'       => $calc['estimated_net_premium'],
-                'notes'                       => $request->input('notes'),
+                'estimated_monthly_aptc' => $calc['estimated_monthly_aptc'],
+                'estimated_net_premium' => $calc['estimated_net_premium'],
+                'notes' => $request->input('notes'),
             ]
         );
 
@@ -258,10 +258,10 @@ class HouseholdMemberController extends Controller
     {
         $this->validate($request, [
             'projected_annual_income' => 'required|numeric|min:0',
-            'household_size'          => 'required|integer|min:1|max:20',
-            'tax_year'                => 'nullable|integer',
-            'state_code'              => 'nullable|string|max:2',
-            'custom_benchmark'        => 'nullable|numeric|min:0',
+            'household_size' => 'required|integer|min:1|max:20',
+            'tax_year' => 'nullable|integer',
+            'state_code' => 'nullable|string|max:2',
+            'custom_benchmark' => 'nullable|numeric|min:0',
         ]);
 
         $annualIncome = (float) $request->input('projected_annual_income');

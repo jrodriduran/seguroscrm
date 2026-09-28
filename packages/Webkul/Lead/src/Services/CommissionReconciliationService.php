@@ -2,6 +2,7 @@
 
 namespace Webkul\Lead\Services;
 
+use Webkul\Lead\Exceptions\DuplicateStatementException;
 use Webkul\Lead\Models\CarrierStatement;
 use Webkul\Lead\Models\CarrierStatementItem;
 use Webkul\Lead\Models\InsuranceCommission;
@@ -26,7 +27,7 @@ class CommissionReconciliationService
         // Check if this exact file content has already been processed
         $existing = CarrierStatement::where('file_hash', $fileHash)->first();
         if ($existing) {
-            throw new \Webkul\Lead\Exceptions\DuplicateStatementException($existing, $fileHash);
+            throw new DuplicateStatementException($existing, $fileHash);
         }
 
         // 2. Create statement record
@@ -144,7 +145,7 @@ class CommissionReconciliationService
 
                 // Sync to Agent Ledger (credits on exact match, debits on clawbacks)
                 if ($comm->user_id) {
-                    $ledgerService = app(\Webkul\Lead\Services\AgentLedgerService::class);
+                    $ledgerService = app(AgentLedgerService::class);
                     $splitPercent = (float) ($comm->agent_split_percent ?: 70.0);
 
                     if ($status === 'matched_exact') {

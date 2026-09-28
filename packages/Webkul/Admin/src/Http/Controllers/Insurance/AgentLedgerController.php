@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use InvalidArgumentException;
-use Webkul\Lead\Models\AgentCommissionBalance;
 use Webkul\Lead\Models\AgentCommissionLedgerTransaction;
 use Webkul\Lead\Services\AgentLedgerService;
 use Webkul\User\Models\User;

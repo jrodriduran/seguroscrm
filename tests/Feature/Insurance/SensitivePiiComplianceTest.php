@@ -86,7 +86,7 @@ it('formats masked SSN correctly for secure UI rendering', function () {
 it('gracefully handles legacy unencrypted SSN without throwing DecryptException', function () {
     $lead = createPiiTestLead();
 
-    $member = new HouseholdMember();
+    $member = new HouseholdMember;
     $member->setRawAttributes([
         'lead_id' => $lead->id,
         'name' => 'Legacy Member',

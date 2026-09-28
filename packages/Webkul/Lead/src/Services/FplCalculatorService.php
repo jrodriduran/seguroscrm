@@ -10,31 +10,30 @@ class FplCalculatorService
     protected array $guidelines = [
         2026 => [
             'contiguous' => ['base' => 15960, 'additional' => 5600],
-            'AK'         => ['base' => 19950, 'additional' => 7000],
-            'HI'         => ['base' => 18350, 'additional' => 6440],
+            'AK' => ['base' => 19950, 'additional' => 7000],
+            'HI' => ['base' => 18350, 'additional' => 6440],
         ],
         2025 => [
             'contiguous' => ['base' => 15650, 'additional' => 5500],
-            'AK'         => ['base' => 19570, 'additional' => 6880],
-            'HI'         => ['base' => 17990, 'additional' => 6330],
+            'AK' => ['base' => 19570, 'additional' => 6880],
+            'HI' => ['base' => 17990, 'additional' => 6330],
         ],
         2024 => [
             'contiguous' => ['base' => 15060, 'additional' => 5380],
-            'AK'         => ['base' => 18810, 'additional' => 6730],
-            'HI'         => ['base' => 17310, 'additional' => 6190],
+            'AK' => ['base' => 18810, 'additional' => 6730],
+            'HI' => ['base' => 17310, 'additional' => 6190],
         ],
     ];
 
     /**
      * Calculate FPL, CSR tier, and estimated ACA subsidies.
      *
-     * @param int $householdSize Total tax household members (e.g. 3)
-     * @param float $annualIncome Projected Modified Adjusted Gross Income (MAGI)
-     * @param string $stateCode 2-letter US state code (default 'FL')
-     * @param int $taxYear Tax year (default 2026)
-     * @param int|null $applyingMembers Number of members seeking coverage (defaults to householdSize)
-     * @param float|null $customBenchmark Monthly gross benchmark premium (defaults to $480/member)
-     * @return array
+     * @param  int  $householdSize  Total tax household members (e.g. 3)
+     * @param  float  $annualIncome  Projected Modified Adjusted Gross Income (MAGI)
+     * @param  string  $stateCode  2-letter US state code (default 'FL')
+     * @param  int  $taxYear  Tax year (default 2026)
+     * @param  int|null  $applyingMembers  Number of members seeking coverage (defaults to householdSize)
+     * @param  float|null  $customBenchmark  Monthly gross benchmark premium (defaults to $480/member)
      */
     public function calculate(
         int $householdSize,
@@ -89,23 +88,23 @@ class FplCalculatorService
         }
 
         return [
-            'household_size'               => $householdSize,
-            'applying_members'             => $applyingMembers,
-            'projected_annual_income'      => $annualIncome,
-            'state_code'                   => $stateCode,
-            'tax_year'                     => $taxYear,
-            'fpl_guideline_threshold'      => $threshold,
-            'fpl_percentage'               => $fplPercentage,
-            'fpl_category'                 => $fplCategory,
-            'csr_tier'                     => $csrTier,
-            'csr_description'              => $csrDescription,
-            'applicable_percentage'        => $applicablePercentage,
-            'max_annual_contribution'      => $maxAnnualContribution,
-            'max_monthly_contribution'     => $maxMonthlyContribution,
-            'estimated_benchmark_premium'  => $totalBenchmarkMonthly,
-            'estimated_monthly_aptc'       => $estimatedMonthlyAptc,
-            'estimated_net_premium'        => $estimatedNetPremium,
-            'is_zero_premium_eligible'     => $estimatedNetPremium <= 0.0 && $fplCategory !== 'medicaid_gap',
+            'household_size' => $householdSize,
+            'applying_members' => $applyingMembers,
+            'projected_annual_income' => $annualIncome,
+            'state_code' => $stateCode,
+            'tax_year' => $taxYear,
+            'fpl_guideline_threshold' => $threshold,
+            'fpl_percentage' => $fplPercentage,
+            'fpl_category' => $fplCategory,
+            'csr_tier' => $csrTier,
+            'csr_description' => $csrDescription,
+            'applicable_percentage' => $applicablePercentage,
+            'max_annual_contribution' => $maxAnnualContribution,
+            'max_monthly_contribution' => $maxMonthlyContribution,
+            'estimated_benchmark_premium' => $totalBenchmarkMonthly,
+            'estimated_monthly_aptc' => $estimatedMonthlyAptc,
+            'estimated_net_premium' => $estimatedNetPremium,
+            'is_zero_premium_eligible' => $estimatedNetPremium <= 0.0 && $fplCategory !== 'medicaid_gap',
         ];
     }
 

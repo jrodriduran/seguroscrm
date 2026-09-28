@@ -4,9 +4,9 @@ namespace Webkul\Admin\Http\Controllers\Insurance;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Models\InsurancePolicy;
@@ -140,7 +140,7 @@ class InsuredPortalController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "¡Solicitud de Formulario 1095-A enviada con éxito! Su agente tramitará el documento con el Marketplace y se lo compartirá aquí.",
+            'message' => '¡Solicitud de Formulario 1095-A enviada con éxito! Su agente tramitará el documento con el Marketplace y se lo compartirá aquí.',
             'ticket_number' => $serviceCase->ticket_number,
             'data' => $serviceCase,
         ]);
@@ -164,4 +164,3 @@ class InsuredPortalController extends Controller
         return Storage::disk('public')->download($serviceCase->attachment_path);
     }
 }
-

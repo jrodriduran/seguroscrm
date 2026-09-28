@@ -1,6 +1,5 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Models\CarrierStatement;

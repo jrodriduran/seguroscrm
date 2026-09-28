@@ -3,7 +3,6 @@
 namespace Webkul\Lead\Services;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Webkul\Lead\Models\InsuranceCommission;
 use Webkul\Lead\Models\InsurancePolicy;
 
@@ -62,7 +61,7 @@ class RevenueShieldService
                     'missing_commission_amount' => $estimatedUnpaid,
                     'missing_commission_days' => $daysActive,
                     'missing_commission_notes' => sprintf(
-                        "Alerta Revenue Shield: Póliza activa sin comisión reportada por el carrier (%s) en los últimos %d días.",
+                        'Alerta Revenue Shield: Póliza activa sin comisión reportada por el carrier (%s) en los últimos %d días.',
                         $policy->carrier_name,
                         $daysActive
                     ),
@@ -153,7 +152,7 @@ class RevenueShieldService
         $policy = InsurancePolicy::findOrFail($policyId);
 
         $appendNote = sprintf(
-            "[%s] Reclamo de comisión resuelto: %s%s",
+            '[%s] Reclamo de comisión resuelto: %s%s',
             Carbon::now()->toDateTimeString(),
             $resolutionNote,
             $claimTicket ? " (Ticket Carrier: #{$claimTicket})" : ''

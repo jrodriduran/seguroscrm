@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Webkul\Lead\Models\AgentCommissionBalance;
 use Webkul\Lead\Models\AgentCommissionLedgerTransaction;
-use Webkul\User\Models\User;
 
 class AgentLedgerService
 {

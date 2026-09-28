@@ -3,6 +3,9 @@
 namespace Webkul\Lead\Providers;
 
 use Webkul\Core\Providers\BaseModuleServiceProvider;
+use Webkul\Lead\Models\Agency;
+use Webkul\Lead\Models\AgentCommissionBalance;
+use Webkul\Lead\Models\AgentCommissionLedgerTransaction;
 use Webkul\Lead\Models\AssignmentRule;
 use Webkul\Lead\Models\HouseholdMember;
 use Webkul\Lead\Models\Lead;
@@ -22,9 +25,6 @@ use Webkul\Lead\Models\SlaRule;
 use Webkul\Lead\Models\Source;
 use Webkul\Lead\Models\Stage;
 use Webkul\Lead\Models\Type;
-use Webkul\Lead\Models\Agency;
-use Webkul\Lead\Models\AgentCommissionBalance;
-use Webkul\Lead\Models\AgentCommissionLedgerTransaction;
 use Webkul\Lead\Models\UserAgentLicense;
 
 class ModuleServiceProvider extends BaseModuleServiceProvider

@@ -2,10 +2,13 @@
 
 namespace Webkul\User\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
+use Webkul\Lead\Models\Agency;
 use Webkul\Lead\Models\UserAgentLicense;
 use Webkul\User\Contracts\User as UserContract;
 
@@ -145,7 +148,7 @@ class User extends Authenticatable implements UserContract
         return $this->agentLicenses()
             ->where('state_code', strtoupper($stateCode))
             ->where('status', 'active')
-            ->whereDate('expires_at', '>=', \Carbon\Carbon::today())
+            ->whereDate('expires_at', '>=', Carbon::today())
             ->get()
             ->contains(function ($lic) use ($line) {
                 $lines = $lic->lines_of_authority ?? [];
@@ -163,8 +166,8 @@ class User extends Authenticatable implements UserContract
     /**
      * Get the agency that this user belongs to.
      */
-    public function agency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function agency(): BelongsTo
     {
-        return $this->belongsTo(\Webkul\Lead\Models\Agency::class);
+        return $this->belongsTo(Agency::class);
     }
 }

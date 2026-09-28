@@ -4,7 +4,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Webkul\Activity\Models\Activity;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Exceptions\TcpaConsentRequiredException;
 use Webkul\Lead\Models\Lead;

@@ -9,10 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Webkul\Contact\Models\PersonProxy;
+use Webkul\Lead\Traits\BelongsToAgency;
 use Webkul\Quote\Models\Quote;
 use Webkul\User\Models\User;
-
-use Webkul\Lead\Traits\BelongsToAgency;
 
 class InsurancePolicy extends Model
 {

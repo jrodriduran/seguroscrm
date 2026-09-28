@@ -5,7 +5,9 @@ namespace Webkul\Admin\Http\Controllers\Insurance;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Webkul\Activity\Models\ActivityProxy;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Services\PolicyRetentionService;
@@ -126,14 +128,14 @@ class BookOfBusinessController extends Controller
         // Also if policy is linked to lead, record an activity
         if ($policy->lead_id) {
             try {
-                $activity = \Webkul\Activity\Models\ActivityProxy::modelClass()::create([
+                $activity = ActivityProxy::modelClass()::create([
                     'title' => "Primer Pago (Binder) Confirmado - Póliza #{$policy->policy_number}",
                     'type' => 'note',
                     'comment' => "Pago inicial verificado exitosamente con confirmación #{$validated['confirmation_number']} vía {$validated['payment_method']}. Cobertura médica activada y en vigor.",
                     'user_id' => auth()->guard('user')->id() ?: $policy->user_id,
                 ]);
 
-                \Illuminate\Support\Facades\DB::table('lead_activities')->insert([
+                DB::table('lead_activities')->insert([
                     'lead_id' => $policy->lead_id,
                     'activity_id' => $activity->id,
                 ]);

@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Webkul\Admin\Http\Controllers\Controller;
+use Webkul\Lead\Exceptions\DuplicateStatementException;
 use Webkul\Lead\Models\CarrierStatement;
 use Webkul\Lead\Models\InsuranceCommission;
 use Webkul\Lead\Models\InsuranceCommissionRate;
@@ -286,7 +287,7 @@ class CommissionController extends Controller
                 $userId,
                 $originalFileName
             );
-        } catch (\Webkul\Lead\Exceptions\DuplicateStatementException $e) {
+        } catch (DuplicateStatementException $e) {
             return response()->json([
                 'success' => false,
                 'is_duplicate' => true,

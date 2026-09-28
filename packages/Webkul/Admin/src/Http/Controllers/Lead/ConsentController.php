@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Webkul\Core\Traits\PDFHandler;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\LeadConsent;
+use Webkul\Lead\Models\LeadConsentVersion;
 
 class ConsentController extends Controller
 {
@@ -142,7 +143,7 @@ class ConsentController extends Controller
 
                 if (! $alreadyArchived) {
                     $vNum = ((int) $consent->versions()->max('version_number')) + 1;
-                    $fileHash = \Webkul\Lead\Models\LeadConsentVersion::generateHash(
+                    $fileHash = LeadConsentVersion::generateHash(
                         (string) $consent->signature_data,
                         (string) $consent->consent_text,
                         (string) $consent->client_name,
@@ -150,7 +151,7 @@ class ConsentController extends Controller
                         $consent->ip_address
                     );
 
-                    \Webkul\Lead\Models\LeadConsentVersion::create([
+                    LeadConsentVersion::create([
                         'lead_consent_id' => $consent->id,
                         'lead_id' => $consent->lead_id,
                         'version_number' => $vNum,

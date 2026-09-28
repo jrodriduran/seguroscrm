@@ -2,7 +2,6 @@
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Webkul\Lead\Models\AssignmentRule;
 use Webkul\Lead\Models\Lead;
