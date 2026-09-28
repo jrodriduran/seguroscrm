@@ -174,5 +174,5 @@ it('automatically creates an InsurancePolicy record when a health quote is conve
     expect($policy)->not->toBeNull();
     expect($policy->carrier_name)->toBe('Ambetter');
     expect($policy->net_premium)->toBe(30.00);
-    expect($policy->status)->toBe('active');
+    expect($policy->status)->toBe('binder_pending');
 });
