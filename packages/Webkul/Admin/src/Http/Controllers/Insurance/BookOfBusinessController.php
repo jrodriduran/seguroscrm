@@ -160,6 +160,12 @@ class BookOfBusinessController extends Controller
 
         return response()->json([
             'success' => true,
+            'policy' => [
+                'id' => $policy->id,
+                'policy_number' => $policy->policy_number,
+                'status' => $policy->status,
+                'effectuation_status' => $policy->effectuation_status,
+            ],
             'policy_number' => $policy->policy_number,
             'status' => $policy->status,
             'binder_payment_status' => $policy->binder_payment_status,

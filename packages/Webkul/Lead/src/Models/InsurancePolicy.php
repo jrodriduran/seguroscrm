@@ -98,6 +98,7 @@ class InsurancePolicy extends Model
         'days_overdue',
         'whatsapp_payment_reminder',
         'portal_url',
+        'effectuation_status',
     ];
 
     protected static function booted(): void
@@ -213,6 +214,15 @@ class InsurancePolicy extends Model
         }
 
         return (int) $this->paid_to_date->diffInDays($now, false);
+    }
+
+    public function getEffectuationStatusAttribute(): string
+    {
+        if (in_array($this->binder_payment_status, ['paid', 'waived_zero_premium']) || $this->status === 'active') {
+            return 'effectuated';
+        }
+
+        return 'pending_binder';
     }
 
     /**
@@ -430,8 +440,10 @@ class InsurancePolicy extends Model
         ?string $paidAt = null,
         ?string $paidToDate = null,
         ?int $userId = null,
-        ?string $notes = null
+        ?string $notes = null,
+        ?string $paymentMethod = null
     ): self {
+        $method = $paymentMethod ?: $method;
         $paidTimestamp = $paidAt ? Carbon::parse($paidAt) : now();
         $newPaidTo = $paidToDate ? Carbon::parse($paidToDate) : ($this->effective_date ? Carbon::parse($this->effective_date)->endOfMonth() : now()->endOfMonth());
 

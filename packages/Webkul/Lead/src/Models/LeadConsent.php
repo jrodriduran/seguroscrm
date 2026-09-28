@@ -96,8 +96,9 @@ class LeadConsent extends Model implements LeadConsentContract
     /**
      * Record client signature and freeze immutable version with cryptographic hash.
      */
-    public function recordSignature(string $signatureData, ?string $ip = null, ?string $userAgent = null, ?string $pdfPath = null): LeadConsentVersion
+    public function recordSignature(string $signatureData, ?string $ip = null, ?string $userAgent = null, ?string $pdfPath = null, ?string $ipAddress = null): LeadConsentVersion
     {
+        $ip = $ip ?: $ipAddress;
         $signedAt = now();
         $this->update([
             'status' => 'signed',
