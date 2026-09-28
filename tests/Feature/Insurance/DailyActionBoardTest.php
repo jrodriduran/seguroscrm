@@ -50,12 +50,11 @@ it('compiles critical urgent actions across binder, dmi, and grace periods in th
     // 2. DMI Inconsistency with 7 days remaining
     $dmiDoc = LeadDmiDocument::create([
         'lead_id' => $lead->id,
-        'dmi_type' => 'income',
+        'doc_type' => 'income',
         'title' => 'W-2 Inconsistency Verification',
-        'days_remaining' => 7,
+        'notice_date' => Carbon::today()->subDays(83),
+        'deadline_date' => Carbon::today()->addDays(7),
         'status' => 'pending_upload',
-        'due_date' => Carbon::today()->addDays(7),
-        'urgency_level' => 'critical',
     ]);
 
     // 3. Grace Period Month 2-3 Policy

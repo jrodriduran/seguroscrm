@@ -93,13 +93,13 @@ class DailyActionBoardService
     {
         $query = LeadDmiDocument::with(['lead.person'])
             ->where('status', 'pending_upload')
-            ->whereDate('due_date', '<=', Carbon::today()->addDays(15));
+            ->whereDate('deadline_date', '<=', Carbon::today()->addDays(15));
 
         if ($userId) {
             $query->whereHas('lead', fn ($q) => $q->where('user_id', $userId));
         }
 
-        $docs = $query->orderBy('due_date', 'asc')->limit(15)->get();
+        $docs = $query->orderBy('deadline_date', 'asc')->limit(15)->get();
 
         return $docs->map(function ($doc) {
             $days = (int) $doc->days_remaining;
@@ -107,11 +107,11 @@ class DailyActionBoardService
             return [
                 'id' => $doc->id,
                 'lead_id' => $doc->lead_id,
-                'dmi_type' => $doc->dmi_type,
+                'dmi_type' => $doc->doc_type ?? $doc->dmi_type,
                 'title' => $doc->title,
                 'client_name' => $doc->lead?->person?->name ?? 'Asegurado',
                 'client_phone' => $this->extractLeadPhone($doc->lead),
-                'due_date' => $doc->due_date?->format('Y-m-d'),
+                'due_date' => $doc->deadline_date ? Carbon::parse($doc->deadline_date)->format('Y-m-d') : null,
                 'days_remaining' => $days,
                 'urgency' => $days <= 5 ? 'critical' : ($days <= 10 ? 'warning' : 'info'),
                 'action_url' => route('admin.leads.view', $doc->lead_id).'?tab=dmi_documents',

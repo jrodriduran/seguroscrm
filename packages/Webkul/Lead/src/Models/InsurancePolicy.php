@@ -375,6 +375,7 @@ class InsurancePolicy extends Model
             'variance' => [
                 'gross_premium_diff' => $grossDiff,
                 'aptc_subsidy_diff' => $subsidyDiff,
+                'subsidy_diff' => $subsidyDiff,
                 'net_premium_diff' => $netDiff,
                 'deductible_diff' => $deductibleDiff,
                 'moop_diff' => $moopDiff,
