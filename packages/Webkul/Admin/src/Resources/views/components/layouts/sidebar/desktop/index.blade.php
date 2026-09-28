@@ -190,8 +190,9 @@
                     <a
                         class="ghl-menu-link flex gap-2.5 px-2.5 py-2 items-center cursor-pointer rounded-xl transition-all duration-200 peer"
                         :class="{
-                            'ghl-menu-active': {{ $isItemActive ? 'true' : 'false' }} || (isMenuActive && hoveringMenu == '{{$key}}'),
-                            'ghl-menu-hover': hoveringMenu != '{{$key}}' && {{ $isItemActive ? 'false' : 'true' }}
+                            'ghl-menu-active': {{ $isItemActive ? 'true' : 'false' }},
+                            'ghl-menu-deployed': hoveringMenu == '{{$key}}' && !{{ $isItemActive ? 'true' : 'false' }},
+                            'ghl-menu-hover': hoveringMenu != '{{$key}}' && !{{ $isItemActive ? 'true' : 'false' }}
                         }"
                         href="{{ ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren() ? 'javascript:void(0)' : $menuItem->getUrl() }}"
                         @click="isMenuActive = !isMenuActive; hoveringMenu = '{{$key}}';"
@@ -224,13 +225,13 @@
                         && $menuItem->haveChildren()
                     )
                         <div
-                            class="ghl-flyout-card fixed z-[10010] w-[252px] max-lg:hidden {{ $isLowerItem ? 'ghl-flyout-bottom' : '' }}"
-                            :class="[isMenuActive && (hoveringMenu == '{{$key}}') ? '!opacity-100 !visible !pointer-events-auto !translate-x-0' : '']"
+                            class="ghl-flyout-card fixed z-[10010] w-[256px] max-lg:hidden {{ $isLowerItem ? 'ghl-flyout-bottom' : '' }}"
+                            :class="{'!flex': hoveringMenu == '{{$key}}'}"
                             style="left: 226px;"
                         >
-                            <div class="ghl-card-inner w-full flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xl overflow-hidden">
+                            <div class="ghl-card-inner w-full flex flex-col rounded-2xl border overflow-hidden">
                                 <!-- Card Header -->
-                                <div class="px-3.5 py-2.5 bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-800/80 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <div class="px-3.5 py-2.5 bg-gradient-to-r from-blue-50/80 via-slate-50 to-white dark:from-slate-800 dark:to-slate-800/80 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <span class="w-2.5 h-2.5 rounded-full shadow-xs" style="background-color: {{ $cfg['color'] }};"></span>
                                         <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-200">
@@ -343,6 +344,25 @@
         color: #ffffff !important;
     }
 
+    /* Deployed menu item (notable background when submenus pop out) */
+    .ghl-menu-deployed {
+        background-color: #E0F2FE !important;
+        border: 1px solid #7DD3FC !important;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.16) !important;
+    }
+    .ghl-menu-deployed .ghl-menu-text {
+        color: #0369A1 !important;
+        font-weight: 700 !important;
+    }
+    .ghl-menu-deployed .ghl-menu-arrow {
+        color: #0284C7 !important;
+        transform: translateX(2px) !important;
+    }
+    .dark .ghl-menu-deployed {
+        background-color: #0c4a6e !important;
+        border-color: #0284c7 !important;
+    }
+
     /* Hover Link */
     .ghl-menu-hover:hover {
         background-color: #f8fafc !important;
@@ -355,12 +375,14 @@
 
     /* Popout Flyout Card (GoHighLevel floating menu) */
     .ghl-flyout-card {
-        margin-top: -36px !important;
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transform: translateX(-4px) scale(0.98);
-        transition: opacity 0.16s ease, transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.16s;
+        display: none !important;
+        margin-top: -46px !important;
+        z-index: 10020 !important;
+    }
+    .ghl-flyout-card.\!flex,
+    .group\/item:hover > .ghl-flyout-card {
+        display: flex !important;
+        animation: ghlFlyoutSlide 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     /* Smooth hover bridge so cursor never drops flyout */
     .ghl-flyout-card::before {
@@ -368,18 +390,11 @@
         position: absolute;
         top: -12px;
         bottom: -12px;
-        left: -18px;
-        width: 20px;
-    }
-    /* Pure CSS hover activation */
-    .group\/item:hover > .ghl-flyout-card {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        transform: translateX(0) scale(1) !important;
+        left: -20px;
+        width: 22px;
     }
     .ghl-flyout-bottom {
-        margin-top: -125px !important;
+        margin-top: -120px !important;
     }
     .group-[.sidebar-collapsed]/container .ghl-flyout-card {
         left: 78px !important;
@@ -390,29 +405,67 @@
     }
     [dir="rtl"] .ghl-flyout-card::before {
         left: auto;
-        right: -18px;
+        right: -20px;
     }
     [dir="rtl"] .group-[.sidebar-collapsed]/container .ghl-flyout-card {
         right: 78px !important;
     }
 
+    /* Card Inner Background: Notable Soft Gray/Blue Tone */
     .ghl-card-inner {
-        box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.16), 0 8px 16px -4px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+        background-color: #F8FAFC !important;
+        border-color: #CBD5E1 !important;
+        box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06) !important;
     }
     .dark .ghl-card-inner {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
         box-shadow: 0 25px 45px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* Submenu Row Individual Card */
+    .ghl-subitem-row {
+        background-color: #ffffff !important;
+        border: 1px solid #E2E8F0 !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+    }
+    .ghl-subitem-row:hover {
+        background-color: #E0F2FE !important;
+        border-color: #BAE6FD !important;
+        color: #0284C7 !important;
+        transform: translateX(3px) !important;
+    }
+    .dark .ghl-subitem-row {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+    }
+    .dark .ghl-subitem-row:hover {
+        background-color: #0c4a6e !important;
+        border-color: #0284c7 !important;
     }
 
     /* Active Subitem inside Popout */
     .ghl-subitem-active {
-        background-color: #eff6ff !important;
+        background-color: #EFF6FF !important;
         color: #2563eb !important;
-        border: 1px solid #bfdbfe !important;
+        border-color: #93C5FD !important;
+        font-weight: 700 !important;
     }
     .dark .ghl-subitem-active {
         background-color: #1e3a8a !important;
         color: #93c5fd !important;
         border-color: #2563eb !important;
+    }
+
+    @keyframes ghlFlyoutSlide {
+        from {
+            opacity: 0;
+            transform: translateX(-6px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
     }
 
     /* Desktop layout spacing guarantees main content is never covered */
