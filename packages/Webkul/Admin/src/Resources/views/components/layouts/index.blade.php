@@ -91,14 +91,14 @@
 
         @media (min-width: 1024px) {
             .admin-main-content {
-                padding-left: 236px !important;
+                padding-left: 248px !important;
             }
             .sidebar-collapsed .admin-main-content {
                 padding-left: 85px !important;
             }
             [dir="rtl"] .admin-main-content {
                 padding-left: 16px !important;
-                padding-right: 236px !important;
+                padding-right: 248px !important;
             }
             [dir="rtl"] .sidebar-collapsed .admin-main-content {
                 padding-left: 16px !important;

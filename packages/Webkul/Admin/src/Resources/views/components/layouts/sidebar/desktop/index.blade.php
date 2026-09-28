@@ -182,24 +182,14 @@
                     $isLowerItem = in_array($key, ['contacts', 'products', 'settings', 'configuration']);
                 @endphp
 
-                <div
-                    class="group/item relative my-0.5 {{ $isItemActive ? 'active' : 'inactive' }}"
-                    @mouseenter="hoveringMenu = '{{$key}}'"
-                    @mouseleave="hoveringMenu == '{{$key}}' ? hoveringMenu = '' : {}"
-                >
+                <div class="sidebar-menu-row relative my-0.5 {{ $isItemActive ? 'active' : 'inactive' }}">
                     <a
-                        class="ghl-menu-link flex gap-2.5 px-2.5 py-2 items-center cursor-pointer rounded-xl transition-all duration-200 peer"
-                        :class="{
-                            'ghl-menu-active': {{ $isItemActive ? 'true' : 'false' }},
-                            'ghl-menu-deployed': hoveringMenu == '{{$key}}' && !{{ $isItemActive ? 'true' : 'false' }},
-                            'ghl-menu-hover': hoveringMenu != '{{$key}}' && !{{ $isItemActive ? 'true' : 'false' }}
-                        }"
+                        class="ghl-menu-link flex gap-2.5 px-2.5 py-2 items-center cursor-pointer rounded-xl transition-all duration-200 peer {{ $isItemActive ? 'ghl-menu-active' : '' }}"
                         href="{{ ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren() ? 'javascript:void(0)' : $menuItem->getUrl() }}"
-                        @click="isMenuActive = !isMenuActive; hoveringMenu = '{{$key}}';"
                     >
                         <!-- High-Tech Pastel Icon Container -->
                         <span
-                            class="ghl-icon-badge w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 transition-transform duration-200 group-hover/item:scale-105"
+                            class="ghl-icon-badge w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 transition-transform duration-200"
                             style="background-color: {{ $cfg['bg'] }}; border: 1px solid {{ $cfg['border'] }}; color: {{ $cfg['color'] }};"
                         >
                             {!! $svg !!}
@@ -212,7 +202,7 @@
                             </span>
                         
                             @if ( ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren())
-                                <span class="ghl-menu-arrow text-slate-400 group-hover/item:text-slate-600 dark:text-slate-500 text-xs font-bold transition-transform duration-200 group-hover/item:translate-x-0.5 shrink-0 pl-1">
+                                <span class="ghl-menu-arrow text-slate-400 dark:text-slate-500 text-xs font-bold transition-transform duration-200 shrink-0 pl-1">
                                     ›
                                 </span>
                             @endif
@@ -226,7 +216,6 @@
                     )
                         <div
                             class="ghl-flyout-card fixed z-[10010] w-[256px] max-lg:hidden {{ $isLowerItem ? 'ghl-flyout-bottom' : '' }}"
-                            :class="hoveringMenu == '{{$key}}' ? 'active-flyout' : 'hidden'"
                             style="left: 226px;"
                         >
                             <div class="ghl-card-inner w-full flex flex-col rounded-2xl border overflow-hidden">
@@ -344,33 +333,32 @@
         color: #ffffff !important;
     }
 
-    /* Deployed menu item (notable background when submenus pop out) */
-    .ghl-menu-deployed {
+    /* Hover Link & Deployed Notable Highlighting */
+    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) {
         background-color: #E0F2FE !important;
         border: 1px solid #7DD3FC !important;
-        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.16) !important;
-    }
-    .ghl-menu-deployed .ghl-menu-text {
-        color: #0369A1 !important;
-        font-weight: 700 !important;
-    }
-    .ghl-menu-deployed .ghl-menu-arrow {
-        color: #0284C7 !important;
-        transform: translateX(2px) !important;
-    }
-    .dark .ghl-menu-deployed {
-        background-color: #0c4a6e !important;
-        border-color: #0284c7 !important;
-    }
-
-    /* Hover Link */
-    .ghl-menu-hover:hover {
-        background-color: #f8fafc !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.18) !important;
         border-radius: 0.75rem !important;
         transform: translateX(3px) !important;
     }
-    .dark .ghl-menu-hover:hover {
-        background-color: #1e293b !important;
+    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) .ghl-menu-text {
+        color: #0369A1 !important;
+        font-weight: 700 !important;
+    }
+    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) .ghl-icon-badge {
+        background-color: #FFFFFF !important;
+        border-color: #BAE6FD !important;
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+        transform: scale(1.08) !important;
+    }
+    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) .ghl-menu-arrow {
+        color: #0284C7 !important;
+        transform: translateX(3px) !important;
+    }
+
+    .dark .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) {
+        background-color: #0c4a6e !important;
+        border-color: #0284c7 !important;
     }
 
     /* Popout Flyout Card (GoHighLevel floating menu) */
@@ -379,7 +367,7 @@
         margin-top: -46px !important;
         z-index: 10020 !important;
     }
-    .ghl-flyout-card.active-flyout {
+    .sidebar-menu-row:hover .ghl-flyout-card {
         display: flex !important;
         animation: ghlFlyoutSlide 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -390,7 +378,7 @@
         top: -12px;
         bottom: -12px;
         left: -20px;
-        width: 22px;
+        width: 24px;
     }
     .ghl-flyout-bottom {
         margin-top: -120px !important;
@@ -470,14 +458,14 @@
     /* Desktop layout spacing guarantees main content is never covered */
     @media (min-width: 1024px) {
         .group\/container.sidebar-not-collapsed > div:last-child > div:first-child {
-            padding-left: 236px !important;
+            padding-left: 248px !important;
         }
         .group\/container.sidebar-collapsed > div:last-child > div:first-child {
             padding-left: 85px !important;
         }
         [dir="rtl"] .group\/container.sidebar-not-collapsed > div:last-child > div:first-child {
             padding-left: 16px !important;
-            padding-right: 236px !important;
+            padding-right: 248px !important;
         }
         [dir="rtl"] .group\/container.sidebar-collapsed > div:last-child > div:first-child {
             padding-left: 16px !important;
