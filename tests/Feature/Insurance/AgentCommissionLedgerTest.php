@@ -176,7 +176,7 @@ it('provides agency ledger overview and agent detail endpoints via HTTP', functi
             'success' => true,
         ]);
 
-    expect($clawbackRes->json('balance.current_balance'))->toBe(250.0);
+    expect($clawbackRes->json('balance.current_balance'))->toEqual(250.0);
 
     // 4. Disburse via API
     $disburseRes = test()->actingAs($admin)->postJson("/admin/insurance/ledger/{$agent->id}/disburse", [
@@ -186,5 +186,5 @@ it('provides agency ledger overview and agent detail endpoints via HTTP', functi
     ]);
 
     $disburseRes->assertOk();
-    expect($disburseRes->json('balance.current_balance'))->toBe(50.0);
+    expect($disburseRes->json('balance.current_balance'))->toEqual(50.0);
 });

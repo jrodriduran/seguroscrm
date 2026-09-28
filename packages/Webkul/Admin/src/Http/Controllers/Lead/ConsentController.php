@@ -176,7 +176,6 @@ class ConsentController extends Controller
                         ->whereIn('status', ['active', 'signed'])
                         ->update([
                             'status' => 'superseded',
-                            'superseded_at' => now(),
                         ]);
                 }
             }

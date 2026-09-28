@@ -39,6 +39,14 @@ class LeadConsentVersion extends Model implements LeadConsentVersionContract
     ];
 
     /**
+     * Timestamp when version was superseded by a newer consent document.
+     */
+    public function getSupersededAtAttribute()
+    {
+        return $this->status === 'superseded' ? $this->updated_at : null;
+    }
+
+    /**
      * Parent LeadConsent relation.
      */
     public function consent(): BelongsTo
