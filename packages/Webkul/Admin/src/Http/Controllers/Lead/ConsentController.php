@@ -101,9 +101,10 @@ class ConsentController extends Controller
             'status' => 'revoked',
         ]);
 
-        // Update latest signed version without deleting signature or legal audit data
+        // Update latest signed/active version without deleting signature or legal audit data
         $latestSignedVersion = $consent->versions()
-            ->where('status', 'signed')
+            ->whereIn('status', ['active', 'signed'])
+            ->latest('id')
             ->first();
 
         if ($latestSignedVersion) {
@@ -172,8 +173,11 @@ class ConsentController extends Controller
                     ]);
                 } else {
                     $consent->versions()
-                        ->where('status', 'signed')
-                        ->update(['status' => 'superseded']);
+                        ->whereIn('status', ['active', 'signed'])
+                        ->update([
+                            'status' => 'superseded',
+                            'superseded_at' => now(),
+                        ]);
                 }
             }
 
@@ -211,6 +215,7 @@ class ConsentController extends Controller
         $auditTrail = $consent->versions->map(function ($ver) {
             return [
                 'version' => $ver->version_number,
+                'version_number' => $ver->version_number,
                 'status' => $ver->status,
                 'client_name' => $ver->client_name,
                 'agent_name' => $ver->agent_name,
@@ -218,7 +223,8 @@ class ConsentController extends Controller
                 'signed_at' => $ver->signed_at?->toIso8601String(),
                 'ip_address' => $ver->ip_address,
                 'user_agent' => $ver->user_agent,
-                'sha256_hash' => $ver->file_hash,
+                'consent_sha256' => $ver->consent_sha256 ?: $ver->file_hash,
+                'sha256_hash' => $ver->consent_sha256 ?: $ver->file_hash,
                 'integrity_verified' => $ver->verifyIntegrity(),
                 'revoked_at' => $ver->revoked_at?->toIso8601String(),
                 'revocation_reason' => $ver->revocation_reason,
@@ -227,8 +233,10 @@ class ConsentController extends Controller
 
         return response()->json([
             'success' => true,
+            'lead_id' => $lead->id,
             'regulation' => 'CMS 45 CFR § 155.220 (10-Year Record Retention Rule)',
             'retention_standard' => 'CMS 45 CFR 155.220 (10-Year Immutable Audit Trail)',
+            'generated_at' => now()->toIso8601String(),
             'consumer' => [
                 'name' => $consent->client_name,
                 'phone' => $consent->client_phone,
@@ -237,6 +245,8 @@ class ConsentController extends Controller
             ],
             'current_status' => $consent->status,
             'total_versions_archived' => $consent->versions->count(),
+            'total_versions' => $consent->versions->count(),
+            'versions' => $auditTrail,
             'audit_trail' => $auditTrail,
         ]);
     }

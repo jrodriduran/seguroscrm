@@ -15,6 +15,11 @@ it('isolates leads and policies between distinct agencies using agency global sc
     $pipeline = Pipeline::first() ?: Pipeline::create(['name' => 'Agency Pipeline', 'is_default' => 1]);
     $stage = Stage::where('lead_pipeline_id', $pipeline->id)->first() ?: Stage::create(['name' => 'New', 'code' => 'new', 'lead_pipeline_id' => $pipeline->id]);
 
+    $role = \Webkul\User\Models\Role::first() ?: \Webkul\User\Models\Role::create([
+        'name' => 'Agent Role',
+        'permission_type' => 'all',
+    ]);
+
     // 1. Create Agency A & User A
     $agencyA = Agency::create([
         'name' => 'Alpha Health Agency',
@@ -27,7 +32,7 @@ it('isolates leads and policies between distinct agencies using agency global sc
         'email' => 'agent.alpha.'.uniqid().'@example.com',
         'password' => Hash::make('password123'),
         'status' => 1,
-        'role_id' => 2,
+        'role_id' => $role->id,
         'agency_id' => $agencyA->id,
     ]);
 
@@ -43,7 +48,7 @@ it('isolates leads and policies between distinct agencies using agency global sc
         'email' => 'agent.beta.'.uniqid().'@example.com',
         'password' => Hash::make('password123'),
         'status' => 1,
-        'role_id' => 2,
+        'role_id' => $role->id,
         'agency_id' => $agencyB->id,
     ]);
 

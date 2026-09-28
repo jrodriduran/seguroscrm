@@ -14,8 +14,13 @@ Route::group(['middleware' => ['web', 'admin_locale', 'user']], function () {
         // Statements Reconciliation
         Route::get('reconciliation', 'reconciliationIndex')->name('admin.commissions.reconciliation.index');
         Route::post('reconciliation/upload', 'uploadStatement')->name('admin.commissions.reconciliation.upload');
+        Route::post('upload-statement', 'uploadStatement');
         Route::get('reconciliation/{id}', 'showStatement')->name('admin.commissions.reconciliation.show');
         Route::delete('reconciliation/{id}', 'deleteStatement')->name('admin.commissions.reconciliation.destroy');
+    });
+
+    Route::controller(CommissionController::class)->prefix('insurance/commissions')->group(function () {
+        Route::post('upload-statement', 'uploadStatement')->name('admin.insurance.commissions.upload_statement');
     });
 
     Route::controller(AgentLedgerController::class)->prefix('insurance/ledger')->group(function () {

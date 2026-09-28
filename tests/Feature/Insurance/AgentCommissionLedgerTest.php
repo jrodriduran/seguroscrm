@@ -7,8 +7,24 @@ use Webkul\User\Models\User;
 
 uses(DatabaseTransactions::class);
 
+function createAgentLedgerUser(array $attributes = []): User
+{
+    $role = \Webkul\User\Models\Role::first() ?: \Webkul\User\Models\Role::create([
+        'name' => 'Agent Role',
+        'permission_type' => 'all',
+    ]);
+
+    return User::create(array_merge([
+        'name' => 'Agent '.uniqid(),
+        'email' => 'agent.'.uniqid().'@example.com',
+        'password' => bcrypt('password123'),
+        'status' => 1,
+        'role_id' => $role->id,
+    ], $attributes));
+}
+
 it('creates initial agent commission balance in good standing', function () {
-    $user = User::factory()->create();
+    $user = createAgentLedgerUser();
     $service = app(AgentLedgerService::class);
 
     $balance = $service->getOrCreateBalance($user->id);
@@ -21,7 +37,7 @@ it('creates initial agent commission balance in good standing', function () {
 });
 
 it('credits commission and amortizes debt from prior clawbacks', function () {
-    $user = User::factory()->create();
+    $user = createAgentLedgerUser();
     $service = app(AgentLedgerService::class);
 
     // 1. Initial Credit: $100.00
@@ -81,7 +97,7 @@ it('credits commission and amortizes debt from prior clawbacks', function () {
 });
 
 it('disburses net payout and rejects disbursement exceeding available balance', function () {
-    $user = User::factory()->create();
+    $user = createAgentLedgerUser();
     $service = app(AgentLedgerService::class);
 
     $service->recordCommissionCredit(
@@ -115,8 +131,8 @@ it('disburses net payout and rejects disbursement exceeding available balance', 
 });
 
 it('provides agency ledger overview and agent detail endpoints via HTTP', function () {
-    $admin = User::first() ?: User::factory()->create();
-    $agent = User::factory()->create(['name' => 'Agent Patricia']);
+    $admin = User::first() ?: createAgentLedgerUser();
+    $agent = createAgentLedgerUser(['name' => 'Agent Patricia']);
 
     $service = app(AgentLedgerService::class);
     $service->recordCommissionCredit($agent->id, 300.00, 'POL-PAT-01', 'Oscar');

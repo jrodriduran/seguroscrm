@@ -68,7 +68,7 @@ it('records an immutable version with SHA-256 fingerprint when client signs cons
     expect($version->version_number)->toBe(1);
     expect($version->status)->toBe('active');
     expect($version->ip_address)->toBe('198.51.100.42');
-    expect($version->consent_sha256)->toHaveLength(64);
+    expect(strlen($version->consent_sha256))->toBe(64);
     expect($version->verifyIntegrity())->toBeTrue();
 
     // Verify parent consent status
