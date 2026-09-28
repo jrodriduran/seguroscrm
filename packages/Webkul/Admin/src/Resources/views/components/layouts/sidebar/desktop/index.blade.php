@@ -44,67 +44,80 @@
         'dashboard' => [
             'bg' => '#EEF2FF',
             'border' => '#C7D2FE',
-            'color' => '#4F46E5',
+            'color' => '#6366F1',
+            'glow' => 'rgba(99,102,241,0.15)',
         ],
         'leads' => [
             'bg' => '#E0F2FE',
             'border' => '#BAE6FD',
-            'color' => '#0284C7',
+            'color' => '#0EA5E9',
+            'glow' => 'rgba(14,165,233,0.15)',
         ],
         'quotes' => [
             'bg' => '#FEF3C7',
             'border' => '#FDE68A',
-            'color' => '#D97706',
+            'color' => '#F59E0B',
+            'glow' => 'rgba(245,158,11,0.15)',
         ],
         'policies' => [
             'bg' => '#D1FAE5',
             'border' => '#A7F3D0',
-            'color' => '#059669',
+            'color' => '#10B981',
+            'glow' => 'rgba(16,185,129,0.15)',
         ],
         'commissions' => [
             'bg' => '#DCFCE7',
             'border' => '#BBF7D0',
-            'color' => '#16A34A',
+            'color' => '#22C55E',
+            'glow' => 'rgba(34,197,94,0.15)',
         ],
         'mail' => [
             'bg' => '#DBEAFE',
             'border' => '#BFDBFE',
-            'color' => '#2563EB',
+            'color' => '#3B82F6',
+            'glow' => 'rgba(59,130,246,0.15)',
         ],
         'hierarchy' => [
             'bg' => '#F3E8FF',
             'border' => '#E9D5FF',
-            'color' => '#9333EA',
+            'color' => '#A855F7',
+            'glow' => 'rgba(168,85,247,0.15)',
         ],
         'activities' => [
             'bg' => '#FFE4E6',
             'border' => '#FECDD3',
-            'color' => '#E11D48',
+            'color' => '#F43F5E',
+            'glow' => 'rgba(244,63,94,0.15)',
         ],
         'insurance_analytics' => [
             'bg' => '#FAE8FF',
             'border' => '#F5D0FE',
-            'color' => '#C026D3',
+            'color' => '#D946EF',
+            'glow' => 'rgba(217,70,239,0.15)',
         ],
         'contacts' => [
             'bg' => '#CCFBF1',
             'border' => '#99F6E4',
-            'color' => '#0D9488',
+            'color' => '#14B8A6',
+            'glow' => 'rgba(20,184,166,0.15)',
         ],
         'products' => [
             'bg' => '#FFEDD5',
             'border' => '#FED7AA',
-            'color' => '#EA580C',
+            'color' => '#F97316',
+            'glow' => 'rgba(249,115,22,0.15)',
         ],
         'settings' => [
             'bg' => '#F1F5F9',
             'border' => '#E2E8F0',
-            'color' => '#475569',
+            'color' => '#64748B',
+            'glow' => 'rgba(100,116,139,0.10)',
         ],
         'configuration' => [
             'bg' => '#F4F4F5',
             'border' => '#E4E4E7',
-            'color' => '#52525B',
+            'color' => '#71717A',
+            'glow' => 'rgba(113,113,122,0.10)',
         ],
     ];
 
@@ -136,38 +149,38 @@
 
     $subItemConfig = [
         // Mail
-        'mail.inbox' => ['bg' => '#DBEAFE', 'color' => '#2563EB', 'badge' => ''],
-        'mail.draft' => ['bg' => '#FEF3C7', 'color' => '#D97706', 'badge' => ''],
-        'mail.outbox' => ['bg' => '#E0F2FE', 'color' => '#0284C7', 'badge' => ''],
-        'mail.sent' => ['bg' => '#D1FAE5', 'color' => '#059669', 'badge' => ''],
-        'mail.trash' => ['bg' => '#FFE4E6', 'color' => '#E11D48', 'badge' => ''],
+        'mail.inbox' => ['bg' => '#DBEAFE', 'color' => '#3B82F6', 'badge' => ''],
+        'mail.draft' => ['bg' => '#FEF3C7', 'color' => '#F59E0B', 'badge' => ''],
+        'mail.outbox' => ['bg' => '#E0F2FE', 'color' => '#0EA5E9', 'badge' => ''],
+        'mail.sent' => ['bg' => '#D1FAE5', 'color' => '#10B981', 'badge' => ''],
+        'mail.trash' => ['bg' => '#FFE4E6', 'color' => '#F43F5E', 'badge' => ''],
 
         // Contacts
-        'contacts.persons' => ['bg' => '#CCFBF1', 'color' => '#0D9488', 'badge' => 'Asegurados'],
-        'contacts.organizations' => ['bg' => '#EEF2FF', 'color' => '#4F46E5', 'badge' => 'Carriers'],
+        'contacts.persons' => ['bg' => '#CCFBF1', 'color' => '#14B8A6', 'badge' => 'Asegurados'],
+        'contacts.organizations' => ['bg' => '#EEF2FF', 'color' => '#6366F1', 'badge' => 'Carriers'],
 
         // Leads
-        'leads.team_radar' => ['bg' => '#F3E8FF', 'color' => '#9333EA', 'badge' => 'Radar SLA'],
+        'leads.team_radar' => ['bg' => '#F3E8FF', 'color' => '#A855F7', 'badge' => 'Radar SLA'],
 
         // Settings User
-        'settings.user' => ['bg' => '#EEF2FF', 'color' => '#4F46E5', 'badge' => ''],
-        'settings.user.groups' => ['bg' => '#EEF2FF', 'color' => '#4F46E5', 'badge' => 'Grupos'],
-        'settings.user.roles' => ['bg' => '#FEF3C7', 'color' => '#D97706', 'badge' => 'Roles'],
-        'settings.user.users' => ['bg' => '#E0F2FE', 'color' => '#0284C7', 'badge' => 'Usuarios'],
-        'settings.lead' => ['bg' => '#E0F2FE', 'color' => '#0284C7', 'badge' => ''],
-        'settings.lead.pipelines' => ['bg' => '#E0F2FE', 'color' => '#0284C7', 'badge' => 'Pipelines'],
-        'settings.lead.sources' => ['bg' => '#D1FAE5', 'color' => '#059669', 'badge' => 'Fuentes'],
-        'settings.lead.types' => ['bg' => '#FAE8FF', 'color' => '#C026D3', 'badge' => 'Tipos'],
+        'settings.user' => ['bg' => '#EEF2FF', 'color' => '#6366F1', 'badge' => ''],
+        'settings.user.groups' => ['bg' => '#EEF2FF', 'color' => '#6366F1', 'badge' => 'Grupos'],
+        'settings.user.roles' => ['bg' => '#FEF3C7', 'color' => '#F59E0B', 'badge' => 'Roles'],
+        'settings.user.users' => ['bg' => '#E0F2FE', 'color' => '#0EA5E9', 'badge' => 'Usuarios'],
+        'settings.lead' => ['bg' => '#E0F2FE', 'color' => '#0EA5E9', 'badge' => ''],
+        'settings.lead.pipelines' => ['bg' => '#E0F2FE', 'color' => '#0EA5E9', 'badge' => 'Pipelines'],
+        'settings.lead.sources' => ['bg' => '#D1FAE5', 'color' => '#10B981', 'badge' => 'Fuentes'],
+        'settings.lead.types' => ['bg' => '#FAE8FF', 'color' => '#D946EF', 'badge' => 'Tipos'],
     ];
 @endphp
 
 <div
     id="admin-sidebar"
     ref="sidebar"
-    class="duration-80 fixed top-[60px] z-[10002] h-full w-[220px] bg-white pt-2.5 transition-all group-[.sidebar-collapsed]/container:w-[70px] dark:border-gray-800 dark:bg-slate-900 max-lg:hidden ltr:border-r rtl:border-l shadow-xs"
+    class="duration-80 fixed top-[60px] z-[10002] h-full w-[220px] pt-2 transition-all group-[.sidebar-collapsed]/container:w-[70px] max-lg:hidden"
 >
     <div class="journal-scroll h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden group-[.sidebar-collapsed]/container:overflow-visible pb-14">
-        <nav class="grid w-full gap-0.5 px-2.5">
+        <nav class="grid w-full gap-[3px] px-2">
             <!-- Navigation Menu -->
             @foreach (menu()->getItems('admin') as $menuItem)
                 @php
@@ -175,65 +188,60 @@
                     $cfg = $menuConfig[$key] ?? [
                         'bg' => '#F1F5F9',
                         'border' => '#E2E8F0',
-                        'color' => '#475569',
+                        'color' => '#64748B',
+                        'glow' => 'rgba(100,116,139,0.10)',
                     ];
                     $svg = $svgIcons[$key] ?? '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>';
                     $isItemActive = (bool) $menuItem->isActive();
-                    $isLowerItem = in_array($key, ['contacts', 'products', 'settings', 'configuration']);
+                    $hasChildren = ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren();
                 @endphp
 
-                <div class="sidebar-menu-row relative my-0.5 {{ $isItemActive ? 'active' : 'inactive' }}">
+                <div
+                    class="nv-menu-row relative"
+                    data-has-flyout="{{ $hasChildren ? '1' : '0' }}"
+                    @if($hasChildren) @mouseenter="$event.currentTarget.querySelector('.nv-flyout')?.classList.add('nv-flyout-open'); positionFlyout($event.currentTarget)" @mouseleave="$event.currentTarget.querySelector('.nv-flyout')?.classList.remove('nv-flyout-open')" @endif
+                >
                     <a
-                        class="ghl-menu-link flex gap-2.5 px-2.5 py-2 items-center cursor-pointer rounded-xl transition-all duration-200 peer {{ $isItemActive ? 'ghl-menu-active' : '' }}"
+                        class="nv-menu-link flex gap-2.5 px-2 py-[7px] items-center cursor-pointer rounded-xl transition-all duration-200 {{ $isItemActive ? 'nv-active' : '' }}"
                         href="{{ ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren() ? 'javascript:void(0)' : $menuItem->getUrl() }}"
                     >
-                        <!-- High-Tech Pastel Icon Container -->
+                        <!-- Pastel Icon Badge -->
                         <span
-                            class="ghl-icon-badge w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 transition-transform duration-200"
-                            style="background-color: {{ $cfg['bg'] }}; border: 1px solid {{ $cfg['border'] }}; color: {{ $cfg['color'] }};"
+                            class="nv-icon w-[30px] h-[30px] rounded-[9px] flex items-center justify-center shrink-0 transition-all duration-200"
+                            style="background: {{ $cfg['bg'] }}; border: 1px solid {{ $cfg['border'] }}; color: {{ $cfg['color'] }}; box-shadow: 0 1px 4px {{ $cfg['glow'] }};"
                         >
                             {!! $svg !!}
                         </span>
 
-                        <!-- Menu Name & Chevron -->
+                        <!-- Label + Chevron -->
                         <div class="flex-1 min-w-0 flex justify-between items-center whitespace-nowrap group-[.sidebar-collapsed]/container:hidden">
-                            <span class="ghl-menu-text text-[13px] font-semibold text-slate-700 dark:text-slate-200 tracking-tight truncate transition-colors">
+                            <span class="nv-label text-[12.5px] font-semibold tracking-tight truncate transition-colors duration-150">
                                 {{ $menuItem->getName() }}
                             </span>
-                        
-                            @if ( ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren())
-                                <span class="ghl-menu-arrow text-slate-400 dark:text-slate-500 text-xs font-bold transition-transform duration-200 shrink-0 pl-1">
-                                    ›
-                                </span>
+
+                            @if ($hasChildren)
+                                <svg class="nv-chevron w-3.5 h-3.5 shrink-0 ml-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                             @endif
                         </div>
                     </a>
 
-                    <!-- GoHighLevel Popout Submenu Card -->
-                    @if (
-                        ! in_array($key, ['settings', 'configuration'])
-                        && $menuItem->haveChildren()
-                    )
-                        <div
-                            class="ghl-flyout-card fixed z-[10010] w-[256px] max-lg:hidden {{ $isLowerItem ? 'ghl-flyout-bottom' : '' }}"
-                            style="left: 226px;"
-                        >
-                            <div class="ghl-card-inner w-full flex flex-col rounded-2xl border overflow-hidden">
-                                <!-- Card Header -->
-                                <div class="px-3.5 py-2.5 bg-gradient-to-r from-blue-50/80 via-slate-50 to-white dark:from-slate-800 dark:to-slate-800/80 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+                    <!-- Flyout Submenu (JS-positioned, not CSS margin hacks) -->
+                    @if ($hasChildren)
+                        <div class="nv-flyout fixed z-[10020] w-[260px] max-lg:hidden" style="display:none;">
+                            <!-- Invisible hover bridge -->
+                            <div class="nv-bridge"></div>
+                            <div class="nv-flyout-inner">
+                                <!-- Header -->
+                                <div class="nv-flyout-header">
                                     <div class="flex items-center gap-2">
-                                        <span class="w-2.5 h-2.5 rounded-full shadow-xs" style="background-color: {{ $cfg['color'] }};"></span>
-                                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-200">
-                                            {{ $menuItem->getName() }}
-                                        </span>
+                                        <span class="nv-flyout-dot" style="background: {{ $cfg['color'] }};"></span>
+                                        <span class="nv-flyout-title">{{ $menuItem->getName() }}</span>
                                     </div>
-                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
-                                        {{ count($menuItem->getChildren()) }}
-                                    </span>
+                                    <span class="nv-flyout-count">{{ count($menuItem->getChildren()) }}</span>
                                 </div>
 
-                                <!-- Submenu Options List -->
-                                <div class="p-2 space-y-1">
+                                <!-- Items -->
+                                <div class="nv-flyout-items">
                                     @foreach ($menuItem->getChildren() as $subMenuItem)
                                         @php
                                             $subKey = $subMenuItem->getKey();
@@ -247,24 +255,21 @@
                                         @endphp
                                         <a
                                             href="{{ $subMenuItem->getUrl() }}"
-                                            class="ghl-subitem-row flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100/90 dark:hover:bg-slate-800 transition-all duration-150 {{ $subMenuItem->isActive() ? 'ghl-subitem-active' : '' }}"
+                                            class="nv-flyout-item {{ $subMenuItem->isActive() ? 'nv-flyout-item-active' : '' }}"
                                         >
                                             <div class="flex items-center gap-2.5 min-w-0">
                                                 <span
-                                                    class="w-7 h-7 rounded-lg flex items-center justify-center text-xs shadow-2xs shrink-0"
-                                                    style="background-color: {{ $subCfg['bg'] }}; color: {{ $subCfg['color'] }};"
+                                                    class="nv-sub-icon w-[26px] h-[26px] rounded-lg flex items-center justify-center shrink-0"
+                                                    style="background: {{ $subCfg['bg'] }}; color: {{ $subCfg['color'] }};"
                                                 >
                                                     {!! $subSvg !!}
                                                 </span>
-                                                <span class="truncate whitespace-nowrap">{{ $subMenuItem->getName() }}</span>
+                                                <span class="nv-sub-label truncate">{{ $subMenuItem->getName() }}</span>
                                             </div>
-
                                             @if($showBadge)
-                                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 shrink-0 ml-1">
-                                                    {{ $subCfg['badge'] }}
-                                                </span>
+                                                <span class="nv-badge">{{ $subCfg['badge'] }}</span>
                                             @else
-                                                <span class="text-slate-300 dark:text-slate-600 text-xs font-bold shrink-0 ml-1">›</span>
+                                                <svg class="nv-sub-arrow w-3 h-3 shrink-0 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                                             @endif
                                         </a>
                                     @endforeach
@@ -286,168 +291,297 @@
 </div>
 
 <style>
-    /* GoHighLevel Modern SaaS Aesthetics */
+    /* ═══════════════════════════════════════════════
+       2027 NEOMORPHIC SIDEBAR — Premium SaaS Design
+       ═══════════════════════════════════════════════ */
+
+    /* Sidebar Container — Subtle gradient background */
     #admin-sidebar {
-        background-color: #ffffff !important;
-        border-right: 1px solid #e2e8f0 !important;
-        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03) !important;
+        background: linear-gradient(180deg, #f8faff 0%, #f1f4fb 40%, #eef1f8 100%) !important;
+        border-right: 1px solid rgba(203, 213, 230, 0.6) !important;
+        box-shadow: 2px 0 20px rgba(15, 23, 42, 0.04), 1px 0 3px rgba(15, 23, 42, 0.02) !important;
     }
     .dark #admin-sidebar {
-        background-color: #0f172a !important;
-        border-right: 1px solid #1e293b !important;
+        background: linear-gradient(180deg, #0f172a 0%, #0c1322 60%, #0a0f1c 100%) !important;
+        border-right: 1px solid rgba(51, 65, 85, 0.5) !important;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3) !important;
     }
 
-    /* Clean Scrollbar inside Sidebar */
-    #admin-sidebar .journal-scroll::-webkit-scrollbar {
-        width: 4px;
-    }
+    /* Custom Scrollbar */
+    #admin-sidebar .journal-scroll::-webkit-scrollbar { width: 3px; }
     #admin-sidebar .journal-scroll::-webkit-scrollbar-thumb {
-        background-color: rgba(203, 213, 225, 0.6);
-        border-radius: 9999px;
+        background: rgba(148, 163, 184, 0.4);
+        border-radius: 99px;
     }
-    #admin-sidebar .journal-scroll::-webkit-scrollbar-track {
-        background: transparent;
+    #admin-sidebar .journal-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(148, 163, 184, 0.7);
+    }
+    #admin-sidebar .journal-scroll::-webkit-scrollbar-track { background: transparent; }
+
+    /* ─── Menu Link Base ─── */
+    .nv-menu-link {
+        color: #475569;
+        border: 1px solid transparent;
+    }
+    .dark .nv-menu-link {
+        color: #cbd5e1;
+    }
+    .nv-label {
+        color: #334155;
+    }
+    .dark .nv-label {
+        color: #e2e8f0;
+    }
+    .nv-chevron {
+        color: #94a3b8;
+    }
+    .dark .nv-chevron {
+        color: #64748b;
     }
 
-    /* Active Link in GoHighLevel Style */
-    .ghl-menu-active {
-        background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
-        color: #ffffff !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
-        border-radius: 0.75rem !important;
+    /* ─── Hover State: Elevated card look ─── */
+    .nv-menu-row:hover .nv-menu-link:not(.nv-active) {
+        background: rgba(241, 245, 249, 0.9);
+        border-color: rgba(203, 213, 225, 0.6);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
     }
-    .ghl-menu-active .ghl-menu-text {
+    .nv-menu-row:hover .nv-menu-link:not(.nv-active) .nv-label {
+        color: #0f172a;
+    }
+    .nv-menu-row:hover .nv-menu-link:not(.nv-active) .nv-icon {
+        transform: scale(1.06);
+    }
+    .nv-menu-row:hover .nv-menu-link:not(.nv-active) .nv-chevron {
+        color: #3b82f6;
+        transform: translateX(2px);
+    }
+    .dark .nv-menu-row:hover .nv-menu-link:not(.nv-active) {
+        background: rgba(30, 41, 59, 0.8);
+        border-color: rgba(51, 65, 85, 0.7);
+    }
+    .dark .nv-menu-row:hover .nv-menu-link:not(.nv-active) .nv-label {
+        color: #f1f5f9;
+    }
+
+    /* ─── Active State: Gradient pill ─── */
+    .nv-active {
+        background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%) !important;
+        border-color: transparent !important;
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), 0 1px 3px rgba(99, 102, 241, 0.2) !important;
+    }
+    .nv-active .nv-label {
         color: #ffffff !important;
         font-weight: 700 !important;
     }
-    .ghl-menu-active .ghl-icon-badge {
-        background: rgba(255, 255, 255, 0.22) !important;
+    .nv-active .nv-icon {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
         color: #ffffff !important;
-        border-color: rgba(255, 255, 255, 0.35) !important;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15), 0 1px 3px rgba(0,0,0,0.15) !important;
     }
-    .ghl-menu-active .ghl-icon-badge svg {
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
-    }
-    .ghl-menu-active .ghl-menu-arrow {
-        color: #ffffff !important;
+    .nv-active .nv-chevron {
+        color: rgba(255, 255, 255, 0.8) !important;
     }
 
-    /* Hover Link & Deployed Notable Highlighting */
-    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) {
-        background-color: #E0F2FE !important;
-        border: 1px solid #7DD3FC !important;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.18) !important;
-        border-radius: 0.75rem !important;
-        transform: translateX(3px) !important;
-    }
-    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) .ghl-menu-text {
-        color: #0369A1 !important;
-        font-weight: 700 !important;
-    }
-    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) .ghl-icon-badge {
-        background-color: #FFFFFF !important;
-        border-color: #BAE6FD !important;
-        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
-        transform: scale(1.08) !important;
-    }
-    .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) .ghl-menu-arrow {
-        color: #0284C7 !important;
-        transform: translateX(3px) !important;
-    }
-
-    .dark .sidebar-menu-row:hover .ghl-menu-link:not(.ghl-menu-active) {
-        background-color: #0c4a6e !important;
-        border-color: #0284c7 !important;
-    }
-
-    /* Popout Flyout Card (GoHighLevel floating menu) */
-    .ghl-flyout-card {
+    /* ═══════════════════════════════════════════════
+       FLYOUT SUBMENU — Glass card with JS positioning
+       ═══════════════════════════════════════════════ */
+    .nv-flyout {
         display: none !important;
-        margin-top: -46px !important;
-        z-index: 10020 !important;
+        pointer-events: none;
     }
-    .sidebar-menu-row:hover .ghl-flyout-card {
-        display: flex !important;
-        animation: ghlFlyoutSlide 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .nv-flyout.nv-flyout-open {
+        display: block !important;
+        pointer-events: auto;
+        animation: nvFlyIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    /* Smooth hover bridge so cursor never drops flyout */
-    .ghl-flyout-card::before {
-        content: '';
+
+    /* Invisible hover bridge between sidebar row and flyout */
+    .nv-bridge {
         position: absolute;
-        top: -12px;
-        bottom: -12px;
-        left: -20px;
-        width: 24px;
+        top: -16px;
+        bottom: -16px;
+        left: -24px;
+        width: 28px;
     }
-    .ghl-flyout-bottom {
-        margin-top: -120px !important;
-    }
-    .group-[.sidebar-collapsed]/container .ghl-flyout-card {
-        left: 78px !important;
-    }
-    [dir="rtl"] .ghl-flyout-card {
-        left: auto !important;
-        right: 226px !important;
-    }
-    [dir="rtl"] .ghl-flyout-card::before {
+    [dir="rtl"] .nv-bridge {
         left: auto;
-        right: -20px;
-    }
-    [dir="rtl"] .group-[.sidebar-collapsed]/container .ghl-flyout-card {
-        right: 78px !important;
+        right: -24px;
     }
 
-    /* Card Inner Background: Notable Soft Gray/Blue Tone */
-    .ghl-card-inner {
-        background-color: #F8FAFC !important;
-        border-color: #CBD5E1 !important;
-        box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06) !important;
+    /* Flyout Inner Card */
+    .nv-flyout-inner {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(203, 213, 225, 0.7);
+        border-radius: 16px;
+        box-shadow:
+            0 24px 48px -12px rgba(15, 23, 42, 0.15),
+            0 12px 24px -8px rgba(15, 23, 42, 0.08),
+            0 0 0 1px rgba(15, 23, 42, 0.04),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        overflow: hidden;
     }
-    .dark .ghl-card-inner {
-        background-color: #0f172a !important;
-        border-color: #334155 !important;
-        box-shadow: 0 25px 45px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
-    }
-
-    /* Submenu Row Individual Card */
-    .ghl-subitem-row {
-        background-color: #ffffff !important;
-        border: 1px solid #E2E8F0 !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
-    }
-    .ghl-subitem-row:hover {
-        background-color: #E0F2FE !important;
-        border-color: #BAE6FD !important;
-        color: #0284C7 !important;
-        transform: translateX(3px) !important;
-    }
-    .dark .ghl-subitem-row {
-        background-color: #1e293b !important;
-        border-color: #334155 !important;
-    }
-    .dark .ghl-subitem-row:hover {
-        background-color: #0c4a6e !important;
-        border-color: #0284c7 !important;
+    .dark .nv-flyout-inner {
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border-color: rgba(51, 65, 85, 0.6);
+        box-shadow:
+            0 24px 48px -12px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
 
-    /* Active Subitem inside Popout */
-    .ghl-subitem-active {
-        background-color: #EFF6FF !important;
+    /* Flyout Header */
+    .nv-flyout-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px 8px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.5) 100%);
+    }
+    .dark .nv-flyout-header {
+        border-bottom-color: rgba(51, 65, 85, 0.5);
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%);
+    }
+    .nv-flyout-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        box-shadow: 0 0 8px currentColor;
+    }
+    .nv-flyout-title {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #334155;
+    }
+    .dark .nv-flyout-title {
+        color: #e2e8f0;
+    }
+    .nv-flyout-count {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 99px;
+        background: rgba(241, 245, 249, 0.9);
+        color: #64748b;
+        border: 1px solid rgba(226, 232, 240, 0.6);
+    }
+    .dark .nv-flyout-count {
+        background: rgba(30, 41, 59, 0.8);
+        color: #94a3b8;
+        border-color: rgba(51, 65, 85, 0.5);
+    }
+
+    /* Flyout Items Container */
+    .nv-flyout-items {
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    /* Individual Flyout Item */
+    .nv-flyout-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #475569;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(226, 232, 240, 0.5);
+        transition: all 0.15s ease;
+        text-decoration: none;
+    }
+    .nv-flyout-item:hover {
+        background: linear-gradient(135deg, rgba(219, 234, 254, 0.7) 0%, rgba(224, 242, 254, 0.5) 100%);
+        border-color: rgba(147, 197, 253, 0.6);
+        color: #1d4ed8;
+        transform: translateX(3px);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+    }
+    .dark .nv-flyout-item {
+        color: #cbd5e1;
+        background: rgba(30, 41, 59, 0.5);
+        border-color: rgba(51, 65, 85, 0.4);
+    }
+    .dark .nv-flyout-item:hover {
+        background: rgba(30, 58, 138, 0.4);
+        border-color: rgba(59, 130, 246, 0.4);
+        color: #93c5fd;
+    }
+
+    .nv-sub-label {
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .nv-sub-arrow {
+        color: #cbd5e1;
+        transition: all 0.15s ease;
+    }
+    .nv-flyout-item:hover .nv-sub-arrow {
+        color: #3b82f6;
+        transform: translateX(2px);
+    }
+    .dark .nv-sub-arrow {
+        color: #475569;
+    }
+
+    .nv-badge {
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 99px;
+        background: rgba(241, 245, 249, 0.9);
+        color: #64748b;
+        border: 1px solid rgba(226, 232, 240, 0.5);
+        white-space: nowrap;
+    }
+    .dark .nv-badge {
+        background: rgba(30, 41, 59, 0.8);
+        color: #94a3b8;
+        border-color: rgba(51, 65, 85, 0.5);
+    }
+
+    /* Active flyout item */
+    .nv-flyout-item-active {
+        background: linear-gradient(135deg, rgba(219, 234, 254, 0.8) 0%, rgba(238, 242, 255, 0.6) 100%) !important;
+        border-color: rgba(147, 197, 253, 0.7) !important;
         color: #2563eb !important;
-        border-color: #93C5FD !important;
-        font-weight: 700 !important;
     }
-    .dark .ghl-subitem-active {
-        background-color: #1e3a8a !important;
+    .dark .nv-flyout-item-active {
+        background: rgba(30, 58, 138, 0.5) !important;
+        border-color: rgba(59, 130, 246, 0.5) !important;
         color: #93c5fd !important;
-        border-color: #2563eb !important;
     }
 
-    @keyframes ghlFlyoutSlide {
+    /* Flyout Animation */
+    @keyframes nvFlyIn {
         from {
             opacity: 0;
-            transform: translateX(-6px) scale(0.98);
+            transform: translateX(-8px) scale(0.97);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+    }
+    [dir="rtl"] .nv-flyout.nv-flyout-open {
+        animation-name: nvFlyInRtl;
+    }
+    @keyframes nvFlyInRtl {
+        from {
+            opacity: 0;
+            transform: translateX(8px) scale(0.97);
         }
         to {
             opacity: 1;
@@ -455,7 +589,12 @@
         }
     }
 
-    /* Desktop layout spacing guarantees main content is never covered */
+    /* Collapsed sidebar flyout positioning */
+    .group-[.sidebar-collapsed]\/container .nv-flyout {
+        /* JS will handle the left positioning dynamically */
+    }
+
+    /* ─── Desktop Layout Spacing ─── */
     @media (min-width: 1024px) {
         .group\/container.sidebar-not-collapsed > div:last-child > div:first-child {
             padding-left: 248px !important;
@@ -480,8 +619,9 @@
         id="v-sidebar-collapse-template"
     >
         <div
-            class="fixed bottom-0 w-full max-w-[220px] cursor-pointer border-t border-gray-200 bg-white px-4 transition-all duration-300 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:hover:bg-gray-950 max-lg:hidden"
+            class="fixed bottom-0 w-full max-w-[220px] cursor-pointer border-t bg-white/80 backdrop-blur-sm px-4 transition-all duration-300 hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900/80 dark:hover:bg-gray-950 max-lg:hidden"
             :class="{'max-w-[70px]': isCollapsed}"
+            style="border-color: rgba(203,213,225,0.5);"
             :title="isCollapsed
                 ? '@lang('admin::app.layouts.sidebar.expand')'
                 : '@lang('admin::app.layouts.sidebar.collapse')'"
@@ -536,5 +676,46 @@
                 },
             },
         });
+
+        /* ═══════════════════════════════════════
+           Flyout Positioning — JS-driven, pixel-perfect
+           ═══════════════════════════════════════ */
+        window.positionFlyout = function(rowEl) {
+            const flyout = rowEl.querySelector('.nv-flyout');
+            if (!flyout) return;
+
+            const sidebar = document.getElementById('admin-sidebar');
+            if (!sidebar) return;
+
+            const isRtl = document.documentElement.dir === 'rtl';
+            const sidebarRect = sidebar.getBoundingClientRect();
+            const rowRect = rowEl.getBoundingClientRect();
+            const viewportH = window.innerHeight;
+
+            // Position horizontally: flush to sidebar edge + 6px gap
+            if (isRtl) {
+                flyout.style.right = (window.innerWidth - sidebarRect.left + 6) + 'px';
+                flyout.style.left = 'auto';
+            } else {
+                flyout.style.left = (sidebarRect.right + 6) + 'px';
+                flyout.style.right = 'auto';
+            }
+
+            // Position vertically: align top of flyout with top of the menu row
+            let topPos = rowRect.top - 8;
+
+            // Make sure flyout doesn't go below viewport
+            // Estimate flyout height (will refine after render)
+            requestAnimationFrame(function() {
+                const flyoutH = flyout.offsetHeight || 200;
+                if (topPos + flyoutH > viewportH - 16) {
+                    topPos = viewportH - flyoutH - 16;
+                }
+                if (topPos < 60) topPos = 60; // Don't overlap header
+                flyout.style.top = topPos + 'px';
+            });
+
+            flyout.style.top = topPos + 'px';
+        };
     </script>
 @endPushOnce

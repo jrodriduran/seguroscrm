@@ -146,7 +146,7 @@
                 $showPoweredBy = (bool) core()->getConfigData('general.settings.footer.show');
             @endphp
 
-            <div class="flex min-h-[calc(100vh-62px)] max-w-full flex-1 flex-col bg-gray-100 pt-3 transition-all duration-300 dark:bg-gray-950">
+            <div class="flex min-h-[calc(100vh-62px)] max-w-full flex-1 flex-col pt-3 transition-all duration-300 dark:bg-gray-950" style="background: linear-gradient(180deg, #f1f5f9 0%, #eef2f7 50%, #e8ecf3 100%);">
                 <!-- Page Content Blade Component -->
                 <div class="admin-main-content px-4 {{ $showPoweredBy ? 'pb-[72px]' : 'pb-4' }} transition-all duration-300 lg:group-[.sidebar-collapsed]/container:ltr:pl-[85px] lg:group-[.sidebar-collapsed]/container:rtl:pr-[85px]">
                     {{ $slot }}
