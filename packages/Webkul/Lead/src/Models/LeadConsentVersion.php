@@ -47,6 +47,14 @@ class LeadConsentVersion extends Model implements LeadConsentVersionContract
     }
 
     /**
+     * Alias accessor for file_hash / SHA-256 fingerprint.
+     */
+    public function getConsentSha256Attribute(): ?string
+    {
+        return $this->file_hash;
+    }
+
+    /**
      * Parent LeadConsent relation.
      */
     public function consent(): BelongsTo
