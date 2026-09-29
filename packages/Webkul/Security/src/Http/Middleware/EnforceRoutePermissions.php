@@ -77,7 +77,7 @@ class EnforceRoutePermissions
             && str_starts_with((string) $request->query('type'), 'revenue')
             && ! bouncer()->hasPermission('financials')
         ) {
-            return response()->json(['message' => trans('admin::app.errors.401')], 401);
+            return response()->json(['message' => trans('admin::app.errors.401.description')], 401);
         }
 
         if (! str_starts_with($name, 'admin.') || $request->routeIs(...$this->alwaysAllowed)) {
@@ -85,7 +85,7 @@ class EnforceRoutePermissions
         }
 
         // Listed in config('acl'): Krayin's Bouncer already enforces it.
-        if (array_key_exists($name, acl()->getRoles())) {
+        if (collect(acl()->getRoles())->has($name)) {
             return $next($request);
         }
 
@@ -96,10 +96,10 @@ class EnforceRoutePermissions
         }
 
         if ($request->expectsJson()) {
-            return response()->json(['message' => trans('admin::app.errors.401')], 401);
+            return response()->json(['message' => trans('admin::app.errors.401.description')], 401);
         }
 
-        abort(401, trans('admin::app.errors.401'));
+        abort(401, trans('admin::app.errors.401.description'));
     }
 
     /**
