@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Webkul\Teamwork\Http\Controllers\FollowUpCenterController;
 use Webkul\Teamwork\Http\Controllers\AutomationController;
 use Webkul\Teamwork\Http\Controllers\FollowerController;
+use Webkul\Teamwork\Http\Controllers\FollowUpCenterController;
 use Webkul\Teamwork\Http\Controllers\FollowUpController;
 use Webkul\Teamwork\Http\Controllers\NoteController;
 use Webkul\Teamwork\Http\Controllers\NotificationController;

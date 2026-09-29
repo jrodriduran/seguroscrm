@@ -3,8 +3,10 @@
 namespace Webkul\Admin\Http\Controllers\Lead;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 use Webkul\Activity\Models\ActivityProxy;
 use Webkul\Admin\DataGrids\Lead\TeamRadarDataGrid;
@@ -114,9 +116,9 @@ class TeamRadarController extends Controller
      * Superseded by the Teamwork follow-up center, which also shows urgent
      * activities and escalations; kept as a fallback when that package is off.
      */
-    public function myPending(): View|\Illuminate\Http\RedirectResponse
+    public function myPending(): View|RedirectResponse
     {
-        if (\Illuminate\Support\Facades\Route::has('admin.teamwork.center')) {
+        if (Route::has('admin.teamwork.center')) {
             return redirect()->route('admin.teamwork.center');
         }
 
