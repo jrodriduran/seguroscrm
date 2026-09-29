@@ -110,9 +110,16 @@ class TeamRadarController extends Controller
 
     /**
      * Agent "My Pending" view — their prioritised task queue.
+     *
+     * Superseded by the Teamwork follow-up center, which also shows urgent
+     * activities and escalations; kept as a fallback when that package is off.
      */
-    public function myPending(): View
+    public function myPending(): View|\Illuminate\Http\RedirectResponse
     {
+        if (\Illuminate\Support\Facades\Route::has('admin.teamwork.center')) {
+            return redirect()->route('admin.teamwork.center');
+        }
+
         $userId = auth()->id();
 
         $overdue = $this->leadRepository
