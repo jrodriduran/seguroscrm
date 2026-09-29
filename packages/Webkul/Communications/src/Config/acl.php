@@ -9,7 +9,7 @@ return [
     ], [
         'key' => 'contacts.persons.consent',
         'name' => 'communications::app.acl.consent',
-        'route' => ['admin.communications.persons.preferences', 'admin.communications.persons.consent'],
+        'route' => ['admin.communications.persons.preferences', 'admin.communications.persons.consent', 'admin.communications.persons.reply'],
         'sort' => 8,
     ], [
         'key' => 'settings.communications',
@@ -28,5 +28,14 @@ return [
             'admin.settings.communications.outcomes.delete',
         ],
         'sort' => 1,
+    ], [
+        'key' => 'settings.communications.chatwoot',
+        'name' => 'communications::app.chatwoot.title',
+        'route' => [
+            'admin.settings.communications.chatwoot.index',
+            'admin.settings.communications.chatwoot.update',
+            'admin.settings.communications.chatwoot.disconnect',
+        ],
+        'sort' => 2,
     ],
 ];

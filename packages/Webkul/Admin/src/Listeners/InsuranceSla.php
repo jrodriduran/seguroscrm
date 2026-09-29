@@ -72,9 +72,11 @@ class InsuranceSla
 
         foreach ($activity->leads as $lead) {
             if (in_array($lead->sla_status, ['pending', 'overdue', 'escalated'], true)) {
+                // Empty attribute set: only the SLA columns change, custom attributes are left alone.
                 $this->leadRepository->update(
                     ['sla_status' => 'active'],
-                    $lead->id
+                    $lead->id,
+                    collect()
                 );
             }
         }
@@ -104,7 +106,9 @@ class InsuranceSla
                 'sla_status' => 'pending',
                 'sla_hours' => $slaHours,
             ],
-            $lead->id
+            $lead->id,
+            // Empty attribute set: only the SLA columns change, custom attributes are left alone.
+            collect()
         );
     }
 
