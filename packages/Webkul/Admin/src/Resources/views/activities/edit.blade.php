@@ -253,6 +253,12 @@
 
                                 <x-admin::form.control-group.error control-name="location" />
                             </x-admin::form.control-group>
+
+                            @if ($activity->type === 'call')
+                                <div class="mt-4">
+                                    @includeIf('communications::partials.call-outcome-control', ['current' => old('outcome') ?? $activity->outcome])
+                                </div>
+                            @endif
                         </x-slot>
                     </x-admin::accordion>
 

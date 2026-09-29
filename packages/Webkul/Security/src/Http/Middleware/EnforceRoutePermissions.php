@@ -48,7 +48,7 @@ class EnforceRoutePermissions
         '/^admin\.insurance\.agent_compliance\./' => ['settings.user.users', 'settings.user.users.edit', null],
         '/^admin\.quotes\./' => ['quotes', 'quotes.edit', 'quotes.delete'],
         '/^admin\.contacts\.persons\./' => ['contacts.persons', 'contacts.persons.edit', 'contacts.persons.delete'],
-        '/^admin\.communications\.persons\./' => ['contacts.persons.view', null, null],
+        '/^admin\.communications\.persons\./' => ['contacts.persons.view', 'contacts.persons.edit', null],
         '/^admin\.contacts\.organizations\./' => ['contacts.organizations', 'contacts.organizations.edit', 'contacts.organizations.delete'],
         '/^admin\.products\./' => ['products', 'products.edit', 'products.delete'],
         '/^admin\.mail\./' => ['mail', 'mail.edit', 'mail.delete'],

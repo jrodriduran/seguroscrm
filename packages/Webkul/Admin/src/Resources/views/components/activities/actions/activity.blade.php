@@ -126,6 +126,9 @@
                                 <x-admin::form.control-group.error control-name="comment" />
                             </x-admin::form.control-group>
 
+                            <!-- Call Outcome -->
+                            @includeIf('communications::partials.call-outcome-control', ['condition' => "selectedType.value === 'call'"])
+
                             <!-- Participants -->
                             <x-admin::form.control-group>
                                 <x-admin::form.control-group.label>
