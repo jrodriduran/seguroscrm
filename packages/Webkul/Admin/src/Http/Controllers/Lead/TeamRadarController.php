@@ -3,8 +3,10 @@
 namespace Webkul\Admin\Http\Controllers\Lead;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 use Webkul\Activity\Models\ActivityProxy;
 use Webkul\Admin\DataGrids\Lead\TeamRadarDataGrid;
@@ -110,9 +112,16 @@ class TeamRadarController extends Controller
 
     /**
      * Agent "My Pending" view — their prioritised task queue.
+     *
+     * Superseded by the Teamwork follow-up center, which also shows urgent
+     * activities and escalations; kept as a fallback when that package is off.
      */
-    public function myPending(): View
+    public function myPending(): View|RedirectResponse
     {
+        if (Route::has('admin.teamwork.center')) {
+            return redirect()->route('admin.teamwork.center');
+        }
+
         $userId = auth()->id();
 
         $overdue = $this->leadRepository

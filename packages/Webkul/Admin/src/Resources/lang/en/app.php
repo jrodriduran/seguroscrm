@@ -2292,7 +2292,7 @@ return [
         'quotes' => 'Quotes',
         'quote' => 'Quote',
         'mail' => [
-            'title' => 'Mail',
+            'title' => 'Communications',
             'compose' => 'Compose',
             'inbox' => 'Inbox',
             'draft' => 'Draft',
@@ -2324,6 +2324,9 @@ return [
         'sidebar' => [
             'collapse' => 'Collapse',
             'expand' => 'Expand',
+            'pin' => 'Pin menu',
+            'unpin' => 'Auto-hide menu',
+            'show-menu' => 'Show menu',
         ],
         'quick-add' => [
             'title' => 'Quick Add',

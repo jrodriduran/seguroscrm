@@ -38,6 +38,11 @@
 
     {!! view_render_event('admin.dashboard.index.header.after') !!}
 
+    <!-- Follow-up strip (Teamwork package) -->
+    <div class="mt-3.5">
+        @includeIf('teamwork::dashboard.summary')
+    </div>
+
     <!-- Body Component -->
     {!! view_render_event('admin.dashboard.index.content.before') !!}
 
@@ -47,7 +52,9 @@
 
         <div class="flex flex-1 flex-col gap-4 max-xl:flex-auto">
             <!-- Revenue Stats -->
-            @include('admin::dashboard.index.revenue')
+            @if (bouncer()->hasPermission('financials'))
+                @include('admin::dashboard.index.revenue')
+            @endif
 
             <!-- Over All Stats -->
             @include('admin::dashboard.index.over-all')
@@ -74,10 +81,14 @@
             @include('admin::dashboard.index.open-leads-by-states')
 
             <!-- Revenue by Sources -->
-            @include('admin::dashboard.index.revenue-by-sources')
+            @if (bouncer()->hasPermission('financials'))
+                @include('admin::dashboard.index.revenue-by-sources')
+            @endif
 
             <!-- Revenue by Types -->
-            @include('admin::dashboard.index.revenue-by-types')
+            @if (bouncer()->hasPermission('financials'))
+                @include('admin::dashboard.index.revenue-by-types')
+            @endif
         </div>
 
         {!! view_render_event('admin.dashboard.index.content.left.after') !!}

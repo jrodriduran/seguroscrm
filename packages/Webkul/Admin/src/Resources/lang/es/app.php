@@ -18,7 +18,7 @@ return [
         'persons' => 'Personas',
         'organizations' => 'Aseguradoras (Carriers)',
         'products' => 'Productos',
-        'settings' => 'Configuraciones',
+        'settings' => 'Configuración',
         'groups' => 'Grupos',
         'roles' => 'Roles',
         'users' => 'Usuarios',
@@ -670,7 +670,7 @@ return [
         ],
     ],
     'settings' => [
-        'title' => 'Configuraciones',
+        'title' => 'Configuración',
         'groups' => [
             'index' => [
                 'create-btn' => 'Crear Grupo',
@@ -2290,7 +2290,7 @@ return [
         'quotes' => 'Cotizaciones',
         'quote' => 'Cotización',
         'mail' => [
-            'title' => 'Correo',
+            'title' => 'Comunicaciones',
             'compose' => 'Redactar',
             'inbox' => 'Bandeja de Entrada',
             'draft' => 'Borradores',
@@ -2307,7 +2307,7 @@ return [
         'organization' => 'Aseguradora',
         'products' => 'Productos',
         'product' => 'Producto',
-        'settings' => 'Configuraciones',
+        'settings' => 'Configuración',
         'user' => 'Usuario',
         'user-info' => 'Administra todos tus usuarios y sus permisos en el CRM, lo que están autorizados a hacer.',
         'groups' => 'Grupos',
@@ -2322,6 +2322,9 @@ return [
         'sidebar' => [
             'collapse' => 'Contraer',
             'expand' => 'Expandir',
+            'pin' => 'Fijar menú',
+            'unpin' => 'Auto-ocultar menú',
+            'show-menu' => 'Mostrar menú',
         ],
         'quick-add' => [
             'title' => 'Añadir rápido',

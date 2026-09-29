@@ -36,7 +36,7 @@ services:
       MYSQL_PASSWORD: seguroscrm_password
       MYSQL_ROOT_PASSWORD: secret_db_password
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:

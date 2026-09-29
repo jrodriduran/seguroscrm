@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 
+@php
+    /**
+     * Auto-hide mode: the rail slides away and peeks back on hover. It always
+     * shows full width while peeking, so it overrides the collapsed state.
+     */
+    $sidebarAuto = (bool) request()->cookie('sidebar_auto');
+    $sidebarCollapsed = ! $sidebarAuto && request()->cookie('sidebar_collapsed');
+@endphp
+
 <html
-    class="{{ request()->cookie('dark_mode') ? 'dark' : '' }}"
+    class="{{ request()->cookie('dark_mode') ? 'dark' : '' }} {{ $sidebarAuto ? 'nv-auto' : '' }}"
     lang="{{ app()->getLocale() }}"
     dir="{{ in_array(app()->getLocale(), ['fa', 'ar']) ? 'rtl' : 'ltr' }}"
 >
@@ -82,6 +91,8 @@
         $brandColor = core()->getConfigData('general.settings.menu_color.brand_color') ?? '#0E90D9';
     @endphp
 
+    @include('admin::components.layouts.theme')
+
     @stack('styles')
 
     <style>
@@ -130,12 +141,18 @@
         <!-- Page Header Blade Component -->
         <x-admin::layouts.header />
 
+        <!-- Follow-up dialog for the record on this page (Teamwork package); kept out of the header's backdrop filter -->
+        @includeIf('teamwork::partials.record-modal')
+
         <div
-            class="group/container {{ request()->cookie('sidebar_collapsed') ?? 0 ? 'sidebar-collapsed' : 'sidebar-not-collapsed' }} flex gap-4"
+            class="group/container {{ $sidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-not-collapsed' }} flex gap-4"
             ref="appLayout"
         >
             <!-- Page Sidebar Blade Component -->
             <x-admin::layouts.sidebar.desktop />
+
+            <!-- Hover strip that peeks the rail in auto-hide mode -->
+            <div class="nv-edge" aria-hidden="true"></div>
 
             @php
                 /**
@@ -146,7 +163,7 @@
                 $showPoweredBy = (bool) core()->getConfigData('general.settings.footer.show');
             @endphp
 
-            <div class="flex min-h-[calc(100vh-62px)] max-w-full flex-1 flex-col pt-3 transition-all duration-300 dark:bg-gray-950" style="background: linear-gradient(180deg, #f1f5f9 0%, #eef2f7 50%, #e8ecf3 100%);">
+            <div class="flex min-h-[calc(100vh-62px)] max-w-full flex-1 flex-col pt-3 transition-all duration-300 nx-canvas">
                 <!-- Page Content Blade Component -->
                 <div class="admin-main-content px-4 {{ $showPoweredBy ? 'pb-[72px]' : 'pb-4' }} transition-all duration-300 lg:group-[.sidebar-collapsed]/container:ltr:pl-[85px] lg:group-[.sidebar-collapsed]/container:rtl:pr-[85px]">
                     {{ $slot }}
