@@ -2290,7 +2290,7 @@ return [
         'quotes' => 'Cotações',
         'quote' => 'Cotação',
         'mail' => [
-            'title' => 'E-mail',
+            'title' => 'Comunicações',
             'compose' => 'Escrever',
             'inbox' => 'Caixa de Entrada',
             'draft' => 'Rascunho',
@@ -2322,6 +2322,9 @@ return [
         'sidebar' => [
             'collapse' => 'Recolher',
             'expand' => 'Expandir',
+            'pin' => 'Fixar menu',
+            'unpin' => 'Ocultar automático',
+            'show-menu' => 'Mostrar menu',
         ],
         'quick-add' => [
             'title' => 'Adição rápida',

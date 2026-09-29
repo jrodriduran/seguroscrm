@@ -1,9 +1,19 @@
-<header class="sticky top-0 z-[10001] flex items-center justify-between gap-1 border-b px-4 py-2.5 transition-all" style="background: rgba(255,255,255,0.85); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border-color: rgba(203,213,225,0.5); box-shadow: 0 1px 3px rgba(15,23,42,0.04);">    
+<header class="nx-header sticky top-0 z-[10001] flex items-center justify-between gap-1 px-4 py-2.5 transition-all">
     <!-- logo -->
     <div class="flex items-center gap-1.5">
         <!-- Sidebar Menu -->
         <x-admin::layouts.sidebar.mobile />
-        
+
+        <!-- Desktop rail trigger (auto-hide mode only) -->
+        <button
+            type="button"
+            class="nv-reveal"
+            title="@lang('admin::app.layouts.sidebar.show-menu')"
+            aria-label="@lang('admin::app.layouts.sidebar.show-menu')"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </button>
+
         <a href="{{ route('admin.dashboard.index') }}">
             @if ($logo = core()->getConfigData('general.general.admin_logo.logo_image'))
                 <img
@@ -35,6 +45,12 @@
 
         <!-- Quick Creation Bar -->
         @include('admin::components.layouts.header.quick-creation')
+
+        <!-- "Follow up" on record pages (Teamwork package) -->
+        @includeIf('teamwork::partials.flag-button')
+
+        <!-- Client communications shortcut (Communications package) -->
+        @includeIf('communications::partials.header-link')
     </div>
 
     <div class="flex items-center gap-2.5">
@@ -42,7 +58,10 @@
             <!-- Mega Search Bar -->
             @include('admin::components.layouts.header.mobile.mega-search')
         </div>
-        
+
+        <!-- Notifications (Teamwork package) -->
+        @includeIf('teamwork::partials.bell')
+
         <!-- Dark mode -->
         <v-dark>
             <div class="flex">
@@ -150,6 +169,15 @@
                     >
                         @lang('admin::app.layouts.my-account')
                     </a>
+
+                    @if (Route::has('admin.security.two_factor.setup'))
+                        <a
+                            class="cursor-pointer px-5 py-2 text-base text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950"
+                            href="{{ route('admin.security.two_factor.setup') }}"
+                        >
+                            @lang('security::app.two-factor.setup.title')
+                        </a>
+                    @endif
 
                     <!--Admin logout-->
                     <x-admin::form

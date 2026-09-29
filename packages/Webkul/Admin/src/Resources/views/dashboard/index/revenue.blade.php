@@ -20,7 +20,7 @@
 
         <!-- Total Sales Section -->
         <template v-else>
-            <div class="box-shadow rounded-lg border border-gray-300 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <div class="nx-revenue box-shadow rounded-lg border border-gray-300 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex gap-4 max-md:flex-wrap">
                     <!-- Total Revenue -->
                     <div class="flex gap-2 max-md:flex-wrap md:flex-col">

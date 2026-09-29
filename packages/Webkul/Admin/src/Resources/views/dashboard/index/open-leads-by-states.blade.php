@@ -1,8 +1,7 @@
 {!! view_render_event('admin.dashboard.index.open_leads_by_states.before') !!}
 
-<!-- Total Leads Vue Component -->
+<!-- Pipeline funnel: open cases per stage (in funnel order) with their health -->
 <v-dashboard-open-leads-by-states>
-    <!-- Shimmer -->
     <x-admin::shimmer.dashboard.index.open-leads-by-states />
 </v-dashboard-open-leads-by-states>
 
@@ -13,76 +12,91 @@
         type="text/x-template"
         id="v-dashboard-open-leads--by-states-template"
     >
-        <!-- Shimmer -->
         <template v-if="isLoading">
             <x-admin::shimmer.dashboard.index.open-leads-by-states />
         </template>
 
-        <!-- Total Sales Section -->
         <template v-else>
-            <div class="grid gap-4 rounded-lg border border-gray-300 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-                <div class="flex flex-col justify-between gap-1">
-                    <p class="text-base font-semibold dark:text-gray-300">
-                        @lang('admin::app.dashboard.index.open-leads-by-states.title')
-                    </p>
+            <div class="nx-funnel">
+                <!-- Header -->
+                <div class="nx-funnel-head">
+                    <div class="min-w-0">
+                        <p class="nx-funnel-title">@lang('admin::app.dashboard.index.open-leads-by-states.title')</p>
+                        <p class="nx-funnel-sub">@{{ report.pipeline }} · @lang('teamwork::app.funnel.now')</p>
+                    </div>
+
+                    <a :href="report.kanban_url" class="nx-funnel-link">@lang('teamwork::app.funnel.open-pipeline') →</a>
                 </div>
 
-                <!-- Leads by Stages List -->
-                <div
-                    class="flex w-full flex-col gap-2.5"
-                    v-if="report.statistics.length"
-                >
-                    <div
-                        class="flex flex-col gap-1.5 rounded-lg border border-gray-100 bg-gray-50/60 p-2.5 dark:border-gray-800 dark:bg-gray-800/50"
-                        v-for="(stat, index) in report.statistics"
-                        :key="index"
+                <!-- Totals -->
+                <div class="nx-funnel-totals">
+                    <div>
+                        <span class="nx-funnel-big">@{{ report.totals.open }}</span>
+                        <span class="nx-funnel-label">@lang('teamwork::app.funnel.open')</span>
+                    </div>
+
+                    <a :href="report.center_url" class="nx-funnel-alert" :class="{ 'is-quiet': ! report.totals.overdue }">
+                        <span class="nx-funnel-big">@{{ report.totals.overdue }}</span>
+                        <span class="nx-funnel-label">@lang('teamwork::app.funnel.late')</span>
+                    </a>
+
+                    <div v-if="report.totals.value !== null">
+                        <span class="nx-funnel-big">@{{ money(report.totals.value) }}</span>
+                        <span class="nx-funnel-label">@lang('teamwork::app.funnel.value')</span>
+                    </div>
+                </div>
+
+                <!-- Stages -->
+                <div class="nx-funnel-stages" v-if="report.stages.length">
+                    <a
+                        v-for="(stage, index) in report.stages"
+                        :key="stage.id"
+                        :href="report.kanban_url"
+                        class="nx-stage"
+                        :style="{ '--stage-c': color(index) }"
                     >
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-gray-700 dark:text-gray-200">
-                                @{{ stat.name }}
-                            </span>
-                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
-                                @{{ stat.total }}
-                            </span>
-                        </div>
+                        <span class="nx-stage-step">@{{ index + 1 }}</span>
 
-                        <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-                            <div
-                                class="h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-500"
-                                :style="{ width: Math.min(100, Math.max(15, (stat.total / Math.max(...report.statistics.map(s => s.total || 1))) * 100)) + '%' }"
-                            ></div>
-                        </div>
-                    </div>
+                        <span class="nx-stage-body">
+                            <span class="nx-stage-top">
+                                <span class="nx-stage-name">@{{ stage.name }}</span>
+
+                                <span class="nx-stage-count">
+                                    @{{ stage.total }}
+                                    <small>@{{ share(stage.total) }}%</small>
+                                </span>
+                            </span>
+
+                            <span class="nx-stage-track">
+                                <span class="nx-stage-bar" :style="{ width: width(stage.total) + '%' }"></span>
+                            </span>
+
+                            <span class="nx-stage-meta">
+                                <span v-if="stage.overdue" class="nx-chip is-late">@{{ stage.overdue }} @lang('teamwork::app.states.overdue')</span>
+                                <span v-if="stage.warning" class="nx-chip is-warn">@{{ stage.warning }} @lang('teamwork::app.states.warning')</span>
+                                <span v-if="! stage.overdue && ! stage.warning && stage.total" class="nx-chip is-ok">@lang('teamwork::app.states.ok')</span>
+                                <span v-if="stage.oldest" class="nx-stage-oldest">@lang('teamwork::app.funnel.oldest') @{{ stage.oldest }}</span>
+                                <span v-if="stage.value !== null && stage.value" class="nx-stage-oldest">@{{ money(stage.value) }}</span>
+                            </span>
+                        </span>
+                    </a>
                 </div>
 
-                <!-- Empty Product Design -->
-                <div
-                    class="flex flex-col gap-8 p-4"
-                    v-else
-                >
-                    <div class="grid justify-center justify-items-center gap-3.5 py-2.5">
-                        <!-- Placeholder Image -->
-                        <img
-                            src="{{ vite()->asset('images/empty-placeholders/default.svg') }}"
-                            class="dark:mix-blend-exclusion dark:invert"
-                        >
+                <div v-else class="nx-funnel-empty">
+                    @lang('admin::app.dashboard.index.open-leads-by-states.empty-title')
+                </div>
 
-                        <!-- Add Variants Information -->
-                        <div class="flex flex-col items-center">
-                            <p class="text-base font-semibold text-gray-400">
-                                @lang('admin::app.dashboard.index.open-leads-by-states.empty-title')
-                            </p>
-
-                            <p class="text-gray-400">
-                                @lang('admin::app.dashboard.index.open-leads-by-states.empty-info')
-                            </p>
-                        </div>
-                    </div>
+                <!-- Period outcome -->
+                <div class="nx-funnel-foot">
+                    <span class="nx-chip is-ok">@lang('teamwork::app.funnel.won') @{{ report.totals.won }}</span>
+                    <span class="nx-chip is-late">@lang('teamwork::app.funnel.lost') @{{ report.totals.lost }}</span>
+                    <span v-if="report.totals.win_rate !== null" class="nx-funnel-rate">
+                        @lang('teamwork::app.funnel.win-rate') <strong>@{{ report.totals.win_rate }}%</strong>
+                    </span>
                 </div>
             </div>
         </template>
     </script>
-
 
     <script type="module">
         app.component('v-dashboard-open-leads-by-states', {
@@ -90,12 +104,10 @@
 
             data() {
                 return {
-                    report: [],
-
+                    report: null,
                     isLoading: true,
-
-                    chart: undefined,
-                }
+                    palette: ['#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f59e0b', '#10b981', '#0ea5e9'],
+                };
             },
 
             mounted() {
@@ -105,65 +117,37 @@
             },
 
             methods: {
-                getStats(filtets) {
+                getStats(filters) {
                     this.isLoading = true;
 
-                    var filtets = Object.assign({}, filtets);
-
-                    filtets.type = 'open-leads-by-states';
-
-                    this.$axios.get("{{ route('admin.dashboard.stats') }}", {
-                            params: filtets
-                        })
+                    this.$axios.get("{{ route('admin.dashboard.pipeline_health') }}", { params: Object.assign({}, filters) })
                         .then(response => {
                             this.report = response.data;
-
                             this.isLoading = false;
-
-                            setTimeout(() => {
-                                this.prepare();
-                            }, 0);
                         })
-                        .catch(error => {});
+                        .catch(() => {});
                 },
 
-                prepare() {
-                    if (this.chart) {
-                        this.chart.destroy();
-                    }
+                max() {
+                    return Math.max(1, ...this.report.stages.map(stage => stage.total));
+                },
 
-                    if (this.report.statistics.length === 0) {
-                        return;
-                    }
+                width(total) {
+                    return total ? Math.max(6, Math.round(total * 100 / this.max())) : 0;
+                },
 
-                    const ctx = document.getElementById(this.$.uid + '_chart')?.getContext('2d');
+                share(total) {
+                    return this.report.totals.open ? Math.round(total * 100 / this.report.totals.open) : 0;
+                },
 
-                    // Create gradient
-                    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                    gradient.addColorStop(0, 'rgba(144, 247, 236, 0.8)');
-                    gradient.addColorStop(1, 'rgba(50, 204, 188, 1)');
+                color(index) {
+                    return this.palette[index % this.palette.length];
+                },
 
-                    this.chart = new Chart(ctx, {
-                        type: 'funnel',
-
-                        data: {
-                            labels: this.report.statistics.map(stat => stat.name),
-                            datasets: [
-                                {
-                                    data: this.report.statistics.map(stat => stat.total),
-                                    backgroundColor: gradient,
-                                    borderColor: 'rgba(0, 0, 0, 0)',
-                                    borderWidth: 0,
-                                },
-                            ],
-                        },
-
-                        options: {
-                            indexAxis: 'y',
-                        },
-                    });
-                }
-            }
+                money(value) {
+                    return this.report.currency + Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 0 });
+                },
+            },
         });
     </script>
 @endPushOnce

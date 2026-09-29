@@ -434,6 +434,22 @@
                         }
                     }
 
+                    /**
+                     * First visit: start on the user's own cases. Teammates' cases stay one
+                     * click away through the "Sales Person" filter (teamwork, not isolation).
+                     */
+                    const ownerColumn = this.available.columns.find(({ index }) => index === 'user_id');
+
+                    if (ownerColumn) {
+                        this.applied.filters.columns.push({
+                            ...ownerColumn,
+                            value: [{
+                                label: @json(auth()->guard('user')->user()->name),
+                                value: {{ (int) auth()->guard('user')->id() }},
+                            }],
+                        });
+                    }
+
                     this.get()
                         .then(response => {
                             for (let [sortOrder, data] of Object.entries(response.data)) {

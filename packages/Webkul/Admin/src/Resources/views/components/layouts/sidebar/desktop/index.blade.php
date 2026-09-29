@@ -1,6 +1,7 @@
 @php
     $svgIcons = [
         'dashboard' => '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>',
+        'follow_up' => '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"/></svg>',
         'leads' => '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
         'quotes' => '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>',
         'policies' => '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>',
@@ -17,6 +18,7 @@
 
     $menuConfig = [
         'dashboard' => ['bg' => '#EEF2FF', 'border' => '#C7D2FE', 'color' => '#6366F1', 'glow' => 'rgba(99,102,241,0.18)'],
+        'follow_up' => ['bg' => '#FFE4E6', 'border' => '#FECDD3', 'color' => '#E11D48', 'glow' => 'rgba(225,29,72,0.18)'],
         'leads' => ['bg' => '#E0F2FE', 'border' => '#BAE6FD', 'color' => '#0EA5E9', 'glow' => 'rgba(14,165,233,0.18)'],
         'quotes' => ['bg' => '#FEF3C7', 'border' => '#FDE68A', 'color' => '#F59E0B', 'glow' => 'rgba(245,158,11,0.18)'],
         'policies' => ['bg' => '#D1FAE5', 'border' => '#A7F3D0', 'color' => '#10B981', 'glow' => 'rgba(16,185,129,0.18)'],
@@ -70,70 +72,81 @@
     ];
 @endphp
 
+{{-- Styles for this rail live in components/layouts/theme.blade.php (<head>), because Vue strips <style> tags inside #app. --}}
 <div
     id="admin-sidebar"
     ref="sidebar"
     class="duration-80 fixed top-[60px] z-[10002] h-full w-[220px] pt-1.5 transition-all group-[.sidebar-collapsed]/container:w-[70px] max-lg:hidden"
 >
     <div class="journal-scroll h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden group-[.sidebar-collapsed]/container:overflow-visible pb-14">
-        <nav class="grid w-full gap-[2px] px-2">
+        <nav class="grid w-full gap-[3px] px-2 pt-1">
             @foreach (menu()->getItems('admin') as $menuItem)
+                {{-- System configuration is reached from Settings: one menu for every setting. --}}
+                @continue($menuItem->getKey() === 'configuration')
+
                 @php
                     $key = $menuItem->getKey();
-                    $cfg = $menuConfig[$key] ?? ['bg' => '#F1F5F9', 'border' => '#E2E8F0', 'color' => '#64748B', 'glow' => 'rgba(100,116,139,0.12)'];
+                    $cfg = $menuConfig[$key] ?? ['color' => '#64748B'];
                     $svg = $svgIcons[$key] ?? '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>';
                     $isItemActive = (bool) $menuItem->isActive();
                     $hasChildren = ! in_array($key, ['settings', 'configuration']) && $menuItem->haveChildren();
                 @endphp
 
-                <div class="nv-row relative {{ $hasChildren ? 'nv-has-flyout' : '' }}" data-menu-key="{{ $key }}">
+                <div
+                    class="nv-row {{ $hasChildren ? 'nv-has-flyout' : '' }}"
+                    data-menu-key="{{ $key }}"
+                    style="--nx-c: {{ $cfg['color'] }};"
+                >
                     <a
-                        class="nv-link flex gap-2.5 px-2 py-[7px] items-center cursor-pointer rounded-xl transition-all duration-200 {{ $isItemActive ? 'nv-active' : '' }}"
+                        class="nv-link {{ $isItemActive ? 'nv-active' : '' }}"
                         href="{{ $hasChildren ? 'javascript:void(0)' : $menuItem->getUrl() }}"
+                        title="{{ $menuItem->getName() }}"
+                        @if ($hasChildren) aria-haspopup="true" aria-expanded="false" @endif
                     >
-                        <span
-                            class="nv-icon w-[30px] h-[30px] rounded-[9px] flex items-center justify-center shrink-0 transition-all duration-200"
-                            style="background: {{ $cfg['bg'] }}; border: 1px solid {{ $cfg['border'] }}; color: {{ $cfg['color'] }}; box-shadow: 0 2px 6px {{ $cfg['glow'] }};"
-                        >
-                            {!! $svg !!}
-                        </span>
+                        <span class="nv-icon">{!! $svg !!}</span>
+
                         <div class="flex-1 min-w-0 flex justify-between items-center whitespace-nowrap group-[.sidebar-collapsed]/container:hidden">
-                            <span class="nv-label text-[12.5px] font-semibold tracking-tight truncate transition-colors duration-150">
-                                {{ $menuItem->getName() }}
-                            </span>
+                            <span class="nv-label truncate">{{ $menuItem->getName() }}</span>
+
                             @if ($hasChildren)
-                                <svg class="nv-chevron w-3.5 h-3.5 shrink-0 ml-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                                <svg class="nv-chevron shrink-0 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                             @endif
                         </div>
                     </a>
 
-                    {{-- Flyout: CSS :hover driven, JS positions it vertically --}}
                     @if ($hasChildren)
-                        <div class="nv-flyout">
+                        <div class="nv-flyout" role="menu">
                             <div class="nv-flyout-inner">
                                 <div class="nv-flyout-head">
                                     <div class="flex items-center gap-2">
-                                        <span class="nv-dot" style="background: {{ $cfg['color'] }}; box-shadow: 0 0 6px {{ $cfg['glow'] }};"></span>
+                                        <span class="nv-dot"></span>
                                         <span class="nv-flyout-title">{{ $menuItem->getName() }}</span>
                                     </div>
+
                                     <span class="nv-flyout-count">{{ count($menuItem->getChildren()) }}</span>
                                 </div>
+
                                 <div class="nv-flyout-body">
                                     @foreach ($menuItem->getChildren() as $subMenuItem)
                                         @php
                                             $subKey = $subMenuItem->getKey();
-                                            $subCfg = $subItemConfig[$subKey] ?? ['bg' => '#F1F5F9', 'color' => '#64748B', 'badge' => ''];
+                                            $subCfg = $subItemConfig[$subKey] ?? ['color' => $cfg['color'], 'badge' => ''];
                                             $subSvg = $subItemSvgs[$subKey] ?? '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>';
-                                            $showBadge = !empty($subCfg['badge']) && strtolower(trim($subCfg['badge'])) !== strtolower(trim($subMenuItem->getName()));
+                                            $showBadge = ! empty($subCfg['badge']) && strtolower(trim($subCfg['badge'])) !== strtolower(trim($subMenuItem->getName()));
                                         @endphp
-                                        <a href="{{ $subMenuItem->getUrl() }}" class="nv-sub {{ $subMenuItem->isActive() ? 'nv-sub-active' : '' }}">
+
+                                        <a
+                                            href="{{ $subMenuItem->getUrl() }}"
+                                            class="nv-sub {{ $subMenuItem->isActive() ? 'nv-sub-active' : '' }}"
+                                            style="--nx-sc: {{ $subCfg['color'] }};"
+                                            role="menuitem"
+                                        >
                                             <div class="flex items-center gap-2.5 min-w-0">
-                                                <span class="nv-sub-icon" style="background: {{ $subCfg['bg'] }}; color: {{ $subCfg['color'] }};">
-                                                    {!! $subSvg !!}
-                                                </span>
+                                                <span class="nv-sub-icon">{!! $subSvg !!}</span>
                                                 <span class="nv-sub-text">{{ $subMenuItem->getName() }}</span>
                                             </div>
-                                            @if($showBadge)
+
+                                            @if ($showBadge)
                                                 <span class="nv-sub-badge">{{ $subCfg['badge'] }}</span>
                                             @else
                                                 <svg class="nv-sub-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -154,201 +167,42 @@
     {!! view_render_event('admin.layout.sidebar.toggle.after') !!}
 </div>
 
-<style>
-    /* ═══════════════════════════════════════════════════════
-       2027 AURORA SIDEBAR — Premium Enterprise SaaS
-       ═══════════════════════════════════════════════════════ */
-
-    #admin-sidebar {
-        background: linear-gradient(175deg, #f8faff 0%, #f0f4fb 35%, #eaeff8 70%, #e6ebf4 100%) !important;
-        border-right: 1px solid rgba(196, 207, 226, 0.55) !important;
-        box-shadow: 2px 0 24px rgba(15, 23, 42, 0.04), 1px 0 4px rgba(15, 23, 42, 0.02) !important;
-    }
-    .dark #admin-sidebar {
-        background: linear-gradient(175deg, #0f172a 0%, #0c1322 60%, #0a0f1c 100%) !important;
-        border-right: 1px solid rgba(51, 65, 85, 0.5) !important;
-        box-shadow: 2px 0 24px rgba(0, 0, 0, 0.3) !important;
-    }
-
-    /* Scrollbar */
-    #admin-sidebar .journal-scroll::-webkit-scrollbar { width: 3px; }
-    #admin-sidebar .journal-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.35); border-radius: 99px; }
-    #admin-sidebar .journal-scroll::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.6); }
-    #admin-sidebar .journal-scroll::-webkit-scrollbar-track { background: transparent; }
-
-    /* ── Menu Link ── */
-    .nv-link { color: #475569; border: 1px solid transparent; }
-    .dark .nv-link { color: #cbd5e1; }
-    .nv-label { color: #334155; }
-    .dark .nv-label { color: #e2e8f0; }
-    .nv-chevron { color: #94a3b8; }
-    .dark .nv-chevron { color: #64748b; }
-
-    /* ── Hover ── */
-    .nv-row:hover > .nv-link:not(.nv-active) {
-        background: rgba(255, 255, 255, 0.75);
-        border-color: rgba(196, 207, 226, 0.55);
-        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(255,255,255,0.5) inset;
-    }
-    .nv-row:hover > .nv-link:not(.nv-active) .nv-label { color: #0f172a; font-weight: 700; }
-    .nv-row:hover > .nv-link:not(.nv-active) .nv-icon { transform: scale(1.07); }
-    .nv-row:hover > .nv-link:not(.nv-active) .nv-chevron { color: #3b82f6; transform: translateX(2px); }
-    .dark .nv-row:hover > .nv-link:not(.nv-active) {
-        background: rgba(30, 41, 59, 0.7);
-        border-color: rgba(51, 65, 85, 0.6);
-    }
-    .dark .nv-row:hover > .nv-link:not(.nv-active) .nv-label { color: #f1f5f9; }
-
-    /* ── Active ── */
-    .nv-active {
-        background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%) !important;
-        border-color: transparent !important;
-        box-shadow: 0 4px 18px rgba(59,130,246,0.3), 0 1px 3px rgba(99,102,241,0.2) !important;
-    }
-    .nv-active .nv-label { color: #fff !important; font-weight: 700 !important; }
-    .nv-active .nv-icon {
-        background: rgba(255,255,255,0.2) !important; border-color: rgba(255,255,255,0.3) !important;
-        color: #fff !important; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15), 0 1px 3px rgba(0,0,0,0.15) !important;
-    }
-    .nv-active .nv-chevron { color: rgba(255,255,255,0.8) !important; }
-
-    /* ═══════════════════════════════════════════════════════
-       FLYOUT — Pure CSS hover show, JS vertical positioning
-       ═══════════════════════════════════════════════════════ */
-
-    .nv-flyout {
-        position: fixed;
-        z-index: 10020;
-        width: 260px;
-        /* Flush against sidebar: no gap = unbroken hover zone */
-        left: 220px;
-        display: none;
-        pointer-events: none;
-        padding-left: 4px; /* tiny visual gap, but padding keeps hover zone continuous */
-    }
-    [dir="rtl"] .nv-flyout {
-        left: auto;
-        right: 220px;
-        padding-left: 0;
-        padding-right: 4px;
-    }
-    .group-[.sidebar-collapsed]\/container .nv-flyout { left: 70px; }
-    [dir="rtl"] .group-[.sidebar-collapsed]\/container .nv-flyout { right: 70px; left: auto; }
-
-    /* SHOW on hover — the row includes the flyout, so hovering on flyout keeps row hovered */
-    .nv-row.nv-has-flyout:hover > .nv-flyout {
-        display: block !important;
-        pointer-events: auto;
-        animation: nvSlideIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    /* Flyout Inner (glassmorphism card) */
-    .nv-flyout-inner {
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        border: 1px solid rgba(196, 207, 226, 0.65);
-        border-radius: 14px;
-        box-shadow:
-            0 20px 40px -10px rgba(15, 23, 42, 0.14),
-            0 8px 20px -6px rgba(15, 23, 42, 0.07),
-            inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        overflow: hidden;
-    }
-    .dark .nv-flyout-inner {
-        background: rgba(15, 23, 42, 0.92);
-        border-color: rgba(51, 65, 85, 0.6);
-        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
-    }
-
-    /* Header */
-    .nv-flyout-head {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 10px 14px 8px;
-        border-bottom: 1px solid rgba(226,232,240,0.6);
-        background: linear-gradient(135deg, rgba(248,250,252,0.7) 0%, rgba(241,245,249,0.4) 100%);
-    }
-    .dark .nv-flyout-head { border-bottom-color: rgba(51,65,85,0.4); background: linear-gradient(135deg, rgba(30,41,59,0.5) 0%, rgba(15,23,42,0.3) 100%); }
-    .nv-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .nv-flyout-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #334155; }
-    .dark .nv-flyout-title { color: #e2e8f0; }
-    .nv-flyout-count { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: rgba(241,245,249,0.85); color: #64748b; border: 1px solid rgba(226,232,240,0.5); }
-    .dark .nv-flyout-count { background: rgba(30,41,59,0.7); color: #94a3b8; border-color: rgba(51,65,85,0.5); }
-
-    /* Body */
-    .nv-flyout-body { padding: 5px; display: flex; flex-direction: column; gap: 2px; }
-
-    /* Sub Item */
-    .nv-sub {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 7px 10px; border-radius: 10px;
-        font-size: 12px; font-weight: 600; color: #475569;
-        background: rgba(255,255,255,0.55);
-        border: 1px solid rgba(226,232,240,0.45);
-        transition: all 0.15s ease; text-decoration: none;
-    }
-    .nv-sub:hover {
-        background: linear-gradient(135deg, rgba(219,234,254,0.65) 0%, rgba(224,242,254,0.45) 100%);
-        border-color: rgba(147,197,253,0.55);
-        color: #1d4ed8;
-        transform: translateX(3px);
-        box-shadow: 0 2px 8px rgba(59,130,246,0.1);
-    }
-    .dark .nv-sub { color: #cbd5e1; background: rgba(30,41,59,0.45); border-color: rgba(51,65,85,0.35); }
-    .dark .nv-sub:hover { background: rgba(30,58,138,0.35); border-color: rgba(59,130,246,0.35); color: #93c5fd; }
-    .nv-sub-icon { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .nv-sub-text { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .nv-sub-arr { width: 12px; height: 12px; flex-shrink: 0; margin-left: 4px; color: #cbd5e1; transition: all 0.15s ease; }
-    .nv-sub:hover .nv-sub-arr { color: #3b82f6; transform: translateX(2px); }
-    .dark .nv-sub-arr { color: #475569; }
-    .nv-sub-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: rgba(241,245,249,0.85); color: #64748b; border: 1px solid rgba(226,232,240,0.45); white-space: nowrap; }
-    .dark .nv-sub-badge { background: rgba(30,41,59,0.7); color: #94a3b8; border-color: rgba(51,65,85,0.5); }
-
-    .nv-sub-active {
-        background: linear-gradient(135deg, rgba(219,234,254,0.75) 0%, rgba(238,242,255,0.55) 100%) !important;
-        border-color: rgba(147,197,253,0.65) !important;
-        color: #2563eb !important;
-    }
-    .dark .nv-sub-active { background: rgba(30,58,138,0.45) !important; border-color: rgba(59,130,246,0.45) !important; color: #93c5fd !important; }
-
-    @keyframes nvSlideIn {
-        from { opacity: 0; transform: translateX(-6px) scale(0.97); }
-        to   { opacity: 1; transform: translateX(0) scale(1); }
-    }
-    [dir="rtl"] .nv-row.nv-has-flyout:hover > .nv-flyout { animation-name: nvSlideInRtl; }
-    @keyframes nvSlideInRtl {
-        from { opacity: 0; transform: translateX(6px) scale(0.97); }
-        to   { opacity: 1; transform: translateX(0) scale(1); }
-    }
-
-    /* ── Desktop Layout Spacing ── */
-    @media (min-width: 1024px) {
-        .group\/container.sidebar-not-collapsed > div:last-child > div:first-child { padding-left: 248px !important; }
-        .group\/container.sidebar-collapsed > div:last-child > div:first-child { padding-left: 85px !important; }
-        [dir="rtl"] .group\/container.sidebar-not-collapsed > div:last-child > div:first-child { padding-left: 16px !important; padding-right: 248px !important; }
-        [dir="rtl"] .group\/container.sidebar-collapsed > div:last-child > div:first-child { padding-left: 16px !important; padding-right: 85px !important; }
-    }
-</style>
-
 @pushOnce('scripts')
     <script
         type="text/x-template"
         id="v-sidebar-collapse-template"
     >
         <div
-            class="fixed bottom-0 w-full max-w-[220px] cursor-pointer border-t px-4 transition-all duration-300 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-950 max-lg:hidden"
-            style="background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); border-color: rgba(196,207,226,0.5);"
+            class="nv-collapse fixed bottom-0 w-full max-w-[220px] px-2 transition-all duration-300 max-lg:hidden"
             :class="{'max-w-[70px]': isCollapsed}"
-            :title="isCollapsed
-                ? '@lang('admin::app.layouts.sidebar.expand')'
-                : '@lang('admin::app.layouts.sidebar.collapse')'"
-            @click="toggle"
         >
-            <div class="flex items-center gap-2.5 p-1.5">
-                <span
-                    class="icon-left-arrow text-2xl transition-all"
-                    :class="[isCollapsed ? 'ltr:rotate-[180deg] rtl:rotate-[0]' : 'ltr:rotate-[0] rtl:rotate-[180deg]']"
-                ></span>
+            <div class="flex items-center justify-between gap-1 py-1.5">
+                <!-- Collapse / expand (hidden in auto-hide mode) -->
+                <button
+                    type="button"
+                    class="nv-tool nv-tool-collapse"
+                    :title="isCollapsed
+                        ? '@lang('admin::app.layouts.sidebar.expand')'
+                        : '@lang('admin::app.layouts.sidebar.collapse')'"
+                    @click="toggle"
+                >
+                    <span
+                        class="icon-left-arrow text-2xl transition-all"
+                        :class="[isCollapsed ? 'ltr:rotate-[180deg] rtl:rotate-[0]' : 'ltr:rotate-[0] rtl:rotate-[180deg]']"
+                    ></span>
+                </button>
+
+                <!-- Pin / auto-hide, handled by the vanilla rail script -->
+                <button
+                    type="button"
+                    class="nv-tool nv-tool-pin"
+                    data-nv-pin
+                    v-show="! isCollapsed"
+                >
+                    <svg class="nv-pin-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+                    <span class="nv-pin-label nv-pin-label-unpin">@lang('admin::app.layouts.sidebar.unpin')</span>
+                    <span class="nv-pin-label nv-pin-label-pin">@lang('admin::app.layouts.sidebar.pin')</span>
+                </button>
             </div>
         </div>
     </script>
@@ -359,7 +213,7 @@
 
             data() {
                 return {
-                    isCollapsed: {{ request()->cookie('sidebar_collapsed') ?? 0 }},
+                    isCollapsed: {{ ! request()->cookie('sidebar_auto') && request()->cookie('sidebar_collapsed') ? 1 : 0 }},
                 }
             },
 
@@ -393,37 +247,266 @@
                 },
             },
         });
+    </script>
 
+    <script>
         /**
-         * Flyout vertical positioning — vanilla JS, runs after Vue mounts.
-         * Positions each flyout so its top aligns with the menu row.
-         * Clamps to viewport so it never overflows off-screen.
+         * Sidebar flyouts.
+         *
+         * Uses event delegation on `document`, so it keeps working after Vue
+         * mounts and replaces the #app DOM. The row that owns the visible flyout
+         * gets `.nv-open`; the flyout is placed next to the rail with its top
+         * aligned to that row, clamped to the viewport, and its caret always
+         * points at the row's vertical center.
          */
-        window.addEventListener('load', function() {
-            document.querySelectorAll('.nv-row.nv-has-flyout').forEach(function(row) {
-                row.addEventListener('mouseenter', function() {
-                    var flyout = row.querySelector('.nv-flyout');
-                    if (!flyout) return;
+        (function () {
+            if (window.__nvFlyouts) {
+                return;
+            }
 
-                    var rowRect = row.getBoundingClientRect();
-                    var viewH = window.innerHeight;
+            window.__nvFlyouts = true;
 
-                    // Align flyout top with row top
-                    var top = rowRect.top;
+            var HEADER_OFFSET = 68;
+            var VIEWPORT_MARGIN = 12;
+            var GAP = 10;
+            var CLOSE_DELAY = 180;
 
-                    // After a frame, measure flyout height and clamp
-                    requestAnimationFrame(function() {
-                        var fH = flyout.offsetHeight || 200;
-                        if (top + fH > viewH - 12) {
-                            top = viewH - fH - 12;
-                        }
-                        if (top < 62) top = 62; // below header
-                        flyout.style.top = top + 'px';
-                    });
+            var openRow = null;
+            var closeTimer = null;
 
-                    flyout.style.top = top + 'px';
-                });
+            function position(row) {
+                var flyout = row.querySelector('.nv-flyout');
+                var sidebar = document.getElementById('admin-sidebar');
+
+                if (! flyout || ! sidebar) {
+                    return;
+                }
+
+                var rowRect = row.getBoundingClientRect();
+                var railRect = sidebar.getBoundingClientRect();
+
+                if (document.documentElement.dir === 'rtl') {
+                    flyout.style.left = 'auto';
+                    flyout.style.right = (window.innerWidth - railRect.left + GAP) + 'px';
+                } else {
+                    flyout.style.right = 'auto';
+                    flyout.style.left = (railRect.right + GAP) + 'px';
+                }
+
+                var height = flyout.offsetHeight;
+                var top = Math.max(HEADER_OFFSET, Math.min(rowRect.top, window.innerHeight - height - VIEWPORT_MARGIN));
+                var caret = Math.max(16, Math.min(height - 16, rowRect.top + rowRect.height / 2 - top));
+
+                flyout.style.top = top + 'px';
+                flyout.style.setProperty('--nx-caret-y', caret + 'px');
+            }
+
+            function close(row) {
+                row.classList.remove('nv-open');
+                row.querySelector('.nv-link').setAttribute('aria-expanded', 'false');
+
+                if (openRow === row) {
+                    openRow = null;
+                }
+            }
+
+            function open(row) {
+                clearTimeout(closeTimer);
+
+                if (openRow === row) {
+                    return;
+                }
+
+                if (openRow) {
+                    close(openRow);
+                }
+
+                openRow = row;
+                position(row);
+                row.classList.add('nv-open');
+                row.querySelector('.nv-link').setAttribute('aria-expanded', 'true');
+            }
+
+            function scheduleClose() {
+                clearTimeout(closeTimer);
+
+                closeTimer = setTimeout(function () {
+                    if (openRow) {
+                        close(openRow);
+                    }
+                }, CLOSE_DELAY);
+            }
+
+            function rowFrom(target) {
+                return target && target.closest ? target.closest('#admin-sidebar .nv-row') : null;
+            }
+
+            document.addEventListener('mouseover', function (event) {
+                var row = rowFrom(event.target);
+
+                if (row && row.classList.contains('nv-has-flyout')) {
+                    open(row);
+                } else if (openRow) {
+                    scheduleClose();
+                }
             });
-        });
+
+            document.addEventListener('mouseout', function (event) {
+                if (openRow && ! event.relatedTarget) {
+                    scheduleClose();
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                var link = event.target.closest && event.target.closest('#admin-sidebar .nv-has-flyout > .nv-link');
+
+                if (link) {
+                    event.preventDefault();
+
+                    open(link.parentElement);
+                } else if (openRow && ! rowFrom(event.target)) {
+                    close(openRow);
+                }
+            });
+
+            document.addEventListener('focusin', function (event) {
+                var row = rowFrom(event.target);
+
+                if (row && row.classList.contains('nv-has-flyout')) {
+                    open(row);
+                } else if (openRow) {
+                    close(openRow);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && openRow) {
+                    var link = openRow.querySelector('.nv-link');
+
+                    close(openRow);
+                    link.focus({ preventScroll: true });
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                if (openRow) {
+                    position(openRow);
+                }
+            });
+
+            document.addEventListener('scroll', function () {
+                if (openRow) {
+                    position(openRow);
+                }
+            }, true);
+
+            // The rail slides while peeking; re-anchor an open flyout once it settles.
+            document.addEventListener('transitionend', function (event) {
+                if (openRow && event.target.id === 'admin-sidebar') {
+                    position(openRow);
+                }
+            });
+
+            /**
+             * Auto-hide mode (`html.nv-auto`): the rail sits off-canvas and peeks
+             * in (`html.nv-peek`) while the pointer is on the left edge strip, the
+             * header trigger, or the rail itself, including its flyouts.
+             */
+            var root = document.documentElement;
+            var PEEK_CLOSE_DELAY = 320;
+            var peekTimer = null;
+
+            function setCookie(name, value) {
+                var expiryDate = new Date();
+
+                expiryDate.setMonth(expiryDate.getMonth() + 1);
+
+                document.cookie = name + '=' + value + '; path=/; expires=' + expiryDate.toGMTString();
+            }
+
+            function peek() {
+                clearTimeout(peekTimer);
+                root.classList.add('nv-peek');
+            }
+
+            function unpeek(immediate) {
+                clearTimeout(peekTimer);
+
+                if (immediate) {
+                    root.classList.remove('nv-peek');
+
+                    return;
+                }
+
+                peekTimer = setTimeout(function () {
+                    if (openRow) {
+                        close(openRow);
+                    }
+
+                    root.classList.remove('nv-peek');
+                }, PEEK_CLOSE_DELAY);
+            }
+
+            function isPeekZone(target) {
+                return !! (target && target.closest && target.closest('#admin-sidebar, .nv-edge, .nv-reveal'));
+            }
+
+            document.addEventListener('mouseover', function (event) {
+                if (! root.classList.contains('nv-auto')) {
+                    return;
+                }
+
+                isPeekZone(event.target) ? peek() : root.classList.contains('nv-peek') && unpeek();
+            });
+
+            document.addEventListener('mouseout', function (event) {
+                if (root.classList.contains('nv-peek') && ! event.relatedTarget) {
+                    unpeek();
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                if (! event.target.closest) {
+                    return;
+                }
+
+                if (event.target.closest('.nv-reveal')) {
+                    root.classList.contains('nv-peek') ? unpeek(true) : peek();
+
+                    return;
+                }
+
+                if (event.target.closest('[data-nv-pin]')) {
+                    var auto = ! root.classList.contains('nv-auto');
+                    var layout = document.querySelector('.group\\/container');
+
+                    setCookie('sidebar_auto', auto ? 1 : 0);
+
+                    if (auto && layout && layout.classList.contains('sidebar-collapsed')) {
+                        layout.classList.replace('sidebar-collapsed', 'sidebar-not-collapsed');
+                        setCookie('sidebar_collapsed', 0);
+                    }
+
+                    if (openRow) {
+                        close(openRow);
+                    }
+
+                    root.classList.toggle('nv-auto', auto);
+                    unpeek(true);
+
+                    return;
+                }
+
+                if (root.classList.contains('nv-peek') && ! isPeekZone(event.target)) {
+                    unpeek(true);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && ! openRow && root.classList.contains('nv-peek')) {
+                    unpeek(true);
+                }
+            });
+        })();
     </script>
 @endPushOnce
