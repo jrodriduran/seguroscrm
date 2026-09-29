@@ -34,3 +34,7 @@ node_modules/
 /test-results/
 /blob-report/
 /playwright/.cache/
+
+# Local backups (may contain secrets) and test caches
+*.bak-*
+/.phpunit.cache
