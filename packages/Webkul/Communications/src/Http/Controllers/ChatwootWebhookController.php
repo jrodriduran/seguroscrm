@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Throwable;
 use Webkul\Communications\Services\ChatwootInbound;
 use Webkul\Communications\Services\CommunicationSettings;
+use Webkul\Teamwork\Http\Middleware\ApplyTimezone;
 
 /**
  * Receives Chatwoot events. The URL carries a secret token only Chatwoot
@@ -30,7 +31,13 @@ class ChatwootWebhookController extends Controller
             return response()->json(['status' => 'ignored', 'reason' => 'account']);
         }
 
-        // Texts created here (lead titles, notifications) use the agency language.
+        // Same clock as the web app (agency time zone); texts in the agency language.
+        if (class_exists(ApplyTimezone::class)) {
+            $zone = ApplyTimezone::resolve();
+            config(['app.timezone' => $zone]);
+            date_default_timezone_set($zone);
+        }
+
         app()->setLocale(core()->getConfigData('general.general.locale_settings.locale') ?: config('app.locale'));
 
         try {
