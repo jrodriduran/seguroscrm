@@ -28,6 +28,24 @@
     .cm-outcome.is-positive { --cm-c: #059669; }
     .cm-outcome.is-negative { --cm-c: #e11d48; }
     .cm-outcome.is-neutral { --cm-c: #64748b; }
+
+    .cm-preview:not(:empty) { margin-top: 2px; padding: 10px 12px; border-radius: 10px; font-size: 13px; line-height: 1.55; color: #334155; background: #f8fafc; border: 1px dashed rgba(79, 107, 255, 0.35); }
+    .cm-preview:not(:empty)::before { content: attr(data-label); }
+    .dark .cm-preview:not(:empty) { background: rgba(148, 163, 184, 0.06); color: #e2e8f0; }
+    .cm-preview a { color: var(--nx-accent); }
+
+    .cm-step { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; border: 1px solid rgba(15, 23, 42, 0.08); background: #fbfcfe; }
+    .dark .cm-step { background: rgba(148, 163, 184, 0.04); border-color: rgba(148, 163, 184, 0.14); }
+    .cm-step-num { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #4f6bff, #6d5dfc); }
+    .cm-step [hidden], [data-cm-list] [hidden] { display: none !important; }
+
+    .cm-rule { display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 10px; border-radius: 99px; font-size: 12px; color: #334155; background: rgba(79, 107, 255, 0.08); border: 1px solid rgba(79, 107, 255, 0.22); }
+    .cm-rule a { color: inherit; text-decoration: none; }
+    .cm-rule em { color: #b45309; font-style: normal; }
+    .cm-rule button { width: 20px; height: 20px; border-radius: 50%; color: #64748b; }
+    .cm-rule button:hover { background: rgba(225, 29, 72, 0.12); color: #e11d48; }
+    .cm-rule.is-off { opacity: .7; }
+    .dark .cm-rule { color: #e2e8f0; }
 </style>
 
 @if (Route::has('admin.communications.zip') && auth()->guard('user')->check() && bouncer()->hasPermission('contacts.persons.communications'))

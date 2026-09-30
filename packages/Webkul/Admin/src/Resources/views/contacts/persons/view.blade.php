@@ -84,6 +84,9 @@
             <!-- Contact Preferences And Consent -->
             @includeIf('communications::partials.person-contact')
 
+            <!-- Communication Sequences -->
+            @includeIf('communications::partials.person-sequences')
+
             <!-- Contact Organization -->
             @include ('admin::contacts.persons.view.organization')
         </div>

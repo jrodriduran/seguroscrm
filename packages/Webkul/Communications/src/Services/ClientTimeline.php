@@ -48,7 +48,7 @@ class ClientTimeline
             ->limit(500)
             ->get()
             ->map(fn (CommunicationMessage $message) => [
-                'channel' => 'chat',
+                'channel' => $message->channel === 'email' ? 'email' : 'chat',
                 'direction' => $message->direction,
                 'author' => $message->user?->name ?? $message->sender_name,
                 'title' => Lang::has($key = 'communications::app.chatwoot.channels.'.$message->channel) ? trans($key) : $message->channel,

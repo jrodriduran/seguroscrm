@@ -2,6 +2,26 @@
 
 return [
     [
+        'key' => 'mail.communication_sequences',
+        'name' => 'communications::app.sequences.title',
+        'route' => 'admin.communications.sequences.index',
+        'sort' => 6,
+        'icon-class' => '',
+    ], [
+        'key' => 'mail.communication_templates',
+        'name' => 'communications::app.templates.title',
+        'route' => 'admin.communications.templates.index',
+        'sort' => 7,
+        'icon-class' => '',
+    ], [
+        'key' => 'settings.communications.stages',
+        'name' => 'communications::app.stages.title',
+        'info' => 'communications::app.menu.stages-info',
+        'route' => 'admin.settings.communications.stages.index',
+        'sort' => 0,
+        'icon-class' => 'icon-settings-flow',
+    ],
+    [
         'key' => 'settings.communications',
         'name' => 'communications::app.menu.communications',
         'info' => 'communications::app.menu.communications-info',
