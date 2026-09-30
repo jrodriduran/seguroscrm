@@ -155,7 +155,7 @@ return [
         'webhook-pending' => 'Se registra solo al guardar la conexión.',
         'messages-logged' => ':count mensaje(s) recibidos en el CRM.',
         'unknown-sender' => 'Contacto nuevo',
-        'lead-title' => ':name — mensaje por :channel',
+        'lead-title' => ':name · :channel',
         'notification' => 'Nuevo mensaje de :name por :channel',
         'channels' => [
             'whatsapp' => 'WhatsApp',

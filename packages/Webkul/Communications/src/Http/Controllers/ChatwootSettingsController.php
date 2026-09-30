@@ -33,8 +33,9 @@ class ChatwootSettingsController extends Controller
 
         return view('communications::settings.chatwoot', [
             'values' => [
-                'base_url' => config('chatwoot.base_url'),
-                'account_id' => config('chatwoot.account_id'),
+                // Only saved values: never prefill the cloud defaults from config/chatwoot.php.
+                'base_url' => $this->settings->get('chatwoot.base_url', env('CHATWOOT_BASE_URL')),
+                'account_id' => $this->settings->get('chatwoot.account_id', env('CHATWOOT_ACCOUNT_ID')),
                 'default_inbox_id' => config('chatwoot.default_inbox_id'),
                 'owner_id' => $this->settings->get('chatwoot.owner_id'),
                 'pipeline_id' => $this->settings->get('chatwoot.pipeline_id'),

@@ -30,6 +30,9 @@ class ChatwootWebhookController extends Controller
             return response()->json(['status' => 'ignored', 'reason' => 'account']);
         }
 
+        // Texts created here (lead titles, notifications) use the agency language.
+        app()->setLocale(core()->getConfigData('general.general.locale_settings.locale') ?: config('app.locale'));
+
         try {
             $result = $inbound->handle($request->all());
         } catch (Throwable $e) {
