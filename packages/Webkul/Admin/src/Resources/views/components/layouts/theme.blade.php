@@ -1422,3 +1422,5 @@
 </script>
 
 @include('admin::components.layouts.theme-scripts')
+
+@includeIf('communications::partials.head')

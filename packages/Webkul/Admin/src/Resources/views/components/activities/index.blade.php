@@ -98,6 +98,14 @@
                                             <p class="flex flex-wrap items-center gap-1 font-medium dark:text-white">
                                                 @{{ activity.title }}
 
+                                                <span
+                                                    v-if="activity.outcome"
+                                                    class="cm-outcome"
+                                                    :class="'is-' + (activity.outcome_tone || 'neutral')"
+                                                >
+                                                    @{{ activity.outcome_label }}
+                                                </span>
+
                                                 <template v-if="activity.type == 'system' && activity.additional">
                                                     <p class="flex items-center gap-1">
                                                         <span>:</span>

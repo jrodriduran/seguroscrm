@@ -38,6 +38,42 @@ class HouseholdMember extends Model implements HouseholdMemberContract
     ];
 
     /**
+     * Relationship codes; segments (e.g. "has children") rely on them.
+     */
+    public const RELATIONSHIPS = ['spouse', 'child', 'parent', 'dependent', 'other'];
+
+    /**
+     * Words imports and integrations may send, mapped to a relationship code.
+     */
+    protected const RELATIONSHIP_SYNONYMS = [
+        'spouse' => ['spouse', 'wife', 'husband', 'partner', 'domestic partner', 'esposa', 'esposo', 'conyuge', 'cónyuge', 'pareja', 'marido', 'mujer'],
+        'child' => ['child', 'son', 'daughter', 'kid', 'stepchild', 'stepson', 'stepdaughter', 'hijo', 'hija', 'hijastro', 'hijastra', 'niño', 'niña', 'filho', 'filha'],
+        'parent' => ['parent', 'mother', 'father', 'mom', 'dad', 'madre', 'padre', 'mamá', 'papá', 'mae', 'pai'],
+        'dependent' => ['dependent', 'dependiente', 'grandchild', 'nieto', 'nieta', 'ward', 'tutelado'],
+    ];
+
+    /**
+     * Store relationships as codes, whatever wording arrives.
+     */
+    public function setRelationshipAttribute($value): void
+    {
+        $this->attributes['relationship'] = static::normalizeRelationship($value);
+    }
+
+    public static function normalizeRelationship($value): string
+    {
+        $value = mb_strtolower(trim((string) $value));
+
+        foreach (static::RELATIONSHIP_SYNONYMS as $code => $words) {
+            if (in_array($value, $words, true)) {
+                return $code;
+            }
+        }
+
+        return in_array($value, static::RELATIONSHIPS, true) ? $value : 'other';
+    }
+
+    /**
      * Mutator to encrypt SSN / ITIN at application layer for HIPAA/PII compliance.
      */
     public function setSsnItinAttribute($value): void

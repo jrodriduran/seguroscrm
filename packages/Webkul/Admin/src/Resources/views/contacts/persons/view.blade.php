@@ -81,6 +81,9 @@
             <!-- Person Attributes -->
             @include ('admin::contacts.persons.view.attributes')
 
+            <!-- Contact Preferences And Consent -->
+            @includeIf('communications::partials.person-contact')
+
             <!-- Contact Organization -->
             @include ('admin::contacts.persons.view.organization')
         </div>
