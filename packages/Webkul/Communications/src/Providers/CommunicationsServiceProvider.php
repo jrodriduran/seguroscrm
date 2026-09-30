@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Webkul\Communications\Console\BackfillAddresses;
 use Webkul\Communications\Listeners\ActivityOutcomeListener;
 use Webkul\Communications\Listeners\PolicyLifecycleObserver;
+use Webkul\Communications\Services\CommunicationSettings;
 use Webkul\Lead\Models\InsurancePolicy;
 
 /**
@@ -27,6 +28,8 @@ class CommunicationsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(dirname(__DIR__).'/Config/menu.php', 'menu.admin');
 
         $this->mergeConfigFrom(dirname(__DIR__).'/Config/acl.php', 'acl');
+
+        $this->app->singleton(CommunicationSettings::class);
     }
 
     /**
@@ -36,6 +39,9 @@ class CommunicationsServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
 
+        // Chatwoot connection saved in Settings wins over the .env defaults.
+        $this->app->make(CommunicationSettings::class)->applyToConfig();
+
         $this->loadViewsFrom(__DIR__.'/../Resources/views', 'communications');
 
         $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'communications');
@@ -43,6 +49,8 @@ class CommunicationsServiceProvider extends ServiceProvider
         Route::middleware(['web', 'admin_locale', 'user'])
             ->prefix(config('app.admin_path'))
             ->group(__DIR__.'/../Routes/admin.php');
+
+        Route::group([], __DIR__.'/../Routes/webhooks.php');
 
         Event::listen('activity.create.after', [ActivityOutcomeListener::class, 'saved']);
         Event::listen('activity.update.after', [ActivityOutcomeListener::class, 'saved']);
@@ -64,6 +72,11 @@ class CommunicationsServiceProvider extends ServiceProvider
             Breadcrumbs::for('settings.communications.outcomes', function (BreadcrumbTrail $trail) {
                 $trail->parent('settings');
                 $trail->push(trans('communications::app.outcomes.title'), route('admin.settings.communications.outcomes.index'));
+            });
+
+            Breadcrumbs::for('settings.communications.chatwoot', function (BreadcrumbTrail $trail) {
+                $trail->parent('settings');
+                $trail->push(trans('communications::app.chatwoot.title'), route('admin.settings.communications.chatwoot.index'));
             });
         });
     }

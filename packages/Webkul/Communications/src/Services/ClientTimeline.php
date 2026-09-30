@@ -5,7 +5,9 @@ namespace Webkul\Communications\Services;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
+use Webkul\Communications\Models\CommunicationMessage;
 use Webkul\Lead\Services\ChatwootService;
 
 /**
@@ -29,9 +31,33 @@ class ClientTimeline
 
         return $this->emails($personId, $leadIds)
             ->merge($this->activities($personId, $leadIds))
-            ->merge($this->chats($leadIds))
+            ->merge($logged = $this->loggedMessages($personId, $leadIds))
+            ->merge($this->chats($leadIds, $logged->pluck('conversation_id')->filter()->unique()->all()))
             ->sortByDesc('at')
             ->values();
+    }
+
+    /**
+     * Chat messages received through webhooks and kept in the CRM.
+     */
+    protected function loggedMessages(int $personId, array $leadIds): Collection
+    {
+        return CommunicationMessage::with('user:id,name')
+            ->where(fn ($query) => $query->where('person_id', $personId)->when($leadIds, fn ($q) => $q->orWhereIn('lead_id', $leadIds)))
+            ->latest('sent_at')
+            ->limit(500)
+            ->get()
+            ->map(fn (CommunicationMessage $message) => [
+                'channel' => 'chat',
+                'direction' => $message->direction,
+                'author' => $message->user?->name ?? $message->sender_name,
+                'title' => Lang::has($key = 'communications::app.chatwoot.channels.'.$message->channel) ? trans($key) : $message->channel,
+                'body' => Str::limit((string) $message->content, 400).($message->attachments ? ' 📎' : ''),
+                'at' => $message->sent_at ?? $message->created_at,
+                'status' => $message->status,
+                'conversation_id' => $message->conversation_id,
+                'url' => $message->conversation_id && $this->chatwoot->isConfigured() ? $this->chatwoot->getConversationUrl((int) $message->conversation_id) : null,
+            ]);
     }
 
     protected function emails(int $personId, array $leadIds): Collection
@@ -84,9 +110,10 @@ class ClientTimeline
     }
 
     /**
-     * Messages from Chatwoot conversations linked to the client's leads.
+     * Messages from Chatwoot conversations linked to the client's leads that
+     * were never logged (linked before webhooks were set up): read live.
      */
-    protected function chats(array $leadIds): Collection
+    protected function chats(array $leadIds, array $loggedConversations = []): Collection
     {
         if (! $leadIds || ! $this->chatwoot->isConfigured()) {
             return collect();
@@ -95,6 +122,7 @@ class ClientTimeline
         return DB::table('leads')
             ->whereIn('id', $leadIds)
             ->whereNotNull('chatwoot_conversation_id')
+            ->whereNotIn('chatwoot_conversation_id', $loggedConversations ?: [0])
             ->limit(10)
             ->get(['id', 'chatwoot_conversation_id'])
             ->flatMap(function ($lead) {

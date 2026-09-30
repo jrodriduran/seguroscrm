@@ -22,7 +22,8 @@
         ], $changes), fn ($value) => $value !== null && $value !== ''));
     @endphp
 
-    <div class="flex flex-col gap-4">
+    {{-- v-pre: message text comes from clients and must never be read as Vue template syntax. --}}
+    <div class="flex flex-col gap-4" v-pre>
         <div class="scroll-reactive-sticky sticky top-[60px] z-[1000] flex flex-wrap items-center justify-between gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
             <div class="flex min-w-0 flex-col gap-1">
                 <x-admin::breadcrumbs name="communications.person" :entity="$person" />
@@ -78,13 +79,30 @@
             </div>
         </div>
 
+        {{-- Reply in the client's latest chat conversation --}}
+        @if ($conversation && $canReply)
+            <form method="POST" action="{{ route('admin.communications.persons.reply', $person->id) }}" class="tw-card tw-ok p-3">
+                @csrf
+
+                <div class="mb-2 flex items-center justify-between gap-2">
+                    <span class="tw-label" style="margin: 0;">@lang('communications::app.reply.title', ['channel' => trans('communications::app.chatwoot.channels.'.$conversation->channel)])</span>
+                    <span class="tw-meta">#{{ $conversation->conversation_id }}</span>
+                </div>
+
+                <div class="flex items-end gap-2">
+                    <textarea name="message" rows="2" maxlength="2000" required class="tw-input" placeholder="@lang('communications::app.reply.placeholder')">{{ old('message') }}</textarea>
+                    <button type="submit" class="tw-btn tw-btn-primary">@lang('communications::app.reply.send')</button>
+                </div>
+            </form>
+        @endif
+
         {{-- Timeline --}}
         <section class="tw-card tw-info">
             <div class="flex flex-col">
                 @forelse ($entries as $entry)
                     @php([$color, $icon] = $channelMeta[$entry['channel']] ?? $channelMeta['note'])
 
-                    <a href="{{ $entry['url'] }}" class="tw-row" style="grid-template-columns: auto minmax(0, 1fr) auto; text-decoration: none; --tw-c: {{ $color }};" @if (str_starts_with($entry['url'], 'http') && ! str_starts_with($entry['url'], url('/'))) target="_blank" rel="noopener" @endif>
+                    <a href="{{ $entry['url'] ?? '#' }}" class="tw-row" style="grid-template-columns: auto minmax(0, 1fr) auto; text-decoration: none; --tw-c: {{ $color }};" @if (str_starts_with($entry['url'] ?? '', 'http') && ! str_starts_with($entry['url'] ?? '', url('/'))) target="_blank" rel="noopener" @endif>
                         <span class="flex items-center justify-center rounded-full" style="width: 36px; height: 36px; color: {{ $color }}; background: color-mix(in srgb, {{ $color }} 12%, transparent);">
                             <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ $icon }}"/></svg>
                         </span>
