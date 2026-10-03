@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Operaciones de soporte sobre un cliente.
+#
+#   support <cliente> health                          estado y métricas (JSON)
+#   support <cliente> link [email] [--reason "..."]   enlace de entrada de un solo uso (1 min)
+#   support <cliente> reset-owner [email] [--disable-2fa]
+#   support <cliente> warning|read_only|suspended|active ["mensaje"]
+#   support <cliente> logs                            últimos logs de sus contenedores
+#
+# Todo queda en el historial de accesos de la agencia.
+. "$(dirname "$0")/_lib.sh"
+
+T="${1:-}"; ACTION="${2:-}"; shift 2 || true
+require_tenant "$T"
+
+case "$ACTION" in
+    health)
+        artisan "$T" platform status ;;
+    link)
+        artisan "$T" platform support-link "$@" ;;
+    reset-owner)
+        artisan "$T" platform reset-owner "$@" ;;
+    active|warning|read_only|suspended)
+        if [ -n "${1:-}" ]; then
+            artisan "$T" platform status "$ACTION" --message="$1"
+        else
+            artisan "$T" platform status "$ACTION"
+        fi ;;
+    logs)
+        tenant_compose "$T" logs --tail=200 ;;
+    *)
+        sed -n '2,11p' "$0"; exit 1 ;;
+esac

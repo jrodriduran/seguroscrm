@@ -21,6 +21,7 @@ use Webkul\Lead\Providers\LeadServiceProvider;
 use Webkul\Marketing\Providers\MarketingServiceProvider;
 use Webkul\Product\Providers\ProductServiceProvider;
 use Webkul\Quote\Providers\QuoteServiceProvider;
+use Webkul\Platform\Providers\PlatformServiceProvider;
 use Webkul\Security\Providers\SecurityServiceProvider;
 use Webkul\Tag\Providers\TagServiceProvider;
 use Webkul\Teamwork\Providers\TeamworkServiceProvider;
@@ -60,6 +61,7 @@ return [
     LeadServiceProvider::class,
     ProductServiceProvider::class,
     QuoteServiceProvider::class,
+    PlatformServiceProvider::class,
     SecurityServiceProvider::class,
     TeamworkServiceProvider::class,
     CommunicationsServiceProvider::class,

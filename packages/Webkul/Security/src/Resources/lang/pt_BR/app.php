@@ -40,6 +40,8 @@ return [
             'mfa_enabled' => '2FA ativado',
             'mfa_disabled' => '2FA desativado',
             'mfa_reset' => '2FA redefinido pelo admin',
+            'support_login' => 'Acesso do suporte da plataforma',
+            'password_reset' => 'Senha redefinida pela plataforma',
         ],
     ],
 

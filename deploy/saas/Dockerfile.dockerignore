@@ -1,0 +1,15 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+node_modules
+vendor
+storage
+public/storage
+bootstrap/cache/*.php
+tests
+*.bak-*
+docker-compose.yml*
+test_render.php
+example.txt

@@ -35,6 +35,10 @@ class DatabaseSeeder extends Seeder
         $this->call(InsurancePolicyAttributesSeeder::class);
         $this->call(InsuranceEmailTemplatesSeeder::class);
         $this->call(InsuranceWorkflowsSeeder::class);
-        $this->call(TestEnvironmentSeeder::class);
+
+        // Demo users and leads with known passwords: never on a client instance.
+        if (! app()->isProduction() || env('SEED_TEST_DATA')) {
+            $this->call(TestEnvironmentSeeder::class);
+        }
     }
 }
