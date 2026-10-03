@@ -46,6 +46,15 @@
     .cm-rule button:hover { background: rgba(225, 29, 72, 0.12); color: #e11d48; }
     .cm-rule.is-off { opacity: .7; }
     .dark .cm-rule { color: #e2e8f0; }
+
+    .cm-occasion { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; border: 1px solid rgba(15, 23, 42, 0.08); background: #fbfcfe; }
+    .dark .cm-occasion { background: rgba(148, 163, 184, 0.04); border-color: rgba(148, 163, 184, 0.14); }
+    .cm-occasion strong { font-size: 14px; color: #0f172a; }
+    .dark .cm-occasion strong { color: #f1f5f9; }
+    .cm-occasion-icon { font-size: 22px; line-height: 1; }
+
+    .cm-rule-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+    .cm-rule-row [hidden] { display: none !important; }
 </style>
 
 @if (Route::has('admin.communications.zip') && auth()->guard('user')->check() && bouncer()->hasPermission('contacts.persons.communications'))

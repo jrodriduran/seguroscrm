@@ -5,12 +5,14 @@ namespace Webkul\Communications\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Webkul\Communications\Models\Trigger;
+use Webkul\Communications\Services\CampaignRunner;
 use Webkul\Communications\Services\SequenceEngine;
 use Webkul\Teamwork\Http\Middleware\ApplyTimezone;
 
 /**
  * Scheduled every few minutes: starts date-based sequences (birthdays,
- * renewals, leads idle in a stage) and runs the steps that are due.
+ * renewals, leads idle in a stage), runs the steps that are due and sends
+ * the next batch of scheduled campaigns.
  */
 class RunSequences extends Command
 {
@@ -18,7 +20,7 @@ class RunSequences extends Command
 
     protected $description = 'Start date-based communication sequences and run due steps';
 
-    public function handle(SequenceEngine $engine): int
+    public function handle(SequenceEngine $engine, CampaignRunner $campaigns): int
     {
         // Same clock as the web app: the agency time zone.
         if (class_exists('Webkul\\Teamwork\\Http\\Middleware\\ApplyTimezone')) {
@@ -29,8 +31,9 @@ class RunSequences extends Command
 
         $started = $this->birthdays($engine) + $this->renewals($engine) + $this->idleStages($engine);
         $ran = $engine->runDue();
+        $sent = $campaigns->runDue();
 
-        $this->info("Started {$started} enrollment(s), ran {$ran} step(s).");
+        $this->info("Started {$started} enrollment(s), ran {$ran} step(s), {$sent} campaign message(s).");
 
         return self::SUCCESS;
     }
