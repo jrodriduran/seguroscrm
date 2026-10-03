@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Teamwork\Console\RunAutomations;
 use Webkul\Teamwork\Http\Middleware\ApplyTimezone;
+use Webkul\Teamwork\Http\Middleware\EnforceStageGate;
 use Webkul\Teamwork\Listeners\RecordActivityListener;
+use Webkul\Teamwork\Listeners\StagePlaybookListener;
 use Webkul\Teamwork\Services\BusinessHours;
 use Webkul\Teamwork\Services\Mentions;
+use Webkul\Teamwork\Services\MilestoneChecks;
+use Webkul\Teamwork\Services\StagePlaybooks;
 use Webkul\Teamwork\Services\TeamScope;
 
 class TeamworkServiceProvider extends ServiceProvider
@@ -36,6 +40,9 @@ class TeamworkServiceProvider extends ServiceProvider
         // First in the stack, so everything after it (sessions, 2FA, logs) uses the right zone.
         $this->app['router']->prependMiddlewareToGroup('web', ApplyTimezone::class);
 
+        // Stage playbook: leads cannot skip required milestones in "block" stages.
+        $this->app['router']->pushMiddlewareToGroup('web', EnforceStageGate::class);
+
         if ($this->app->runningInConsole()) {
             $this->app->booted(function () {
                 $zone = ApplyTimezone::resolve();
@@ -50,6 +57,11 @@ class TeamworkServiceProvider extends ServiceProvider
         Event::listen('lead.update.before', [RecordActivityListener::class, 'leadUpdating']);
         Event::listen('lead.update.after', [RecordActivityListener::class, 'leadUpdated']);
         Event::listen('lead.create.after', [RecordActivityListener::class, 'leadCreated']);
+
+        // Stage playbook: tasks, carried-over milestones and notices on each move.
+        Event::listen('lead.create.after', [StagePlaybookListener::class, 'leadCreated']);
+        Event::listen('lead.update.before', [StagePlaybookListener::class, 'leadUpdating']);
+        Event::listen('lead.update.after', [StagePlaybookListener::class, 'leadUpdated']);
 
         // Date-based automations (renewals, overdue cases) run every hour.
         if ($this->app->runningInConsole()) {
@@ -81,6 +93,11 @@ class TeamworkServiceProvider extends ServiceProvider
                 $trail->push(trans('teamwork::app.automations.title'), route('admin.settings.teamwork.automations.index'));
             });
 
+            Breadcrumbs::for('settings.teamwork.playbook', function (BreadcrumbTrail $trail) {
+                $trail->parent('settings');
+                $trail->push(trans('teamwork::app.playbook.title'), route('admin.settings.teamwork.playbook.index'));
+            });
+
             Breadcrumbs::for('settings.teamwork.rules', function (BreadcrumbTrail $trail) {
                 $trail->parent('settings');
                 $trail->push(trans('teamwork::app.rules.title'), route('admin.settings.teamwork.rules.index'));
@@ -97,6 +114,8 @@ class TeamworkServiceProvider extends ServiceProvider
         $this->app->scoped(BusinessHours::class);
         $this->app->scoped(TeamScope::class);
         $this->app->scoped(Mentions::class);
+        $this->app->scoped(MilestoneChecks::class);
+        $this->app->scoped(StagePlaybooks::class);
 
         $this->mergeConfigFrom(dirname(__DIR__).'/Config/menu.php', 'menu.admin');
 

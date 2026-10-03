@@ -173,6 +173,16 @@
                                         @{{ element.title }}
                                     </p>
 
+                                    <!-- Stage playbook progress -->
+                                    <span
+                                        v-if="element.playbook && element.playbook.total"
+                                        class="tw-kanban-milestones"
+                                        :class="element.playbook.blocked ? 'is-blocked' : (element.playbook.done >= element.playbook.total ? 'is-ready' : '')"
+                                        :title="element.playbook.missing"
+                                    >
+                                        @{{ element.playbook.blocked ? '⛔' : (element.playbook.done >= element.playbook.total ? '✅' : '🧭') }} @{{ element.playbook.done }}/@{{ element.playbook.total }}
+                                    </span>
+
                                     {!! view_render_event('admin.leads.index.kanban.content.stage.body.card.title.after') !!}
 
                                     <div class="flex flex-wrap gap-1">

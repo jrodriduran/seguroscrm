@@ -19,4 +19,8 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('inbound-emails:process')->everyFiveMinutes();
+// Only IMAP polls a mailbox; Sendgrid delivers inbound mail through its webhook
+// (bulk processing is not supported there and failed on every run).
+Schedule::command('inbound-emails:process')
+    ->everyFiveMinutes()
+    ->when(fn () => config('mail-receiver.default') === 'webklex-imap');

@@ -125,6 +125,9 @@
             <!-- Stages Navigation -->
             @include ('admin::leads.view.stages')
 
+            <!-- Stage Playbook: milestones, gate and stage tasks -->
+            @includeIf('teamwork::partials.lead-playbook')
+
             <!-- Activities -->
             {!! view_render_event('admin.leads.view.activities.before', ['lead' => $lead]) !!}
 

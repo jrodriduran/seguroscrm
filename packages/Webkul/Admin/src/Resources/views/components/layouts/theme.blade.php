@@ -1424,3 +1424,5 @@
 @include('admin::components.layouts.theme-scripts')
 
 @includeIf('communications::partials.head')
+
+@includeIf('teamwork::partials.head')

@@ -4,6 +4,7 @@ namespace Webkul\Admin\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Webkul\Teamwork\Services\StagePlaybooks;
 
 class LeadResource extends JsonResource
 {
@@ -23,6 +24,7 @@ class LeadResource extends JsonResource
             'status' => $this->status,
             'expected_close_date' => $this->expected_close_date,
             'rotten_days' => $this->rotten_days,
+            'playbook' => class_exists(StagePlaybooks::class) ? app(StagePlaybooks::class)->summary($this->resource) : null,
             'closed_at' => $this->closed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
