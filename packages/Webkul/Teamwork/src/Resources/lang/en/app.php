@@ -326,6 +326,14 @@ return [
     ],
 
     'configuration' => [
+        'brand' => [
+            'title' => 'Brand',
+            'info' => 'System name and support details users see (titles, header, emails and the Help page).',
+            'name' => 'System name',
+            'support-email' => 'Support email',
+            'support-phone' => 'Support phone',
+            'support-url' => 'Support website (optional)',
+        ],
         'title' => 'Follow-up & Teamwork',
         'info' => 'Business hours and default limits used to flag late work.',
 
@@ -436,6 +444,17 @@ return [
         ],
         'notices' => [
             'moved' => ':name moved :lead to :stage',
+        ],
+    ],
+
+    'help' => [
+        'cards' => [
+            'support' => ['title' => 'Support', 'description' => 'Write or call us with any question or problem with the CRM.', 'none' => 'Set it in Configuration › General › Brand'],
+            'playbook' => ['title' => 'Pipeline playbook', 'description' => 'Stage milestones, gates and automatic team tasks.'],
+            'sequences' => ['title' => 'Sequences', 'description' => 'Automatic client communications driven by events and stages.'],
+            'follow-up' => ['title' => 'Follow-up center', 'description' => 'Your pending work, the team and what is overdue, in one place.'],
+            'campaigns' => ['title' => 'Campaigns', 'description' => 'Client lists, special dates and bulk sends with consent.'],
+            'templates' => ['title' => 'Templates', 'description' => 'Reusable messages per channel and language, with variables.'],
         ],
     ],
 ];
