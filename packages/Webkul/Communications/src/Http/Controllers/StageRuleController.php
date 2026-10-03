@@ -54,7 +54,7 @@ class StageRuleController extends Controller
 
         session()->flash('success', trans('communications::app.stages.saved'));
 
-        return redirect()->route('admin.settings.communications.stages.index');
+        return back();
     }
 
     public function destroy(int $id): RedirectResponse
@@ -63,6 +63,6 @@ class StageRuleController extends Controller
 
         session()->flash('success', trans('communications::app.stages.deleted'));
 
-        return redirect()->route('admin.settings.communications.stages.index');
+        return back();
     }
 }

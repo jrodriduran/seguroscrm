@@ -28,6 +28,7 @@ class FollowUp extends Model
         'entity_id',
         'title',
         'url',
+        'source',
         'assigned_to',
         'created_by',
         'priority',

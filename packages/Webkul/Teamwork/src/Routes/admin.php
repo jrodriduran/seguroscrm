@@ -5,11 +5,13 @@ use Webkul\Teamwork\Http\Controllers\AutomationController;
 use Webkul\Teamwork\Http\Controllers\FollowerController;
 use Webkul\Teamwork\Http\Controllers\FollowUpCenterController;
 use Webkul\Teamwork\Http\Controllers\FollowUpController;
+use Webkul\Teamwork\Http\Controllers\LeadMilestoneController;
 use Webkul\Teamwork\Http\Controllers\NoteController;
 use Webkul\Teamwork\Http\Controllers\NotificationController;
 use Webkul\Teamwork\Http\Controllers\OverdueRuleController;
 use Webkul\Teamwork\Http\Controllers\PipelineHealthController;
 use Webkul\Teamwork\Http\Controllers\RecordController;
+use Webkul\Teamwork\Http\Controllers\StagePlaybookController;
 
 /**
  * Everyone: their own work and the follow-ups they take part in.
@@ -31,6 +33,10 @@ Route::controller(FollowUpController::class)->prefix('follow-ups')->group(functi
 
     Route::post('{id}/reopen', 'reopen')->name('admin.teamwork.follow_ups.reopen');
 });
+
+Route::post('follow-up/leads/{leadId}/milestones/{milestoneId}', [LeadMilestoneController::class, 'toggle'])->name('admin.teamwork.milestones.toggle');
+
+Route::post('follow-up/leads/{leadId}/stage-override', [LeadMilestoneController::class, 'override'])->name('admin.teamwork.milestones.override');
 
 Route::get('follow-up/record/{type}/{id}', [RecordController::class, 'show'])->name('admin.teamwork.records.show');
 
@@ -78,4 +84,13 @@ Route::controller(OverdueRuleController::class)->prefix('settings/teamwork/rules
     Route::post('{id}/toggle', 'toggle')->name('admin.settings.teamwork.rules.toggle');
 
     Route::delete('{id}', 'destroy')->name('admin.settings.teamwork.rules.delete');
+});
+
+/**
+ * Administration: pipeline playbook (ACL protected).
+ */
+Route::controller(StagePlaybookController::class)->prefix('settings/teamwork/playbook')->group(function () {
+    Route::get('', 'index')->name('admin.settings.teamwork.playbook.index');
+
+    Route::post('{stageId}', 'update')->name('admin.settings.teamwork.playbook.update');
 });

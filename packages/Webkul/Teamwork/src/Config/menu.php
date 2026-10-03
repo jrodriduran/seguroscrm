@@ -11,7 +11,7 @@ return [
         'key' => 'settings.teamwork',
         'name' => 'teamwork::app.menu.teamwork',
         'info' => 'teamwork::app.menu.teamwork-info',
-        'route' => 'admin.settings.teamwork.rules.index',
+        'route' => 'admin.settings.teamwork.playbook.index',
         'sort' => 6,
         'icon-class' => 'icon-activity',
     ], [
@@ -20,6 +20,13 @@ return [
         'info' => 'teamwork::app.menu.automations-info',
         'route' => 'admin.settings.teamwork.automations.index',
         'sort' => 2,
+        'icon-class' => 'icon-settings-flow',
+    ], [
+        'key' => 'settings.teamwork.playbook',
+        'name' => 'teamwork::app.playbook.title',
+        'info' => 'teamwork::app.menu.playbook-info',
+        'route' => 'admin.settings.teamwork.playbook.index',
+        'sort' => 0,
         'icon-class' => 'icon-settings-flow',
     ], [
         'key' => 'settings.teamwork.rules',
