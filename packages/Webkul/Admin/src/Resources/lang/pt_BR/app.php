@@ -2230,11 +2230,11 @@ return [
     'help' => [
         'index' => [
             'title' => 'Ajuda e recursos',
-            'description' => 'Tudo o que você precisa para aproveitar ao máximo o Krayin Admin — hospedagem, suporte e serviços profissionais, além de extensões e documentação para desenvolvedores.',
+            'description' => 'Guias e suporte do seu CRM: acompanhamento, playbook do funil, comunicações e campanhas.',
             'contact-us' => 'Fale conosco',
             'view-all' => 'Ver tudo',
             'still-need-help-title' => 'Ainda precisa de ajuda?',
-            'still-need-help-description' => 'Fale com a equipe Krayin sobre hospedagem, desenvolvimento personalizado ou qualquer outra coisa.',
+            'still-need-help-description' => 'Escreva para a sua equipe de suporte e nós ajudamos.',
 
             'services' => [
                 'title' => 'Serviços e recursos',

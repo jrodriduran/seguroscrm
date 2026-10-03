@@ -326,6 +326,14 @@ return [
     ],
 
     'configuration' => [
+        'brand' => [
+            'title' => 'Marca',
+            'info' => 'Nombre del sistema y datos de soporte que ven los usuarios (títulos, encabezado, correos y la página de Ayuda).',
+            'name' => 'Nombre del sistema',
+            'support-email' => 'Email de soporte',
+            'support-phone' => 'Teléfono de soporte',
+            'support-url' => 'Sitio de soporte (opcional)',
+        ],
         'title' => 'Seguimiento y trabajo en equipo',
         'info' => 'Horario laboral y límites por defecto para marcar el trabajo atrasado.',
 
@@ -436,6 +444,17 @@ return [
         ],
         'notices' => [
             'moved' => ':name movió :lead a :stage',
+        ],
+    ],
+
+    'help' => [
+        'cards' => [
+            'support' => ['title' => 'Soporte', 'description' => 'Escríbenos o llámanos ante cualquier duda o problema con el CRM.', 'none' => 'Configúralo en Configuración › General › Marca'],
+            'playbook' => ['title' => 'Playbook del embudo', 'description' => 'Hitos de cada etapa, control de avance y tareas automáticas del equipo.'],
+            'sequences' => ['title' => 'Secuencias', 'description' => 'Comunicaciones automáticas con el cliente según eventos y etapas.'],
+            'follow-up' => ['title' => 'Centro de seguimiento', 'description' => 'Tus pendientes, los del equipo y lo vencido, en un solo lugar.'],
+            'campaigns' => ['title' => 'Campañas', 'description' => 'Listados de clientes, fechas especiales y envíos masivos con consentimiento.'],
+            'templates' => ['title' => 'Plantillas', 'description' => 'Mensajes reutilizables por canal e idioma, con variables.'],
         ],
     ],
 ];

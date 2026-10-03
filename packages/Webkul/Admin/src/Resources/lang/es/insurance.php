@@ -870,7 +870,7 @@ return [
         'pdf_in_verification' => 'En verificación',
         'pdf_disclaimer_title' => 'Nota Regulatoria & Descargo de Responsabilidad:',
         'pdf_disclaimer_body' => 'La disponibilidad en red de médicos y el nivel de cobertura (formularios y copagos) de fármacos están sujetos a cambios periódicos por parte de cada aseguradora según las pautas de CMS y Marketplace. Este resumen constituye una estimación consultiva elaborada en base a la información proporcionada por el asegurado al momento de la cotización.',
-        'pdf_footer' => 'Documento confidencial generado por Krayin Health CRM — Prohibida su reproducción sin autorización.',
+        'pdf_footer' => 'Documento confidencial — Prohibida su reproducción sin autorización.',
     ],
 
     'chatwoot' => [
