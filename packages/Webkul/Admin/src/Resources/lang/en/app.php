@@ -2232,11 +2232,11 @@ return [
     'help' => [
         'index' => [
             'title' => 'Help & Resources',
-            'description' => 'Everything you need to get the most out of Krayin Admin — hosting, support and professional services, plus extensions and developer documentation.',
+            'description' => 'Guides and support for your CRM: follow-up, pipeline playbook, communications and campaigns.',
             'contact-us' => 'Contact us',
             'view-all' => 'View all',
             'still-need-help-title' => 'Still need a hand?',
-            'still-need-help-description' => 'Talk to the Krayin team about hosting, custom development or anything else.',
+            'still-need-help-description' => 'Write to your support team and we will help you.',
 
             'services' => [
                 'title' => 'Services & Resources',

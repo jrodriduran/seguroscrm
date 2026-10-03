@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Clientes del VPS: dominio, versión, contenedores y estado de suscripción.
+. "$(dirname "$0")/_lib.sh"
+
+printf '%-18s %-34s %-9s %-10s %-10s\n' CLIENTE DOMINIO VERSIÓN WEB ESTADO
+for t in $(tenant_list); do
+    web="$(tenant_compose "$t" ps --format '{{.State}}' web 2>/dev/null || echo '-')"
+    status="$(artisan "$t" platform status 2>/dev/null | sed -n 's/.*"status": "\([a-z_]*\)".*/\1/p' | head -1)"
+    printf '%-18s %-34s %-9s %-10s %-10s\n' "$t" "$(tenant_domain "$t")" "$(tenant_version "$t")" "${web:--}" "${status:--}"
+done

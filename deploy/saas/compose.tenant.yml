@@ -1,0 +1,41 @@
+# Un cliente = un proyecto de compose (crm-<cliente>) con tres contenedores
+# de la misma imagen. Lo usan los scripts de bin/; no hace falta llamarlo a mano.
+#
+# Variables: TENANT, DOMAIN, IMAGE, VERSION, TENANT_ENV (ruta a su .env)
+
+x-crm: &crm
+  image: ${IMAGE}:${VERSION}
+  restart: unless-stopped
+  env_file: ${TENANT_ENV}
+  volumes:
+    - storage:/var/www/storage
+  networks: [saas]
+
+services:
+  web:
+    <<: *crm
+    environment:
+      CONTAINER_ROLE: web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.crm-${TENANT}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.crm-${TENANT}.entrypoints=websecure
+      - traefik.http.routers.crm-${TENANT}.tls.certresolver=le
+      - traefik.http.services.crm-${TENANT}.loadbalancer.server.port=80
+
+  worker:
+    <<: *crm
+    environment:
+      CONTAINER_ROLE: worker
+
+  scheduler:
+    <<: *crm
+    environment:
+      CONTAINER_ROLE: scheduler
+
+networks:
+  saas:
+    external: true
+
+volumes:
+  storage:

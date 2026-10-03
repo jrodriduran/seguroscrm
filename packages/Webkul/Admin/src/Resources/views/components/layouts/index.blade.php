@@ -166,6 +166,9 @@
             <div class="flex min-h-[calc(100vh-62px)] max-w-full flex-1 flex-col pt-3 transition-all duration-300 nx-canvas">
                 <!-- Page Content Blade Component -->
                 <div class="admin-main-content px-4 {{ $showPoweredBy ? 'pb-[72px]' : 'pb-4' }} transition-all duration-300 lg:group-[.sidebar-collapsed]/container:ltr:pl-[85px] lg:group-[.sidebar-collapsed]/container:rtl:pr-[85px]">
+                    <!-- Subscription / support-session notices (Platform package) -->
+                    <div v-pre>@includeIf('platform::banner')</div>
+
                     {{ $slot }}
                 </div>
 
@@ -173,7 +176,7 @@
                     <!-- Powered By -->
                     <div class="fixed bottom-0 left-0 right-0 z-1">
                         <div class="border-t bg-white py-5 text-center text-sm font-normal dark:border-gray-800 dark:bg-gray-900 dark:text-white max-md:py-3">
-                            <p>{!! core()->sanitizeHtml(core()->getConfigData('general.settings.footer.label')) !!}</p>
+                            <p>{!! core()->sanitizeHtml(core()->getConfigData('general.settings.footer.label')) ?: '&copy; '.date('Y').' '.e(config('app.name')) !!}</p>
                         </div>
                     </div>
                 @endif

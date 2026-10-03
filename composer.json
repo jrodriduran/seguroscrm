@@ -22,10 +22,12 @@
         "laravel/ui": "^4.6",
         "league/fractal": "^0.21.0",
         "maatwebsite/excel": "^3.1",
-        "phpoffice/phpspreadsheet": "^1.30.6",
         "mpdf/mpdf": "^8.2",
+        "phpoffice/phpspreadsheet": "^1.30.6",
         "prettus/l5-repository": "^3.0",
         "smalot/pdfparser": "^2.11",
+        "symfony/http-client": "^7.4",
+        "symfony/postmark-mailer": "^7.4",
         "webklex/laravel-imap": "^6.0"
     },
     "require-dev": {
@@ -82,6 +84,7 @@
             "Webkul\\Warehouse\\": "packages/Webkul/Warehouse/src",
             "Webkul\\WebForm\\": "packages/Webkul/WebForm/src",
             "Webkul\\Automation\\": "packages/Webkul/Automation/src",
+            "Webkul\\Platform\\": "packages/Webkul/Platform/src",
             "Webkul\\Security\\": "packages/Webkul/Security/src",
             "Webkul\\Teamwork\\": "packages/Webkul/Teamwork/src",
             "Webkul\\Communications\\": "packages/Webkul/Communications/src"

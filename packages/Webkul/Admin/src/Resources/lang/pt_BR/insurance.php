@@ -817,7 +817,7 @@ return [
         'pdf_in_verification' => 'Em verificação',
         'pdf_disclaimer_title' => 'Aviso Regulatório e Isenção de Responsabilidade:',
         'pdf_disclaimer_body' => 'A disponibilidade da rede de médicos e o nível de cobertura de medicamentos (formulários e copagamentos) estão sujeitos a alterações periódicas por parte de cada seguradora de acordo com as diretrizes do CMS e do Marketplace. Este resumo constitui uma estimativa consultiva elaborada com base nas informações fornecidas pelo segurado no momento da cotação.',
-        'pdf_footer' => 'Documento confidencial gerado pelo Krayin Health CRM — Reprodução não autorizada proibida.',
+        'pdf_footer' => 'Documento confidencial — Reprodução não autorizada proibida.',
     ],
 
     'chatwoot' => [

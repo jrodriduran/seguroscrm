@@ -7,6 +7,7 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Teamwork\Console\RunAutomations;
 use Webkul\Teamwork\Http\Middleware\ApplyTimezone;
@@ -18,6 +19,7 @@ use Webkul\Teamwork\Services\Mentions;
 use Webkul\Teamwork\Services\MilestoneChecks;
 use Webkul\Teamwork\Services\StagePlaybooks;
 use Webkul\Teamwork\Services\TeamScope;
+use Webkul\Teamwork\Support\Brand;
 
 class TeamworkServiceProvider extends ServiceProvider
 {
@@ -71,6 +73,12 @@ class TeamworkServiceProvider extends ServiceProvider
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
             $schedule->command('teamwork:run-automations')->hourly()->withoutOverlapping();
         });
+
+        // Product name from Configuration > General > Brand (titles, header, emails),
+        // and the Help page pointing to the agency's support and in-app guides.
+        $this->app->booted(fn () => config(['app.name' => Brand::name()]));
+
+        View::composer('admin::help.index', fn ($view) => $view->with('support', Brand::support()));
 
         $this->app->booted(function () {
             Breadcrumbs::for('teamwork.center', function (BreadcrumbTrail $trail) {

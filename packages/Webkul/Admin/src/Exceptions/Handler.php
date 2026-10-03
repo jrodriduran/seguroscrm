@@ -81,7 +81,8 @@ class Handler extends ExceptionHandler
                 ? $exception->getStatusCode()
                 : 500;
 
-            return $this->response($statusCode);
+            // The page shows one of the known messages, but the response keeps the real status.
+            return $this->response($statusCode, $exception->getStatusCode());
         }
 
         if ($exception instanceof ValidationException) {
@@ -104,7 +105,7 @@ class Handler extends ExceptionHandler
      * @param  string  $errorCode
      * @return mixed
      */
-    private function response($errorCode)
+    private function response($errorCode, ?int $status = null)
     {
         if (request()->expectsJson()) {
             return response()->json([
@@ -114,6 +115,7 @@ class Handler extends ExceptionHandler
             ], $errorCode);
         }
 
-        return response()->view('admin::errors.index', compact('errorCode'));
+        // Before, error pages went out as "200 OK", which hid failures from browsers, monitoring and integrations.
+        return response()->view('admin::errors.index', compact('errorCode'), $status ?? (int) $errorCode);
     }
 }
