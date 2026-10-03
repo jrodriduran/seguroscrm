@@ -10,7 +10,12 @@
     <div class="flex items-center justify-between">
         <h4 class="font-semibold dark:text-white">@lang('communications::app.contact.title')</h4>
 
-        <a href="{{ route('admin.communications.persons.show', $person->id) }}" class="tw-meta" style="text-decoration: none;">@lang('communications::app.contact.history') →</a>
+        <span class="flex items-center gap-3">
+            @if (Route::has('admin.communications.deliveries.create') && bouncer()->hasPermission('mail.communication_deliveries'))
+                <a href="{{ route('admin.communications.deliveries.create', ['person' => $person->id]) }}" class="tw-meta" style="text-decoration: none;">📮 @lang('communications::app.deliveries.send-something')</a>
+            @endif
+            <a href="{{ route('admin.communications.persons.show', $person->id) }}" class="tw-meta" style="text-decoration: none;">@lang('communications::app.contact.history') →</a>
+        </span>
     </div>
 
     {{-- Preferred channel --}}

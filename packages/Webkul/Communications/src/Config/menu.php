@@ -2,6 +2,13 @@
 
 return [
     [
+        'key' => 'mail.communication_deliveries',
+        'name' => 'communications::app.deliveries.title',
+        'route' => 'admin.communications.deliveries.index',
+        'sort' => 9,
+        'icon-class' => '',
+    ],
+    [
         'key' => 'mail.communication_campaigns',
         'name' => 'communications::app.campaigns.title',
         'route' => 'admin.communications.campaigns.index',

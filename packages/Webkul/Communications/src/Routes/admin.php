@@ -6,6 +6,7 @@ use Webkul\Communications\Http\Controllers\CallOutcomeController;
 use Webkul\Communications\Http\Controllers\CampaignController;
 use Webkul\Communications\Http\Controllers\ChatwootSettingsController;
 use Webkul\Communications\Http\Controllers\ClientCommunicationController;
+use Webkul\Communications\Http\Controllers\DeliveryController;
 use Webkul\Communications\Http\Controllers\EnrollmentController;
 use Webkul\Communications\Http\Controllers\PersonContactController;
 use Webkul\Communications\Http\Controllers\SequenceController;
@@ -136,4 +137,16 @@ Route::controller(CampaignController::class)->prefix('communications/campaigns')
     Route::post('{id}/test', 'test')->name('admin.communications.campaigns.test');
 
     Route::delete('{id}', 'destroy')->name('admin.communications.campaigns.delete');
+});
+
+Route::controller(DeliveryController::class)->prefix('communications/deliveries')->group(function () {
+    Route::get('', 'index')->name('admin.communications.deliveries.index');
+
+    Route::get('create', 'create')->name('admin.communications.deliveries.create');
+
+    Route::post('', 'store')->name('admin.communications.deliveries.store');
+
+    Route::post('settings', 'settings')->name('admin.communications.deliveries.settings');
+
+    Route::post('{id}/move', 'move')->name('admin.communications.deliveries.move');
 });

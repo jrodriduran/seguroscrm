@@ -207,7 +207,7 @@
                             <div data-cm-for="physical">
                                 <label class="tw-meta">@lang('communications::app.sequences.item')</label>
                                 <select name="steps[{{ $loop->index }}][item]" class="tw-input">
-                                    @foreach (['card', 'gift_card', 'kit', 'other'] as $item)
+                                    @foreach (\Webkul\Communications\Models\Delivery::ITEMS as $item)
                                         <option value="{{ $item }}" @selected($cmOpt($step, 'item', 'card') === $item)>@lang('communications::app.sequences.items.'.$item)</option>
                                     @endforeach
                                 </select>
