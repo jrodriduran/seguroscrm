@@ -2,6 +2,19 @@
 
 return [
     [
+        'key' => 'mail.communication_campaigns',
+        'name' => 'communications::app.campaigns.title',
+        'route' => 'admin.communications.campaigns.index',
+        'sort' => 5,
+        'icon-class' => '',
+    ], [
+        'key' => 'mail.communication_audiences',
+        'name' => 'communications::app.audiences.title',
+        'route' => 'admin.communications.audiences.index',
+        'sort' => 8,
+        'icon-class' => '',
+    ],
+    [
         'key' => 'mail.communication_sequences',
         'name' => 'communications::app.sequences.title',
         'route' => 'admin.communications.sequences.index',

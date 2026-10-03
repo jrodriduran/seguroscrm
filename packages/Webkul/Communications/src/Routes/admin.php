@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Webkul\Communications\Http\Controllers\AudienceController;
 use Webkul\Communications\Http\Controllers\CallOutcomeController;
+use Webkul\Communications\Http\Controllers\CampaignController;
 use Webkul\Communications\Http\Controllers\ChatwootSettingsController;
 use Webkul\Communications\Http\Controllers\ClientCommunicationController;
 use Webkul\Communications\Http\Controllers\EnrollmentController;
@@ -96,4 +98,42 @@ Route::controller(StageRuleController::class)->prefix('settings/communications/s
     Route::post('', 'store')->name('admin.settings.communications.stages.store');
 
     Route::delete('{id}', 'destroy')->name('admin.settings.communications.stages.delete');
+});
+
+Route::controller(AudienceController::class)->prefix('communications/audiences')->group(function () {
+    Route::get('', 'index')->name('admin.communications.audiences.index');
+
+    Route::get('create', 'create')->name('admin.communications.audiences.create');
+
+    Route::post('', 'store')->name('admin.communications.audiences.store');
+
+    Route::get('{id}/edit', 'edit')->name('admin.communications.audiences.edit');
+
+    Route::get('{id}/export', 'export')->name('admin.communications.audiences.export');
+
+    Route::put('{id}', 'update')->name('admin.communications.audiences.update');
+
+    Route::delete('{id}', 'destroy')->name('admin.communications.audiences.delete');
+});
+
+Route::controller(CampaignController::class)->prefix('communications/campaigns')->group(function () {
+    Route::get('', 'index')->name('admin.communications.campaigns.index');
+
+    Route::get('create', 'create')->name('admin.communications.campaigns.create');
+
+    Route::post('', 'store')->name('admin.communications.campaigns.store');
+
+    Route::get('{id}', 'show')->name('admin.communications.campaigns.show');
+
+    Route::get('{id}/edit', 'edit')->name('admin.communications.campaigns.edit');
+
+    Route::put('{id}', 'update')->name('admin.communications.campaigns.update');
+
+    Route::post('{id}/launch', 'launch')->name('admin.communications.campaigns.launch');
+
+    Route::post('{id}/cancel', 'cancel')->name('admin.communications.campaigns.cancel');
+
+    Route::post('{id}/test', 'test')->name('admin.communications.campaigns.test');
+
+    Route::delete('{id}', 'destroy')->name('admin.communications.campaigns.delete');
 });

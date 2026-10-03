@@ -99,6 +99,14 @@ class CommunicationsServiceProvider extends ServiceProvider
                 $trail->push(trans('communications::app.templates.title'), route('admin.communications.templates.index'));
             });
 
+            Breadcrumbs::for('communications.campaigns', function (BreadcrumbTrail $trail) {
+                $trail->push(trans('communications::app.campaigns.title'), route('admin.communications.campaigns.index'));
+            });
+
+            Breadcrumbs::for('communications.audiences', function (BreadcrumbTrail $trail) {
+                $trail->push(trans('communications::app.audiences.title'), route('admin.communications.audiences.index'));
+            });
+
             Breadcrumbs::for('communications.sequences', function (BreadcrumbTrail $trail) {
                 $trail->push(trans('communications::app.sequences.title'), route('admin.communications.sequences.index'));
             });

@@ -2,6 +2,26 @@
 
 return [
     [
+        'key' => 'mail.communication_campaigns',
+        'name' => 'communications::app.campaigns.title',
+        'route' => [
+            'admin.communications.campaigns.index', 'admin.communications.campaigns.create', 'admin.communications.campaigns.store',
+            'admin.communications.campaigns.show', 'admin.communications.campaigns.edit', 'admin.communications.campaigns.update',
+            'admin.communications.campaigns.launch', 'admin.communications.campaigns.cancel', 'admin.communications.campaigns.test',
+            'admin.communications.campaigns.delete',
+        ],
+        'sort' => 5,
+    ], [
+        'key' => 'mail.communication_audiences',
+        'name' => 'communications::app.audiences.title',
+        'route' => [
+            'admin.communications.audiences.index', 'admin.communications.audiences.create', 'admin.communications.audiences.store',
+            'admin.communications.audiences.edit', 'admin.communications.audiences.export', 'admin.communications.audiences.update',
+            'admin.communications.audiences.delete',
+        ],
+        'sort' => 8,
+    ],
+    [
         'key' => 'mail.communication_sequences',
         'name' => 'communications::app.sequences.title',
         'route' => [
