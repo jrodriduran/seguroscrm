@@ -2,6 +2,15 @@
 
 return [
     [
+        'key' => 'mail.communication_deliveries',
+        'name' => 'communications::app.deliveries.title',
+        'route' => [
+            'admin.communications.deliveries.index', 'admin.communications.deliveries.create', 'admin.communications.deliveries.store',
+            'admin.communications.deliveries.settings', 'admin.communications.deliveries.move',
+        ],
+        'sort' => 9,
+    ],
+    [
         'key' => 'mail.communication_campaigns',
         'name' => 'communications::app.campaigns.title',
         'route' => [

@@ -82,6 +82,12 @@ class StepActions
         $this->notifier()?->notify($assignee, $urgent ? 'follow_up_urgent' : 'automation', $title, $step->option('note') ? $this->renderer->fill((string) $step->option('note'), $vars) : null,
             route('admin.teamwork.follow_ups.show', $task->id, false), $urgent);
 
+        // Physical deliveries also go to the deliveries board (approval, tracking, spend).
+        if ($step->type === 'physical') {
+            app(Deliveries::class)->request($enrollment->person_id, (string) $step->option('item', 'card'), $this->renderer->fill((string) $step->option('note', ''), $vars) ?: null,
+                $step->option('cost'), $assignee, ['lead_id' => $enrollment->lead_id, 'enrollment_id' => $enrollment->id, 'follow_up_id' => $task->id]);
+        }
+
         return ['status' => 'task', 'channel' => null, 'detail' => $title];
     }
 

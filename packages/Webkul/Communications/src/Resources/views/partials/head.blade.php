@@ -55,6 +55,10 @@
 
     .cm-rule-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 6px; align-items: center; }
     .cm-rule-row [hidden] { display: none !important; }
+
+    .cm-delivery { display: flex; flex-direction: column; gap: 3px; padding: 10px; border-radius: 12px; background: #fff; border: 1px solid rgba(15, 23, 42, 0.08); }
+    .cm-delivery.is-focus { box-shadow: 0 0 0 2px rgba(79, 107, 255, 0.55); }
+    .dark .cm-delivery { background: rgba(148, 163, 184, 0.05); border-color: rgba(148, 163, 184, 0.14); }
 </style>
 
 @if (Route::has('admin.communications.zip') && auth()->guard('user')->check() && bouncer()->hasPermission('contacts.persons.communications'))
