@@ -166,6 +166,9 @@
             <div class="flex min-h-[calc(100vh-62px)] max-w-full flex-1 flex-col pt-3 transition-all duration-300 nx-canvas">
                 <!-- Page Content Blade Component -->
                 <div class="admin-main-content px-4 {{ $showPoweredBy ? 'pb-[72px]' : 'pb-4' }} transition-all duration-300 lg:group-[.sidebar-collapsed]/container:ltr:pl-[85px] lg:group-[.sidebar-collapsed]/container:rtl:pr-[85px]">
+                    <!-- Subscription / support-session notices (Platform package) -->
+                    <div v-pre>@includeIf('platform::banner')</div>
+
                     {{ $slot }}
                 </div>
 

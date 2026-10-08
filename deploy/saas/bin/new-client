@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# Alta de un cliente nuevo.
+#
+#   new-client <cliente> <email-del-dueño> [--name "Ana Pérez"] [--tz America/New_York] [--domain crm.agencia.com]
+#
+# Crea su base de datos, su .env, levanta sus contenedores, instala el CRM y
+# deja al dueño con una contraseña temporal.
+. "$(dirname "$0")/_lib.sh"
+
+T="${1:-}"; EMAIL="${2:-}"; shift 2 || true
+NAME=""; TZ_NAME="America/New_York"; DOMAIN=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --name)   NAME="$2"; shift 2 ;;
+        --tz)     TZ_NAME="$2"; shift 2 ;;
+        --domain) DOMAIN="$2"; shift 2 ;;
+        *) die "Opción desconocida: $1" ;;
+    esac
+done
+
+[[ "$T" =~ ^[a-z][a-z0-9-]{1,30}$ ]] || die "Nombre de cliente inválido (minúsculas, números y guiones; empieza por letra)."
+[[ "$EMAIL" == *@*.* ]] || die "Falta el email del dueño."
+[ -e "$(tenant_dir "$T")" ] && die "El cliente '$T' ya existe."
+
+DOMAIN="${DOMAIN:-$T.$BASE_DOMAIN}"
+DB="crm_${T//-/_}"
+DB_PASS="$(random 20)"
+
+info "Base de datos $DB"
+mysql_root -e "CREATE DATABASE \`$DB\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER '$DB'@'%' IDENTIFIED BY '$DB_PASS';
+GRANT ALL PRIVILEGES ON \`$DB\`.* TO '$DB'@'%';" || die "No se pudo crear la base de datos."
+
+mkdir -p "$(tenant_dir "$T")"
+chmod 700 "$(tenant_dir "$T")"
+
+cat > "$(tenant_env "$T")" <<EOF
+APP_NAME=SegurosCRM
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=base64:$(openssl rand -base64 32)
+APP_URL=https://$DOMAIN
+APP_TIMEZONE=$TZ_NAME
+TRUSTED_PROXIES=*
+LOG_CHANNEL=stderr
+LOG_LEVEL=warning
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=$DB
+DB_USERNAME=$DB
+DB_PASSWORD=$DB_PASS
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PREFIX=${DB}_
+CACHE_DRIVER=redis
+CACHE_STORE=redis
+CACHE_PREFIX=${DB}_cache_
+SESSION_DRIVER=redis
+SESSION_SECURE_COOKIE=true
+QUEUE_CONNECTION=redis
+
+MAIL_MAILER=${MAIL_MAILER:-log}
+POSTMARK_TOKEN=${POSTMARK_TOKEN:-}
+MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:-no-reply@$BASE_DOMAIN}
+MAIL_FROM_NAME="\${APP_NAME}"
+
+PLATFORM_SECRET=$(random 32)
+EOF
+chmod 600 "$(tenant_env "$T")"
+echo "$VERSION" > "$(tenant_dir "$T")/VERSION"
+date -Iseconds > "$(tenant_dir "$T")/created_at"
+
+info "Contenedores (versión $VERSION)"
+tenant_compose "$T" up -d
+wait_ready "$T" || die "El CRM no respondió; revisa: bin/support $T logs"
+
+info "Instalando"
+artisan "$T" migrate --force
+artisan "$T" db:seed --force
+OUT="$(artisan "$T" platform setup-owner "$EMAIL" ${NAME:+--name="$NAME"} --timezone="$TZ_NAME")"
+
+ok "Cliente $T listo: https://$DOMAIN/admin"
+echo "$OUT"
+echo "Comparte la contraseña temporal por un canal privado; el dueño debe cambiarla al entrar."

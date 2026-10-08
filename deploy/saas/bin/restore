@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Restaura un respaldo sobre un cliente (reemplaza sus datos actuales).
+#
+#   restore <cliente> <archivo.sql.gz> [--yes]
+#
+# Si existe el .storage.tgz con el mismo nombre, también restaura los archivos.
+. "$(dirname "$0")/_lib.sh"
+
+T="${1:-}"; FILE="${2:-}"
+require_tenant "$T"
+[ -f "$FILE" ] || die "No existe el respaldo $FILE"
+
+if [ "${3:-}" != "--yes" ]; then
+    read -r -p "Esto REEMPLAZA los datos de '$T'. Escribe el nombre del cliente para seguir: " answer
+    [ "$answer" = "$T" ] || die "Cancelado."
+fi
+
+DB="$(tenant_db "$T")"
+
+info "Deteniendo worker y scheduler"
+tenant_compose "$T" stop worker scheduler
+
+info "Restaurando base de datos"
+mysql_root -e "DROP DATABASE \`$DB\`; CREATE DATABASE \`$DB\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+gunzip -c "$FILE" | mysql_root "$DB"
+
+STORAGE="${FILE%.sql.gz}.storage.tgz"
+if [ -f "$STORAGE" ]; then
+    info "Restaurando archivos"
+    docker run --rm -i -v "crm-${T}_storage:/s" alpine sh -c 'rm -rf /s/app && tar xzf - -C /s && chown -R 33:33 /s/app' < "$STORAGE"
+fi
+
+tenant_compose "$T" start worker scheduler
+artisan "$T" optimize:clear >/dev/null
+ok "Restaurado $T desde $(basename "$FILE")"

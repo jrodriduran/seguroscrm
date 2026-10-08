@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(CanInstall::class);
 
+        // Behind the SaaS proxy (Traefik) HTTPS ends at the proxy; trust its X-Forwarded-* headers.
+        if ($proxies = env('TRUSTED_PROXIES')) {
+            $middleware->trustProxies(at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)));
+        }
+
         $middleware->encryptCookies(except: [
             'dark_mode',
             'sidebar_collapsed',

@@ -23,6 +23,10 @@ class AccessLog extends Model
 
     const EVENT_MFA_RESET = 'mfa_reset';
 
+    const EVENT_SUPPORT_LOGIN = 'support_login';
+
+    const EVENT_PASSWORD_RESET = 'password_reset';
+
     /**
      * Every event, in display order.
      */
@@ -35,6 +39,8 @@ class AccessLog extends Model
         self::EVENT_MFA_ENABLED,
         self::EVENT_MFA_DISABLED,
         self::EVENT_MFA_RESET,
+        self::EVENT_SUPPORT_LOGIN,
+        self::EVENT_PASSWORD_RESET,
     ];
 
     const UPDATED_AT = null;

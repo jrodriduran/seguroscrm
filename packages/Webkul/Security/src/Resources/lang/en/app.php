@@ -40,6 +40,8 @@ return [
             'mfa_enabled' => '2FA enabled',
             'mfa_disabled' => '2FA disabled',
             'mfa_reset' => '2FA reset by admin',
+            'support_login' => 'Platform support signed in',
+            'password_reset' => 'Password reset by the platform',
         ],
     ],
 

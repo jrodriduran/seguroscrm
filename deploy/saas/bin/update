@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Actualiza clientes a una versión nueva de la imagen, por oleadas.
+#
+#   update <versión> --only <cliente>     solo uno (canario)
+#   update <versión> [--wave 5]           todos, de 5 en 5
+#
+# Por cada cliente: respaldo → contenedores nuevos → migraciones → prueba.
+# Si algo falla, ese cliente vuelve a su versión y a su respaldo, y la
+# actualización se detiene para revisar antes de seguir.
+. "$(dirname "$0")/_lib.sh"
+
+NEW="${1:-}"; shift || true
+ONLY=""; WAVE=5
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --only) ONLY="$2"; shift 2 ;;
+        --wave) WAVE="$2"; shift 2 ;;
+        *) die "Opción desconocida: $1" ;;
+    esac
+done
+[ -n "$NEW" ] || die "Indica la versión."
+docker image inspect "$IMAGE:$NEW" >/dev/null 2>&1 || docker pull "$IMAGE:$NEW" || die "No existe la imagen $IMAGE:$NEW"
+
+update_one() {
+    local t="$1" old dump
+    old="$(tenant_version "$t")"
+    [ "$old" = "$NEW" ] && { ok "$t ya está en $NEW"; return 0; }
+
+    info "$t: $old → $NEW"
+    dump="$("$DEPLOY_DIR/bin/backup" "$t" | tail -1)"
+
+    echo "$NEW" > "$(tenant_dir "$t")/VERSION"
+    if tenant_compose "$t" up -d && wait_ready "$t" && artisan "$t" migrate --force && artisan "$t" platform status >/dev/null; then
+        ok "$t actualizado"
+        return 0
+    fi
+
+    echo "✖ $t falló; volviendo a $old" >&2
+    echo "$old" > "$(tenant_dir "$t")/VERSION"
+    tenant_compose "$t" up -d
+    "$DEPLOY_DIR/bin/restore" "$t" "$dump" --yes
+    return 1
+}
+
+if [ -n "$ONLY" ]; then
+    require_tenant "$ONLY"
+    update_one "$ONLY"
+    exit $?
+fi
+
+count=0
+for t in $(tenant_list); do
+    update_one "$t" || die "Actualización detenida en $t. Los anteriores quedaron en $NEW."
+    count=$((count + 1))
+    if [ $((count % WAVE)) -eq 0 ]; then
+        info "Oleada de $WAVE lista; pausa de 60 s para observar"
+        sleep 60
+    fi
+done
+
+sed -i "s/^VERSION=.*/VERSION=$NEW/" "$SAAS_HOME/saas.env"
+ok "Todos los clientes en $NEW (los nuevos también usarán $NEW)"

@@ -19,6 +19,7 @@ use Webkul\GoogleContact\Providers\GoogleContactServiceProvider;
 use Webkul\Installer\Providers\InstallerServiceProvider;
 use Webkul\Lead\Providers\LeadServiceProvider;
 use Webkul\Marketing\Providers\MarketingServiceProvider;
+use Webkul\Platform\Providers\PlatformServiceProvider;
 use Webkul\Product\Providers\ProductServiceProvider;
 use Webkul\Quote\Providers\QuoteServiceProvider;
 use Webkul\Security\Providers\SecurityServiceProvider;
@@ -60,6 +61,7 @@ return [
     LeadServiceProvider::class,
     ProductServiceProvider::class,
     QuoteServiceProvider::class,
+    PlatformServiceProvider::class,
     SecurityServiceProvider::class,
     TeamworkServiceProvider::class,
     CommunicationsServiceProvider::class,
