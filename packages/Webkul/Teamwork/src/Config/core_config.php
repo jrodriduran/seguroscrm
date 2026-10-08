@@ -2,6 +2,35 @@
 
 return [
     /**
+     * The product's own name and support contacts (replaces upstream branding).
+     */
+    [
+        'key' => 'general.general.brand',
+        'name' => 'teamwork::app.configuration.brand.title',
+        'info' => 'teamwork::app.configuration.brand.info',
+        'sort' => 1,
+        'fields' => [
+            [
+                'name' => 'name',
+                'title' => 'teamwork::app.configuration.brand.name',
+                'type' => 'text',
+                'default' => 'SegurosCRM',
+            ], [
+                'name' => 'support_email',
+                'title' => 'teamwork::app.configuration.brand.support-email',
+                'type' => 'text',
+            ], [
+                'name' => 'support_phone',
+                'title' => 'teamwork::app.configuration.brand.support-phone',
+                'type' => 'text',
+            ], [
+                'name' => 'support_url',
+                'title' => 'teamwork::app.configuration.brand.support-url',
+                'type' => 'text',
+            ],
+        ],
+    ],
+    /**
      * Agency time zone, shown under Configuration > General > General.
      */
     [
