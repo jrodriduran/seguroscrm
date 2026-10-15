@@ -5,6 +5,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Webkul\Contact\Models\Person;
+use Webkul\Lead\Models\CarrierStatement;
+use Webkul\Lead\Models\CarrierStatementItem;
 use Webkul\Lead\Models\InsuranceCommission;
 use Webkul\Lead\Models\InsurancePolicy;
 use Webkul\Lead\Models\Lead;
@@ -62,6 +64,10 @@ it('converts the quote into pending coverage in the correct pipeline won stage',
     expect($lead->fresh()->lead_pipeline_id)->toBe($pipeline->id);
     expect(InsurancePolicy::where('quote_id', $quote->id)->count())->toBe(1);
     expect(InsuranceCommission::where('quote_id', $quote->id)->count())->toBe(1);
+    $policy = InsurancePolicy::where('quote_id', $quote->id)->firstOrFail();
+    $commission = InsuranceCommission::where('quote_id', $quote->id)->firstOrFail();
+    expect($commission->policy_number)->toBe($policy->policy_number);
+    expect($commission->effective_date->toDateString())->toBe($policy->effective_date->toDateString());
 });
 
 it('rolls back quote policy commission and stage when override calculation fails', function () {
@@ -163,6 +169,23 @@ it('preserves the household signed consent documents and coverage history throug
     expect($policy->fresh()->status)->toBe('active');
     $priorHistory = $policy->coverageHistories()->pluck('id')->all();
     $renewalYear = $policy->effective_date->year + 1;
+
+    // The automatically generated commission must be reconcilable by policy number.
+    $commission = InsuranceCommission::where('quote_id', $quote->id)->firstOrFail();
+    $csv = "policy_number,insured_name,carrier_amount\n{$policy->policy_number},Synthetic ACA Applicant,{$commission->gross_monthly}\n";
+    $statementPayload = [
+        'carrier_name' => $policy->carrier_name,
+        'period_month' => $policy->effective_date->format('Y-m'),
+        'csv_content' => $csv,
+    ];
+    $this->postJson(route('admin.insurance.commissions.upload_statement'), $statementPayload)
+        ->assertOk()->assertJsonPath('success', true);
+    $statement = CarrierStatement::where('file_hash', hash('sha256', trim($csv)))->firstOrFail();
+    expect(CarrierStatementItem::where('carrier_statement_id', $statement->id)->firstOrFail()->match_status)
+        ->toBe('matched_exact');
+    $this->postJson(route('admin.insurance.commissions.upload_statement'), $statementPayload)
+        ->assertConflict()->assertJsonPath('is_duplicate', true);
+    expect(CarrierStatementItem::where('carrier_statement_id', $statement->id)->count())->toBe(1);
 
     $response = $this->postJson(route('admin.policies.process_renewal', $policy->id), [
         'plan_year' => $renewalYear, 'carrier_name' => 'Synthetic Renewal Carrier',

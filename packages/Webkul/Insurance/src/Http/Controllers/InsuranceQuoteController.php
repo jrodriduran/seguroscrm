@@ -27,6 +27,8 @@ class InsuranceQuoteController extends QuoteController
 
             // A retry must not reset paid coverage or create another commission.
             if ($quote->quote_status === 'bound' && $policy && $commission) {
+                $this->linkCommission($commission, $policy);
+
                 return [$quote, $policy];
             }
 
@@ -58,7 +60,9 @@ class InsuranceQuoteController extends QuoteController
             $quote->save();
 
             $policy ??= InsurancePolicy::createOrUpdateFromQuote($quote);
+            $newCommission = ! $commission;
             $commission ??= InsuranceCommission::createFromQuote($quote);
+            $this->linkCommission($commission, $policy, $newCommission);
             app(AgencyOverrideService::class)->distributeOverridesForPolicy($policy, $commission);
 
             if ($lead) {
@@ -86,5 +90,20 @@ class InsuranceQuoteController extends QuoteController
         session()->flash('success', $message);
 
         return redirect()->route('admin.quotes.index');
+    }
+
+    protected function linkCommission(InsuranceCommission $commission, InsurancePolicy $policy, bool $new = false): void
+    {
+        if (! $commission->policy_number) {
+            $commission->policy_number = $policy->policy_number;
+        }
+
+        if ($new) {
+            $commission->effective_date = $policy->effective_date;
+        }
+
+        if ($commission->isDirty()) {
+            $commission->save();
+        }
     }
 }
