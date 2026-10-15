@@ -17,6 +17,7 @@ use Webkul\Email\Providers\EmailServiceProvider;
 use Webkul\EmailTemplate\Providers\EmailTemplateServiceProvider;
 use Webkul\GoogleContact\Providers\GoogleContactServiceProvider;
 use Webkul\Installer\Providers\InstallerServiceProvider;
+use Webkul\Insurance\Providers\InsuranceServiceProvider;
 use Webkul\Lead\Providers\LeadServiceProvider;
 use Webkul\Marketing\Providers\MarketingServiceProvider;
 use Webkul\Platform\Providers\PlatformServiceProvider;
@@ -69,4 +70,5 @@ return [
     UserServiceProvider::class,
     WarehouseServiceProvider::class,
     WebFormServiceProvider::class,
+    InsuranceServiceProvider::class,
 ];

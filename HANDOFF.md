@@ -102,6 +102,14 @@ Además de los módulos de Krayin y de las funciones de seguros que ya traía el
 repo (pólizas, comisiones, DMI, SOA de Medicare, cumplimiento, etc.), estos
 paquetes se construyeron en este proyecto:
 
+### Insurance
+Extensiones propias del dominio, separadas del core. `InsuranceServiceProvider`
+vincula el controlador de cotizaciones existente con una subclase que modifica
+solo `convertToPolicy`. Conserva rutas, middleware y ACL. Usa una transacción y
+bloqueo de cotización, la etapa `won` del embudo correspondiente y los bloqueos
+del playbook; los reintentos no duplican comisiones ni reinician coberturas pagadas.
+Los modelos heredados permanecen en Lead. No añade inscripción externa.
+
 ### Security
 2FA, lista de IP permitidas (`security:disable-ip-restriction` para
 emergencias), historial de accesos (`user_access_logs`, modelo `AccessLog`
