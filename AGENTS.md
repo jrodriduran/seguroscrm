@@ -1,5 +1,9 @@
 # Krayin CRM: Agent Instructions
 
+> **SegurosCRM project:** read [HANDOFF.md](HANDOFF.md) first. It covers
+> where the CRM runs, the git/CI workflow, known traps, the custom packages
+> (Security, Teamwork, Communications, Platform), the SaaS deployment and what is pending.
+
 This repository ships reusable **agent skills** for developing Krayin CRM. These
 instructions apply to all AI coding agents (Claude Code, Codex, Copilot, Cursor,
 Kilo Code, etc.).
