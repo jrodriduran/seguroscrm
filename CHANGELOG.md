@@ -4,6 +4,10 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [fixed] Run the full Pest suite against the seeded CI database so missing parallel-worker fixtures no longer obscure actual regressions.
+
+* [fixed] Restored Chatwoot webhook regression coverage for the authenticated Communications endpoint, including message deduplication and rejection of invalid tokens and other accounts.
+
 * [enhancement] Dashboard redesign. "Open leads by stage" becomes a pipeline funnel for the selected pipeline: stages in funnel order with step badges, progress bars, count and share, late / attention chips and longest-untouched time per stage (from the follow-up center), value at stake for users with financial permission, won / lost and win rate for the period, and links to the pipeline. KPI tiles get icons and accents, and dashboard cards share one elevated style in light and dark mode.
 
 * [fixed] Fixed the dashboard console error "Cannot read properties of undefined (reading createLinearGradient)" from the open-leads widget drawing on a missing canvas; the widget also mixed every pipeline and ignored funnel order.
