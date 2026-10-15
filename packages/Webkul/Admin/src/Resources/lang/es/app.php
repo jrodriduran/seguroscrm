@@ -1,6 +1,23 @@
 <?php
 
 return [
+    'healthsherpa' => [
+        'permission' => 'Usar cotización HealthSherpa',
+        'household-invalid' => 'Revisa el tamaño del hogar y el solicitante principal.',
+        'member-mismatch' => 'Selecciona solicitantes que pertenezcan a este expediente.',
+        'consent-required' => 'Obtén y registra el consentimiento del cliente antes de solicitar cotizaciones.',
+        'bridge-retired' => 'El enlace anterior de HealthSherpa usaba datos de ejemplo. Completa y revisa la información de cotización para usar la nueva conexión.',
+        'enrollment-pending' => 'La inscripción requiere aprobación de HealthSherpa y una cuenta de agente vinculada.',
+        'errors' => [
+            'not-configured' => 'HealthSherpa todavía no está configurado.',
+            'rate-limited' => 'Espera antes de solicitar otro resultado de HealthSherpa.',
+            'invalid-request' => 'HealthSherpa no pudo cotizar estos datos. Revisa la información proporcionada.',
+            'access-denied' => 'Es necesario activar o revisar el acceso a HealthSherpa.',
+            'unavailable' => 'HealthSherpa no está disponible temporalmente. Inténtalo más tarde.',
+            'invalid-response' => 'HealthSherpa devolvió un resultado inesperado. Inténtalo más tarde.',
+        ],
+    ],
+
     'insurance-conversion' => [
         'success' => 'Cotización #:id registrada como póliza. Revisa su estado de cobertura.',
         'won-stage-missing' => 'El embudo del prospecto necesita una etapa con código won antes de convertir la cotización.',

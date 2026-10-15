@@ -3,6 +3,13 @@
 Estado al 2026-10-15. Léelo completo antes de tocar código. Complementa a
 `AGENTS.md` (convenciones de Krayin) y no lo reemplaza.
 
+**Prioridad actual:** preparar un piloto de cotización ACA con HealthSherpaONE.
+El titular aún no tiene cuenta. La rama `feature/healthsherpa-foundation` contiene
+un backend desactivado por defecto y probado con respuestas simuladas; no está
+desplegado ni conectado. Primero cotizador y datos revisados, después inscripción
+asistida y estados según aprobación. Ver [plan y requisitos](docs/healthsherpa-integration.md).
+El puente anterior que inventaba datos queda bloqueado en esa rama. No reactivarlo.
+
 ---
 
 ## 1. Qué es

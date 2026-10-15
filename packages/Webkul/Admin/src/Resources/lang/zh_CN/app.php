@@ -1,6 +1,23 @@
 <?php
 
 return [
+    'healthsherpa' => [
+        'permission' => 'Use HealthSherpa quoting',
+        'household-invalid' => 'Review the household size and primary applicant.',
+        'member-mismatch' => 'Select applicants belonging to this client record.',
+        'consent-required' => 'Obtain and record the consumer consent before requesting quotes.',
+        'bridge-retired' => 'The previous HealthSherpa link used example data. Complete the reviewed quote information to use the new connection.',
+        'enrollment-pending' => 'Enrollment access requires HealthSherpa approval and a linked agent account.',
+        'errors' => [
+            'not-configured' => 'HealthSherpa is not configured yet.',
+            'rate-limited' => 'Please wait before requesting another HealthSherpa result.',
+            'invalid-request' => 'HealthSherpa could not quote these details. Review the information supplied.',
+            'access-denied' => 'HealthSherpa access needs to be activated or reviewed.',
+            'unavailable' => 'HealthSherpa is temporarily unavailable. Try again later.',
+            'invalid-response' => 'HealthSherpa returned an unexpected result. Try again later.',
+        ],
+    ],
+
     'insurance-conversion' => [
         'success' => 'Quote #:id recorded as a policy. Review its coverage status.',
         'won-stage-missing' => 'The lead pipeline needs a stage with code won before converting the quote.',

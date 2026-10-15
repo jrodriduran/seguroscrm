@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Validation\ValidationException;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Models\HouseholdMember;
 use Webkul\Lead\Models\Lead;
@@ -41,7 +42,7 @@ function createTestCompetitiveLead(): Lead
     ]);
 }
 
-it('generates a full HealthSherpa prefill payload and deep link URL', function () {
+it('rejects the retired HealthSherpa bridge instead of inventing client and agent data', function () {
     $lead = createTestCompetitiveLead();
 
     HouseholdMember::create([
@@ -54,13 +55,8 @@ it('generates a full HealthSherpa prefill payload and deep link URL', function (
     ]);
 
     $bridgeService = app(HealthSherpaBridgeService::class);
-    $payload = $bridgeService->generateBridgeData($lead);
-
-    expect($payload)->toBeArray();
-    expect($payload['household_size'])->toBeGreaterThanOrEqual(2);
-    expect($payload['deep_link_url'])->toContain('healthsherpa.com');
-    expect($payload['applicants'])->toHaveCount(2);
-    expect($payload['applicants'][0]['role'])->toBe('primary');
+    expect(fn () => $bridgeService->generateBridgeData($lead))
+        ->toThrow(ValidationException::class);
 });
 
 it('evaluates cross-sell opportunities for ancillary bundles', function () {

@@ -15,3 +15,11 @@ Provider/Marketplace submission and carrier verification remain separate concern
 this package does not add external enrollment or payment processing.
 
 Regression and integrated backend coverage: `tests/Feature/Insurance/PolicyConversionSafetyTest.php`.
+
+HealthSherpaONE quoting foundation also lives here: server-side counties/quotes,
+explicit household input, lead ownership, signed CRM consent and dedicated ACL.
+It is disabled by default (`HEALTHSHERPA_ENABLED=false`), has no quoting UI yet,
+and does not enable enrollment or policy status. The fabricated legacy bridge is
+blocked through container bindings. Tests fake all provider responses:
+`tests/Feature/Insurance/HealthSherpaFoundationTest.php`.
+See `docs/healthsherpa-integration.md` for onboarding and pilot prerequisites.
