@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'insurance-conversion' => [
+        'success' => 'Cotización #:id registrada como póliza. Revisa su estado de cobertura.',
+        'won-stage-missing' => 'El embudo del prospecto necesita una etapa con código won antes de convertir la cotización.',
+    ],
+
     'acl' => [
         'help' => 'Ayuda',
         'leads' => 'Clientes potenciales',

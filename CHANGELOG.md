@@ -4,6 +4,10 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [fixed] Commissions generated from quotes now carry the policy number and effective date needed to match carrier statements.
+
+* [fixed] Policy conversion now rolls back on errors, selects the won stage from the lead's pipeline, respects blocking milestones and safely handles retries without duplicating commissions or resetting paid coverage.
+
 * [fixed] Run the full Pest suite against the seeded CI database so missing parallel-worker fixtures no longer obscure actual regressions.
 
 * [fixed] Restored Chatwoot webhook regression coverage for the authenticated Communications endpoint, including message deduplication and rejection of invalid tokens and other accounts.

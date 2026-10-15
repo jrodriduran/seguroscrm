@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'insurance-conversion' => [
+        'success' => 'Quote #:id recorded as a policy. Review its coverage status.',
+        'won-stage-missing' => 'The lead pipeline needs a stage with code won before converting the quote.',
+    ],
+
     'acl' => [
         'help' => 'Help',
         'leads' => 'Leads',

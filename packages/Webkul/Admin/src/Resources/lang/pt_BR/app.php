@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'insurance-conversion' => [
+        'success' => 'Cotação #:id registrada como apólice. Confira o estado da cobertura.',
+        'won-stage-missing' => 'O funil do lead precisa de uma etapa com código won antes de converter a cotação.',
+    ],
+
     'acl' => [
         'help' => 'Ajuda',
         'leads' => 'Oportunidades',
