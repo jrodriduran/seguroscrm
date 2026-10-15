@@ -4,6 +4,10 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Prepared a disabled-by-default HealthSherpa ONE quoting connector with scoped access, explicit household data, consent checks, rate limiting and safe provider errors.
+
+* [fixed] Disabled the legacy HealthSherpa handoff that fabricated missing ZIP, income, birth date and agent identifiers; enrollment remains unavailable until approved.
+
 * [fixed] Commissions generated from quotes now carry the policy number and effective date needed to match carrier statements.
 
 * [fixed] Policy conversion now rolls back on errors, selects the won stage from the lead's pipeline, respects blocking milestones and safely handles retries without duplicating commissions or resetting paid coverage.

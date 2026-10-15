@@ -1,6 +1,23 @@
 <?php
 
 return [
+    'healthsherpa' => [
+        'permission' => 'Usar cotação HealthSherpa',
+        'household-invalid' => 'Confira o tamanho da família e o solicitante principal.',
+        'member-mismatch' => 'Selecione solicitantes que pertençam a este cadastro.',
+        'consent-required' => 'Obtenha e registre o consentimento do cliente antes de solicitar cotações.',
+        'bridge-retired' => 'O link anterior do HealthSherpa usava dados de exemplo. Preencha e confira as informações da cotação para usar a nova conexão.',
+        'enrollment-pending' => 'A inscrição exige aprovação do HealthSherpa e uma conta de agente vinculada.',
+        'errors' => [
+            'not-configured' => 'O HealthSherpa ainda não está configurado.',
+            'rate-limited' => 'Aguarde antes de solicitar outro resultado do HealthSherpa.',
+            'invalid-request' => 'O HealthSherpa não conseguiu cotar estes dados. Confira as informações fornecidas.',
+            'access-denied' => 'É necessário ativar ou revisar o acesso ao HealthSherpa.',
+            'unavailable' => 'O HealthSherpa está temporariamente indisponível. Tente novamente mais tarde.',
+            'invalid-response' => 'O HealthSherpa retornou um resultado inesperado. Tente novamente mais tarde.',
+        ],
+    ],
+
     'insurance-conversion' => [
         'success' => 'Cotação #:id registrada como apólice. Confira o estado da cobertura.',
         'won-stage-missing' => 'O funil do lead precisa de uma etapa com código won antes de converter a cotação.',
