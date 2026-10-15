@@ -53,7 +53,7 @@ repo, a commits ni a la conversación.
 - Autor de los commits: `jrodriduran <jrodriduran@gmail.com>`.
 - **CI** (GitHub Actions):
   - *Linting Tests* corre Pint y **hace un auto-commit** (`chore: applied pint changes`) en la rama. Haz pull antes de seguir trabajando en ella.
-  - *CI* (Pest): **la línea base de `main` es 91 failed / 54 passed.** Esos 91 fallos ya existían (tests de seguros heredados que esperan columnas o rutas que no existen). Un PR es aceptable si **no sube** de 91. Si sube, compara los nombres de los tests que fallan contra `main`.
+  - *CI* (Pest): la ejecución paralela histórica de `main` reportaba **91 failed / 54 passed**. La reproducción aislada en serie del commit `bc61f60` da **1 failed / 144 passed**; el fallo es una prueba del webhook antiguo de Chatwoot. Al actualizar esa prueba y añadir casos de autenticación y cuenta ajena, la suite en serie da **147 passed / 858 assertions**. Los trabajadores paralelos migran bases separadas sin los datos del instalador que requieren muchas pruebas. CI ahora ejecuta la suite completa en serie sobre su base sembrada. **No aceptar una cuota de fallos heredados:** cualquier fallo debe investigarse. El resultado aislado no implica que se hayan validado integraciones externas ni Playwright.
   - *Playwright* (6 shards): también falla en `main`. Hoy no bloquea.
 - Cada cambio actualiza `CHANGELOG.md` bajo `v2.2.7 (unreleased)`.
 - Después de un merge, borra la rama remota.
@@ -213,7 +213,7 @@ con eventos que incluyen `support_login` y `password_reset`) y el middleware
    - cambiar el estado de la cuenta (aviso, solo lectura, suspendido).
    
    Debe consumir la API firmada de Platform. Para las altas y actualizaciones, debe hablar con un agente en el host que ejecute los scripts de `deploy/saas/bin`; la app web no debe montar `docker.sock`. Los webhooks de Stripe vendrán después.
-2. **Reducir los 91 tests heredados que fallan.** Cada test arreglado baja la línea base.
+2. **Mantener Pest sin fallos y mejorar el aislamiento de fixtures.** La suite en serie pasa; para recuperar el paralelismo, preparar datos independientes por prueba o trabajador. Playwright sigue pendiente de diagnóstico.
 3. **Puntaje de salud del cliente** (customer care): actividad, pólizas, pagos, respuestas y consentimiento.
 4. **Unificar las automatizaciones de Teamwork con las secuencias de Communications** en un solo motor.
 5. Ajustar dos expectativas viejas del test de secuencias. Ahora hay 13 plantillas de inicio, y el texto que buscaba el test en el índice de plantillas cambió.

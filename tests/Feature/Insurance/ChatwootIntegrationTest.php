@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Webkul\Activity\Models\Activity;
+use Webkul\Communications\Models\CommunicationMessage;
+use Webkul\Communications\Services\CommunicationSettings;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\Pipeline;
@@ -18,6 +20,8 @@ beforeEach(function () {
     Config::set('chatwoot.account_id', '42');
     Config::set('chatwoot.api_token', 'test_secret_token_123');
     Config::set('chatwoot.default_inbox_id', 99);
+    app(CommunicationSettings::class)->set('chatwoot.webhook_token', 'test-webhook-token');
+    Http::preventStrayRequests();
 });
 
 function createTestLeadForChatwoot(): Lead
@@ -66,14 +70,17 @@ it('creates contact and conversation in chatwoot when syncing a lead', function 
     expect($conv['id'])->toEqual(888);
 });
 
-it('processes incoming webhook message and creates or links CRM lead with activity', function () {
+it('processes incoming webhook message once and links it to the contact and lead timeline', function () {
     $webhookPayload = [
+        'id' => 7001,
+        'account' => ['id' => 42],
         'event' => 'message_created',
         'message_type' => 'incoming',
         'content' => 'Hola, necesito cotizar un plan de salud para mi familia en Florida.',
         'conversation' => [
             'id' => 5001,
             'inbox_id' => 99,
+            'channel' => 'Channel::Whatsapp',
         ],
         'sender' => [
             'id' => 3001,
@@ -83,12 +90,12 @@ it('processes incoming webhook message and creates or links CRM lead with activi
         ],
     ];
 
-    $response = $this->postJson(route('chatwoot.webhook'), $webhookPayload);
+    $webhookUrl = route('communications.chatwoot.webhook', ['token' => 'test-webhook-token']);
+    $response = $this->postJson($webhookUrl, $webhookPayload);
 
     $response->assertOk()
         ->assertJson([
-            'status' => 'success',
-            'event' => 'message_created',
+            'status' => 'logged',
         ]);
 
     // Check Person was created/linked
@@ -102,16 +109,49 @@ it('processes incoming webhook message and creates or links CRM lead with activi
     expect($lead->chatwoot_conversation_id)->toEqual(5001);
     expect($lead->chatwoot_last_message_at)->not->toBeNull();
 
-    // Check CRM activity was created
-    $this->assertDatabaseHas('activities', [
-        'title' => '💬 Mensaje WhatsApp/Chatwoot de Manuel Garcia',
+    // Communications owns the incoming message timeline now, rather than Activity.
+    $this->assertDatabaseHas('communication_messages', [
+        'provider' => 'chatwoot',
+        'external_id' => '7001',
+        'conversation_id' => '5001',
+        'person_id' => $person->id,
+        'lead_id' => $lead->id,
+        'channel' => 'whatsapp',
+        'direction' => 'in',
+        'content' => $webhookPayload['content'],
     ]);
 
-    $activity = Activity::where('title', '💬 Mensaje WhatsApp/Chatwoot de Manuel Garcia')->first();
-    $this->assertDatabaseHas('lead_activities', [
-        'lead_id' => $lead->id,
-        'activity_id' => $activity->id,
-    ]);
+    $this->postJson($webhookUrl, $webhookPayload)
+        ->assertOk()
+        ->assertJsonPath('status', 'duplicate');
+
+    expect(CommunicationMessage::where('provider', 'chatwoot')->where('external_id', '7001')->count())->toBe(1);
+    expect(Person::where('chatwoot_contact_id', 3001)->count())->toBe(1);
+    expect(Lead::where('chatwoot_conversation_id', 5001)->count())->toBe(1);
+    Http::assertNothingSent();
+});
+
+it('rejects chatwoot webhook requests with missing or invalid tokens before storing messages', function () {
+    $payload = ['id' => 7002, 'event' => 'message_created', 'account' => ['id' => 42]];
+
+    foreach ([[], ['token' => 'incorrect-token']] as $query) {
+        $this->postJson(route('communications.chatwoot.webhook', $query), $payload)
+            ->assertUnauthorized();
+    }
+
+    $this->assertDatabaseMissing('communication_messages', ['external_id' => '7002']);
+    Http::assertNothingSent();
+});
+
+it('ignores chatwoot events belonging to another account before storing messages', function () {
+    $this->postJson(route('communications.chatwoot.webhook', ['token' => 'test-webhook-token']), [
+        'id' => 7003,
+        'event' => 'message_created',
+        'account' => ['id' => 43],
+    ])->assertOk()->assertJson(['status' => 'ignored', 'reason' => 'account']);
+
+    $this->assertDatabaseMissing('communication_messages', ['external_id' => '7003']);
+    Http::assertNothingSent();
 });
 
 it('allows sending an outbound message from CRM to Chatwoot', function () {
