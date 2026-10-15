@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Insurance\Exceptions\HealthSherpaFailure;
 use Webkul\Insurance\Http\Requests\HealthSherpaQuoteRequest;
+use Webkul\Insurance\Models\HouseholdTransition;
 use Webkul\Insurance\Services\HealthSherpaOne;
 use Webkul\Lead\Models\LeadConsent;
 use Webkul\Lead\Repositories\LeadRepository;
@@ -40,6 +41,22 @@ class HealthSherpaController extends Controller
         }
 
         $payload = $request->payload();
+        $changes = HouseholdTransition::where('lead_id', $lead->id)
+            ->where('plan_type', 'marketplace')
+            ->whereIn('status', ['planned', 'confirmed'])->get();
+        foreach ($payload['household']['applicants'] as $applicant) {
+            foreach ($changes as $change) {
+                if ($applicant['member_id'] !== 'member-'.$change->household_member_id) {
+                    continue;
+                }
+                $start = $payload['household']['effective_date'] ?? null;
+                if (! $start || $start > $change->coverage_end_date->toDateString()) {
+                    throw ValidationException::withMessages([
+                        'household.applicants' => trans('admin::app.family-workflow.quote-review'),
+                    ]);
+                }
+            }
+        }
         $members = $lead->householdMembers()->where('is_applying_coverage', true)->pluck('id')
             ->map(fn ($id) => 'member-'.$id)->push('person-'.$lead->person_id);
 

@@ -172,7 +172,7 @@
                             <span v-if="doc.file_path" class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium">
                                 <span>📎</span>
                                 <a :href="'/storage/' + doc.file_path" target="_blank" class="hover:underline">
-                                    @{{ doc.file_name || '{{ trans('admin::insurance.dmi_documents.view_attachment') }}' }}
+                                    @{{ doc.file_name || uiText["admin::insurance.dmi_documents.view_attachment"] }}
                                 </a>
                             </span>
                             <span v-else class="text-gray-400 italic">
@@ -312,6 +312,9 @@
 
             data() {
                 return {
+                    uiText: {
+                        'admin::insurance.dmi_documents.view_attachment': @json(trans('admin::insurance.dmi_documents.view_attachment')),
+                    },
                     isLoading: false,
                     isSubmitting: false,
                     showModal: false,

@@ -23,3 +23,17 @@ and does not enable enrollment or policy status. The fabricated legacy bridge is
 blocked through container bindings. Tests fake all provider responses:
 `tests/Feature/Insurance/HealthSherpaFoundationTest.php`.
 See `docs/healthsherpa-integration.md` for onboarding and pilot prerequisites.
+
+Family coverage changes are recorded in `insurance_household_transitions` with
+planned/confirmed/cancelled states, last expected covered day, review date, actor
+and reference. They create internal follow-ups and can create one individual lead
+per member. They never terminate coverage, alter tax household size or move old
+policies/commissions. The linked case needs its own verified information and consent.
+Age-26 review tasks run daily, within 90 days of the birthday or during its year;
+they do not infer the coverage end date. Marketplace transitions prevent HS quotes
+for the affected family applicant after the planned end date (or without a start
+date). Other plan types do not block ACA quoting. Existing family CRUD is extended
+to enforce ownership, mask write responses, preserve masked identifiers on edit
+and disallow routine member deletion. Unsaved tax defaults are not shown as a
+client eligibility result. New routes require `leads.family_transitions` and case
+creation additionally requires `leads.create`; no roles are granted automatically.

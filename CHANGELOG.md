@@ -4,6 +4,14 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Added family coverage transition planning, assigned review tasks, confirmation history and individual prospect follow-up without automatically cancelling coverage or changing tax household data.
+
+* [fixed] Missing household income is no longer displayed as a real zero-income eligibility result, and individual follow-up cases render correctly with empty contact details.
+
+* [fixed] Corrected nested Blade translations in the SOA, enrollment and document templates that could prevent the Spanish lead screen from rendering.
+
+* [security] Enforced household record ownership, masked identifiers in write responses and preserved identifiers when editing masked values; family members can no longer be deleted through routine household actions.
+
 * [feature] Prepared a disabled-by-default HealthSherpa ONE quoting connector with scoped access, explicit household data, consent checks, rate limiting and safe provider errors.
 
 * [fixed] Disabled the legacy HealthSherpa handoff that fabricated missing ZIP, income, birth date and agent identifiers; enrollment remains unavailable until approved.
