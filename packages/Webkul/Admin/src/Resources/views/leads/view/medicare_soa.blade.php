@@ -66,11 +66,11 @@
                             <span class="text-3xl">@{{ isEligible ? '✅' : '⏳' }}</span>
                             <div>
                                 <h4 class="text-sm font-bold" :class="isEligible ? 'text-emerald-900 dark:text-emerald-300' : 'text-amber-900 dark:text-amber-300'">
-                                    @{{ isEligible ? '{{ trans('admin::insurance.medicare_soa.rule_48h_met') }}' : '{{ trans('admin::insurance.medicare_soa.rule_48h_waiting') }}' }}
+                                    @{{ isEligible ? uiText["admin::insurance.medicare_soa.rule_48h_met"] : uiText["admin::insurance.medicare_soa.rule_48h_waiting"] }}
                                 </h4>
                                 <p class="text-xs" :class="isEligible ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'">
                                     <span v-if="soa.exception_reason && soa.exception_reason !== 'none'">
-                                        @lang('admin::insurance.medicare_soa.rule_48h_exception'): <strong>@{{ soa.exception_reason === 'walk_in' ? '{{ trans('admin::insurance.medicare_soa.walk_in') }}' : '{{ trans('admin::insurance.medicare_soa.end_of_enrollment') }}' }}</strong>.
+                                        @lang('admin::insurance.medicare_soa.rule_48h_exception'): <strong>@{{ soa.exception_reason === 'walk_in' ? uiText["admin::insurance.medicare_soa.walk_in"] : uiText["admin::insurance.medicare_soa.end_of_enrollment"] }}</strong>.
                                     </span>
                                     <span v-else-if="isEligible">
                                         @lang('admin::insurance.medicare_soa.authorized_from', ['date' => '']) <strong>@{{ formatDateTime(soa.appointment_eligible_at) }}</strong>.
@@ -107,7 +107,7 @@
                         </div>
                         <div>
                             <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.audited_ip')</span>
-                            <strong class="text-gray-800 dark:text-gray-200 font-mono">@{{ soa.ip_address || '{{ trans('admin::insurance.medicare_soa.registered') }}' }}</strong>
+                            <strong class="text-gray-800 dark:text-gray-200 font-mono">@{{ soa.ip_address || uiText["admin::insurance.medicare_soa.registered"] }}</strong>
                         </div>
                         <div class="md:col-span-2">
                             <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.certified_agent')</span>
@@ -115,7 +115,7 @@
                         </div>
                         <div>
                             <span class="text-gray-400 block font-medium">@lang('admin::insurance.medicare_soa.device')</span>
-                            <span class="text-gray-600 dark:text-gray-400 truncate block">@{{ soa.user_agent || '{{ trans('admin::insurance.medicare_soa.web_mobile') }}' }}</span>
+                            <span class="text-gray-600 dark:text-gray-400 truncate block">@{{ soa.user_agent || uiText["admin::insurance.medicare_soa.web_mobile"] }}</span>
                         </div>
                     </div>
 
@@ -249,7 +249,7 @@
                             <div class="flex justify-end gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
                                 <button type="button" @click="showExceptionModal = false" class="secondary-button">@lang('admin::insurance.medicare_soa.cancel')</button>
                                 <button type="button" @click="applyException" class="primary-button" :disabled="isSubmittingException">
-                                    @{{ isSubmittingException ? '{{ trans('admin::insurance.medicare_soa.registering') }}' : '{{ trans('admin::insurance.medicare_soa.confirm_exception') }}' }}
+                                    @{{ isSubmittingException ? uiText["admin::insurance.medicare_soa.registering"] : uiText["admin::insurance.medicare_soa.confirm_exception"] }}
                                 </button>
                             </div>
                         </div>
@@ -267,6 +267,16 @@
 
             data() {
                 return {
+                    uiText: {
+                        'admin::insurance.medicare_soa.rule_48h_met': @json(trans('admin::insurance.medicare_soa.rule_48h_met')),
+                        'admin::insurance.medicare_soa.rule_48h_waiting': @json(trans('admin::insurance.medicare_soa.rule_48h_waiting')),
+                        'admin::insurance.medicare_soa.walk_in': @json(trans('admin::insurance.medicare_soa.walk_in')),
+                        'admin::insurance.medicare_soa.end_of_enrollment': @json(trans('admin::insurance.medicare_soa.end_of_enrollment')),
+                        'admin::insurance.medicare_soa.registered': @json(trans('admin::insurance.medicare_soa.registered')),
+                        'admin::insurance.medicare_soa.web_mobile': @json(trans('admin::insurance.medicare_soa.web_mobile')),
+                        'admin::insurance.medicare_soa.registering': @json(trans('admin::insurance.medicare_soa.registering')),
+                        'admin::insurance.medicare_soa.confirm_exception': @json(trans('admin::insurance.medicare_soa.confirm_exception')),
+                    },
                     soa: null,
                     publicUrl: '',
                     whatsappUrl: '',

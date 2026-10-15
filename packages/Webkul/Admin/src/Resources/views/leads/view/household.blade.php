@@ -1,5 +1,7 @@
 <v-lead-household :lead-id="{{ $lead->id }}"></v-lead-household>
 
+@include('admin::leads.view.family-transitions')
+
 @pushOnce('scripts')
     <script type="text/x-template" id="v-lead-household-template">
         <div class="flex flex-col gap-4 p-4">
@@ -59,6 +61,7 @@
                 </div>
 
                 <!-- FPL Metrics Grid -->
+                <p v-if="!fplCalc" class="text-sm text-gray-500 mt-3">@lang('admin::app.family-workflow.tax-missing')</p>
                 <div v-if="fplCalc" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
                     <!-- FPL % & CSR Tier -->
                     <div class="p-2.5 rounded bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800">
@@ -158,7 +161,7 @@
                             </td>
                             <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">
                                 <span v-if="member.date_of_birth">
-                                    @{{ member.date_of_birth }}
+                                    @{{ member.date_of_birth.substring(0, 10) }}
                                     <span v-if="member.age !== null" class="text-xs text-gray-500">(@{{ member.age }} @{{ labels.yearsShort }})</span>
                                 </span>
                                 <span v-else class="text-gray-400">--</span>
@@ -204,14 +207,6 @@
                                         @click="openEditModal(member)"
                                     >
                                         <span class="icon-edit text-lg"></span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="text-gray-500 hover:text-red-600 transition"
-                                        :title="labels.delete"
-                                        @click="deleteMember(member.id)"
-                                    >
-                                        <span class="icon-delete text-lg"></span>
                                     </button>
                                 </div>
                             </td>

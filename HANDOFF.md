@@ -10,6 +10,15 @@ desplegado ni conectado. Primero cotizador y datos revisados, después inscripci
 asistida y estados según aprobación. Ver [plan y requisitos](docs/healthsherpa-integration.md).
 El puente anterior que inventaba datos queda bloqueado en esa rama. No reactivarlo.
 
+**Grupo familiar:** `feature/household-transitions` añade cambios de cobertura con
+motivo, tipo de plan, fechas, tarea asignada y confirmación manual con referencia.
+Permite crear un expediente individual vinculado sin copiar consentimiento ni datos
+fiscales del titular. Las alertas por 26 años solo solicitan revisión; nunca dan de
+baja. No modifica el hogar fiscal, pólizas ni comisiones. Requiere migración y el
+permiso `leads.family_transitions` (más `leads.create` para el expediente individual).
+Incluye protección de acceso en las rutas familiares heredadas y bloquea el borrado
+ordinario de integrantes. No desplegado todavía.
+
 ---
 
 ## 1. Qué es

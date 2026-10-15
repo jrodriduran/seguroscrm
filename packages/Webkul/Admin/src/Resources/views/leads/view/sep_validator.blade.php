@@ -81,7 +81,7 @@
                         <div class="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
                             <div class="text-slate-500 font-medium">@lang('admin::insurance.sep_validator.effective_date')</div>
                             <div class="font-bold text-sky-600 dark:text-sky-400 text-sm mt-0.5">
-                                @{{ qualification.effective_date || '{{ trans('admin::insurance.sep_validator.immediate') }}' }}
+                                @{{ qualification.effective_date || uiText["admin::insurance.sep_validator.immediate"] }}
                             </div>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                             @click="isEditing = !isEditing"
                             class="text-xs text-sky-600 hover:text-sky-700 font-bold"
                         >
-                            @{{ isEditing ? '{{ trans('admin::insurance.sep_validator.cancel_edit') }}' : '{{ trans('admin::insurance.sep_validator.modify_qle') }}' }}
+                            @{{ isEditing ? uiText["admin::insurance.sep_validator.cancel_edit"] : uiText["admin::insurance.sep_validator.modify_qle"] }}
                         </button>
                     </div>
                 </div>
@@ -206,6 +206,11 @@
 
             data() {
                 return {
+                    uiText: {
+                        'admin::insurance.sep_validator.immediate': @json(trans('admin::insurance.sep_validator.immediate')),
+                        'admin::insurance.sep_validator.cancel_edit': @json(trans('admin::insurance.sep_validator.cancel_edit')),
+                        'admin::insurance.sep_validator.modify_qle': @json(trans('admin::insurance.sep_validator.modify_qle')),
+                    },
                     isLoading: true,
                     isEditing: false,
                     federalStatus: {},
