@@ -4,6 +4,8 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [fixed] Own-role editing checks now verify redirection and absence of the edit form instead of a transient notification; the escalation guard remains enforced.
+
 * [fixed] Carrier creation checks now verify the persisted record after redirect instead of relying on a short-lived notification during import setup.
 
 * [fixed] Kept fixed dialogs inside the viewport by removing retained animation state from their content ancestor.
