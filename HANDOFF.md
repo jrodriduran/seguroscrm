@@ -235,6 +235,15 @@ con eventos que incluyen `support_login` y `password_reset`) y el middleware
 - **No corras Pest contra la base del servidor.** Los tests usan
   `RefreshDatabase` y la borrarían. Corre Pest en CI o con una base de pruebas aparte.
 
+### Respaldos de la instalación LAN
+
+- Runner: `deploy/lan/backup.py`; copia operativa en `/home/admin1/seguroscrm-ops/backup.py`.
+- Cron de `admin1`: copia diaria a las 03:00, hora del servidor (America/New_York), y comprobación cada hora al minuto 15. Conserva intacto el cron de Laravel.
+- Destino privado: `/home/admin1/seguroscrm-backups`; SQL, `storage/app`, `.env` y checksums. Retención de 14 días solo para copias creadas por el runner.
+- `python3 /home/admin1/seguroscrm-ops/backup.py --check` detecta último intento fallido, copia alterada o antigüedad superior a 26 horas. Estado en `last-run.json`, `latest.json` y `/home/admin1/seguroscrm-ops/health.log`.
+- Primera copia del runner restaurada en MySQL aislado: 120 tablas y 143 migraciones. Los contenedores de verificación quedaron detenidos.
+- Detección local, sin notificaciones externas ni copia fuera del host todavía. Ver `deploy/lan/README.md` y sus pruebas de fallos; nunca publicar estos respaldos como artifacts.
+
 ## 7. SaaS (`deploy/saas/`, ver su README)
 
 - **Arquitectura:**
