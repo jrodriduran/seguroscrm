@@ -425,12 +425,8 @@
     html { scrollbar-width: thin; scrollbar-color: rgba(100, 116, 139, 0.35) transparent; }
     ::selection { background: rgba(79, 124, 255, 0.18); }
 
-    /* Content settles in on each page load (ends at transform:none, so fixed modals are unaffected) */
-    @keyframes nxRise {
-        from { opacity: 0; transform: translateY(6px); }
-        to   { opacity: 1; transform: none; }
-    }
-    .admin-main-content { animation: nxRise 0.45s var(--nx-ease) both; }
+    /* Keep this ancestor free of transforms and retained animation state:
+       fixed dialogs must be positioned against the viewport. */
 
     /* Page titles */
     :root:not(.dark) .admin-main-content .text-xl.font-bold { color: #0b1220; }

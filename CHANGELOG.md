@@ -4,6 +4,10 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [fixed] Kept fixed dialogs inside the viewport by removing retained animation state from their content ancestor.
+
+* [security] Kept users without an assigned agency inside their own team and limited reopening completed follow-ups to the assignee, requester or agency owner.
+
 * [fixed] Completed missing insurance translation paths in every Admin locale with English fallbacks where needed, while retaining localized text and legacy product translations.
 
 * [enhancement] Documented pilot acceptance, agent identity setup and import review, and added a reproducible inventory of Composer-declared dependency licenses.

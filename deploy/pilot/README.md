@@ -21,6 +21,12 @@ ACA y Medicare. La conexión de WhatsApp y la marca quedaron aplazadas por el du
   reiniciarse: una futura modificación necesita historial de versiones de SOA.
 - HealthSherpa desactivado. La interfaz no ofrece una inscripción que no existe.
 - Revisión previa de CSV sin crear, actualizar ni fusionar personas.
+- Flujo de asignación, revisión de vencimientos, cierre y supervisión probado con
+  una dueña y dos agentes sintéticos. La reapertura de una tarea terminada exige
+  ser responsable, solicitante o dueña. Los usuarios sin agencia no ven otros equipos.
+- Todas las claves de traducción de Admin disponibles en los diez idiomas, con
+  textos de respaldo en inglés donde faltaba traducción. Formulario de correo
+  comprobado visualmente dentro de la pantalla con CC/BCC, sin enviar mensajes.
 
 ## Configurar los usuarios y su identidad
 

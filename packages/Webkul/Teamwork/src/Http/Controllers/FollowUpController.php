@@ -294,6 +294,11 @@ class FollowUpController extends Controller
     public function reopen(int $id): RedirectResponse
     {
         $followUp = $this->findVisible($id);
+        $user = auth()->guard('user')->user();
+        abort_unless(
+            in_array($user->id, [$followUp->assigned_to, $followUp->created_by], true) || $this->teamScope->isMasterAgent($user),
+            403
+        );
 
         $followUp->update([
             'status' => FollowUp::STATUS_OPEN,

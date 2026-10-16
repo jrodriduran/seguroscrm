@@ -7,9 +7,15 @@ Estado al 2026-10-15. Léelo completo antes de tocar código. Complementa a
 criterios de aceptación y pendientes reales. `feature/pilot-closure` añade identidad
 explícita por agente (`insurance:agent-identity`), protege firmas y alcance de acceso,
 corrige Rx/venta cruzada y permite revisar CSV sin importar (`insurance:preview-contacts`).
-La identidad configurada no verifica licencias. La suite aislada pasó 250 pruebas
-con 1.209 aserciones y todas las vistas compilan. Playwright sigue
+La identidad configurada no verifica licencias. La suite aislada pasó 262 pruebas
+con 1.239 aserciones y todas las vistas compilan. Playwright sigue
 en revisión; no considerar el piloto listo ni desplegado por tener commits.
+
+Se probó el flujo dueña + dos agentes (asignar, atraso, completar, supervisar y
+reabrir). La reapertura exige ser responsable, solicitante o dueña; un usuario sin
+agencia no obtiene acceso global al equipo. Se completó la paridad de traducciones
+de Admin. El modal de correo ya permite usar CC/BCC dentro de la pantalla, comprobado
+visualmente en la instancia sintética; no se hicieron envíos reales.
 
 **Prioridad comercial actual (2026-10-16):** primer cliente: una dueña y dos
 agentes. El 95% del canal es WhatsApp; no significa 95% de autonomía de IA.
