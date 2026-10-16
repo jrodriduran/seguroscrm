@@ -1,0 +1,1592 @@
+{
+  "scope": "Composer lock metadata only; excludes JavaScript, bundled assets and services. Not a license notice bundle or a legal opinion.",
+  "source_sha256": "485d7be10dcecff46f42d68330f1baa19143baa848c7fe0ee67982a46c4f09ab",
+  "packages": [
+    {
+      "name": "barryvdh/laravel-debugbar",
+      "version": "v3.16.5",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/fruitcake/laravel-debugbar.git"
+    },
+    {
+      "name": "barryvdh/laravel-dompdf",
+      "version": "v3.1.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/barryvdh/laravel-dompdf.git"
+    },
+    {
+      "name": "brianium/paratest",
+      "version": "v7.8.5",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/paratestphp/paratest.git"
+    },
+    {
+      "name": "brick/math",
+      "version": "0.14.8",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/brick/math.git"
+    },
+    {
+      "name": "carbonphp/carbon-doctrine-types",
+      "version": "3.2.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/CarbonPHP/carbon-doctrine-types.git"
+    },
+    {
+      "name": "composer/pcre",
+      "version": "3.3.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/composer/pcre.git"
+    },
+    {
+      "name": "composer/semver",
+      "version": "3.4.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/composer/semver.git"
+    },
+    {
+      "name": "dflydev/dot-access-data",
+      "version": "v3.0.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/dflydev/dflydev-dot-access-data.git"
+    },
+    {
+      "name": "diglactic/laravel-breadcrumbs",
+      "version": "v10.1.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/diglactic/laravel-breadcrumbs.git"
+    },
+    {
+      "name": "doctrine/deprecations",
+      "version": "1.1.6",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/doctrine/deprecations.git"
+    },
+    {
+      "name": "doctrine/inflector",
+      "version": "2.1.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/doctrine/inflector.git"
+    },
+    {
+      "name": "doctrine/lexer",
+      "version": "3.0.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/doctrine/lexer.git"
+    },
+    {
+      "name": "dompdf/dompdf",
+      "version": "v3.1.6",
+      "scope": "runtime",
+      "declared_licenses": [
+        "LGPL-2.1"
+      ],
+      "source": "https://github.com/dompdf/dompdf.git"
+    },
+    {
+      "name": "dompdf/php-font-lib",
+      "version": "1.0.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "LGPL-2.1-or-later"
+      ],
+      "source": "https://github.com/dompdf/php-font-lib.git"
+    },
+    {
+      "name": "dompdf/php-svg-lib",
+      "version": "1.0.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "LGPL-3.0-or-later"
+      ],
+      "source": "https://github.com/dompdf/php-svg-lib.git"
+    },
+    {
+      "name": "dragonmantank/cron-expression",
+      "version": "v3.6.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/dragonmantank/cron-expression.git"
+    },
+    {
+      "name": "egulias/email-validator",
+      "version": "4.0.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/egulias/EmailValidator.git"
+    },
+    {
+      "name": "enshrined/svg-sanitize",
+      "version": "0.22.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "GPL-2.0-or-later"
+      ],
+      "source": "https://github.com/darylldoyle/svg-sanitizer.git"
+    },
+    {
+      "name": "ezyang/htmlpurifier",
+      "version": "v4.19.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "LGPL-2.1-or-later"
+      ],
+      "source": "https://github.com/ezyang/htmlpurifier.git"
+    },
+    {
+      "name": "facade/ignition-contracts",
+      "version": "1.0.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/facade/ignition-contracts.git"
+    },
+    {
+      "name": "fakerphp/faker",
+      "version": "v1.24.1",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/FakerPHP/Faker.git"
+    },
+    {
+      "name": "fidry/cpu-core-counter",
+      "version": "1.3.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/theofidry/cpu-core-counter.git"
+    },
+    {
+      "name": "filp/whoops",
+      "version": "2.18.4",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/filp/whoops.git"
+    },
+    {
+      "name": "firebase/php-jwt",
+      "version": "v7.1.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/googleapis/php-jwt.git"
+    },
+    {
+      "name": "fruitcake/php-cors",
+      "version": "v1.4.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/fruitcake/php-cors.git"
+    },
+    {
+      "name": "google/apiclient",
+      "version": "v2.19.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "Apache-2.0"
+      ],
+      "source": "https://github.com/googleapis/google-api-php-client.git"
+    },
+    {
+      "name": "google/apiclient-services",
+      "version": "v0.452.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "Apache-2.0"
+      ],
+      "source": "https://github.com/googleapis/google-api-php-client-services.git"
+    },
+    {
+      "name": "google/auth",
+      "version": "v1.53.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "Apache-2.0"
+      ],
+      "source": "https://github.com/googleapis/google-auth-library-php.git"
+    },
+    {
+      "name": "graham-campbell/result-type",
+      "version": "v1.1.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/GrahamCampbell/Result-Type.git"
+    },
+    {
+      "name": "guzzlehttp/guzzle",
+      "version": "7.15.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/guzzle/guzzle.git"
+    },
+    {
+      "name": "guzzlehttp/promises",
+      "version": "2.5.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/guzzle/promises.git"
+    },
+    {
+      "name": "guzzlehttp/psr7",
+      "version": "2.13.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/guzzle/psr7.git"
+    },
+    {
+      "name": "guzzlehttp/uri-template",
+      "version": "v1.0.10",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/guzzle/uri-template.git"
+    },
+    {
+      "name": "hamcrest/hamcrest-php",
+      "version": "v2.1.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/hamcrest/hamcrest-php.git"
+    },
+    {
+      "name": "jean85/pretty-package-versions",
+      "version": "2.1.1",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/Jean85/pretty-package-versions.git"
+    },
+    {
+      "name": "khaled.alshamaa/ar-php",
+      "version": "v6.3.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "LGPL-3.0"
+      ],
+      "source": "https://github.com/khaled-alshamaa/ar-php.git"
+    },
+    {
+      "name": "konekt/concord",
+      "version": "1.18.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/artkonekt/concord.git"
+    },
+    {
+      "name": "konekt/enum",
+      "version": "4.2.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/artkonekt/enum.git"
+    },
+    {
+      "name": "konekt/enum-eloquent",
+      "version": "1.11.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/artkonekt/enum-eloquent.git"
+    },
+    {
+      "name": "krayin/krayin-package-generator",
+      "version": "dev-master",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/krayin/krayin-package-generator.git"
+    },
+    {
+      "name": "laravel/framework",
+      "version": "v12.66.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/framework.git"
+    },
+    {
+      "name": "laravel/pint",
+      "version": "v1.29.1",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/pint.git"
+    },
+    {
+      "name": "laravel/prompts",
+      "version": "v0.3.22",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/prompts.git"
+    },
+    {
+      "name": "laravel/sail",
+      "version": "v1.58.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/sail.git"
+    },
+    {
+      "name": "laravel/sanctum",
+      "version": "v4.3.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/sanctum.git"
+    },
+    {
+      "name": "laravel/serializable-closure",
+      "version": "v2.0.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/serializable-closure.git"
+    },
+    {
+      "name": "laravel/tinker",
+      "version": "v2.11.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/tinker.git"
+    },
+    {
+      "name": "laravel/ui",
+      "version": "v4.6.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/laravel/ui.git"
+    },
+    {
+      "name": "league/commonmark",
+      "version": "2.10.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/thephpleague/commonmark.git"
+    },
+    {
+      "name": "league/config",
+      "version": "v1.2.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/thephpleague/config.git"
+    },
+    {
+      "name": "league/flysystem",
+      "version": "3.35.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thephpleague/flysystem.git"
+    },
+    {
+      "name": "league/flysystem-local",
+      "version": "3.31.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thephpleague/flysystem-local.git"
+    },
+    {
+      "name": "league/fractal",
+      "version": "0.21",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thephpleague/fractal.git"
+    },
+    {
+      "name": "league/mime-type-detection",
+      "version": "1.17.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thephpleague/mime-type-detection.git"
+    },
+    {
+      "name": "league/uri",
+      "version": "7.8.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thephpleague/uri.git"
+    },
+    {
+      "name": "league/uri-interfaces",
+      "version": "7.8.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thephpleague/uri-interfaces.git"
+    },
+    {
+      "name": "maatwebsite/excel",
+      "version": "3.1.68",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/SpartnerNL/Laravel-Excel.git"
+    },
+    {
+      "name": "maennchen/zipstream-php",
+      "version": "3.2.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/maennchen/ZipStream-PHP.git"
+    },
+    {
+      "name": "markbaker/complex",
+      "version": "3.0.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/MarkBaker/PHPComplex.git"
+    },
+    {
+      "name": "markbaker/matrix",
+      "version": "3.0.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/MarkBaker/PHPMatrix.git"
+    },
+    {
+      "name": "masterminds/html5",
+      "version": "2.11.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/Masterminds/html5-php.git"
+    },
+    {
+      "name": "mockery/mockery",
+      "version": "1.6.12",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/mockery/mockery.git"
+    },
+    {
+      "name": "monolog/monolog",
+      "version": "3.10.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/Seldaek/monolog.git"
+    },
+    {
+      "name": "mpdf/mpdf",
+      "version": "v8.3.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "GPL-2.0-only"
+      ],
+      "source": "https://github.com/mpdf/mpdf.git"
+    },
+    {
+      "name": "mpdf/psr-http-message-shim",
+      "version": "v2.0.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/mpdf/psr-http-message-shim.git"
+    },
+    {
+      "name": "mpdf/psr-log-aware-trait",
+      "version": "v3.0.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/mpdf/psr-log-aware-trait.git"
+    },
+    {
+      "name": "myclabs/deep-copy",
+      "version": "1.13.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/myclabs/DeepCopy.git"
+    },
+    {
+      "name": "nesbot/carbon",
+      "version": "3.13.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/CarbonPHP/carbon.git"
+    },
+    {
+      "name": "nette/schema",
+      "version": "v1.3.6",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause",
+        "GPL-2.0-only",
+        "GPL-3.0-only"
+      ],
+      "source": "https://github.com/nette/schema.git"
+    },
+    {
+      "name": "nette/utils",
+      "version": "v4.1.5",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause",
+        "GPL-2.0-only",
+        "GPL-3.0-only"
+      ],
+      "source": "https://github.com/nette/utils.git"
+    },
+    {
+      "name": "nikic/php-parser",
+      "version": "v5.7.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/nikic/PHP-Parser.git"
+    },
+    {
+      "name": "nunomaduro/collision",
+      "version": "v8.9.4",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/nunomaduro/collision.git"
+    },
+    {
+      "name": "nunomaduro/termwind",
+      "version": "v2.4.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/nunomaduro/termwind.git"
+    },
+    {
+      "name": "paragonie/random_compat",
+      "version": "v9.99.100",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/paragonie/random_compat.git"
+    },
+    {
+      "name": "pestphp/pest",
+      "version": "v3.8.6",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/pestphp/pest.git"
+    },
+    {
+      "name": "pestphp/pest-plugin",
+      "version": "v3.0.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/pestphp/pest-plugin.git"
+    },
+    {
+      "name": "pestphp/pest-plugin-arch",
+      "version": "v3.1.1",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/pestphp/pest-plugin-arch.git"
+    },
+    {
+      "name": "pestphp/pest-plugin-laravel",
+      "version": "v3.2.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/pestphp/pest-plugin-laravel.git"
+    },
+    {
+      "name": "pestphp/pest-plugin-mutate",
+      "version": "v3.0.5",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/pestphp/pest-plugin-mutate.git"
+    },
+    {
+      "name": "phar-io/manifest",
+      "version": "2.0.4",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/phar-io/manifest.git"
+    },
+    {
+      "name": "phar-io/version",
+      "version": "3.2.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/phar-io/version.git"
+    },
+    {
+      "name": "php-debugbar/php-debugbar",
+      "version": "v2.2.6",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-debugbar/php-debugbar.git"
+    },
+    {
+      "name": "phpdocumentor/reflection-common",
+      "version": "2.2.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/phpDocumentor/ReflectionCommon.git"
+    },
+    {
+      "name": "phpdocumentor/reflection-docblock",
+      "version": "6.0.3",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/phpDocumentor/ReflectionDocBlock.git"
+    },
+    {
+      "name": "phpdocumentor/type-resolver",
+      "version": "2.0.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/phpDocumentor/TypeResolver.git"
+    },
+    {
+      "name": "phpoffice/phpspreadsheet",
+      "version": "1.30.6",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/PHPOffice/PhpSpreadsheet.git"
+    },
+    {
+      "name": "phpoption/phpoption",
+      "version": "1.9.5",
+      "scope": "runtime",
+      "declared_licenses": [
+        "Apache-2.0"
+      ],
+      "source": "https://github.com/schmittjoh/php-option.git"
+    },
+    {
+      "name": "phpstan/phpdoc-parser",
+      "version": "2.3.2",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/phpstan/phpdoc-parser.git"
+    },
+    {
+      "name": "phpunit/php-code-coverage",
+      "version": "11.0.12",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/php-code-coverage.git"
+    },
+    {
+      "name": "phpunit/php-file-iterator",
+      "version": "5.1.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/php-file-iterator.git"
+    },
+    {
+      "name": "phpunit/php-invoker",
+      "version": "5.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/php-invoker.git"
+    },
+    {
+      "name": "phpunit/php-text-template",
+      "version": "4.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/php-text-template.git"
+    },
+    {
+      "name": "phpunit/php-timer",
+      "version": "7.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/php-timer.git"
+    },
+    {
+      "name": "phpunit/phpunit",
+      "version": "11.5.50",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/phpunit.git"
+    },
+    {
+      "name": "prettus/l5-repository",
+      "version": "3.0.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/andersao/l5-repository.git"
+    },
+    {
+      "name": "prettus/laravel-validation",
+      "version": "1.7.0",
+      "scope": "runtime",
+      "declared_licenses": [],
+      "source": "https://github.com/andersao/laravel-validator.git"
+    },
+    {
+      "name": "psr/cache",
+      "version": "3.0.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/cache.git"
+    },
+    {
+      "name": "psr/clock",
+      "version": "1.0.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/clock.git"
+    },
+    {
+      "name": "psr/container",
+      "version": "2.0.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/container.git"
+    },
+    {
+      "name": "psr/event-dispatcher",
+      "version": "1.0.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/event-dispatcher.git"
+    },
+    {
+      "name": "psr/http-client",
+      "version": "1.0.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/http-client.git"
+    },
+    {
+      "name": "psr/http-factory",
+      "version": "1.1.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/http-factory.git"
+    },
+    {
+      "name": "psr/http-message",
+      "version": "2.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/http-message.git"
+    },
+    {
+      "name": "psr/log",
+      "version": "3.0.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/log.git"
+    },
+    {
+      "name": "psr/simple-cache",
+      "version": "3.0.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/php-fig/simple-cache.git"
+    },
+    {
+      "name": "psy/psysh",
+      "version": "v0.12.22",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/bobthecow/psysh.git"
+    },
+    {
+      "name": "ralouphie/getallheaders",
+      "version": "3.0.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/ralouphie/getallheaders.git"
+    },
+    {
+      "name": "ramsey/collection",
+      "version": "2.1.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/ramsey/collection.git"
+    },
+    {
+      "name": "ramsey/uuid",
+      "version": "4.9.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/ramsey/uuid.git"
+    },
+    {
+      "name": "sabberworm/php-css-parser",
+      "version": "v9.4.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/MyIntervals/PHP-CSS-Parser.git"
+    },
+    {
+      "name": "sebastian/cli-parser",
+      "version": "3.0.2",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/cli-parser.git"
+    },
+    {
+      "name": "sebastian/code-unit",
+      "version": "3.0.3",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/code-unit.git"
+    },
+    {
+      "name": "sebastian/code-unit-reverse-lookup",
+      "version": "4.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git"
+    },
+    {
+      "name": "sebastian/comparator",
+      "version": "6.3.3",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/comparator.git"
+    },
+    {
+      "name": "sebastian/complexity",
+      "version": "4.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/complexity.git"
+    },
+    {
+      "name": "sebastian/diff",
+      "version": "6.0.2",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/diff.git"
+    },
+    {
+      "name": "sebastian/environment",
+      "version": "7.2.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/environment.git"
+    },
+    {
+      "name": "sebastian/exporter",
+      "version": "6.3.2",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/exporter.git"
+    },
+    {
+      "name": "sebastian/global-state",
+      "version": "7.0.2",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/global-state.git"
+    },
+    {
+      "name": "sebastian/lines-of-code",
+      "version": "3.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/lines-of-code.git"
+    },
+    {
+      "name": "sebastian/object-enumerator",
+      "version": "6.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/object-enumerator.git"
+    },
+    {
+      "name": "sebastian/object-reflector",
+      "version": "4.0.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/object-reflector.git"
+    },
+    {
+      "name": "sebastian/recursion-context",
+      "version": "6.0.3",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/recursion-context.git"
+    },
+    {
+      "name": "sebastian/type",
+      "version": "5.1.3",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/type.git"
+    },
+    {
+      "name": "sebastian/version",
+      "version": "5.0.2",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/sebastianbergmann/version.git"
+    },
+    {
+      "name": "setasign/fpdi",
+      "version": "v2.6.8",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/Setasign/FPDI.git"
+    },
+    {
+      "name": "smalot/pdfparser",
+      "version": "v2.12.5",
+      "scope": "runtime",
+      "declared_licenses": [
+        "LGPL-3.0"
+      ],
+      "source": "https://github.com/smalot/pdfparser.git"
+    },
+    {
+      "name": "spatie/backtrace",
+      "version": "1.8.2",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/spatie/backtrace.git"
+    },
+    {
+      "name": "spatie/error-solutions",
+      "version": "1.1.3",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/spatie/error-solutions.git"
+    },
+    {
+      "name": "spatie/flare-client-php",
+      "version": "1.11.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/spatie/flare-client-php.git"
+    },
+    {
+      "name": "spatie/ignition",
+      "version": "1.16.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/spatie/ignition.git"
+    },
+    {
+      "name": "spatie/laravel-ignition",
+      "version": "2.12.0",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/spatie/laravel-ignition.git"
+    },
+    {
+      "name": "staabm/side-effects-detector",
+      "version": "1.0.5",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/staabm/side-effects-detector.git"
+    },
+    {
+      "name": "symfony/clock",
+      "version": "v7.4.8",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/clock.git"
+    },
+    {
+      "name": "symfony/console",
+      "version": "v7.4.16",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/console.git"
+    },
+    {
+      "name": "symfony/css-selector",
+      "version": "v7.4.9",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/css-selector.git"
+    },
+    {
+      "name": "symfony/deprecation-contracts",
+      "version": "v3.7.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/deprecation-contracts.git"
+    },
+    {
+      "name": "symfony/error-handler",
+      "version": "v7.4.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/error-handler.git"
+    },
+    {
+      "name": "symfony/event-dispatcher",
+      "version": "v7.4.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/event-dispatcher.git"
+    },
+    {
+      "name": "symfony/event-dispatcher-contracts",
+      "version": "v3.7.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/event-dispatcher-contracts.git"
+    },
+    {
+      "name": "symfony/finder",
+      "version": "v7.4.14",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/finder.git"
+    },
+    {
+      "name": "symfony/http-client",
+      "version": "v7.4.20",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/http-client.git"
+    },
+    {
+      "name": "symfony/http-client-contracts",
+      "version": "v3.7.3",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/http-client-contracts.git"
+    },
+    {
+      "name": "symfony/http-foundation",
+      "version": "v7.4.16",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/http-foundation.git"
+    },
+    {
+      "name": "symfony/http-kernel",
+      "version": "v7.4.16",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/http-kernel.git"
+    },
+    {
+      "name": "symfony/mailer",
+      "version": "v7.4.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/mailer.git"
+    },
+    {
+      "name": "symfony/mime",
+      "version": "v7.4.16",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/mime.git"
+    },
+    {
+      "name": "symfony/polyfill-ctype",
+      "version": "v1.37.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-ctype.git"
+    },
+    {
+      "name": "symfony/polyfill-intl-grapheme",
+      "version": "v1.41.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-intl-grapheme.git"
+    },
+    {
+      "name": "symfony/polyfill-intl-idn",
+      "version": "v1.38.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-intl-idn.git"
+    },
+    {
+      "name": "symfony/polyfill-intl-normalizer",
+      "version": "v1.38.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-intl-normalizer.git"
+    },
+    {
+      "name": "symfony/polyfill-mbstring",
+      "version": "v1.38.2",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-mbstring.git"
+    },
+    {
+      "name": "symfony/polyfill-php80",
+      "version": "v1.37.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-php80.git"
+    },
+    {
+      "name": "symfony/polyfill-php83",
+      "version": "v1.41.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-php83.git"
+    },
+    {
+      "name": "symfony/polyfill-php84",
+      "version": "v1.38.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-php84.git"
+    },
+    {
+      "name": "symfony/polyfill-php85",
+      "version": "v1.41.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-php85.git"
+    },
+    {
+      "name": "symfony/polyfill-uuid",
+      "version": "v1.37.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/polyfill-uuid.git"
+    },
+    {
+      "name": "symfony/postmark-mailer",
+      "version": "v7.4.18",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/postmark-mailer.git"
+    },
+    {
+      "name": "symfony/process",
+      "version": "v7.4.13",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/process.git"
+    },
+    {
+      "name": "symfony/routing",
+      "version": "v7.4.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/routing.git"
+    },
+    {
+      "name": "symfony/service-contracts",
+      "version": "v3.7.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/service-contracts.git"
+    },
+    {
+      "name": "symfony/string",
+      "version": "v7.4.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/string.git"
+    },
+    {
+      "name": "symfony/translation",
+      "version": "v7.4.16",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/translation.git"
+    },
+    {
+      "name": "symfony/translation-contracts",
+      "version": "v3.7.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/translation-contracts.git"
+    },
+    {
+      "name": "symfony/uid",
+      "version": "v7.4.9",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/uid.git"
+    },
+    {
+      "name": "symfony/var-dumper",
+      "version": "v7.4.15",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/var-dumper.git"
+    },
+    {
+      "name": "symfony/yaml",
+      "version": "v7.4.15",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/symfony/yaml.git"
+    },
+    {
+      "name": "ta-tikoma/phpunit-architecture-test",
+      "version": "0.8.7",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/ta-tikoma/phpunit-architecture-test.git"
+    },
+    {
+      "name": "thecodingmachine/safe",
+      "version": "v3.4.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/thecodingmachine/safe.git"
+    },
+    {
+      "name": "theseer/tokenizer",
+      "version": "1.3.1",
+      "scope": "development",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/theseer/tokenizer.git"
+    },
+    {
+      "name": "tijsverkoyen/css-to-inline-styles",
+      "version": "v2.4.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/tijsverkoyen/CssToInlineStyles.git"
+    },
+    {
+      "name": "vlucas/phpdotenv",
+      "version": "v5.6.4",
+      "scope": "runtime",
+      "declared_licenses": [
+        "BSD-3-Clause"
+      ],
+      "source": "https://github.com/vlucas/phpdotenv.git"
+    },
+    {
+      "name": "voku/portable-ascii",
+      "version": "2.1.1",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/voku/portable-ascii.git"
+    },
+    {
+      "name": "webklex/laravel-imap",
+      "version": "6.2.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/Webklex/laravel-imap.git"
+    },
+    {
+      "name": "webklex/php-imap",
+      "version": "6.2.0",
+      "scope": "runtime",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/Webklex/php-imap.git"
+    },
+    {
+      "name": "webmozart/assert",
+      "version": "2.4.1",
+      "scope": "development",
+      "declared_licenses": [
+        "MIT"
+      ],
+      "source": "https://github.com/webmozarts/assert.git"
+    }
+  ]
+}

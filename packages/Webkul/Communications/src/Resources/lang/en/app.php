@@ -1,6 +1,25 @@
 <?php
 
 return [
+    'birthdays' => [
+        'title' => 'Birthdays',
+        'description' => 'Review the day’s contacts and what needs attention before a greeting.',
+        'preview-only' => 'Review only: this screen does not send messages or activate automations. WhatsApp connection and provider templates remain pending.',
+        'data-note' => 'Uses saved contact birth dates. Family members without their own contact record are not included. February 29 is shown only in leap years; no substitute date is assumed.',
+        'date' => 'Review date',
+        'show' => 'Show birthdays',
+        'today' => 'Today',
+        'total' => ':count contact(s)',
+        'contact' => 'Contact',
+        'owner' => 'Responsible agent',
+        'check' => 'WhatsApp review',
+        'unassigned' => 'Unassigned',
+        'missing-phone' => 'Review phone number',
+        'missing-consent' => 'WhatsApp consent missing or revoked',
+        'review' => 'Review template and connection before sending',
+        'empty' => 'No saved contact birthdays for this date within your access.',
+    ],
+
     'acl' => [
         'communications' => 'Communications',
         'sequences' => 'Communication sequences',

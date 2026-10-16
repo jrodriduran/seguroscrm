@@ -90,14 +90,15 @@
 
                 <!-- Quick Insurance Actions -->
                 <div class="mt-2 flex w-full flex-wrap items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
-                    <a
-                        href="{{ route('admin.leads.healthsherpa.redirect', $lead->id) }}"
-                        target="_blank"
-                        class="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700 transition"
-                        title="{{ trans('admin::insurance.quick_actions.healthsherpa_title') }}"
+                    <button
+                        type="button"
+                        disabled
+                        aria-disabled="true"
+                        class="inline-flex items-center gap-1.5 rounded-md bg-gray-200 px-2.5 py-1 text-xs font-semibold text-gray-600"
+                        title="{{ trans('admin::app.healthsherpa.enrollment-pending') }}"
                     >
-                        {{ trans('admin::insurance.quick_actions.healthsherpa') }}
-                    </a>
+                        HealthSherpa
+                    </button>
 
                     @include ('admin::leads.view.ai_client_snapshot')
                 </div>

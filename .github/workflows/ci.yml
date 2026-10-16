@@ -52,4 +52,8 @@ jobs:
         run: php artisan krayin-crm:install --skip-env-check --skip-admin-creation
 
       - name: Running Pest Test
-        run: vendor/bin/pest --parallel --colors=always
+        # Existing feature tests use the installation's seeded admin and pipeline.
+        # Parallel workers migrate separate databases without those fixtures.
+        # Run the complete suite against the seeded CI database until fixtures
+        # are independent; every failing test must fail the job.
+        run: vendor/bin/pest --colors=always

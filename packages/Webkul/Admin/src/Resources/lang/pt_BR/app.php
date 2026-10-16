@@ -1,6 +1,77 @@
 <?php
 
 return [
+    'insurance-identity' => [
+        'required' => 'Configure o NPN do agente ativo responsável e o nome legal da agência antes de gerar este documento.',
+        'signed-soa' => 'Um SOA assinado não pode ser reiniciado. Preserve o registro assinado e solicite uma alteração com histórico de versões.',
+    ],
+
+    'family-workflow' => [
+        'tax-missing' => 'Não há dados fiscais salvos. Revise tamanho do núcleo, estado e renda antes de usar uma estimativa; ela não é uma decisão de elegibilidade do Marketplace.',
+        'plan-type' => 'Tipo de plano familiar',
+        'marketplace' => 'Marketplace',
+        'employer' => 'Plano do empregador',
+
+        'title' => 'Alterações de cobertura familiar',
+        'explanation' => 'Planeje a transição de um integrante preservando seu histórico. Nenhuma cobertura é cancelada automaticamente. Completar 26 anos exige revisar o plano e as regras do estado.',
+        'tax-note' => 'Sair de um plano não significa necessariamente sair do núcleo fiscal. Revise separadamente o tamanho fiscal e a renda.',
+        'member' => 'Integrante da família',
+        'reason' => 'Motivo',
+        'end-date' => 'Último dia previsto de cobertura familiar',
+        'review-on' => 'Prazo de revisão',
+        'note' => 'Situação e próximos passos (sem SSN ou detalhes médicos)',
+        'plan' => 'Planejar transição e atribuir revisão',
+        'refresh' => 'Atualizar',
+        'empty' => 'Nenhuma alteração de cobertura familiar registrada.',
+        'reference' => 'Fonte de verificação / referência, ou motivo do cancelamento',
+        'confirm-note' => 'Confirme após verificar a alteração externa e as datas de cobertura. Isso registra sua revisão; não envia um cancelamento.',
+        'confirm' => 'Registrar confirmação externa',
+        'cancel' => 'Cancelar esta transição planejada',
+        'individual' => 'Criar acompanhamento individual',
+        'open-individual' => 'Abrir acompanhamento individual',
+        'planned' => 'Aguardando revisão',
+        'confirmed' => 'Confirmação registrada',
+        'cancelled' => 'Transição cancelada',
+        'age_limit' => 'Revisão por limite de idade',
+        'own_coverage' => 'Cobertura própria',
+        'household_change' => 'Alteração familiar ou fiscal',
+        'move' => 'Mudança de endereço',
+        'death' => 'Falecimento',
+        'other' => 'Outro',
+        'duplicate' => 'Este integrante já possui uma transição pendente.',
+        'resolved' => 'Esta transição já foi resolvida ou não permite criar acompanhamento individual.',
+        'keep-history' => 'Preserve o registro familiar. Planeje uma alteração de cobertura em vez de excluir o integrante.',
+        'quote-review' => 'Revise a transição familiar e informe uma data inicial compatível antes de cotar este integrante no plano familiar.',
+        'task' => 'Revisar transição de cobertura familiar',
+        'task-note' => 'Verifique o último dia coberto, cobertura substituta, alterações a informar e núcleo fiscal. Não cancele a cobertura por esta tarefa.',
+        'individual-title' => 'Acompanhamento de cobertura individual',
+        'age-task' => 'Revisar dependente próximo dos 26 anos',
+        'age-note' => 'Um integrante completa 26 anos em :date. Revise quem é, o tipo de plano, as regras do estado e a data real de saída; não presuma que a cobertura termina no aniversário.',
+        'error' => 'Não foi possível processar a alteração familiar. Revise os dados e tente novamente.',
+    ],
+
+    'healthsherpa' => [
+        'permission' => 'Usar cotação HealthSherpa',
+        'household-invalid' => 'Confira o tamanho da família e o solicitante principal.',
+        'member-mismatch' => 'Selecione solicitantes que pertençam a este cadastro.',
+        'consent-required' => 'Obtenha e registre o consentimento do cliente antes de solicitar cotações.',
+        'bridge-retired' => 'O link anterior do HealthSherpa usava dados de exemplo. Preencha e confira as informações da cotação para usar a nova conexão.',
+        'enrollment-pending' => 'A inscrição exige aprovação do HealthSherpa e uma conta de agente vinculada.',
+        'errors' => [
+            'not-configured' => 'O HealthSherpa ainda não está configurado.',
+            'rate-limited' => 'Aguarde antes de solicitar outro resultado do HealthSherpa.',
+            'invalid-request' => 'O HealthSherpa não conseguiu cotar estes dados. Confira as informações fornecidas.',
+            'access-denied' => 'É necessário ativar ou revisar o acesso ao HealthSherpa.',
+            'unavailable' => 'O HealthSherpa está temporariamente indisponível. Tente novamente mais tarde.',
+            'invalid-response' => 'O HealthSherpa retornou um resultado inesperado. Tente novamente mais tarde.',
+        ],
+    ],
+
+    'insurance-conversion' => [
+        'success' => 'Cotação #:id registrada como apólice. Confira o estado da cobertura.',
+        'won-stage-missing' => 'O funil do lead precisa de uma etapa com código won antes de converter a cotação.',
+    ],
+
     'acl' => [
         'help' => 'Ajuda',
         'leads' => 'Oportunidades',
@@ -654,6 +725,8 @@ return [
                 'per_month' => '/ mês',
                 'sku' => 'Código / SKU',
                 'view' => 'Visualizar',
+                'on-hand' => 'Disponível',
+                'tag-name' => 'Nome da etiqueta',
             ],
         ],
         'create' => [
@@ -667,6 +740,29 @@ return [
             'general' => 'Informações Gerais',
             'price' => 'Prêmio / Custo Mensal',
             'save-btn' => 'Salvar Plano',
+        ],
+        'view' => [
+            'sku' => 'SKU',
+            'all' => 'Todos',
+            'notes' => 'Notas',
+            'files' => 'Arquivos',
+            'inventories' => 'Estoques',
+            'change-logs' => 'Histórico de alterações',
+            'attributes' => [
+                'about-product' => 'Sobre o produto',
+            ],
+            'inventory' => [
+                'warehouse' => 'Armazém',
+                'in-stock' => 'Em estoque',
+                'allocated' => 'Alocado',
+                'on-hand' => 'Disponível',
+                'actions' => 'Ações',
+                'assign' => 'Atribuir',
+                'add-warehouse' => 'Adicionar armazém',
+                'location' => 'Localização',
+                'add-more' => 'Adicionar mais',
+                'save' => 'Salvar',
+            ],
         ],
     ],
     'settings' => [
@@ -1595,7 +1691,7 @@ return [
                     'button-title' => 'Create Import',
                     'title' => 'Imports',
                     'datagrid' => [
-                        'actions' => 'Actions',
+                        'actions' => 'Ações',
                         'completed-at' => 'Completed At',
                         'created' => 'Created',
                         'delete' => 'Delete',
@@ -2597,6 +2693,7 @@ return [
             'masculino' => 'Masculino',
             'femenino' => 'Feminino',
             'outro' => 'Outro',
+            'otro' => 'Other',
         ],
         'marital_status' => [
             'single' => 'Solteiro(a)',

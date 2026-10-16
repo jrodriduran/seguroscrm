@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Webkul\Contact\Models\Person;
 use Webkul\Lead\Models\Lead;
@@ -41,6 +42,9 @@ function createConsentAuditLead(): Lead
 
 it('records an immutable version with SHA-256 fingerprint when client signs consent', function () {
     $lead = createConsentAuditLead();
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $lead->user_id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
 
     $consent = LeadConsent::create([
         'lead_id' => $lead->id,
@@ -79,6 +83,9 @@ it('records an immutable version with SHA-256 fingerprint when client signs cons
 
 it('detects tampering when consent text or signature is altered', function () {
     $lead = createConsentAuditLead();
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $lead->user_id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
 
     $consent = LeadConsent::create([
         'lead_id' => $lead->id,
@@ -106,6 +113,9 @@ it('detects tampering when consent text or signature is altered', function () {
 it('archives previous signed version as superseded when regenerating consent token for compliance', function () {
     $admin = getDefaultAdmin();
     $lead = createConsentAuditLead();
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $lead->user_id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
 
     $consent = LeadConsent::create([
         'lead_id' => $lead->id,
@@ -151,6 +161,9 @@ it('archives previous signed version as superseded when regenerating consent tok
 it('preserves signature record when consent is revoked', function () {
     $admin = getDefaultAdmin();
     $lead = createConsentAuditLead();
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $lead->user_id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
 
     $consent = LeadConsent::create([
         'lead_id' => $lead->id,
@@ -185,6 +198,9 @@ it('preserves signature record when consent is revoked', function () {
 it('exports 10-year CMS compliance audit JSON with complete version history', function () {
     $admin = getDefaultAdmin();
     $lead = createConsentAuditLead();
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $lead->user_id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
 
     $consent = LeadConsent::create([
         'lead_id' => $lead->id,

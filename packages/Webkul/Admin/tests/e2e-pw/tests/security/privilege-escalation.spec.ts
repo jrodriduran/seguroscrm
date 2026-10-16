@@ -316,7 +316,8 @@ test.describe.serial("privilege escalation guards", () => {
          * Nobody, administrators included, may edit the role attached to their own account — the
          * one guard that closes the loop on every other ceiling in this suite.
          */
-        await expect(rolesPage.currentRoleEditError.first()).toBeVisible();
+        await expect(managerSession!.page).toHaveURL(/\/admin\/settings\/roles(?:\?|$)/);
+        await expect(rolesPage.nameInput).toHaveCount(0);
     });
 
     test("the manager never gains the permission every attempt was after", async () => {

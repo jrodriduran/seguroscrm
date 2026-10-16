@@ -3,6 +3,57 @@
 Estado al 2026-10-15. Léelo completo antes de tocar código. Complementa a
 `AGENTS.md` (convenciones de Krayin) y no lo reemplaza.
 
+**Cierre técnico del piloto (2026-10-16):** ver `deploy/pilot/README.md` para
+criterios de aceptación y pendientes reales. `feature/pilot-closure` añade identidad
+explícita por agente (`insurance:agent-identity`), protege firmas y alcance de acceso,
+corrige Rx/venta cruzada y permite revisar CSV sin importar (`insurance:preview-contacts`).
+La identidad configurada no verifica licencias. La suite aislada pasó 262 pruebas
+con 1.239 aserciones y todas las vistas compilan. Playwright sigue
+en revisión; no considerar el piloto listo ni desplegado por tener commits.
+
+Se probó el flujo dueña + dos agentes (asignar, atraso, completar, supervisar y
+reabrir). La reapertura exige ser responsable, solicitante o dueña; un usuario sin
+agencia no obtiene acceso global al equipo. Se completó la paridad de traducciones
+de Admin. El modal de correo ya permite usar CC/BCC dentro de la pantalla, comprobado
+visualmente en la instancia sintética; no se hicieron envíos reales.
+
+**Prioridad comercial actual (2026-10-16):** primer cliente: una dueña y dos
+agentes. El 95% del canal es WhatsApp; no significa 95% de autonomía de IA.
+Piloto centrado en inbox compartido, asignación/seguimiento diario y felicitaciones
+automáticas de cumpleaños. Objetivo de entrega: fin de semana 17–18 de octubre,
+condicionado a conexión oficial WhatsApp, plantillas aprobadas y HTTPS. No activar
+envíos reales hasta revisar configuración y autorización de la clienta. El código
+actual de MessageDispatcher solo envía texto en conversaciones ya vinculadas: no
+implementa aún plantillas de proveedor para iniciar contactos fuera de la ventana
+de atención. No presentar el kit de cumpleaños pausado como integración lista.
+Pendiente confirmar qué WhatsApp tiene la clienta y si conservará el número.
+Nombre/marca, HS, call center e IA de venta quedan detrás de este piloto.
+
+La clienta trabaja ACA y Medicare y actualmente usa WhatsApp Business en el celular,
+sin API. El dueño pidió dejar para después la conexión del número y la configuración
+externa, y continuar desarrollando. `feature/pilot-readiness` incorpora un panel
+interno de revisión de cumpleaños (sin envíos), permiso `communication_birthdays`,
+filtros por responsable/fecha y estado del consentimiento WhatsApp, con teléfono
+enmascarado. Comparte la consulta de fechas con el programador. No cambia estados
+de secuencias ni concede permisos automáticamente; las políticas de cumpleaños
+del 29 de febrero siguen siendo estrictas (sin sustitución por otro día).
+
+**Segunda fase:** preparar un piloto de cotización ACA con HealthSherpaONE.
+El titular aún no tiene cuenta. La rama `feature/healthsherpa-foundation` contiene
+un backend desactivado por defecto y probado con respuestas simuladas; no está
+desplegado ni conectado. Primero cotizador y datos revisados, después inscripción
+asistida y estados según aprobación. Ver [plan y requisitos](docs/healthsherpa-integration.md).
+El puente anterior que inventaba datos queda bloqueado en esa rama. No reactivarlo.
+
+**Grupo familiar:** `feature/household-transitions` añade cambios de cobertura con
+motivo, tipo de plan, fechas, tarea asignada y confirmación manual con referencia.
+Permite crear un expediente individual vinculado sin copiar consentimiento ni datos
+fiscales del titular. Las alertas por 26 años solo solicitan revisión; nunca dan de
+baja. No modifica el hogar fiscal, pólizas ni comisiones. Requiere migración y el
+permiso `leads.family_transitions` (más `leads.create` para el expediente individual).
+Incluye protección de acceso en las rutas familiares heredadas y bloquea el borrado
+ordinario de integrantes. No desplegado todavía.
+
 ---
 
 ## 1. Qué es
@@ -53,7 +104,7 @@ repo, a commits ni a la conversación.
 - Autor de los commits: `jrodriduran <jrodriduran@gmail.com>`.
 - **CI** (GitHub Actions):
   - *Linting Tests* corre Pint y **hace un auto-commit** (`chore: applied pint changes`) en la rama. Haz pull antes de seguir trabajando en ella.
-  - *CI* (Pest): **la línea base de `main` es 91 failed / 54 passed.** Esos 91 fallos ya existían (tests de seguros heredados que esperan columnas o rutas que no existen). Un PR es aceptable si **no sube** de 91. Si sube, compara los nombres de los tests que fallan contra `main`.
+  - *CI* (Pest): la ejecución paralela histórica de `main` reportaba **91 failed / 54 passed**. La reproducción aislada en serie del commit `bc61f60` da **1 failed / 144 passed**; el fallo es una prueba del webhook antiguo de Chatwoot. Al actualizar esa prueba y añadir casos de autenticación y cuenta ajena, la suite en serie da **147 passed / 858 assertions**. Los trabajadores paralelos migran bases separadas sin los datos del instalador que requieren muchas pruebas. CI ahora ejecuta la suite completa en serie sobre su base sembrada. **No aceptar una cuota de fallos heredados:** cualquier fallo debe investigarse. El resultado aislado no implica que se hayan validado integraciones externas ni Playwright.
   - *Playwright* (6 shards): también falla en `main`. Hoy no bloquea.
 - Cada cambio actualiza `CHANGELOG.md` bajo `v2.2.7 (unreleased)`.
 - Después de un merge, borra la rama remota.
@@ -101,6 +152,14 @@ repo, a commits ni a la conversación.
 Además de los módulos de Krayin y de las funciones de seguros que ya traía el
 repo (pólizas, comisiones, DMI, SOA de Medicare, cumplimiento, etc.), estos
 paquetes se construyeron en este proyecto:
+
+### Insurance
+Extensiones propias del dominio, separadas del core. `InsuranceServiceProvider`
+vincula el controlador de cotizaciones existente con una subclase que modifica
+solo `convertToPolicy`. Conserva rutas, middleware y ACL. Usa una transacción y
+bloqueo de cotización, la etapa `won` del embudo correspondiente y los bloqueos
+del playbook; los reintentos no duplican comisiones ni reinician coberturas pagadas.
+Los modelos heredados permanecen en Lead. No añade inscripción externa.
 
 ### Security
 2FA, lista de IP permitidas (`security:disable-ip-restriction` para
@@ -182,6 +241,15 @@ con eventos que incluyen `support_login` y `password_reset`) y el middleware
 - **No corras Pest contra la base del servidor.** Los tests usan
   `RefreshDatabase` y la borrarían. Corre Pest en CI o con una base de pruebas aparte.
 
+### Respaldos de la instalación LAN
+
+- Runner: `deploy/lan/backup.py`; copia operativa en `/home/admin1/seguroscrm-ops/backup.py`.
+- Cron de `admin1`: copia diaria a las 03:00, hora del servidor (America/New_York), y comprobación cada hora al minuto 15. Conserva intacto el cron de Laravel.
+- Destino privado: `/home/admin1/seguroscrm-backups`; SQL, `storage/app`, `.env` y checksums. Retención de 14 días solo para copias creadas por el runner.
+- `python3 /home/admin1/seguroscrm-ops/backup.py --check` detecta último intento fallido, copia alterada o antigüedad superior a 26 horas. Estado en `last-run.json`, `latest.json` y `/home/admin1/seguroscrm-ops/health.log`.
+- Primera copia del runner restaurada en MySQL aislado: 120 tablas y 143 migraciones. Los contenedores de verificación quedaron detenidos.
+- Detección local, sin notificaciones externas ni copia fuera del host todavía. Ver `deploy/lan/README.md` y sus pruebas de fallos; nunca publicar estos respaldos como artifacts.
+
 ## 7. SaaS (`deploy/saas/`, ver su README)
 
 - **Arquitectura:**
@@ -213,7 +281,7 @@ con eventos que incluyen `support_login` y `password_reset`) y el middleware
    - cambiar el estado de la cuenta (aviso, solo lectura, suspendido).
    
    Debe consumir la API firmada de Platform. Para las altas y actualizaciones, debe hablar con un agente en el host que ejecute los scripts de `deploy/saas/bin`; la app web no debe montar `docker.sock`. Los webhooks de Stripe vendrán después.
-2. **Reducir los 91 tests heredados que fallan.** Cada test arreglado baja la línea base.
+2. **Mantener Pest sin fallos y mejorar el aislamiento de fixtures.** La suite en serie pasa; para recuperar el paralelismo, preparar datos independientes por prueba o trabajador. Playwright sigue pendiente de diagnóstico.
 3. **Puntaje de salud del cliente** (customer care): actividad, pólizas, pagos, respuestas y consentimiento.
 4. **Unificar las automatizaciones de Teamwork con las secuencias de Communications** en un solo motor.
 5. Ajustar dos expectativas viejas del test de secuencias. Ahora hay 13 plantillas de inicio, y el texto que buscaba el test en el índice de plantillas cambió.
@@ -221,7 +289,8 @@ con eventos que incluyen `support_login` y `password_reset`) y el middleware
 
 ### Depende del dueño
 - Nombre del producto y dominio con HTTPS. Con eso se monta el VPS y se activa el webhook de Chatwoot.
-- Cuenta de Postmark. El driver ya está instalado y hoy el correo va a mailhog.
+- Cuenta de correo saliente. El driver de Postmark está instalado; el hostname
+  mailhog configurado no existe en la red actual y los mensajes no se entregan.
 - Número de WhatsApp de Meta (WABA).
 - Activar las secuencias de inicio, llenar los datos de la agencia y la marca, y pasar a *block* las etapas críticas (consentimiento ACA, SOA de Medicare).
 - Revisión visual del modo oscuro.

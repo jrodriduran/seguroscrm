@@ -56,13 +56,8 @@ export default class OrganizationPage extends CoreLocators{
 
     // Save organization
     await this.saveOrganizationButton.click();
-    await expect(this.organizationCreateSuccessMessage.first()).toBeVisible();
-    // await this.searchInputExact.fill(orgData.name);
-    // await this.page.keyboard.press('Enter');
-    console.log("There’s an issue: the organization search isn’t working and needs to be fixed.");
-
-
-    await expect(this.page.getByText(orgData.name).first()).toBeVisible();
+    await expect(this.page).toHaveURL(/\/admin\/contacts\/organizations(?:\?|$)/);
+    await expect(this.page.getByText(orgData.name, { exact: true }).first()).toBeVisible();
 
    
     }

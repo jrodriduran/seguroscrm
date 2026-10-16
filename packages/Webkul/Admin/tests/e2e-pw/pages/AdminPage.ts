@@ -17,7 +17,7 @@ export class AdminPage extends CoreLocators {
         this.passwordInput = page.getByPlaceholder("Password");
         this.signInButton = page.getByRole("button", { name: "Sign In" });
         this.megaSearchInput = page.getByPlaceholder("Mega Search").first();
-        this.profileButton = page.getByRole("button", { name: "E" });
+        this.profileButton = page.getByRole("banner").getByRole("button", { name: "E", exact: true });
         this.signOutLink = page.getByRole("link", { name: "Sign Out" });
     }
 
@@ -28,6 +28,7 @@ export class AdminPage extends CoreLocators {
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.signInButton.click();
+        await expect(this.page).not.toHaveURL(/\/admin\/login(?:\?|$)/);
     }
 
     async verifyLogin() {

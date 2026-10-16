@@ -4,6 +4,56 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [fixed] Own-role editing checks now verify redirection and absence of the edit form instead of a transient notification; the escalation guard remains enforced.
+
+* [fixed] Carrier creation checks now verify the persisted record after redirect instead of relying on a short-lived notification during import setup.
+
+* [fixed] Kept fixed dialogs inside the viewport by removing retained animation state from their content ancestor.
+
+* [security] Kept users without an assigned agency inside their own team and limited reopening completed follow-ups to the assignee, requester or agency owner.
+
+* [fixed] Completed missing insurance translation paths in every Admin locale with English fallbacks where needed, while retaining localized text and legacy product translations.
+
+* [enhancement] Documented pilot acceptance, agent identity setup and import review, and added a reproducible inventory of Composer-declared dependency licenses.
+
+* [fixed] The lead screen now marks HealthSherpa enrollment unavailable until approved, and unverified doctor networks remain visibly pending.
+
+* [feature] Added a read-only CSV intake review with explicit ownership, date validation and duplicate or shared-phone warnings without automatically merging family contacts.
+
+* [fixed] Browser checks now wait for completed sign-in, select the exact profile control and verify saved roles rather than transient notifications.
+
+* [security] Restricted medical, cross-sell and consent endpoints to the agent's authorized leads, serialized signature changes and prevented revoked consent reuse or signed Medicare SOA replacement.
+
+* [fixed] Consent documents now require an explicitly configured agent NPN and agency name; renewed ACA documents keep their identity metadata consistent with their text without rewriting signed history.
+
+* [fixed] Restored medication, doctor and cross-sell panel requests using registered routes, implemented the missing cross-sell evaluation action and stopped assuming unverified doctors participate in carrier networks.
+
+* [feature] Added a scoped daily birthday review list with responsible agents, masked phone references and WhatsApp consent checks, without sending or activating messages.
+
+* [fixed] Birthday scheduling now shares the review list's contact lookup and excludes orphaned, future and other-entity birth-date records.
+
+* [feature] Added family coverage transition planning, assigned review tasks, confirmation history and individual prospect follow-up without automatically cancelling coverage or changing tax household data.
+
+* [fixed] Missing household income is no longer displayed as a real zero-income eligibility result, and individual follow-up cases render correctly with empty contact details.
+
+* [fixed] Corrected nested Blade translations in the SOA, enrollment and document templates that could prevent the Spanish lead screen from rendering.
+
+* [security] Enforced household record ownership, masked identifiers in write responses and preserved identifiers when editing masked values; family members can no longer be deleted through routine household actions.
+
+* [feature] Prepared a disabled-by-default HealthSherpa ONE quoting connector with scoped access, explicit household data, consent checks, rate limiting and safe provider errors.
+
+* [fixed] Disabled the legacy HealthSherpa handoff that fabricated missing ZIP, income, birth date and agent identifiers; enrollment remains unavailable until approved.
+
+* [fixed] Commissions generated from quotes now carry the policy number and effective date needed to match carrier statements.
+
+* [fixed] Policy conversion now rolls back on errors, selects the won stage from the lead's pipeline, respects blocking milestones and safely handles retries without duplicating commissions or resetting paid coverage.
+
+* [feature] Added private, atomic backups for the existing LAN installation, with 14-day retention, checksum verification and a health check that detects failed or stale copies.
+
+* [fixed] Run the full Pest suite against the seeded CI database so missing parallel-worker fixtures no longer obscure actual regressions.
+
+* [fixed] Restored Chatwoot webhook regression coverage for the authenticated Communications endpoint, including message deduplication and rejection of invalid tokens and other accounts.
+
 * [enhancement] Dashboard redesign. "Open leads by stage" becomes a pipeline funnel for the selected pipeline: stages in funnel order with step badges, progress bars, count and share, late / attention chips and longest-untouched time per stage (from the follow-up center), value at stake for users with financial permission, won / lost and win rate for the period, and links to the pipeline. KPI tiles get icons and accents, and dashboard cards share one elevated style in light and dark mode.
 
 * [fixed] Fixed the dashboard console error "Cannot read properties of undefined (reading createLinearGradient)" from the open-leads widget drawing on a missing canvas; the widget also mixed every pipeline and ignored funnel order.

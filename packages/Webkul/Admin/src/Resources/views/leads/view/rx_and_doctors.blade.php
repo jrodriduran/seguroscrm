@@ -227,11 +227,11 @@
                                         <div v-if="doc.phone" class="text-[10px] text-gray-500">@{{ doc.phone }}</div>
                                     </td>
                                     <td class="p-2.5">
-                                        <div class="flex flex-wrap gap-1" v-if="doc.carrier_network_status">
+                                        <div class="flex flex-wrap gap-1" v-if="Object.keys(doc.carrier_network_status || {}).length">
                                             <span
                                                 v-for="(status, carrier) in doc.carrier_network_status"
                                                 :key="carrier"
-                                                :class="status.toLowerCase().includes('in') ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300'"
+                                                :class="status === 'In-Network' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' : status === 'Out-of-Network' ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300' : 'text-gray-500'"
                                                 class="px-1.5 py-0.5 rounded text-[10px] font-medium"
                                             >
                                                 @{{ carrier }}: @{{ status }}
@@ -509,7 +509,7 @@
             methods: {
                 fetchData() {
                     this.isLoading = true;
-                    this.$axios.get(`/admin/insurance/leads/${this.leadId}/rx-network/summary`)
+                    this.$axios.get(@json(route('admin.insurance.leads.rx_network.summary', $lead->id)))
                         .then(response => {
                             if (response.data.success) {
                                 this.medications = response.data.medications || [];
@@ -553,7 +553,7 @@
                 },
                 saveMedication() {
                     this.isSaving = true;
-                    this.$axios.post(`/admin/insurance/leads/${this.leadId}/rx-medications`, this.medForm)
+                    this.$axios.post(@json(route('admin.insurance.leads.rx_medications.store', $lead->id)), this.medForm)
                         .then(res => {
                             this.showMedModal = false;
                             this.fetchData();
@@ -563,13 +563,13 @@
                 },
                 deleteMedication(id) {
                     if (!confirm(this.labels.confirmDeleteMed)) return;
-                    this.$axios.delete(`/admin/insurance/leads/${this.leadId}/rx-medications/${id}`)
+                    this.$axios.delete(@json(route('admin.insurance.leads.rx_medications.delete', [$lead->id, '__record__'])).replace('__record__', encodeURIComponent(id)))
                         .then(() => this.fetchData())
                         .catch(err => alert(this.labels.errorDeleteMed));
                 },
                 saveDoctor() {
                     this.isSaving = true;
-                    this.$axios.post(`/admin/insurance/leads/${this.leadId}/doctor-networks`, this.docForm)
+                    this.$axios.post(@json(route('admin.insurance.leads.doctor_networks.store', $lead->id)), this.docForm)
                         .then(res => {
                             this.showDocModal = false;
                             this.fetchData();
@@ -579,7 +579,7 @@
                 },
                 deleteDoctor(id) {
                     if (!confirm(this.labels.confirmDeleteDoc)) return;
-                    this.$axios.delete(`/admin/insurance/leads/${this.leadId}/doctor-networks/${id}`)
+                    this.$axios.delete(@json(route('admin.insurance.leads.doctor_networks.delete', [$lead->id, '__record__'])).replace('__record__', encodeURIComponent(id)))
                         .then(() => this.fetchData())
                         .catch(err => alert(this.labels.errorDeleteDoc));
                 },

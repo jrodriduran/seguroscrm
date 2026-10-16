@@ -30,13 +30,14 @@ class TeamScope
 
         if ($this->isMasterAgent($user)) {
             $ids = User::query()
-                ->when($user->agency_id, fn ($query) => $query->where('agency_id', $user->agency_id))
+                ->where('agency_id', $user->agency_id)
                 ->where('id', '!=', $user->id)
                 ->where('status', 1)
                 ->pluck('id')
                 ->all();
         } else {
-            $ids = $this->downline($user->id);
+            $ids = User::query()->whereIn('id', $this->downline($user->id))
+                ->where('agency_id', $user->agency_id)->where('status', 1)->pluck('id')->all();
         }
 
         return $this->cache[$user->id] = array_values(array_unique(array_map('intval', $ids)));
@@ -54,7 +55,7 @@ class TeamScope
     public function teamUserIds(User $user): array
     {
         return $this->cache['team:'.$user->id] ??= User::query()
-            ->when($user->agency_id, fn ($query) => $query->where('agency_id', $user->agency_id))
+            ->where('agency_id', $user->agency_id)
             ->where('status', 1)
             ->pluck('id')
             ->map(fn ($id) => (int) $id)
@@ -96,7 +97,7 @@ class TeamScope
     public function assignableUsers(User $user)
     {
         return User::query()
-            ->when($user->agency_id, fn ($query) => $query->where('agency_id', $user->agency_id))
+            ->where('agency_id', $user->agency_id)
             ->where('status', 1)
             ->orderBy('name')
             ->get(['id', 'name']);
