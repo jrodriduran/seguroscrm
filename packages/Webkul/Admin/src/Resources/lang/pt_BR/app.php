@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'insurance-identity' => [
+        'required' => 'Configure o NPN do agente ativo responsável e o nome legal da agência antes de gerar este documento.',
+        'signed-soa' => 'Um SOA assinado não pode ser reiniciado. Preserve o registro assinado e solicite uma alteração com histórico de versões.',
+    ],
+
     'family-workflow' => [
         'tax-missing' => 'Não há dados fiscais salvos. Revise tamanho do núcleo, estado e renda antes de usar uma estimativa; ela não é uma decisão de elegibilidade do Marketplace.',
         'plan-type' => 'Tipo de plano familiar',

@@ -4,6 +4,20 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [enhancement] Documented pilot acceptance, agent identity setup and import review, and added a reproducible inventory of Composer-declared dependency licenses.
+
+* [fixed] The lead screen now marks HealthSherpa enrollment unavailable until approved, and unverified doctor networks remain visibly pending.
+
+* [feature] Added a read-only CSV intake review with explicit ownership, date validation and duplicate or shared-phone warnings without automatically merging family contacts.
+
+* [fixed] Browser checks now wait for completed sign-in, select the exact profile control and verify saved roles rather than transient notifications.
+
+* [security] Restricted medical, cross-sell and consent endpoints to the agent's authorized leads, serialized signature changes and prevented revoked consent reuse or signed Medicare SOA replacement.
+
+* [fixed] Consent documents now require an explicitly configured agent NPN and agency name; renewed ACA documents keep their identity metadata consistent with their text without rewriting signed history.
+
+* [fixed] Restored medication, doctor and cross-sell panel requests using registered routes, implemented the missing cross-sell evaluation action and stopped assuming unverified doctors participate in carrier networks.
+
 * [feature] Added a scoped daily birthday review list with responsible agents, masked phone references and WhatsApp consent checks, without sending or activating messages.
 
 * [fixed] Birthday scheduling now shares the review list's contact lookup and excludes orphaned, future and other-entity birth-date records.

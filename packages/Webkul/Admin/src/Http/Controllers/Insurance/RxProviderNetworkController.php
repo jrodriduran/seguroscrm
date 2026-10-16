@@ -132,6 +132,7 @@ class RxProviderNetworkController extends Controller
             'address_city_state' => 'nullable|string|max:180',
             'phone' => 'nullable|string|max:50',
             'carrier_network_status' => 'nullable|array',
+            'carrier_network_status.*' => 'required|string|in:In-Network,Out-of-Network,Unknown',
             'is_primary_physician' => 'nullable|boolean',
             'notes' => 'nullable|string',
         ]);
@@ -148,12 +149,7 @@ class RxProviderNetworkController extends Controller
             'clinic_or_hospital' => $validated['clinic_or_hospital'] ?? null,
             'address_city_state' => $validated['address_city_state'] ?? null,
             'phone' => $validated['phone'] ?? null,
-            'carrier_network_status' => $validated['carrier_network_status'] ?? [
-                'Florida Blue' => 'In-Network',
-                'Ambetter' => 'In-Network',
-                'UnitedHealthcare' => 'In-Network',
-                'Oscar' => 'In-Network',
-            ],
+            'carrier_network_status' => $validated['carrier_network_status'] ?? [],
             'is_primary_physician' => (bool) ($validated['is_primary_physician'] ?? false),
             'notes' => $validated['notes'] ?? null,
         ]);

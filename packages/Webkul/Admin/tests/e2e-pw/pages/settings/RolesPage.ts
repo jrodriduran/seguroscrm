@@ -148,7 +148,9 @@ export class RolesPage extends SettingsPage {
         await this.fillRoleForm(role);
         await this.saveRoleButton.click();
 
-        await expect(this.createSuccessMessage.first()).toBeVisible();
+        // The short-lived toast can disappear while the layout hydrates. Verify the
+        // persisted role below, after confirming the successful form redirect.
+        await expect(this.page).toHaveURL(/\/admin\/settings\/roles(?:\?|$)/);
 
         await this.searchRole(role.name);
 

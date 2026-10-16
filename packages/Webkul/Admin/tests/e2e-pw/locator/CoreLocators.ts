@@ -283,7 +283,7 @@ export default class CoreLocators {
 
         // Buttons
         this.saveQuoteButton = page.getByRole("button", { name: "Save Quote" });
-        this.saveProductsButton = page.getByRole("button", { name: "Save Products" });
+        this.saveProductsButton = page.getByRole("button", { name: "Save Product", exact: true });
         this.confirmDeleteButton = page.locator("button.transparent-button + button.primary-button:visible");
         this.saveLeadButton = page.getByRole("button", { name: "Save" });
         this.sendEmailButton = page.getByRole("button", { name: "Send" });
@@ -301,8 +301,8 @@ export default class CoreLocators {
         this.createUserButton = page.getByRole("button", { name: "Create User" });
         this.saveUserButton = page.getByRole("button", { name: "Save User" });
         this.composeMailButton = page.getByRole("button", { name: "Compose Mail" });
-        this.createOrganizationButton = page.getByRole("link", { name: "Create Organization" });
-        this.saveOrganizationButton = page.getByRole("button", { name: "Save Organization" });
+        this.createOrganizationButton = page.getByRole("link", { name: "Create Carrier" });
+        this.saveOrganizationButton = page.getByRole("button", { name: "Save Carrier" });
         this.deleteButton = page.getByRole("button", { name: "Delete" });
         this.leadProductSelect = page.locator('.mb-4.\\!mb-0 > div > .relative.inline-block > .relative').first();
         this.leadProductAddMoreButton = page.locator('//button[@class="flex max-w-max items-center gap-2 text-brandColor"]');
@@ -312,10 +312,10 @@ export default class CoreLocators {
 
         // Links
         this.createQuoteLink = page.getByRole("link", { name: "Create Quote" });
-        this.createProductLink = page.getByRole("link", { name: "Create Product" });
+        this.createProductLink = page.getByRole("link", { name: "Create Plan / Product" });
         this.createLeadLink = page.getByRole("link", { name: "Create Lead" });
         this.signOutLink = page.getByRole("link", { name: "Sign Out" });
-        this.createOrganizationLink = page.getByRole("link", { name: "Create Organization" });
+        this.createOrganizationLink = page.getByRole("link", { name: "Create Carrier" });
 
         this.addAsNewButton = page.getByText("Add as New");
         this.quoteSelectListPerson = page.locator(`(//li[@class="flex cursor-pointer gap-2 p-2 transition-colors hover:bg-blue-100 dark:text-gray-300 dark:hover:bg-gray-900"])[1]`);
@@ -418,10 +418,10 @@ export default class CoreLocators {
         this.megaSearchPlaceholder = page.getByPlaceholder("Mega Search").first();
 
         // Profile and logout buttons
-        this.profileButton = page.getByRole('button', { name: "E" });
+        this.profileButton = page.getByRole("banner").getByRole("button", { name: "E", exact: true });
 
         // Organization Locators Initialization
-        this.createOrgLink = page.getByRole('link', { name: 'Create Organization' });
+        this.createOrgLink = page.getByRole('link', { name: 'Create Carrier' });
         this.orgNameTextbox = page.getByRole('textbox', { name: 'Name *' });
         this.orgAddressTextarea = page.locator('textarea[name="address\\[address\\]"]');
         this.orgCountryCombobox = page.getByRole('combobox');
@@ -476,7 +476,7 @@ export default class CoreLocators {
 
 
         this.saveLeadButton = page.getByRole('button', { name: 'Save' });
-        this.organizationCreateSuccessMessage = page.getByText('Organization created successfully');
+        this.organizationCreateSuccessMessage = page.getByText('Carrier created successfully');
 
         // General
 
@@ -531,7 +531,7 @@ export default class CoreLocators {
         // Quick Add
         this.quickAddTrigger = page.locator("header button.bg-brandColor").first();
         this.quickAddModalTitle = page.locator("p").filter({ hasText: "Quick Add" });
-        this.quickAddTab = (tabLabel: string) => page.locator("span.cursor-pointer").filter({ hasText: new RegExp(`^${tabLabel}$`) }).first();
+        this.quickAddTab = (tabLabel: string) => page.locator("span.cursor-pointer").filter({ hasText: new RegExp(`^${tabLabel === "Organization" ? "Carrier" : tabLabel}$`) }).first();
         this.quickAddSaveButton = page.getByRole("button", { name: "Save", exact: true }).last();
         
         this.quickAddLeadForm = page.locator('form:has(input[value="lead"])').first();
@@ -565,7 +565,7 @@ export default class CoreLocators {
 
         this.quickAddLeadSuccessMsg = page.getByText("Lead created successfully.");
         this.quickAddPersonSuccessMsg = page.getByText("Person created successfully.");
-        this.quickAddOrgSuccessMsg = page.getByText("Organization created successfully.");
+        this.quickAddOrgSuccessMsg = page.getByText("Carrier created successfully.");
         this.quickAddProductSuccessMsg = page.getByText("Product created successfully.");
         this.quickAddMailSuccessMsg = page.getByText("Email sent successfully.");
     }

@@ -5,8 +5,10 @@ namespace Webkul\Admin\Http\Controllers\Lead;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Webkul\Core\Traits\PDFHandler;
+use Webkul\Insurance\Services\AgentIdentity;
 use Webkul\Lead\Models\Lead;
 use Webkul\Lead\Models\LeadConsent;
 use Webkul\Lead\Models\LeadConsentVersion;
@@ -20,43 +22,47 @@ class ConsentController extends Controller
      */
     public function get(int $leadId): JsonResponse
     {
-        $lead = Lead::with(['person', 'user'])->findOrFail($leadId);
+        return DB::transaction(function () use ($leadId) {
+            Lead::whereKey($leadId)->lockForUpdate()->firstOrFail();
+            $lead = Lead::with(['person', 'user'])->findOrFail($leadId);
 
-        $consent = LeadConsent::where('lead_id', $lead->id)->first();
+            $consent = LeadConsent::where('lead_id', $lead->id)->first();
 
-        if (! $consent) {
-            $clientName = $lead->person?->name ?: $lead->title;
-            $clientPhone = collect($lead->person?->contact_numbers ?? [])->first()['value'] ?? null;
-            $clientEmail = collect($lead->person?->emails ?? [])->first()['value'] ?? null;
+            if (! $consent) {
+                $clientName = $lead->person?->name ?: $lead->title;
+                $clientPhone = collect($lead->person?->contact_numbers ?? [])->first()['value'] ?? null;
+                $clientEmail = collect($lead->person?->emails ?? [])->first()['value'] ?? null;
 
-            $agentName = $lead->user?->name ?: (auth()->guard('user')->user()?->name ?: 'Agente Certificado ACA');
-            $agentNpn = '19845210'; // Default NPN or placeholder
-            $agencyName = 'Seguros CRM - Marketplace Agency';
+                $identity = app(AgentIdentity::class)->forLead($lead);
+                $agentName = $identity['agent_name'];
+                $agentNpn = $identity['agent_npn'];
+                $agencyName = $identity['agency_name'];
 
-            $consentText = LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName);
+                $consentText = LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName);
 
-            $consent = LeadConsent::create([
-                'lead_id' => $lead->id,
-                'person_id' => $lead->person_id,
-                'user_id' => $lead->user_id ?: auth()->guard('user')->id(),
-                'token' => Str::random(36),
-                'status' => 'pending',
-                'client_name' => $clientName,
-                'client_phone' => $clientPhone,
-                'client_email' => $clientEmail,
-                'agent_name' => $agentName,
-                'agent_npn' => $agentNpn,
-                'agency_name' => $agencyName,
-                'consent_text' => $consentText,
+                $consent = LeadConsent::create([
+                    'lead_id' => $lead->id,
+                    'person_id' => $lead->person_id,
+                    'user_id' => $lead->user_id ?: auth()->guard('user')->id(),
+                    'token' => Str::random(36),
+                    'status' => 'pending',
+                    'client_name' => $clientName,
+                    'client_phone' => $clientPhone,
+                    'client_email' => $clientEmail,
+                    'agent_name' => $agentName,
+                    'agent_npn' => $agentNpn,
+                    'agency_name' => $agencyName,
+                    'consent_text' => $consentText,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'consent' => $consent,
+                'public_url' => $consent->public_url,
+                'whatsapp_message' => $consent->whatsapp_message,
             ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'consent' => $consent,
-            'public_url' => $consent->public_url,
-            'whatsapp_message' => $consent->whatsapp_message,
-        ]);
+        });
     }
 
     /**
@@ -94,32 +100,35 @@ class ConsentController extends Controller
      */
     public function revoke(Request $request, int $leadId): JsonResponse
     {
-        $consent = LeadConsent::where('lead_id', $leadId)->firstOrFail();
-        $reason = $request->input('reason', 'Revocado formalmente por el titular');
+        return DB::transaction(function () use ($request, $leadId) {
+            Lead::whereKey($leadId)->lockForUpdate()->firstOrFail();
+            $consent = LeadConsent::where('lead_id', $leadId)->firstOrFail();
+            $reason = $request->input('reason', 'Revocado formalmente por el titular');
 
-        $consent->update([
-            'status' => 'revoked',
-        ]);
-
-        // Update latest signed/active version without deleting signature or legal audit data
-        $latestSignedVersion = $consent->versions()
-            ->whereIn('status', ['active', 'signed'])
-            ->latest('id')
-            ->first();
-
-        if ($latestSignedVersion) {
-            $latestSignedVersion->update([
+            $consent->update([
                 'status' => 'revoked',
-                'revoked_at' => now(),
-                'revocation_reason' => $reason,
             ]);
-        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'El consentimiento ha sido revocado formalmente. El registro histórico y firma previa se conservan inmutables para auditoría CMS (10 años).',
-            'consent' => $consent->fresh(['versions']),
-        ]);
+            // Update latest signed/active version without deleting signature or legal audit data
+            $latestSignedVersion = $consent->versions()
+                ->whereIn('status', ['active', 'signed'])
+                ->latest('id')
+                ->first();
+
+            if ($latestSignedVersion) {
+                $latestSignedVersion->update([
+                    'status' => 'revoked',
+                    'revoked_at' => now(),
+                    'revocation_reason' => $reason,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'El consentimiento ha sido revocado formalmente. El registro histórico y firma previa se conservan inmutables para auditoría CMS (10 años).',
+                'consent' => $consent->fresh(['versions']),
+            ]);
+        });
     }
 
     /**
@@ -127,80 +136,88 @@ class ConsentController extends Controller
      */
     public function regenerate(int $leadId): JsonResponse
     {
-        $lead = Lead::with(['person', 'user'])->findOrFail($leadId);
-        $consent = LeadConsent::where('lead_id', $leadId)->first();
+        return DB::transaction(function () use ($leadId) {
+            Lead::whereKey($leadId)->lockForUpdate()->firstOrFail();
+            $lead = Lead::with(['person', 'user'])->findOrFail($leadId);
+            $consent = LeadConsent::where('lead_id', $leadId)->first();
 
-        $clientName = $lead->person?->name ?: $lead->title;
-        $agentName = $lead->user?->name ?: (auth()->guard('user')->user()?->name ?: 'Agente Certificado ACA');
-        $agentNpn = $lead->user?->npn ?: '19845210';
-        $agencyName = 'Seguros CRM - Marketplace Agency';
+            $clientName = $lead->person?->name ?: $lead->title;
+            $identity = app(AgentIdentity::class)->forLead($lead);
+            $agentName = $identity['agent_name'];
+            $agentNpn = $identity['agent_npn'];
+            $agencyName = $identity['agency_name'];
 
-        if ($consent) {
-            // If currently signed, ensure previous signature is safely archived as superseded
-            if ($consent->status === 'signed' && $consent->signature_data) {
-                $alreadyArchived = $consent->versions()
-                    ->where('signed_at', $consent->signed_at)
-                    ->exists();
+            if ($consent) {
+                // If currently signed, ensure previous signature is safely archived as superseded
+                if ($consent->status === 'signed' && $consent->signature_data) {
+                    $alreadyArchived = $consent->versions()
+                        ->where('signed_at', $consent->signed_at)
+                        ->exists();
 
-                if (! $alreadyArchived) {
-                    $vNum = ((int) $consent->versions()->max('version_number')) + 1;
-                    $fileHash = LeadConsentVersion::generateHash(
-                        (string) $consent->signature_data,
-                        (string) $consent->consent_text,
-                        (string) $consent->client_name,
-                        $consent->signed_at?->toIso8601String() ?: now()->toIso8601String(),
-                        $consent->ip_address
-                    );
+                    if (! $alreadyArchived) {
+                        $vNum = ((int) $consent->versions()->max('version_number')) + 1;
+                        $fileHash = LeadConsentVersion::generateHash(
+                            (string) $consent->signature_data,
+                            (string) $consent->consent_text,
+                            (string) $consent->client_name,
+                            $consent->signed_at?->toIso8601String() ?: now()->toIso8601String(),
+                            $consent->ip_address
+                        );
 
-                    LeadConsentVersion::create([
-                        'lead_consent_id' => $consent->id,
-                        'lead_id' => $consent->lead_id,
-                        'version_number' => $vNum,
-                        'status' => 'superseded',
-                        'client_name' => $consent->client_name,
-                        'client_phone' => $consent->client_phone,
-                        'client_email' => $consent->client_email,
-                        'agent_name' => $consent->agent_name,
-                        'agent_npn' => $consent->agent_npn,
-                        'agency_name' => $consent->agency_name,
-                        'consent_text' => $consent->consent_text,
-                        'signature_data' => $consent->signature_data,
-                        'signed_at' => $consent->signed_at,
-                        'ip_address' => $consent->ip_address,
-                        'user_agent' => $consent->user_agent,
-                        'pdf_path' => $consent->pdf_path,
-                        'file_hash' => $fileHash,
-                    ]);
-                } else {
-                    $consent->versions()
-                        ->whereIn('status', ['active', 'signed'])
-                        ->update([
+                        LeadConsentVersion::create([
+                            'lead_consent_id' => $consent->id,
+                            'lead_id' => $consent->lead_id,
+                            'version_number' => $vNum,
                             'status' => 'superseded',
+                            'client_name' => $consent->client_name,
+                            'client_phone' => $consent->client_phone,
+                            'client_email' => $consent->client_email,
+                            'agent_name' => $consent->agent_name,
+                            'agent_npn' => $consent->agent_npn,
+                            'agency_name' => $consent->agency_name,
+                            'consent_text' => $consent->consent_text,
+                            'signature_data' => $consent->signature_data,
+                            'signed_at' => $consent->signed_at,
+                            'ip_address' => $consent->ip_address,
+                            'user_agent' => $consent->user_agent,
+                            'pdf_path' => $consent->pdf_path,
+                            'file_hash' => $fileHash,
                         ]);
+                    } else {
+                        $consent->versions()
+                            ->whereIn('status', ['active', 'signed'])
+                            ->update([
+                                'status' => 'superseded',
+                            ]);
+                    }
                 }
+
+                $consent->update([
+                    'token' => Str::random(36),
+                    'status' => 'pending',
+                    'signature_data' => null,
+                    'signed_at' => null,
+                    'ip_address' => null,
+                    'user_agent' => null,
+                    'user_id' => $identity['user_id'],
+                    'client_name' => $clientName,
+                    'agent_name' => $agentName,
+                    'agency_name' => $agencyName,
+                    'agent_npn' => $agentNpn,
+                    'consent_text' => LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName),
+                ]);
+            } else {
+                return $this->get($leadId);
             }
 
-            $consent->update([
-                'token' => Str::random(36),
-                'status' => 'pending',
-                'signature_data' => null,
-                'signed_at' => null,
-                'ip_address' => null,
-                'user_agent' => null,
-                'agent_npn' => $agentNpn,
-                'consent_text' => LeadConsent::getDefaultConsentText($clientName, $agentName, $agentNpn, $agencyName),
+            return response()->json([
+                'success' => true,
+                'message' => 'Nuevo enlace de consentimiento generado exitosamente. Las firmas previas han sido archivadas para auditoría.',
+                'consent' => $consent,
+                'public_url' => $consent->public_url,
+                'whatsapp_message' => $consent->whatsapp_message,
             ]);
-        } else {
-            return $this->get($leadId);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Nuevo enlace de consentimiento generado exitosamente. Las firmas previas han sido archivadas para auditoría.',
-            'consent' => $consent,
-            'public_url' => $consent->public_url,
-            'whatsapp_message' => $consent->whatsapp_message,
-        ]);
+        });
     }
 
     /**

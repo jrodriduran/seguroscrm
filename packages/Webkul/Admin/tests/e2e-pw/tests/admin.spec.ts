@@ -6,7 +6,8 @@ test.describe("admin mangement", async () => {
 
     test("verify admin login", async ({ adminPage }) => {
 
-        expect(adminPage.waitForURL("admin/dashboard"));
+        await adminPage.goto("admin/dashboard");
+        await expect(adminPage).toHaveURL(/\/admin\/dashboard/);
 
     })
     test("verify admin logout", async ({ adminPage }) => {

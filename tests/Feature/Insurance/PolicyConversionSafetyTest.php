@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Webkul\Contact\Models\Person;
@@ -55,6 +56,9 @@ function policyConversionScenario(bool $withWonStage = true): array
 
 it('converts the quote into pending coverage in the correct pipeline won stage', function () {
     extract(policyConversionScenario());
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $admin->id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
 
     $this->actingAs($admin)->postJson(route('admin.quotes.convert_to_policy', $quote->id))
         ->assertOk()->assertJsonPath('status', true)->assertJsonPath('policy.status', 'binder_pending');
@@ -72,6 +76,9 @@ it('converts the quote into pending coverage in the correct pipeline won stage',
 
 it('rolls back quote policy commission and stage when override calculation fails', function () {
     extract(policyConversionScenario());
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $admin->id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
     $this->mock(AgencyOverrideService::class)->shouldReceive('distributeOverridesForPolicy')
         ->once()->andThrow(new RuntimeException('Synthetic override failure'));
     $this->withoutExceptionHandling();
@@ -98,6 +105,9 @@ it('rejects a pipeline without a won stage without partially creating records', 
 
 it('keeps paid coverage and creates no duplicate commissions or history on retry', function () {
     extract(policyConversionScenario());
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $admin->id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
     $url = route('admin.quotes.convert_to_policy', $quote->id);
     $this->actingAs($admin)->postJson($url)->assertOk();
     $policy = InsurancePolicy::where('quote_id', $quote->id)->firstOrFail();
@@ -115,6 +125,9 @@ it('keeps paid coverage and creates no duplicate commissions or history on retry
 
 it('applies blocking pipeline milestones to quote conversion too', function () {
     extract(policyConversionScenario());
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $admin->id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
     StagePlaybook::create(['lead_pipeline_stage_id' => $initialStage->id, 'gate' => 'block']);
     StageMilestone::create([
         'lead_pipeline_stage_id' => $initialStage->id, 'position' => 1,
@@ -131,6 +144,9 @@ it('applies blocking pipeline milestones to quote conversion too', function () {
 
 it('preserves the household signed consent documents and coverage history through an ACA renewal', function () {
     extract(policyConversionScenario());
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $admin->id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
     Storage::fake('public');
     $this->actingAs($admin);
     StagePlaybook::create(['lead_pipeline_stage_id' => $initialStage->id, 'gate' => 'block']);
@@ -210,6 +226,9 @@ it('preserves the household signed consent documents and coverage history throug
 
 it('preserves route permissions when using the insurance controller extension', function () {
     extract(policyConversionScenario());
+    DB::table('insurance_agent_identities')->updateOrInsert(['user_id' => $admin->id], [
+        'npn' => '900000001', 'agency_name' => 'Synthetic Test Agency', 'created_at' => now(), 'updated_at' => now(),
+    ]);
     $role = Role::create(['name' => 'No quote access', 'permission_type' => 'custom', 'permissions' => ['dashboard']]);
     $restricted = User::create([
         'name' => 'Synthetic Restricted User', 'email' => 'restricted-conversion@example.invalid',

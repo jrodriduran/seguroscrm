@@ -129,7 +129,7 @@
             methods: {
                 fetchOpportunities() {
                     this.isLoading = true;
-                    this.$axios.get(`/admin/insurance/leads/${this.leadId}/cross-sell`)
+                    this.$axios.get(@json(route('admin.leads.cross_sell.index', $lead->id)))
                         .then(res => {
                             if (res.data.success) {
                                 this.opportunities = res.data.data.opportunities || [];
@@ -140,7 +140,7 @@
                         .finally(() => this.isLoading = false);
                 },
                 updateStatus(oppId, newStatus) {
-                    this.$axios.put(`/admin/insurance/leads/${this.leadId}/cross-sell/${oppId}`, { status: newStatus })
+                    this.$axios.put(@json(route('admin.leads.cross_sell.update_status', [$lead->id, '__record__'])).replace('__record__', encodeURIComponent(oppId)), { status: newStatus })
                         .then(res => {
                             this.fetchOpportunities();
                         })

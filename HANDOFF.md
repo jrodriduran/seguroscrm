@@ -3,6 +3,14 @@
 Estado al 2026-10-15. Léelo completo antes de tocar código. Complementa a
 `AGENTS.md` (convenciones de Krayin) y no lo reemplaza.
 
+**Cierre técnico del piloto (2026-10-16):** ver `deploy/pilot/README.md` para
+criterios de aceptación y pendientes reales. `feature/pilot-closure` añade identidad
+explícita por agente (`insurance:agent-identity`), protege firmas y alcance de acceso,
+corrige Rx/venta cruzada y permite revisar CSV sin importar (`insurance:preview-contacts`).
+La identidad configurada no verifica licencias. La suite aislada pasó 250 pruebas
+con 1.209 aserciones y todas las vistas compilan. Playwright sigue
+en revisión; no considerar el piloto listo ni desplegado por tener commits.
+
 **Prioridad comercial actual (2026-10-16):** primer cliente: una dueña y dos
 agentes. El 95% del canal es WhatsApp; no significa 95% de autonomía de IA.
 Piloto centrado en inbox compartido, asignación/seguimiento diario y felicitaciones
@@ -266,7 +274,8 @@ con eventos que incluyen `support_login` y `password_reset`) y el middleware
 
 ### Depende del dueño
 - Nombre del producto y dominio con HTTPS. Con eso se monta el VPS y se activa el webhook de Chatwoot.
-- Cuenta de Postmark. El driver ya está instalado y hoy el correo va a mailhog.
+- Cuenta de correo saliente. El driver de Postmark está instalado; el hostname
+  mailhog configurado no existe en la red actual y los mensajes no se entregan.
 - Número de WhatsApp de Meta (WABA).
 - Activar las secuencias de inicio, llenar los datos de la agencia y la marca, y pasar a *block* las etapas críticas (consentimiento ACA, SOA de Medicare).
 - Revisión visual del modo oscuro.

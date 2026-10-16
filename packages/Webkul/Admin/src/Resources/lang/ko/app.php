@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'insurance-identity' => [
+        'required' => 'Configure the assigned active agent\'s NPN and legal agency name before generating this document.',
+        'signed-soa' => 'A signed SOA cannot be reset. Preserve the signed record and request a versioned amendment.',
+    ],
+
     'family-workflow' => [
         'tax-missing' => 'No tax data has been saved. Review household size, state and income before using an estimate; it is not a Marketplace eligibility decision.',
         'plan-type' => 'Type of family plan',

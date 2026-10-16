@@ -83,6 +83,7 @@ test.describe("admin authentication hardening", () => {
     });
 
     test("ends the session on logout so the dashboard is no longer reachable", async ({ adminPage }) => {
+        await adminPage.goto("admin/dashboard");
         await expect(adminPage).toHaveURL(/\/admin\/dashboard/);
 
         const profileToggle = adminPage.getByRole("banner").getByRole("button").last();
