@@ -4,6 +4,10 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [feature] Added a scoped daily birthday review list with responsible agents, masked phone references and WhatsApp consent checks, without sending or activating messages.
+
+* [fixed] Birthday scheduling now shares the review list's contact lookup and excludes orphaned, future and other-entity birth-date records.
+
 * [feature] Added family coverage transition planning, assigned review tasks, confirmation history and individual prospect follow-up without automatically cancelling coverage or changing tax household data.
 
 * [fixed] Missing household income is no longer displayed as a real zero-income eligibility result, and individual follow-up cases render correctly with empty contact details.

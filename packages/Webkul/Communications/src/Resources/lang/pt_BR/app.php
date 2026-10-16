@@ -1,6 +1,25 @@
 <?php
 
 return [
+    'birthdays' => [
+        'title' => 'Aniversários',
+        'description' => 'Revise os contatos do dia e o que falta antes de uma felicitação.',
+        'preview-only' => 'Somente revisão: esta tela não envia mensagens nem ativa automações. A conexão WhatsApp e os modelos do provedor continuam pendentes.',
+        'data-note' => 'Usa datas de nascimento salvas nos contatos. Não inclui familiares sem contato próprio. O dia 29 de fevereiro aparece somente em anos bissextos; nenhuma outra data é presumida.',
+        'date' => 'Data da revisão',
+        'show' => 'Ver aniversários',
+        'today' => 'Hoje',
+        'total' => ':count contato(s)',
+        'contact' => 'Contato',
+        'owner' => 'Agente responsável',
+        'check' => 'Revisão WhatsApp',
+        'unassigned' => 'Sem responsável',
+        'missing-phone' => 'Revisar telefone',
+        'missing-consent' => 'Consentimento WhatsApp ausente ou revogado',
+        'review' => 'Revisar modelo e conexão antes de enviar',
+        'empty' => 'Nenhum aniversário salvo para esta data dentro do seu acesso.',
+    ],
+
     'acl' => [
         'communications' => 'Comunicações',
         'sequences' => 'Sequências de comunicação',
