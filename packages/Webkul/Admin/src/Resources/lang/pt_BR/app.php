@@ -725,6 +725,8 @@ return [
                 'per_month' => '/ mês',
                 'sku' => 'Código / SKU',
                 'view' => 'Visualizar',
+                'on-hand' => 'Disponível',
+                'tag-name' => 'Nome da etiqueta',
             ],
         ],
         'create' => [
@@ -738,6 +740,29 @@ return [
             'general' => 'Informações Gerais',
             'price' => 'Prêmio / Custo Mensal',
             'save-btn' => 'Salvar Plano',
+        ],
+        'view' => [
+            'sku' => 'SKU',
+            'all' => 'Todos',
+            'notes' => 'Notas',
+            'files' => 'Arquivos',
+            'inventories' => 'Estoques',
+            'change-logs' => 'Histórico de alterações',
+            'attributes' => [
+                'about-product' => 'Sobre o produto',
+            ],
+            'inventory' => [
+                'warehouse' => 'Armazém',
+                'in-stock' => 'Em estoque',
+                'allocated' => 'Alocado',
+                'on-hand' => 'Disponível',
+                'actions' => 'Ações',
+                'assign' => 'Atribuir',
+                'add-warehouse' => 'Adicionar armazém',
+                'location' => 'Localização',
+                'add-more' => 'Adicionar mais',
+                'save' => 'Salvar',
+            ],
         ],
     ],
     'settings' => [
@@ -1666,7 +1691,7 @@ return [
                     'button-title' => 'Create Import',
                     'title' => 'Imports',
                     'datagrid' => [
-                        'actions' => 'Actions',
+                        'actions' => 'Ações',
                         'completed-at' => 'Completed At',
                         'created' => 'Created',
                         'delete' => 'Delete',
@@ -2668,6 +2693,7 @@ return [
             'masculino' => 'Masculino',
             'femenino' => 'Feminino',
             'outro' => 'Outro',
+            'otro' => 'Other',
         ],
         'marital_status' => [
             'single' => 'Solteiro(a)',

@@ -725,6 +725,8 @@ return [
                 'per_month' => '/ mes',
                 'sku' => 'Código / SKU',
                 'view' => 'Ver',
+                'on-hand' => 'Disponible',
+                'tag-name' => 'Nombre de etiqueta',
             ],
         ],
         'create' => [
@@ -738,6 +740,29 @@ return [
             'general' => 'Información General',
             'price' => 'Prima / Costo Mensual',
             'save-btn' => 'Guardar Plan',
+        ],
+        'view' => [
+            'sku' => 'SKU',
+            'all' => 'Todos',
+            'notes' => 'Notas',
+            'files' => 'Archivos',
+            'inventories' => 'Inventario',
+            'change-logs' => 'Historial de cambios',
+            'attributes' => [
+                'about-product' => 'Acerca del producto',
+            ],
+            'inventory' => [
+                'warehouse' => 'Almacén',
+                'in-stock' => 'En existencia',
+                'allocated' => 'Asignado',
+                'on-hand' => 'Disponible',
+                'actions' => 'Acciones',
+                'assign' => 'Asignar',
+                'add-warehouse' => 'Añadir almacén',
+                'location' => 'Ubicación',
+                'add-more' => 'Añadir más',
+                'save' => 'Guardar',
+            ],
         ],
     ],
     'settings' => [
@@ -2668,6 +2693,7 @@ return [
             'masculino' => 'Masculino',
             'femenino' => 'Femenino',
             'otro' => 'Otro',
+            'outro' => 'Otro',
         ],
         'marital_status' => [
             'single' => 'Soltero(a)',

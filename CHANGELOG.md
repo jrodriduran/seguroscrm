@@ -4,6 +4,8 @@ This changelog consists of the bug & security fixes and new features being inclu
 
 ## **v2.2.7 (unreleased)**
 
+* [fixed] Completed missing insurance translation paths in every Admin locale with English fallbacks where needed, while retaining localized text and legacy product translations.
+
 * [enhancement] Documented pilot acceptance, agent identity setup and import review, and added a reproducible inventory of Composer-declared dependency licenses.
 
 * [fixed] The lead screen now marks HealthSherpa enrollment unavailable until approved, and unverified doctor networks remain visibly pending.

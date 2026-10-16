@@ -38,3 +38,5 @@ node_modules/
 # Local backups (may contain secrets) and test caches
 *.bak-*
 /.phpunit.cache
+__pycache__/
+*.pyc

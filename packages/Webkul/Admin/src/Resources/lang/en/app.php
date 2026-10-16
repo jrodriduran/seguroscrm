@@ -726,6 +726,8 @@ return [
                 'per_month' => '/ month',
                 'sku' => 'SKU / Code',
                 'view' => 'View',
+                'on-hand' => 'On Hand',
+                'tag-name' => 'Tag Name',
             ],
         ],
         'create' => [
@@ -739,6 +741,29 @@ return [
             'general' => 'General Information',
             'price' => 'Monthly Premium / Price',
             'save-btn' => 'Save Product',
+        ],
+        'view' => [
+            'sku' => 'SKU',
+            'all' => 'All',
+            'notes' => 'Notes',
+            'files' => 'Files',
+            'inventories' => 'Inventories',
+            'change-logs' => 'Change Logs',
+            'attributes' => [
+                'about-product' => 'About Product',
+            ],
+            'inventory' => [
+                'warehouse' => 'Warehouse',
+                'in-stock' => 'In Stock',
+                'allocated' => 'Allocated',
+                'on-hand' => 'On Hand',
+                'actions' => 'Actions',
+                'assign' => 'Assign',
+                'add-warehouse' => 'Add Warehouse',
+                'location' => 'Location',
+                'add-more' => 'Add More',
+                'save' => 'Save',
+            ],
         ],
     ],
     'settings' => [
@@ -2670,6 +2695,7 @@ return [
             'masculino' => 'Male',
             'femenino' => 'Female',
             'otro' => 'Other',
+            'outro' => 'Other',
         ],
         'marital_status' => [
             'single' => 'Single',
