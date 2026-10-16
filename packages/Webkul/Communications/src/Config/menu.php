@@ -2,6 +2,13 @@
 
 return [
     [
+        'key' => 'communication_birthdays',
+        'name' => 'communications::app.birthdays.title',
+        'route' => 'admin.communications.birthdays.index',
+        'sort' => 4,
+        'icon-class' => '',
+    ],
+    [
         'key' => 'mail.communication_deliveries',
         'name' => 'communications::app.deliveries.title',
         'route' => 'admin.communications.deliveries.index',

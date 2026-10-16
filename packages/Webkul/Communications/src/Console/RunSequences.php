@@ -5,6 +5,7 @@ namespace Webkul\Communications\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Webkul\Communications\Models\Trigger;
+use Webkul\Communications\Services\BirthdayRecipients;
 use Webkul\Communications\Services\CampaignRunner;
 use Webkul\Communications\Services\SequenceEngine;
 use Webkul\Teamwork\Http\Middleware\ApplyTimezone;
@@ -46,13 +47,8 @@ class RunSequences extends Command
 
         $today = now();
 
-        return DB::table('attribute_values')
-            ->join('attributes', 'attributes.id', '=', 'attribute_values.attribute_id')
-            ->where('attributes.entity_type', 'persons')
-            ->where('attributes.code', 'dob')
-            ->whereMonth('attribute_values.date_value', $today->month)
-            ->whereDay('attribute_values.date_value', $today->day)
-            ->pluck('attribute_values.entity_id')
+        return app(BirthdayRecipients::class)->query($today)
+            ->pluck('persons.id')
             ->sum(fn ($personId) => $engine->fire('birthday', [], (int) $personId, null, null, 'birthday:'.$today->year));
     }
 

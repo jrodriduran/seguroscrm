@@ -3,7 +3,28 @@
 Estado al 2026-10-15. Léelo completo antes de tocar código. Complementa a
 `AGENTS.md` (convenciones de Krayin) y no lo reemplaza.
 
-**Prioridad actual:** preparar un piloto de cotización ACA con HealthSherpaONE.
+**Prioridad comercial actual (2026-10-16):** primer cliente: una dueña y dos
+agentes. El 95% del canal es WhatsApp; no significa 95% de autonomía de IA.
+Piloto centrado en inbox compartido, asignación/seguimiento diario y felicitaciones
+automáticas de cumpleaños. Objetivo de entrega: fin de semana 17–18 de octubre,
+condicionado a conexión oficial WhatsApp, plantillas aprobadas y HTTPS. No activar
+envíos reales hasta revisar configuración y autorización de la clienta. El código
+actual de MessageDispatcher solo envía texto en conversaciones ya vinculadas: no
+implementa aún plantillas de proveedor para iniciar contactos fuera de la ventana
+de atención. No presentar el kit de cumpleaños pausado como integración lista.
+Pendiente confirmar qué WhatsApp tiene la clienta y si conservará el número.
+Nombre/marca, HS, call center e IA de venta quedan detrás de este piloto.
+
+La clienta trabaja ACA y Medicare y actualmente usa WhatsApp Business en el celular,
+sin API. El dueño pidió dejar para después la conexión del número y la configuración
+externa, y continuar desarrollando. `feature/pilot-readiness` incorpora un panel
+interno de revisión de cumpleaños (sin envíos), permiso `communication_birthdays`,
+filtros por responsable/fecha y estado del consentimiento WhatsApp, con teléfono
+enmascarado. Comparte la consulta de fechas con el programador. No cambia estados
+de secuencias ni concede permisos automáticamente; las políticas de cumpleaños
+del 29 de febrero siguen siendo estrictas (sin sustitución por otro día).
+
+**Segunda fase:** preparar un piloto de cotización ACA con HealthSherpaONE.
 El titular aún no tiene cuenta. La rama `feature/healthsherpa-foundation` contiene
 un backend desactivado por defecto y probado con respuestas simuladas; no está
 desplegado ni conectado. Primero cotizador y datos revisados, después inscripción

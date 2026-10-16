@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Webkul\Communications\Http\Controllers\AudienceController;
+use Webkul\Communications\Http\Controllers\BirthdayController;
 use Webkul\Communications\Http\Controllers\CallOutcomeController;
 use Webkul\Communications\Http\Controllers\CampaignController;
 use Webkul\Communications\Http\Controllers\ChatwootSettingsController;
@@ -12,6 +13,8 @@ use Webkul\Communications\Http\Controllers\PersonContactController;
 use Webkul\Communications\Http\Controllers\SequenceController;
 use Webkul\Communications\Http\Controllers\StageRuleController;
 use Webkul\Communications\Http\Controllers\TemplateController;
+
+Route::get('communications/birthdays', [BirthdayController::class, 'index'])->name('admin.communications.birthdays.index');
 
 Route::get('contacts/persons/{id}/communications', [ClientCommunicationController::class, 'person'])
     ->name('admin.communications.persons.show');
